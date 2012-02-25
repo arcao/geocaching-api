@@ -25,7 +25,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.UserProfile;
-import com.arcao.geocaching.api.data.type.LogType;
+import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
 import com.arcao.geocaching.api.exception.InvalidSessionException;
@@ -327,7 +327,7 @@ public class LiveGeocachingApi extends GeocachingApi {
 	}
 	
 	@Override
-	public CacheLog createFieldNoteAndPublish(String cacheCode, LogType logType, Date dateLogged, String note, boolean publish, ImageData imageData,
+	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
 			boolean favoriteThisCache) throws GeocachingApiException {
     CacheLog cacheLog = null;
     
@@ -337,7 +337,7 @@ public class LiveGeocachingApi extends GeocachingApi {
       w.beginObject();
       w.name("AccessToken").value(session);
       w.name("CacheCode").value(cacheCode);
-      w.name("WptLogTypeId").value(logType.getFriendlyName());
+      w.name("WptLogTypeId").value(cacheLogType.getFriendlyName());
       w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
       w.name("PromoteToLog").value(publish);
       if (imageData != null) {

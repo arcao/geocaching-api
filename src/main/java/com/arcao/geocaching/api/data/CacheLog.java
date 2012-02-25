@@ -4,7 +4,7 @@ package com.arcao.geocaching.api.data;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import com.arcao.geocaching.api.data.type.LogType;
+import com.arcao.geocaching.api.data.type.CacheLogType;
 
 /**
  * CacheLog class keep all information cache log.
@@ -13,20 +13,20 @@ import com.arcao.geocaching.api.data.type.LogType;
  */
 public class CacheLog {
 	private final Date date;
-	private final LogType logType;
+	private final CacheLogType cacheLogType;
 	private final String author;
 	private final String text;
 
 	/**
 	 * Create a new instance of cache log and fill it with data 
 	 * @param date date when the cache was found
-	 * @param logType type of log
+	 * @param cacheLogType type of log
 	 * @param author author of log
 	 * @param text text of log
 	 */
-	public CacheLog(Date date, LogType logType, String author, String text) {
+	public CacheLog(Date date, CacheLogType cacheLogType, String author, String text) {
 		this.date = date;
-		this.logType = logType;
+		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
 	}
@@ -43,8 +43,8 @@ public class CacheLog {
 	 * Get a type of log
 	 * @return type of log
 	 */
-	public LogType getLogType() {
-		return logType;
+	public CacheLogType getLogType() {
+		return cacheLogType;
 	}
 
 	/**

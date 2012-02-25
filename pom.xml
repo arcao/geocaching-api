@@ -37,6 +37,7 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.1</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -62,39 +63,29 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<artifactSet>
-								<includes>
-									<inplude>com.google.code.gson:gson</inplude>
-								</includes>
-							</artifactSet>
-							<filters>
-								<filter>
-									<artifact>com.google.code.gson:gson</artifact>
-									<includes>
-										<include>com/google/gson/stream/**</include>
-									</includes>
-								</filter>
-							</filters>
-							<relocations>
-								<relocation>
-									<pattern>com.google.gson</pattern>
-									<shadedPattern>com.arcao.shade.gson</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>jarjar-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jarjar</goal>
+            </goals>
+            <configuration>
+            	<overwrite>true</overwrite>
+              <includes>
+                <include>com.google.code.gson:gson</include>
+              </includes>
+              <rules>
+                <rule>
+                  <pattern>com.google.gson.**</pattern>
+                  <result>com.arcao.shade.gson.@1</result>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>

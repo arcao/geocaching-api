@@ -4,27 +4,27 @@ package com.arcao.geocaching.api.data;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import com.arcao.geocaching.api.data.type.WayPointType;
+import com.arcao.geocaching.api.data.type.WaypointType;
 
 public class Waypoint {
 	private final double latitude;
 	private final double longitude;
 	private final Date time;
-	private final String waypointGeoCode;
+	private final String waypointCode;
 	private final String name;
 	private final String note;
-	private final WayPointType wayPointType;
+	private final WaypointType waypointType;
 	private final String iconName;
 
-	public Waypoint(double longitude, double latitude, Date time, String waypointGeoCode, String name, String note, WayPointType wayPointType) {
+	public Waypoint(double longitude, double latitude, Date time, String waypointCode, String name, String note, WaypointType waypointType) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.time = time;
-		this.waypointGeoCode = waypointGeoCode;
+		this.waypointCode = waypointCode;
 		this.name = name;
 		this.note = note;
-		this.wayPointType = wayPointType;
-		this.iconName = wayPointType.getIconName();
+		this.waypointType = waypointType;
+		this.iconName = waypointType.getIconName();
 	}
 
 	public double getLatitude() {
@@ -39,8 +39,8 @@ public class Waypoint {
 		return time;
 	}
 
-	public String getWaypointGeoCode() {
-		return waypointGeoCode;
+	public String getWaypointCode() {
+		return waypointCode;
 	}
 
 	public String getName() {
@@ -51,8 +51,8 @@ public class Waypoint {
 		return note;
 	}
 
-	public WayPointType getWayPointType() {
-		return wayPointType;
+	public WaypointType getWaypointType() {
+		return waypointType;
 	}
 
 	public String getIconName() {

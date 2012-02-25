@@ -24,7 +24,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame("", cache.getAuthorGuid());
     Assert.assertNotSame("", cache.getAuthorName());
     Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
-    Assert.assertEquals(CacheType.MultiCache, cache.getCacheType());
+    Assert.assertEquals(CacheType.Multi, cache.getCacheType());
     Assert.assertNotSame("", cache.getContactName());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotSame(new Date(0), cache.getCreated());
@@ -47,7 +47,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame("", cache.getAuthorGuid());
     Assert.assertNotSame("", cache.getAuthorName());
     Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
-    Assert.assertEquals(CacheType.MultiCache, cache.getCacheType());
+    Assert.assertEquals(CacheType.Multi, cache.getCacheType());
     Assert.assertNotSame("", cache.getContactName());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotSame(new Date(0), cache.getCreated());

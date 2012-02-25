@@ -1,6 +1,6 @@
 package com.arcao.geocaching.api.data.type;
 
-public enum WayPointType {
+public enum WaypointType {
 	QuestionToAnswer("Question to Answer", "puzzle.jpg"),
 	FinalLocation("Final Location", "flag.jpg"),
 	ParkingArea("Parking Area", "pkg.jpg"),
@@ -11,7 +11,7 @@ public enum WayPointType {
 	private final String friendlyName;
 	private final String iconName;
 
-	private WayPointType(String friendlyName, String iconName) {
+	private WaypointType(String friendlyName, String iconName) {
 		this.friendlyName = friendlyName;
 		this.iconName = iconName;
 	}
@@ -33,8 +33,8 @@ public enum WayPointType {
 		return iconName;
 	}
 
-	public static WayPointType parseWayPointType(String waypointName) {
-		for (WayPointType type : values()) {
+	public static WaypointType parseWayPointType(String waypointName) {
+		for (WaypointType type : values()) {
 			if (type.toString().equals(waypointName))
 				return type;
 		}

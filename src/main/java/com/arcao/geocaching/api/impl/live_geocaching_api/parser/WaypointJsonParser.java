@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.Waypoint;
-import com.arcao.geocaching.api.data.type.WayPointType;
+import com.arcao.geocaching.api.data.type.WaypointType;
 import com.google.gson.stream.JsonToken;
 
 public class WaypointJsonParser extends JsonParser {
@@ -29,10 +29,10 @@ public class WaypointJsonParser extends JsonParser {
 		double longitude = Double.NaN;
 		double latitude = Double.NaN;
 		Date time = new Date(0);
-		String waypointGeoCode = "";
+		String waypointCode = "";
 		String waypointName = "";
 		String note = "";
-		WayPointType wayPointType = WayPointType.ReferencePoint;
+		WaypointType waypointType = WaypointType.ReferencePoint;
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -44,9 +44,9 @@ public class WaypointJsonParser extends JsonParser {
 			} else if ("UTCEnteredDate".equals(name)) {
 				time = parseJsonDate(r.nextString());
 			} else if ("Code".equals(name)) {
-				waypointGeoCode = r.nextString();
+				waypointCode = r.nextString();
 			} else if ("Name".equals(name)) {
-				wayPointType = WayPointType.parseWayPointType(r.nextString());
+				waypointType = WaypointType.parseWayPointType(r.nextString());
 			} else if ("Description".equals(name)) {
 				waypointName = r.nextString();
 			} else if ("Comment".equals(name)) {
@@ -57,6 +57,6 @@ public class WaypointJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new Waypoint(longitude, latitude, time, waypointGeoCode, waypointName, note, wayPointType);
+		return new Waypoint(longitude, latitude, time, waypointCode, waypointName, note, waypointType);
 	}
 }

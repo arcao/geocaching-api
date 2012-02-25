@@ -33,7 +33,7 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		String cacheName = "";
 		double longitude = Double.NaN;
 		double latitude = Double.NaN;
-		CacheType cacheType = CacheType.UnknownCache;
+		CacheType cacheType = CacheType.Unknown;
 		float difficultyRating = 1;
 		float terrainRating = 1;
 		String authorGuid = "";

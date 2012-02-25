@@ -37,7 +37,7 @@ public class JsonParser {
 	}
 	
 	protected static CacheType parseCacheType(JsonReader r) throws IOException {
-		CacheType cacheType = CacheType.UnknownCache;
+		CacheType cacheType = CacheType.Unknown;
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();

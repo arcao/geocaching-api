@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.CacheLog;
-import com.arcao.geocaching.api.data.type.LogType;
+import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.google.gson.stream.JsonToken;
 
 public class CacheLogJsonParser extends JsonParser {
@@ -27,7 +27,7 @@ public class CacheLogJsonParser extends JsonParser {
 	
 	public static CacheLog parse(JsonReader r) throws IOException {
 		Date date = new Date(0);
-		LogType logType = LogType.Unknown;
+		CacheLogType cacheLogType = CacheLogType.Unknown;
 		String author = "";
 		String text = "";
 		
@@ -36,8 +36,8 @@ public class CacheLogJsonParser extends JsonParser {
 			String name = r.nextName();
 			if ("UTCCreateDate".equals(name)) {
 				date = JsonParser.parseJsonDate(r.nextString());
-			} else if ("LogType".equals(name)) {
-				logType = parseLogType(r);
+			} else if ("CacheLogType".equals(name)) {
+				cacheLogType = parseLogType(r);
 			} else if ("Finder".equals(name)) {
 				author = parseUser(r).getUserName();
 			} else if ("LogText".equals(name)) {
@@ -48,22 +48,22 @@ public class CacheLogJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new CacheLog(date, logType, author, text);
+		return new CacheLog(date, cacheLogType, author, text);
 	}
 
-	protected static LogType parseLogType(JsonReader r) throws IOException {
-		LogType logType = LogType.Unknown;
+	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
+		CacheLogType cacheLogType = CacheLogType.Unknown;
 		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("WptLogTypeName".equals(name)) {
-				logType = LogType.parseLogType(r.nextString());
+				cacheLogType = CacheLogType.parseLogType(r.nextString());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		return logType;
+		return cacheLogType;
 	}
 }

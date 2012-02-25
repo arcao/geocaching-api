@@ -10,7 +10,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.UserProfile;
-import com.arcao.geocaching.api.data.type.LogType;
+import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
@@ -237,7 +237,7 @@ public abstract class GeocachingApi {
    * 
    * @param cacheCode
    *          geocache which can own this field note
-   * @param logType
+   * @param cacheLogType
    *          type of log
    * @param dateLogged
    *          when cache was found
@@ -256,7 +256,7 @@ public abstract class GeocachingApi {
    *           If error occurs during sending field note
    * @since 1.1
    */
-  public abstract CacheLog createFieldNoteAndPublish(String cacheCode, LogType logType, Date dateLogged, String note, boolean publish, ImageData imageData,
+  public abstract CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
       boolean favoriteThisCache) throws GeocachingApiException;
 
   /**

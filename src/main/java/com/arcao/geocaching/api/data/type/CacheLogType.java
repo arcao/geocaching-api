@@ -1,6 +1,6 @@
 package com.arcao.geocaching.api.data.type;
 
-public enum LogType {
+public enum CacheLogType {
 	Unknown("Unknown"),
 	FoundIt("Found it"),
 	DidntFindIt("Didn't find it"),
@@ -21,7 +21,7 @@ public enum LogType {
 
 	private final String friendlyName;
 
-	private LogType(String friendlyName) {
+	private CacheLogType(String friendlyName) {
 		this.friendlyName = friendlyName;
 	}
 
@@ -34,8 +34,8 @@ public enum LogType {
 		return friendlyName;
 	}
 
-	public static LogType parseLogType(String log) {
-		for (LogType type : values()) {
+	public static CacheLogType parseLogType(String log) {
+		for (CacheLogType type : values()) {
 			if (type.getFriendlyName().equals(log))
 				return type;
 		}

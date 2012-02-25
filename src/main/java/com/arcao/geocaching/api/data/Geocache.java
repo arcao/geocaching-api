@@ -67,7 +67,7 @@ public class Geocache extends SimpleGeocache {
     return cacheLogs;
   }
 
-  public List<Trackable> getTravelBugs() {
+  public List<Trackable> getTrackables() {
     return trackables;
   }
 

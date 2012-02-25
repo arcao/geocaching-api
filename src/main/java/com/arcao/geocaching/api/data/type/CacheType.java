@@ -1,20 +1,20 @@
 package com.arcao.geocaching.api.data.type;
 
 public enum CacheType {
-	TraditionalCache("Traditional Cache", 2),
-	MultiCache("Multi-cache", 3),
-	UnknownCache("Unknown Cache", 8),
-	VirtualCache("Virtual Cache", 4),
-	EarthCache("Earthcache", 137),
-	ProjectApeCache("Project APE Cache", 9),
+	Traditional("Traditional Cache", 2),
+	Multi("Multi-cache", 3),
+	Unknown("Unknown Cache", 8),
+	Virtual("Virtual Cache", 4),
+	Earth("Earthcache", 137),
+	ProjectApe("Project APE Cache", 9),
 	LetterboxHybrid("Letterbox Hybrid", 5),
-	WherigoCache("Wherigo Cache", 1858),
-	EventCache("Event Cache", 6),
-	MegaEventCache("Mega-Event Cache", 453),
+	Wherigo("Wherigo Cache", 1858),
+	Event("Event Cache", 6),
+	MegaEvent("Mega-Event Cache", 453),
 	CacheInTrashOutEvent("Cache In Trash Out Event", 13),
 	GpsAdventuresExhibit("GPS Adventures Exhibit", 1304),
-	WebcamCache("Webcam Cache", 11),
-	LocationlessCache("Locationless (Reverse) Cache", 12);
+	Webcam("Webcam Cache", 11),
+	Locationless("Locationless (Reverse) Cache", 12);
 
 	private final String friendlyName;
 	private final int groundSpeakId;
@@ -43,7 +43,7 @@ public enum CacheType {
 				return type;
 		}
 
-		return UnknownCache;
+		return Unknown;
 	}
 	
 	public static CacheType parseCacheTypeByGroundSpeakId(int groundSpeakId) {
@@ -52,7 +52,7 @@ public enum CacheType {
 				return type;
 		}
 
-		return UnknownCache;
+		return Unknown;
 	}
 	
 }
