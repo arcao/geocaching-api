@@ -36,7 +36,7 @@ public class CacheLogJsonParser extends JsonParser {
 			String name = r.nextName();
 			if ("UTCCreateDate".equals(name)) {
 				date = JsonParser.parseJsonDate(r.nextString());
-			} else if ("CacheLogType".equals(name)) {
+			} else if ("LogType".equals(name)) {
 				cacheLogType = parseLogType(r);
 			} else if ("Finder".equals(name)) {
 				author = parseUser(r).getUserName();

@@ -6,8 +6,10 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.SimpleGeocache;
+import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
@@ -65,7 +67,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame("", cache.getStateName());
     
     Assert.assertEquals(8, cache.getWaypoints().size());
+
     Assert.assertEquals(5, cache.getCacheLogs().size());
+    for (CacheLog cacheLog : cache.getCacheLogs()) {
+      Assert.assertNotSame("", cacheLog.getAuthor());
+      Assert.assertNotSame(new Date(0), cacheLog.getDate());
+      Assert.assertNotSame(CacheLogType.Unknown, cacheLog.getLogType());
+      Assert.assertNotSame("", cacheLog.getText());
+    }
     
     // TODO more tests
   }
