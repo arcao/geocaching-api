@@ -9,9 +9,9 @@ public class Trackable {
 	private final String description;
 	private final String trackableTypeName;
 	private final String trackableTypeImage;
-	private final String ownerUserName;
+	private final User owner;
 	private final String currentCacheCode;
-	private final String currentHolderUserName;
+	private final User currentOwner;
 	private final String trackingNumber;
 	private final String lookupCode;
 
@@ -19,36 +19,36 @@ public class Trackable {
 
 	public Trackable(String guid, String name, String goal, String description,
 			String trackableTypeName, String trackableTypeImage,
-			String ownerUserName, String currentCacheCode,
-			String currentHolderUserName, String trackingNumber) {
+			User owner, String currentCacheCode,
+			User currentOwner, String trackingNumber) {
 		this.guid = guid;
 		this.name = name;
 		this.goal = goal;
 		this.description = description;
 		this.trackableTypeName = trackableTypeName;
 		this.trackableTypeImage = trackableTypeImage;
-		this.ownerUserName = ownerUserName;
+		this.owner = owner;
 		this.currentCacheCode = currentCacheCode;
-		this.currentHolderUserName = currentHolderUserName;
+		this.currentOwner = currentOwner;
 		this.trackingNumber = trackingNumber;
 
 		lookupCode = "";
 	}
 
 	public Trackable(String lookupCode, String name, String trackingNumber,
-			String ownerUserName) {
+			User owner) {
 		this.lookupCode = lookupCode;
 		this.name = name;
 		this.trackingNumber = trackingNumber;
-		this.ownerUserName = ownerUserName;
+		this.owner = owner;
 
 		guid = "";
 		goal = "";
 		description = "";
 		trackableTypeName = "";
 		trackableTypeImage = "";
-		currentCacheCode = "";
-		currentHolderUserName = "";
+		currentCacheCode = null;
+		currentOwner = null;
 	}
 
 	public Trackable(String trackingNumber, String name, String currentCacheCode) {
@@ -61,8 +61,8 @@ public class Trackable {
 		description = "";
 		trackableTypeName = "";
 		trackableTypeImage = "";
-		ownerUserName = "";
-		currentHolderUserName = "";
+		owner = null;
+		currentOwner = null;
 		lookupCode = "";
 	}
 
@@ -90,16 +90,16 @@ public class Trackable {
 		return trackableTypeImage;
 	}
 
-	public String getOwnerUserName() {
-		return ownerUserName;
+	public User getOwner() {
+		return owner;
 	}
 
 	public String getCurrentCacheCode() {
 		return currentCacheCode;
 	}
 
-	public String getCurrentHolderUserName() {
-		return currentHolderUserName;
+	public User getCurrentOwner() {
+		return currentOwner;
 	}
 
 	public String getTrackingNumber() {

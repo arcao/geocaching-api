@@ -22,14 +22,14 @@ public class Geocache extends SimpleGeocache {
 
   public Geocache(String cacheCode, String name, double longitude,
       double latitude, CacheType cacheType, float difficultyRating,
-      float terrainRating, String authorGuid, String authorName,
+      float terrainRating, User author,
       boolean available, boolean archived, boolean premiumListing,
       Date created, String contactName, ContainerType containerType,
       int trackableCount, boolean found, String countryName, String stateName, String shortDescription,
       String longDescrition, String hint, List<CacheLog> cacheLogs,
       List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints) {
     super(cacheCode, name, longitude, latitude, cacheType, difficultyRating,
-        terrainRating, authorGuid, authorName, available, archived,
+        terrainRating, author, available, archived,
         premiumListing, created, contactName, containerType, trackableCount, found);
     this.countryName = countryName;
     this.stateName = stateName;

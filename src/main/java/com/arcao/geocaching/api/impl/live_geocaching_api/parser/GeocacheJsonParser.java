@@ -16,6 +16,7 @@ import com.arcao.geocaching.api.data.Waypoint;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
+import com.arcao.geocaching.api.data.type.MemberType;
 import com.google.gson.stream.JsonToken;
 
 public class GeocacheJsonParser extends JsonParser {
@@ -42,8 +43,7 @@ public class GeocacheJsonParser extends JsonParser {
 		CacheType cacheType = CacheType.Unknown;
 		float difficultyRating = 1;
 		float terrainRating = 1;
-		String authorGuid = "";
-		String authorName = "";
+		User author = new User("", 0, 0, new float[] {Float.NaN, Float.NaN}, 0, false, MemberType.Guest, "", "");
 		boolean available = false;
 		boolean archived = false;
 		boolean premiumListing = false;
@@ -81,9 +81,7 @@ public class GeocacheJsonParser extends JsonParser {
 			} else if ("Terrain".equals(name)) {
 				terrainRating = (float) r.nextDouble();
 			} else if ("Owner".equals(name)) {
-				User u = parseUser(r);
-				authorGuid = u.getPublicGuid();
-				authorName = u.getUserName();
+				author = parseUser(r);
 			} else if ("Available".equals(name)) {
 				available = r.nextBoolean();
 			} else if ("Archived".equals(name)) {
@@ -126,6 +124,6 @@ public class GeocacheJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new Geocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, authorGuid, authorName, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints);
+		return new Geocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints);
 	}
 }

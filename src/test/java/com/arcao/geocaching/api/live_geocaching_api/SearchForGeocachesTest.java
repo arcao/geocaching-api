@@ -12,6 +12,7 @@ import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
+import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilter;
 
@@ -23,8 +24,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     SimpleGeocache cache = api.getCacheSimple(CACHE_CODE);
     
     Assert.assertNotNull(cache);
-    Assert.assertNotSame("", cache.getAuthorGuid());
-    Assert.assertNotSame("", cache.getAuthorName());
+    Assert.assertNotNull(cache.getAuthor());
+    Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
     Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
     Assert.assertEquals(CacheType.Multi, cache.getCacheType());
     Assert.assertNotSame("", cache.getContactName());
@@ -46,8 +47,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Geocache cache = api.getCache(CACHE_CODE, 5, -1);
     
     Assert.assertNotNull(cache);
-    Assert.assertNotSame("", cache.getAuthorGuid());
-    Assert.assertNotSame("", cache.getAuthorName());
+    Assert.assertNotNull(cache.getAuthor());
+    Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
     Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
     Assert.assertEquals(CacheType.Multi, cache.getCacheType());
     Assert.assertNotSame("", cache.getContactName());

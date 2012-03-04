@@ -18,8 +18,7 @@ public class SimpleGeocache {
 	private final CacheType cacheType;
 	private final float difficultyRating;
 	private final float terrainRating;
-	private final String authorGuid;
-	private final String authorName;
+	private final User author;
 	private final boolean available;
 	private final boolean archived;
 	private final boolean premiumListing;
@@ -36,7 +35,7 @@ public class SimpleGeocache {
 
 	public SimpleGeocache(String cacheCode, String name, double longitude,
 			double latitude, CacheType cacheType, float difficultyRating,
-			float terrainRating, String authorGuid, String authorName,
+			float terrainRating, User author,
 			boolean available, boolean archived, boolean premiumListing,
 			Date created, String contactName, ContainerType containerType,
 			int trackableCount, boolean found) {
@@ -47,8 +46,7 @@ public class SimpleGeocache {
 		this.cacheType = cacheType;
 		this.difficultyRating = difficultyRating;
 		this.terrainRating = terrainRating;
-		this.authorGuid = authorGuid;
-		this.authorName = authorName;
+		this.author = author;
 		this.available = available;
 		this.archived = archived;
 		this.premiumListing = premiumListing;
@@ -87,12 +85,8 @@ public class SimpleGeocache {
 		return terrainRating;
 	}
 
-	public String getAuthorGuid() {
-		return authorGuid;
-	}
-
-	public String getAuthorName() {
-		return authorName;
+	public User getAuthor() {
+		return author;
 	}
 
 	public boolean isAvailable() {

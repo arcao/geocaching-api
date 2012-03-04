@@ -14,7 +14,7 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
 public class CacheLog {
 	private final Date date;
 	private final CacheLogType cacheLogType;
-	private final String author;
+	private final User author;
 	private final String text;
 
 	/**
@@ -24,7 +24,7 @@ public class CacheLog {
 	 * @param author author of log
 	 * @param text text of log
 	 */
-	public CacheLog(Date date, CacheLogType cacheLogType, String author, String text) {
+	public CacheLog(Date date, CacheLogType cacheLogType, User author, String text) {
 		this.date = date;
 		this.cacheLogType = cacheLogType;
 		this.author = author;
@@ -51,7 +51,7 @@ public class CacheLog {
 	 * Get an author of log
 	 * @return author of log
 	 */
-	public String getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
