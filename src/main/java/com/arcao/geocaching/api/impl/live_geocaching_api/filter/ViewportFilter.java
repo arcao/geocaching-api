@@ -18,7 +18,7 @@ public class ViewportFilter implements Filter {
   protected final double bottomRightLongitude;
   
     
-  public ViewportFilter(float topLeftLatitude, float topLeftLongitude, float bottomRightLatitude, float bottomRightLongitude) {
+  public ViewportFilter(double topLeftLatitude, double topLeftLongitude, double bottomRightLatitude, double bottomRightLongitude) {
     this.topLeftLatitude = topLeftLatitude;
     this.topLeftLongitude = topLeftLongitude;
     this.bottomRightLatitude = bottomRightLatitude;
