@@ -62,6 +62,7 @@ public class GeocacheJsonParser extends JsonParser {
 		List<Waypoint> waypoints = new ArrayList<Waypoint>();
 		List<AttributeType> attributes = new ArrayList<AttributeType>();
 		List<UserWaypoint> userWaypoints = new ArrayList<UserWaypoint>();
+		String personalNote = "";
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -118,12 +119,14 @@ public class GeocacheJsonParser extends JsonParser {
 				attributes = parseAttributteList(r);
 			} else if ("UserWaypoints".equals(name)) {
 				userWaypoints = UserWaypointsJsonParser.parseList(r);
+			} else if ("GeocacheNote".equals(name)) {
+			  personalNote = r.nextString();	  
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 		
-		return new Geocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints);
+		return new Geocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote);
 	}
 }

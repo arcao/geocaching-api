@@ -12,27 +12,22 @@ import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 
 /**
- * Abstract class of Geocaching API
+ * Interface of Geocaching API
  * 
  * @author arcao
  * @since 1.0
  */
-public abstract class GeocachingApi {
-  protected String session;
-
+public interface GeocachingApi {
   /**
    * Gets a session id for current logged user
    * 
    * @return session id
    * @since 1.0
    */
-  public String getSession() {
-    return session;
-  }
+  String getSession();
 
   /**
    * Open a session with giving session id of already logged-in user
@@ -43,9 +38,7 @@ public abstract class GeocachingApi {
    *           If Geocaching API error occurs
    * @since 1.0
    */
-  public void openSession(String session) throws GeocachingApiException {
-    this.session = session;
-  }
+  void openSession(String session) throws GeocachingApiException;
 
   /**
    * Open a new session and log-in user
@@ -58,14 +51,14 @@ public abstract class GeocachingApi {
    *           If Geocaching API error occurs
    * @since 1.0
    */
-  public abstract void openSession(String userName, String password) throws GeocachingApiException;
+  void openSession(String userName, String password) throws GeocachingApiException;
 
   /**
    * Close current used session
    * 
    * @since 1.0
    */
-  public abstract void closeSession();
+  void closeSession();
 
   /**
    * Check if current used session is still valid
@@ -73,7 +66,7 @@ public abstract class GeocachingApi {
    * @return true if is valid otherwise false
    * @since 1.0
    */
-  public abstract boolean isSessionValid();
+  boolean isSessionValid();
 
   /**
    * Get a trackable object for given trackable code. This method works for
@@ -88,7 +81,7 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.1
    */
-  public abstract Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException;
+  Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException;
 
   /**
    * Get a list of trackables which is currently placed in a cache.
@@ -106,8 +99,7 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.1
    */
-  public abstract List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount)
-      throws GeocachingApiException;
+  List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException;
 
   /**
    * Get a list of cache logs in given cache.
@@ -123,7 +115,7 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.1
    */
-  public abstract List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
+  List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
 
   /**
    * Get a basic information about cache.
@@ -135,14 +127,7 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.0
    */
-  public SimpleGeocache getCacheSimple(String cacheCode) throws GeocachingApiException {
-    List<SimpleGeocache> caches = searchForGeocaches(true, 1, 0, 0, new Filter[] {
-        new CacheCodeFilter(cacheCode)
-    });
-    if (caches.size() == 0)
-      return null;
-    return caches.get(0);
-  }
+  SimpleGeocache getCacheSimple(String cacheCode) throws GeocachingApiException;
 
   /**
    * Get a full information about cache.
@@ -158,14 +143,7 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.0
    */
-  public Geocache getCache(String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException {
-    List<SimpleGeocache> caches = searchForGeocaches(false, 1, cacheLogCount, trackableCount, new Filter[] {
-        new CacheCodeFilter(cacheCode)
-    });
-    if (caches.size() == 0)
-      return null;
-    return (Geocache) caches.get(0);
-  }
+  Geocache getCache(String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException;
 
   /**
    * Search for geocaches and return list of found.
@@ -186,8 +164,8 @@ public abstract class GeocachingApi {
    *           If error occurs during searching caches
    * @since 1.1
    */
-  public abstract List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount,
-      Filter[] filters) throws GeocachingApiException;
+  List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount, Filter[] filters)
+      throws GeocachingApiException;
 
   /**
    * 
@@ -207,7 +185,7 @@ public abstract class GeocachingApi {
    *           If error occurs during searching caches
    * @since 1.1
    */
-  public abstract List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount)
+  List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount)
       throws GeocachingApiException;
 
   /**
@@ -228,8 +206,8 @@ public abstract class GeocachingApi {
    *           If error occurs during getting information
    * @since 1.2
    */
-  public abstract UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
-      boolean trackableData) throws GeocachingApiException;
+  UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData)
+      throws GeocachingApiException;
 
   /**
    * Create field note and publish them or store them to list of Field notes on
@@ -256,7 +234,7 @@ public abstract class GeocachingApi {
    *           If error occurs during sending field note
    * @since 1.1
    */
-  public abstract CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
+  CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
       boolean favoriteThisCache) throws GeocachingApiException;
 
   /**
@@ -278,8 +256,19 @@ public abstract class GeocachingApi {
    *           If error occurs during sending field note
    * @since 1.1
    */
-  public CacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
-    return createFieldNoteAndPublish(fieldNote.getCacheCode(), fieldNote.getLogType(), fieldNote.getDateLogged(), fieldNote.getNote(), publish, imageData,
-        favoriteThisCache);
-  }
+  CacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
+
+  /**
+   * Store a personal note for specified cache. If note parameter is null or
+   * empty the note will be removed.
+   * 
+   * @param cacheCode
+   *          geocache which can own this personal note
+   * @param note
+   *          personal note
+   * @throws GeocachingApiException
+   *           If error occurs during sending field note
+   * @since 1.4.3
+   */
+  void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
 }

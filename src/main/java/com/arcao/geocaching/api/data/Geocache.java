@@ -19,6 +19,7 @@ public class Geocache extends SimpleGeocache {
   private final List<Waypoint> waypoints;
   private final List<AttributeType> attributes;
   private final List<UserWaypoint> userWaypoints;
+  private final String personalNote;
 
   public Geocache(String cacheCode, String name, double longitude,
       double latitude, CacheType cacheType, float difficultyRating,
@@ -27,7 +28,7 @@ public class Geocache extends SimpleGeocache {
       Date created, String contactName, ContainerType containerType,
       int trackableCount, boolean found, String countryName, String stateName, String shortDescription,
       String longDescrition, String hint, List<CacheLog> cacheLogs,
-      List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints) {
+      List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote) {
     super(cacheCode, name, longitude, latitude, cacheType, difficultyRating,
         terrainRating, author, available, archived,
         premiumListing, created, contactName, containerType, trackableCount, found);
@@ -41,6 +42,7 @@ public class Geocache extends SimpleGeocache {
     this.waypoints = waypoints;
     this.attributes = attributes;
     this.userWaypoints = userWaypoints;
+    this.personalNote = personalNote;
   }
   
   public String getCountryName() {
@@ -81,6 +83,10 @@ public class Geocache extends SimpleGeocache {
 
   public List<UserWaypoint> getUserWaypoints() {
     return userWaypoints;
+  }
+  
+  public String getPersonalNote() {
+    return personalNote;
   }
 
   @Override

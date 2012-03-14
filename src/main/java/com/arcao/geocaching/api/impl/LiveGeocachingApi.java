@@ -19,7 +19,7 @@ import java.util.zip.InflaterInputStream;
 
 import org.apache.log4j.Logger;
 
-import com.arcao.geocaching.api.GeocachingApi;
+import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
@@ -53,7 +53,7 @@ import com.google.gson.stream.JsonWriter;
  * @author arcao
  *
  */
-public class LiveGeocachingApi extends GeocachingApi {
+public class LiveGeocachingApi extends AbstractGeocachingApi {
   private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
 	protected static final String BASE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
 	
@@ -70,7 +70,6 @@ public class LiveGeocachingApi extends GeocachingApi {
     this.licenseKey = licenseKey;
   }
 
-	@Override
 	public void openSession(String userName, String password) throws GeocachingApiException {
 		try {
 			JsonReader r = callGet(
@@ -100,21 +99,18 @@ public class LiveGeocachingApi extends GeocachingApi {
 			session = null;
 		} catch (IOException e) {
 		  logger.error(e.toString(), e);
-			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
 		}
 	}
 	
-	@Override
 	public void closeSession() {
 		session = null;
 	}
 
-	@Override
 	public boolean isSessionValid() {
 		return true;
 	}
 	
-	@Override
 	public List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount,
 			Filter[] filters) throws GeocachingApiException {
 		
@@ -162,11 +158,10 @@ public class LiveGeocachingApi extends GeocachingApi {
 			return list;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
-			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
 		}
 	}
 	
-	@Override
 	public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
 	  List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
     
@@ -209,11 +204,10 @@ public class LiveGeocachingApi extends GeocachingApi {
       return list;
     } catch (IOException e) {
       logger.error(e.toString(), e);
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 	}
 
-	@Override
 	public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
 	  List<Trackable> list = null;
     
@@ -255,11 +249,10 @@ public class LiveGeocachingApi extends GeocachingApi {
       return list.get(0);
     } catch (IOException e) {
       logger.error(e.toString(), e);
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 	}
 
-	@Override
 	public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
 	  List<Trackable> list = null;
     
@@ -289,11 +282,10 @@ public class LiveGeocachingApi extends GeocachingApi {
       return list;
     } catch (IOException e) {
       logger.error(e.toString(), e);
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 	}
 
-	@Override
 	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode,  int startIndex, int maxPerPage) throws GeocachingApiException {
 	  List<CacheLog> list = null;
     
@@ -322,11 +314,10 @@ public class LiveGeocachingApi extends GeocachingApi {
       return list;
     } catch (IOException e) {
       logger.error(e.toString(), e);
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 	}
 	
-	@Override
 	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
 			boolean favoriteThisCache) throws GeocachingApiException {
     CacheLog cacheLog = null;
@@ -366,13 +357,66 @@ public class LiveGeocachingApi extends GeocachingApi {
       return cacheLog;
     } catch (IOException e) {
       logger.error(e.toString(), e);
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage());
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 	}
 	
-	@Override
 	public UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData) throws GeocachingApiException {
 		throw new GeocachingApiException("Not implemented.");
+	}
+	
+	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
+	  if (note == null || note.length() == 0) {
+	    deleteCachePersonalNote(cacheCode);
+	    return;
+	  }
+	  
+	  try {
+      StringWriter sw = new StringWriter();
+      JsonWriter w = new JsonWriter(sw);
+      w.beginObject();
+      w.name("AccessToken").value(session);
+      w.name("CacheCode").value(cacheCode);
+      w.name("Note").value(note);      
+      w.endObject();
+      w.close();
+      
+      JsonReader r = callPost("UpdateCacheNote?format=json", sw.toString());
+      r.beginObject();
+      checkError(r);
+      
+      while(r.hasNext()) {
+        r.nextName();
+        r.skipValue();
+      }
+      r.endObject();
+      r.close();
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+    }
+	}
+	
+	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
+    try {
+      JsonReader r = callGet(
+          "GetTrackablesByTBCode?AccessToken=" + session +
+           "&cacheCode=" + cacheCode +
+           "&format=json"
+      );
+      r.beginObject();
+      checkError(r);
+
+      while (r.hasNext()) {
+        r.nextName();
+        r.skipValue();
+      }
+      r.endObject();
+      r.close();
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+    }
 	}
 	
 	// -------------------- Helper methods ----------------------------------------
