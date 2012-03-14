@@ -267,8 +267,8 @@ public interface GeocachingApi {
    * @param note
    *          personal note
    * @throws GeocachingApiException
-   *           If error occurs during sending field note
-   * @since 1.4.3
+   *           If error occurs during personal note storing
+   * @since 1.4.2
    */
   void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
 }
