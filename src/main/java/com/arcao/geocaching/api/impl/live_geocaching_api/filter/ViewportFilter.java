@@ -56,7 +56,7 @@ public class ViewportFilter implements Filter {
     w.name("TopLeft");
     w.beginObject();
     w.name("Latitude").value(topLeftLatitude);
-    w.name("Longitude").value(topLeftLatitude);
+    w.name("Longitude").value(topLeftLongitude);
     w.endObject();
     
     w.name("BottomRight");
