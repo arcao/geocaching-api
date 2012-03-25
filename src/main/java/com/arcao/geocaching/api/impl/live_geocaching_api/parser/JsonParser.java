@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import com.arcao.geocaching.api.data.User;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
@@ -86,33 +87,35 @@ public class JsonParser {
 		return memberType;
 	}
 	
-	protected static float[] parseHomeCoordinates(JsonReader r) throws IOException {
-		float[] coordinates = new float[2];
+	protected static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
+		double latitude = Double.NaN;
+		double longitude = Double.NaN;
+	  
 		if (r.peek() == JsonToken.NULL) {
 			r.nextNull();
-			return new float[] { Float.NaN, Float.NaN};
+			return new Coordinates(latitude, longitude);
 		}
 		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("Latitude".equals(name)) {
-				coordinates[0] = (float) r.nextDouble();
+				latitude = (float) r.nextDouble();
 			} else if ("Longitude".equals(name)) {
-				coordinates[1] = (float) r.nextDouble();
+				longitude = (float) r.nextDouble();
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		return coordinates;
+		return new Coordinates(latitude, longitude);
 	}
 	
 	protected static User parseUser(JsonReader r) throws IOException {
 		String avatarUrl = "";
 		int findCount = 0;
 		int hideCount = 0;
-		float[] homeCoordinates = new float[] { Float.NaN, Float.NaN};
+		Coordinates homeCoordinates = new Coordinates(Double.NaN, Double.NaN);
 		long id = 0;
 		boolean admin = false;
 		MemberType memberType = null;

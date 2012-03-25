@@ -46,6 +46,14 @@ public class ImageData implements JsonSerializable {
     return url;
   }
   
+  /**
+   * Return Base64 encoded data of local read image otherwise null if the image data belongs to image saved on internet.
+   * @return Base 64 encoded image data
+   */
+  public byte[] getImageData() {
+    return imageData;
+  }
+  
   public static ImageData fromInputStream(String description, String name, String fileName, InputStream is) throws IOException {
     
     ByteArrayOutputStream bos = new ByteArrayOutputStream();

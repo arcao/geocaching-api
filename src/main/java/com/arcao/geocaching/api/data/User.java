@@ -3,20 +3,21 @@ package com.arcao.geocaching.api.data;
 
 import java.lang.reflect.Method;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
 
 public class User {
 	private final String avatarUrl;
 	private final int findCount;
 	private final int hideCount;
-	private final float[] homeCoordinates;
+	private final Coordinates homeCoordinates;
 	private final long id;
 	private final boolean admin;
 	private final MemberType memberType;
 	private final String publicGuid;
 	private final String userName;
 	
-	public User(String avatarUrl, int findCount, int hideCount, float[] homeCoordinates, long id, boolean admin, MemberType memberType, String publicGuid,
+	public User(String avatarUrl, int findCount, int hideCount, Coordinates homeCoordinates, long id, boolean admin, MemberType memberType, String publicGuid,
 			String userName) {
 		this.avatarUrl = avatarUrl;
 		this.findCount = findCount;
@@ -41,7 +42,7 @@ public class User {
 		return hideCount;
 	}
 
-	public float[] getHomeCoordinates() {
+	public Coordinates getHomeCoordinates() {
 		return homeCoordinates;
 	}
 

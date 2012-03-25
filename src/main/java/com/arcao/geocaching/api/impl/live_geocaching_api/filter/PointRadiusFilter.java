@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.filter;
 
 import java.io.IOException;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonWriter;
 
 public class PointRadiusFilter implements Filter {
@@ -17,6 +18,16 @@ public class PointRadiusFilter implements Filter {
 		this.distanceInMeters = distanceInMeters;
 	}
 	
+  /**
+   * 
+   * @since 1.5
+   */
+public PointRadiusFilter(Coordinates coordinates, long distanceInMeters) {
+    latitude = coordinates.getLatitude();
+    longitude = coordinates.getLongitude();
+    this.distanceInMeters = distanceInMeters;
+  }
+	
 	public double getLatitude() {
 		return latitude;
 	}
@@ -24,6 +35,14 @@ public class PointRadiusFilter implements Filter {
 	public double getLongitude() {
 		return longitude;
 	}
+	
+  /**
+   * 
+   * @since 1.5
+   */
+  public Coordinates getCoordinates() {
+    return new Coordinates(latitude, longitude); 
+  }
 	
 	public long getDistanceInMeters() {
 		return distanceInMeters;

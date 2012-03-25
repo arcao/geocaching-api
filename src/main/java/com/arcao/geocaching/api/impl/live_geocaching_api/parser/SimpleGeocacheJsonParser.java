@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.User;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.MemberType;
@@ -37,7 +38,7 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		CacheType cacheType = CacheType.Unknown;
 		float difficultyRating = 1;
 		float terrainRating = 1;
-		User author = new User("", 0, 0, new float[] {Float.NaN, Float.NaN}, 0, false, MemberType.Guest, "", "");
+		User author = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
 		boolean available = false;
 		boolean archived = false;
 		boolean premiumListing = false;
@@ -88,6 +89,6 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new SimpleGeocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found);
+		return new SimpleGeocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found);
 	}
 }

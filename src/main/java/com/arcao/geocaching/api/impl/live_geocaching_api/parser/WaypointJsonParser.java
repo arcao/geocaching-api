@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.Waypoint;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.WaypointType;
 import com.google.gson.stream.JsonToken;
 
@@ -57,6 +58,6 @@ public class WaypointJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new Waypoint(longitude, latitude, time, waypointCode, waypointName, note, waypointType);
+		return new Waypoint(new Coordinates(latitude, longitude), time, waypointCode, waypointName, note, waypointType);
 	}
 }

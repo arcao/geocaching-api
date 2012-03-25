@@ -7,14 +7,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 
 public class SimpleGeocache {
 	private final String cacheCode;
 	private final String name;
-	private final double longitude;
-	private final double latitude;
+	private final Coordinates coordinates;
 	private final CacheType cacheType;
 	private final float difficultyRating;
 	private final float terrainRating;
@@ -33,16 +33,15 @@ public class SimpleGeocache {
 		GPX_TIME_FMT.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
 	}
 
-	public SimpleGeocache(String cacheCode, String name, double longitude,
-			double latitude, CacheType cacheType, float difficultyRating,
+	public SimpleGeocache(String cacheCode, String name, Coordinates coordinates,
+			CacheType cacheType, float difficultyRating,
 			float terrainRating, User author,
 			boolean available, boolean archived, boolean premiumListing,
 			Date created, String contactName, ContainerType containerType,
 			int trackableCount, boolean found) {
 		this.cacheCode = cacheCode;
 		this.name = name;
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.coordinates = coordinates;
 		this.cacheType = cacheType;
 		this.difficultyRating = difficultyRating;
 		this.terrainRating = terrainRating;
@@ -64,13 +63,17 @@ public class SimpleGeocache {
 	public String getName() {
 		return name;
 	}
-
-	public double getLongitude() {
-		return longitude;
-	}
+	
+	public Coordinates getCoordinates() {
+    return coordinates;
+  }
 
 	public double getLatitude() {
-		return latitude;
+		return coordinates.getLatitude();
+	}
+
+	public double getLongitude() {
+		return coordinates.getLongitude();
 	}
 
 	public CacheType getCacheType() {

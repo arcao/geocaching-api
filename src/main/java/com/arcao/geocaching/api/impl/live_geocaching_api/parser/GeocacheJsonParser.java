@@ -8,11 +8,13 @@ import java.util.List;
 
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.Geocache;
+import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.UserWaypoint;
 import com.arcao.geocaching.api.data.Waypoint;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
@@ -43,7 +45,7 @@ public class GeocacheJsonParser extends JsonParser {
 		CacheType cacheType = CacheType.Unknown;
 		float difficultyRating = 1;
 		float terrainRating = 1;
-		User author = new User("", 0, 0, new float[] {Float.NaN, Float.NaN}, 0, false, MemberType.Guest, "", "");
+		User author = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
 		boolean available = false;
 		boolean archived = false;
 		boolean premiumListing = false;
@@ -63,6 +65,7 @@ public class GeocacheJsonParser extends JsonParser {
 		List<AttributeType> attributes = new ArrayList<AttributeType>();
 		List<UserWaypoint> userWaypoints = new ArrayList<UserWaypoint>();
 		String personalNote = "";
+		List<ImageData> images = new ArrayList<ImageData>();
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -121,12 +124,14 @@ public class GeocacheJsonParser extends JsonParser {
 				userWaypoints = UserWaypointsJsonParser.parseList(r);
 			} else if ("GeocacheNote".equals(name)) {
 			  personalNote = r.nextString();	  
+			} else if ("Images".equals(name)) {
+        images = ImageDataJsonParser.parseList(r);
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 		
-		return new Geocache(cacheCode, cacheName, longitude, latitude, cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote);
+		return new Geocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
 	}
 }

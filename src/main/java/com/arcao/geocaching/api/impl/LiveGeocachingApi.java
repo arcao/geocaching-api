@@ -437,6 +437,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				default:
 					throw new LiveGeocachingApiException(status.getStatusCode(), status.getStatusMessage());
 			}
+		} else {
+		  throw new GeocachingApiException("Missing Status in a response.");
 		}
 	}
 	

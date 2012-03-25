@@ -3,22 +3,22 @@ package com.arcao.geocaching.api.data;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
+
 public class UserWaypoint {
 	private final String cacheCode;
 	private final String description;
 	private final long id;
-	private final double latitude;
-	private final double longitude;
+	private final Coordinates coordinates;
 	private final Date date;
 	private final int userId;
 	
-	public UserWaypoint(String cacheCode, String description, long id, double latitude, double longitude, Date date, int userId) {
+	public UserWaypoint(String cacheCode, String description, long id, Coordinates coordinates, Date date, int userId) {
 		super();
 		this.cacheCode = cacheCode;
 		this.description = description;
 		this.id = id;
-		this.latitude = latitude;
-		this.longitude = longitude;
+		this.coordinates = coordinates;
 		this.date = date;
 		this.userId = userId;
 	}
@@ -35,12 +35,16 @@ public class UserWaypoint {
 		return id;
 	}
 	
+	public Coordinates getCoordinates() {
+    return coordinates;
+  }
+	
 	public double getLatitude() {
-		return latitude;
+		return coordinates.getLatitude();
 	}
 	
 	public double getLongitude() {
-		return longitude;
+		return coordinates.getLongitude();
 	}
 	
 	public Date getDate() {

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.UserWaypoint;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonToken;
 
 public class UserWaypointsJsonParser extends JsonParser { 
@@ -56,6 +57,6 @@ public class UserWaypointsJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new UserWaypoint(cacheCode, description, id, latitude, longitude, date, userId);
+		return new UserWaypoint(cacheCode, description, id, new Coordinates(latitude, longitude), date, userId);
 	}
 }
