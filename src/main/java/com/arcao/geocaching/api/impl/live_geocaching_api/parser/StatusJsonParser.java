@@ -13,7 +13,8 @@ public class StatusJsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("StatusCode".equals(name)) {
-				status.statusCode = StatusCode.parseStatusCode(r.nextInt());
+			  status.originalStatusCode = r.nextInt();
+				status.statusCode = StatusCode.parseStatusCode(status.originalStatusCode);
 			} else if ("StatusMessage".equals(name)) {
 				status.statusMessage = r.nextString();
 			} else if ("ExceptionDetails".equals(name)) {
@@ -27,6 +28,7 @@ public class StatusJsonParser {
 	}
 		
 	public static class Status {
+	  protected int originalStatusCode;
 		protected StatusCode statusCode;
 		protected String statusMessage;
 		protected String exceptionDetails;
@@ -34,6 +36,10 @@ public class StatusJsonParser {
 		public StatusCode getStatusCode() {
 			return statusCode;
 		}
+		
+		public int getOriginalStatusCode() {
+      return originalStatusCode;
+    }
 		
 		public String getStatusMessage() {
 			return statusMessage;

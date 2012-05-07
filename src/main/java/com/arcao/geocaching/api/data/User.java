@@ -7,6 +7,8 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
 
 public class User {
+  public static final User EMPTY = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
+  
 	private final String avatarUrl;
 	private final int findCount;
 	private final int hideCount;

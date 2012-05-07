@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class Trackable {
 	private final String guid;
@@ -13,14 +14,16 @@ public class Trackable {
 	private final String currentCacheCode;
 	private final User currentOwner;
 	private final String trackingNumber;
-	private final String lookupCode;
+	private String lookupCode;
+	
+	private final List<TrackableLog> trackableLogs;
 
 	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
 	public Trackable(String guid, String name, String goal, String description,
 			String trackableTypeName, String trackableTypeImage,
 			User owner, String currentCacheCode,
-			User currentOwner, String trackingNumber) {
+			User currentOwner, String trackingNumber, List<TrackableLog> trackableLogs) {
 		this.guid = guid;
 		this.name = name;
 		this.goal = goal;
@@ -31,38 +34,9 @@ public class Trackable {
 		this.currentCacheCode = currentCacheCode;
 		this.currentOwner = currentOwner;
 		this.trackingNumber = trackingNumber;
+		
+		this.trackableLogs = trackableLogs;
 
-		lookupCode = "";
-	}
-
-	public Trackable(String lookupCode, String name, String trackingNumber,
-			User owner) {
-		this.lookupCode = lookupCode;
-		this.name = name;
-		this.trackingNumber = trackingNumber;
-		this.owner = owner;
-
-		guid = "";
-		goal = "";
-		description = "";
-		trackableTypeName = "";
-		trackableTypeImage = "";
-		currentCacheCode = null;
-		currentOwner = null;
-	}
-
-	public Trackable(String trackingNumber, String name, String currentCacheCode) {
-		this.trackingNumber = trackingNumber;
-		this.name = name;
-		this.currentCacheCode = currentCacheCode;
-
-		guid = "";
-		goal = "";
-		description = "";
-		trackableTypeName = "";
-		trackableTypeImage = "";
-		owner = null;
-		currentOwner = null;
 		lookupCode = "";
 	}
 
@@ -109,6 +83,10 @@ public class Trackable {
 	public String getLookupCode() {
 		return lookupCode;
 	}
+	
+	public void setLookupCode(String lookupCode) {
+    this.lookupCode = lookupCode;
+  }
 	
 	public String getTrackablePage() {
 	  return String.format(TRACKABLE_URL, trackingNumber);

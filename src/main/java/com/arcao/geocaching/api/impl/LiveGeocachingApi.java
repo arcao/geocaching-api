@@ -24,6 +24,7 @@ import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
@@ -38,6 +39,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.SimpleGeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
 import com.google.gson.stream.JsonWriter;
 
 /**
@@ -60,6 +62,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected final String consumerKey;
 	protected final String licenseKey;
 	
+	private boolean sessionValid = false;
+	
 	/**
 	 * Create a new instance of LiveGeocachingApi with specified consumer key and license key.
 	 * @param consumerKey consumer key
@@ -69,14 +73,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     this.consumerKey = consumerKey;
     this.licenseKey = licenseKey;
   }
+	
+	@Override
+	public void openSession(String session) throws GeocachingApiException {
+	  super.openSession(session);
+	  sessionValid = true;
+	}
 
-	public void openSession(String userName, String password) throws GeocachingApiException {
+	public void openSession(String username, String password) throws GeocachingApiException {
 		try {
 			JsonReader r = callGet(
-					"GetUserCredentials?ConsumerKey=" + consumerKey +
-					"&LicenseKey=" + licenseKey + 
-					"&Username=" + URLEncoder.encode(userName, "UTF-8") +
-					"&Password=" + URLEncoder.encode(password, "UTF-8") +
+					"GetUserCredentials?consumerKey=" + consumerKey +
+					"&licenseKey=" + licenseKey + 
+					"&username=" + URLEncoder.encode(username, "UTF-8") +
+					"&password=" + URLEncoder.encode(password, "UTF-8") +
 					"&format=json"
 			);
 
@@ -94,6 +104,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			r.endObject();
 			r.close();
 			logger.debug("Session: " + session);
+			sessionValid = true;
 		} catch (UnsupportedEncodingException e) {
 		  logger.error(e.toString(), e);
 			session = null;
@@ -108,7 +119,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	public boolean isSessionValid() {
-		return true;
+		return sessionValid;
 	}
 	
 	public List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount,
@@ -216,16 +227,16 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       
       if (trackableCode.toLowerCase().startsWith("tb")) {
         r = callGet(
-            "GetTrackablesByTBCode?AccessToken=" + session +
-            "&TBCode=" + trackableCode + 
-            "&TrackableLogCount=" + trackableLogCount +
+            "GetTrackablesByTBCode?accessToken=" + session +
+            "&tbCode=" + trackableCode + 
+            "&trackableLogCount=" + trackableLogCount +
             "&format=json"
         );
       } else {
         r = callGet(
-            "GetTrackablesByTrackingNumber?AccessToken=" + session +
-            "&TrackingNumber=" + trackableCode + 
-            "&TrackableLogCount=" + trackableLogCount +
+            "GetTrackablesByTrackingNumber?accessToken=" + session +
+            "&trackingNumber=" + trackableCode + 
+            "&trackableLogCount=" + trackableLogCount +
             "&format=json"
         );
       }
@@ -246,6 +257,10 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       if (list == null || list.size() == 0)
         return null;
       
+      if (!trackableCode.toLowerCase().startsWith("tb")) {
+        list.get(0).setLookupCode(trackableCode);
+      }
+      
       return list.get(0);
     } catch (IOException e) {
       logger.error(e.toString(), e);
@@ -254,15 +269,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
-	  List<Trackable> list = null;
+	  List<Trackable> list = new ArrayList<Trackable>();
     
     try {
       JsonReader r = callGet(
-            "GetTrackablesInCache?AccessToken=" + session +
-            "&CacheCode=" + cacheCode +
-            "&StartIndex=" + startIndex + 
-            "&MaxPerPage=" + maxPerPage + 
-            "&TrackableLogCount=" + trackableLogCount +
+            "GetTrackablesInCache?accessToken=" + session +
+            "&cacheCode=" + cacheCode +
+            "&startIndex=" + startIndex + 
+            "&maxPerPage=" + maxPerPage + 
+            "&trackableLogCount=" + trackableLogCount +
             "&format=json"
       );
       
@@ -287,14 +302,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode,  int startIndex, int maxPerPage) throws GeocachingApiException {
-	  List<CacheLog> list = null;
+	  List<CacheLog> list = new ArrayList<CacheLog>();
     
     try {
       JsonReader r = callGet(
-            "GetGeocacheLogsByCacheCode?AccessToken=" + session +
-            "&CacheCode=" + cacheCode +
-            "&StartIndex=" + startIndex + 
-            "&MaxPerPage=" + maxPerPage + 
+            "GetGeocacheLogsByCacheCode?accessToken=" + session +
+            "&cacheCode=" + cacheCode +
+            "&startIndex=" + startIndex + 
+            "&maxPerPage=" + maxPerPage + 
             "&format=json"
       );
       
@@ -400,7 +415,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
     try {
       JsonReader r = callGet(
-          "GetTrackablesByTBCode?AccessToken=" + session +
+          "DeleteCacheNote?accessToken=" + session +
            "&cacheCode=" + cacheCode +
            "&format=json"
       );
@@ -419,6 +434,38 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 	}
 	
+  public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
+    List<TrackableLog> list = new ArrayList<TrackableLog>();
+
+    try {
+      JsonReader r = callGet(
+          "GetGeocacheLogsByCacheCode?accessToken=" + session +
+              "&tbCode=" + trackableCode +
+              "&startIndex=" + startIndex +
+              "&maxPerPage=" + maxPerPage +
+              "&format=json"
+          );
+
+      r.beginObject();
+      checkError(r);
+      while (r.hasNext()) {
+        String name = r.nextName();
+        if ("TrackableLogs".equals(name)) {
+          list = TrackableLogJsonParser.parseList(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+      r.close();
+
+      return list;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+    }
+  }
+	
 	// -------------------- Helper methods ----------------------------------------
 	
 	protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
@@ -431,11 +478,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				case NotAuthorized:
 				case UserDidNotAuthorize:
 				case UserTokenNotValid:
+				case SessionExpired:
+				  sessionValid = false;
 					throw new InvalidSessionException(status.getStatusMessage());
 				case AccountNotFound:
+				  sessionValid = false;
 					throw new InvalidCredentialsException(status.getStatusMessage());
 				default:
-					throw new LiveGeocachingApiException(status.getStatusCode(), status.getStatusMessage());
+					throw new LiveGeocachingApiException(status);
 			}
 		} else {
 		  throw new GeocachingApiException("Missing Status in a response.");

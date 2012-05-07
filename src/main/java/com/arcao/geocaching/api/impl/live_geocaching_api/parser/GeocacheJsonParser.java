@@ -18,7 +18,6 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
-import com.arcao.geocaching.api.data.type.MemberType;
 import com.google.gson.stream.JsonToken;
 
 public class GeocacheJsonParser extends JsonParser {
@@ -45,7 +44,7 @@ public class GeocacheJsonParser extends JsonParser {
 		CacheType cacheType = CacheType.Unknown;
 		float difficultyRating = 1;
 		float terrainRating = 1;
-		User author = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
+		User author = User.EMPTY;
 		boolean available = false;
 		boolean archived = false;
 		boolean premiumListing = false;

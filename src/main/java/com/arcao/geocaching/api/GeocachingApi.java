@@ -9,6 +9,7 @@ import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
@@ -43,7 +44,7 @@ public interface GeocachingApi {
   /**
    * Open a new session and log-in user
    * 
-   * @param userName
+   * @param username
    *          user name
    * @param password
    *          password
@@ -51,7 +52,7 @@ public interface GeocachingApi {
    *           If Geocaching API error occurs
    * @since 1.0
    */
-  void openSession(String userName, String password) throws GeocachingApiException;
+  void openSession(String username, String password) throws GeocachingApiException;
 
   /**
    * Close current used session
@@ -271,4 +272,20 @@ public interface GeocachingApi {
    * @since 1.4.2
    */
   void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
+
+  /**
+   * Get a list of trackable logs for given public trackable code.
+   * 
+   * @param trackableCode
+   *          public trackable code
+   * @param startIndex
+   *          count of trackable logs to skip
+   * @param maxPerPage
+   *          count of trackable logs to get
+   * @return list of trackable logs
+   * @throws GeocachingApiException
+   *           If error occurs during getting information
+   * @since 1.5.1
+   */
+  List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException;
 }

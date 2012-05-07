@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.User;
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.MemberType;
 import com.google.gson.stream.JsonToken;
 
 public class TrackableJsonParser extends JsonParser {
@@ -33,10 +32,12 @@ public class TrackableJsonParser extends JsonParser {
 		String description = "";
 		String travelBugTypeName = "";
 		String travelBugTypeImage = "";
-		User owner = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
+		User owner = User.EMPTY;
 		String currentCacheCode = "";
 		User currentOwner = null;
 		String trackingNumber = "";
+		
+		List<TrackableLog> trackableLogs = new ArrayList<TrackableLog>();
 
 		r.beginObject();
 		while(r.hasNext()) {
@@ -61,12 +62,14 @@ public class TrackableJsonParser extends JsonParser {
 				currentOwner = parseUser(r);
 			} else if ("Code".equals(name)) {
 				trackingNumber = r.nextString();
+			} else if ("TrackableLogs".equals(name)) {
+        trackableLogs = TrackableLogJsonParser.parseList(r);
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 		
-		return new Trackable(guid, travelBugName, goal, description, travelBugTypeName, travelBugTypeImage, owner, currentCacheCode, currentOwner, trackingNumber);
+		return new Trackable(guid, travelBugName, goal, description, travelBugTypeName, travelBugTypeImage, owner, currentCacheCode, currentOwner, trackingNumber, trackableLogs);
 	}
 }

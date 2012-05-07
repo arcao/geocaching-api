@@ -8,9 +8,7 @@ import java.util.List;
 
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.User;
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheLogType;
-import com.arcao.geocaching.api.data.type.MemberType;
 import com.google.gson.stream.JsonToken;
 
 public class CacheLogJsonParser extends JsonParser {
@@ -31,7 +29,7 @@ public class CacheLogJsonParser extends JsonParser {
 	public static CacheLog parse(JsonReader r) throws IOException {
 		Date date = new Date(0);
 		CacheLogType cacheLogType = CacheLogType.Unknown;
-		User author = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
+		User author = User.EMPTY;
 		String text = "";
 		
 		r.beginObject();

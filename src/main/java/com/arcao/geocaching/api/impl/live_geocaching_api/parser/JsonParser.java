@@ -16,6 +16,7 @@ import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.MemberType;
+import com.arcao.geocaching.api.data.type.TrackableLogType;
 import com.google.gson.stream.JsonToken;
 
 public class JsonParser {
@@ -184,5 +185,20 @@ public class JsonParser {
 		}
 		r.endArray();
 		return list;
-	}	
+	}
+	
+	protected static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
+    TrackableLogType trackableLogType = TrackableLogType.Unknown;
+    r.beginObject();
+    while(r.hasNext()) {
+      String name = r.nextName();
+      if ("WptLogTypeId".equals(name)) {
+        trackableLogType = TrackableLogType.parseTrackableLogTypeByGroundSpeakId(r.nextInt());
+      } else {
+        r.skipValue();
+      }
+    }
+    r.endObject();
+    return trackableLogType;
+  }
 }
