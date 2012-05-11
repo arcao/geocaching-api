@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data;
 
-
 import java.lang.reflect.Method;
 import java.util.Date;
 
@@ -8,35 +7,57 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
 
 /**
  * CacheLog class keep all information cache log.
+ * 
  * @author arcao
- *
+ * 
  */
 public class CacheLog {
-	private final Date date;
+	private final Date visited;
+	private final Date created;
 	private final CacheLogType cacheLogType;
 	private final User author;
 	private final String text;
 
 	/**
-	 * Create a new instance of cache log and fill it with data 
-	 * @param date date when the cache was found
+	 * Create a new instance of cache log and fill it with data
+	 * @param created date when the cache log was created (logged) on Geocaching site
+	 * @param visited date when the cache was visited (found)
 	 * @param cacheLogType type of log
 	 * @param author author of log
 	 * @param text text of log
 	 */
-	public CacheLog(Date date, CacheLogType cacheLogType, User author, String text) {
-		this.date = date;
+	public CacheLog(Date created, Date visited, CacheLogType cacheLogType, User author, String text) {
+		this.created = created;
+		this.visited = visited;
 		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
 	}
 
 	/**
-	 * Get a date when the cache was found
+	 * Get a date when the cache was visited (found)
+	 * @return date
+	 * @deprecated use {@link #getVisited()} instead
+	 */
+	@Deprecated
+	public Date getDate() {
+		return visited;
+	}
+
+	/**
+	 * Get a date when the cache log was created (logged) on Geocaching site
 	 * @return date
 	 */
-	public Date getDate() {
-		return date;
+	public Date getCreated() {
+		return created;
+	}
+
+	/**
+	 * Get a date when the cache was visited (found)
+	 * @return date
+	 */
+	public Date getVisited() {
+		return visited;
 	}
 
 	/**
@@ -77,8 +98,7 @@ public class CacheLog {
 			sb.append(':');
 			try {
 				sb.append(m.invoke(this, new Object[0]));
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 			sb.append(", ");
 		}
 		return sb.toString();

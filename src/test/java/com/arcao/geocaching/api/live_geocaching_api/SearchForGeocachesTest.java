@@ -18,11 +18,11 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilte
 
 public class SearchForGeocachesTest extends AbstractGeocachingTest {
   protected final static String CACHE_CODE = "GCY81P";
-  
+
   @Test
   public void getSimpleGeocacheByCacheCodeTest() throws Exception {
     SimpleGeocache cache = api.getCacheSimple(CACHE_CODE);
-    
+
     Assert.assertNotNull(cache);
     Assert.assertNotNull(cache.getAuthor());
     Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
@@ -31,6 +31,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame("", cache.getContactName());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotSame(new Date(0), cache.getCreated());
+    Assert.assertNotSame(new Date(0), cache.getPlaced());
+    Assert.assertNotSame(new Date(0), cache.getLastUpdated());
     Assert.assertEquals(1.5F, cache.getDifficultyRating(), 0);
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
@@ -41,11 +43,11 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
   }
-  
+
   @Test
   public void getGeocacheByCacheCodeTest() throws Exception {
     Geocache cache = api.getCache(CACHE_CODE, 5, -1);
-    
+
     Assert.assertNotNull(cache);
     Assert.assertNotNull(cache.getAuthor());
     Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
@@ -54,6 +56,9 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame("", cache.getContactName());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotSame(new Date(0), cache.getCreated());
+    Assert.assertNotSame(new Date(0), cache.getPlaced());
+    Assert.assertNotSame(new Date(0), cache.getLastUpdated());
+    Assert.assertNotSame(new Date(0), cache.getLastVisited());
     Assert.assertEquals(1.5F, cache.getDifficultyRating(), 0);
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
@@ -63,30 +68,31 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertEquals(true, cache.isAvailable());
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
-    
+
     Assert.assertNotSame("", cache.getCountryName());
     Assert.assertNotSame("", cache.getStateName());
-    
+
     Assert.assertEquals(8, cache.getWaypoints().size());
 
     Assert.assertEquals(5, cache.getCacheLogs().size());
     for (CacheLog cacheLog : cache.getCacheLogs()) {
       Assert.assertNotSame("", cacheLog.getAuthor());
-      Assert.assertNotSame(new Date(0), cacheLog.getDate());
+      Assert.assertNotSame(new Date(0), cacheLog.getCreated());
+      Assert.assertNotSame(new Date(0), cacheLog.getVisited());
       Assert.assertNotSame(CacheLogType.Unknown, cacheLog.getLogType());
       Assert.assertNotSame("", cacheLog.getText());
     }
-    
+
     // TODO more tests
   }
-  
+
   @Test
   public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws Exception {
     Assert.assertEquals(
-        3, 
+        3,
         api.searchForGeocaches(true, 3, 0, 0, new Filter[] {
             new PointRadiusFilter(50, 14, 60000)
         }).size()
-     );
+        );
   }
 }

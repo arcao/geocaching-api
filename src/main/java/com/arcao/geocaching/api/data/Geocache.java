@@ -10,6 +10,7 @@ import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 
 public class Geocache extends SimpleGeocache {
+  private final Date lastVisited;
   private final String countryName;
   private final String stateName;
   private final String shortDescription;
@@ -27,13 +28,15 @@ public class Geocache extends SimpleGeocache {
       CacheType cacheType, float difficultyRating,
       float terrainRating, User author,
       boolean available, boolean archived, boolean premiumListing,
-      Date created, String contactName, ContainerType containerType,
-      int trackableCount, boolean found, String countryName, String stateName, String shortDescription,
+      Date created, Date placed, Date lastUpdate, String contactName, ContainerType containerType,
+      int trackableCount, boolean found, Date lastVisited, String countryName, String stateName, String shortDescription,
       String longDescrition, String hint, List<CacheLog> cacheLogs,
-      List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote, List<ImageData> images) {
+      List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote,
+      List<ImageData> images) {
     super(cacheCode, name, coordinates, cacheType, difficultyRating,
         terrainRating, author, available, archived,
-        premiumListing, created, contactName, containerType, trackableCount, found);
+        premiumListing, created, placed, lastUpdate, contactName, containerType, trackableCount, found);
+    this.lastVisited = lastVisited;
     this.countryName = countryName;
     this.stateName = stateName;
     this.shortDescription = shortDescription;
@@ -47,11 +50,15 @@ public class Geocache extends SimpleGeocache {
     this.personalNote = personalNote;
     this.images = images;
   }
-  
+
+  public Date getLastVisited() {
+    return lastVisited;
+  }
+
   public String getCountryName() {
     return countryName;
   }
-  
+
   public String getStateName() {
     return stateName;
   }
@@ -87,11 +94,11 @@ public class Geocache extends SimpleGeocache {
   public List<UserWaypoint> getUserWaypoints() {
     return userWaypoints;
   }
-  
+
   public String getPersonalNote() {
     return personalNote;
   }
-  
+
   public List<ImageData> getImages() {
     return images;
   }

@@ -16,13 +16,14 @@ public class TrackableLog {
   private final String text;
   private final TrackableLogType type;
   private final User loggedBy;
-  private final Date createDate;
+  private final Date created;
   private final Coordinates updatedCoordinates;
   private final String url;
-  private final Date visitDate;
+  private final Date visited;
 
-  public TrackableLog(int cacheID, String code, int id, List<ImageData> images, boolean archived, String guid, String text, TrackableLogType type, User loggedBy,
-      Date createDate, Coordinates updatedCoordinates, String url, Date visitDate) {
+  public TrackableLog(int cacheID, String code, int id, List<ImageData> images, boolean archived, String guid, String text, TrackableLogType type,
+      User loggedBy,
+      Date created, Coordinates updatedCoordinates, String url, Date visited) {
     this.cacheID = cacheID;
     this.code = code;
     this.id = id;
@@ -32,10 +33,10 @@ public class TrackableLog {
     this.text = text;
     this.type = type;
     this.loggedBy = loggedBy;
-    this.createDate = createDate;
+    this.created = created;
     this.updatedCoordinates = updatedCoordinates;
     this.url = url;
-    this.visitDate = visitDate;
+    this.visited = visited;
   }
 
   public int getCacheID() {
@@ -45,7 +46,7 @@ public class TrackableLog {
   public String getCode() {
     return code;
   }
-  
+
   public int getId() {
     return id;
   }
@@ -74,8 +75,8 @@ public class TrackableLog {
     return loggedBy;
   }
 
-  public Date getCreateDate() {
-    return createDate;
+  public Date getCreated() {
+    return created;
   }
 
   public Coordinates getUpdatedCoordinates() {
@@ -86,7 +87,7 @@ public class TrackableLog {
     return url;
   }
 
-  public Date getVisitDate() {
-    return visitDate;
+  public Date getVisited() {
+    return visited;
   }
 }

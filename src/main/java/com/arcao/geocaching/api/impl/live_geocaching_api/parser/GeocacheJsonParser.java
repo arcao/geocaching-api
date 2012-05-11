@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,17 +24,17 @@ public class GeocacheJsonParser extends JsonParser {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
 		}
-		
+
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
 		r.beginArray();
-		
-		while(r.hasNext()) {
+
+		while (r.hasNext()) {
 			list.add(parse(r));
 		}
 		r.endArray();
 		return list;
 	}
-	
+
 	public static Geocache parse(JsonReader r) throws IOException {
 		String cacheCode = "";
 		String cacheName = "";
@@ -51,6 +50,9 @@ public class GeocacheJsonParser extends JsonParser {
 		String countryName = "";
 		String stateName = "";
 		Date created = new Date(0);
+		Date placed = new Date(0);
+		Date lastUpdated = new Date(0);
+		Date lastVisited = new Date(0);
 		String contactName = "";
 		ContainerType containerType = ContainerType.NotChosen;
 		int trackableCount = 0;
@@ -65,9 +67,9 @@ public class GeocacheJsonParser extends JsonParser {
 		List<UserWaypoint> userWaypoints = new ArrayList<UserWaypoint>();
 		String personalNote = "";
 		List<ImageData> images = new ArrayList<ImageData>();
-		
+
 		r.beginObject();
-		while(r.hasNext()) {
+		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("Code".equals(name)) {
 				cacheCode = r.nextString();
@@ -95,8 +97,14 @@ public class GeocacheJsonParser extends JsonParser {
 				countryName = r.nextString();
 			} else if ("State".equals(name)) {
 				stateName = r.nextString();
-			} else if ("UTCPlaceDate".equals(name)) {
+			} else if ("DateCreated".equals(name)) {
 				created = JsonParser.parseJsonDate(r.nextString());
+			} else if ("UTCPlaceDate".equals(name)) {
+				placed = JsonParser.parseJsonDate(r.nextString());
+			} else if ("DateLastUpdate".equals(name)) {
+				lastUpdated = JsonParser.parseJsonDate(r.nextString());
+			} else if ("DateLastVisited".equals(name)) {
+				lastVisited = JsonParser.parseJsonDate(r.nextString());
 			} else if ("PlacedBy".equals(name)) {
 				contactName = r.nextString();
 			} else if ("ContainerType".equals(name)) {
@@ -122,15 +130,17 @@ public class GeocacheJsonParser extends JsonParser {
 			} else if ("UserWaypoints".equals(name)) {
 				userWaypoints = UserWaypointsJsonParser.parseList(r);
 			} else if ("GeocacheNote".equals(name)) {
-			  personalNote = r.nextString();	  
+				personalNote = r.nextString();
 			} else if ("Images".equals(name)) {
-        images = ImageDataJsonParser.parseList(r);
+				images = ImageDataJsonParser.parseList(r);
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		
-		return new Geocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found, countryName, stateName, shortDescription, longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
+
+		return new Geocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived,
+				premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found, lastVisited, countryName, stateName, shortDescription,
+				longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
 	}
 }

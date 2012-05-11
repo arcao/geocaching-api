@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data;
 
-
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +22,8 @@ public class SimpleGeocache {
 	private final boolean archived;
 	private final boolean premiumListing;
 	private final Date created;
+	private final Date placed;
+	private final Date lastUpdated;
 	private final String contactName;
 	private final ContainerType containerType;
 	private final int trackableCount;
@@ -37,7 +38,7 @@ public class SimpleGeocache {
 			CacheType cacheType, float difficultyRating,
 			float terrainRating, User author,
 			boolean available, boolean archived, boolean premiumListing,
-			Date created, String contactName, ContainerType containerType,
+			Date created, Date placed, Date lastUpdated, String contactName, ContainerType containerType,
 			int trackableCount, boolean found) {
 		this.cacheCode = cacheCode;
 		this.name = name;
@@ -50,6 +51,8 @@ public class SimpleGeocache {
 		this.archived = archived;
 		this.premiumListing = premiumListing;
 		this.created = created;
+		this.placed = placed;
+		this.lastUpdated = lastUpdated;
 		this.contactName = contactName;
 		this.containerType = containerType;
 		this.trackableCount = trackableCount;
@@ -63,10 +66,10 @@ public class SimpleGeocache {
 	public String getName() {
 		return name;
 	}
-	
+
 	public Coordinates getCoordinates() {
-    return coordinates;
-  }
+		return coordinates;
+	}
 
 	public double getLatitude() {
 		return coordinates.getLatitude();
@@ -108,6 +111,14 @@ public class SimpleGeocache {
 		return created;
 	}
 
+	public Date getPlaced() {
+		return placed;
+	}
+
+	public Date getLastUpdated() {
+		return lastUpdated;
+	}
+
 	public String getContactName() {
 		return contactName;
 	}
@@ -138,8 +149,7 @@ public class SimpleGeocache {
 			sb.append(':');
 			try {
 				sb.append(m.invoke(this, new Object[0]));
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 			sb.append(", ");
 		}
 		return sb.toString();

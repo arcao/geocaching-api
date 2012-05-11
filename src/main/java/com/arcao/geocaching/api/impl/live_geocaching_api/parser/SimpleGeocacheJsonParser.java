@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,17 +17,17 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
 		}
-		
+
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
 		r.beginArray();
-		
-		while(r.hasNext()) {
+
+		while (r.hasNext()) {
 			list.add(parse(r));
 		}
 		r.endArray();
 		return list;
 	}
-	
+
 	public static SimpleGeocache parse(JsonReader r) throws IOException {
 		String cacheCode = "";
 		String cacheName = "";
@@ -42,13 +41,15 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		boolean archived = false;
 		boolean premiumListing = false;
 		Date created = new Date(0);
+		Date placed = new Date(0);
+		Date lastUpdated = new Date(0);
 		String contactName = "";
 		ContainerType containerType = ContainerType.NotChosen;
 		int trackableCount = 0;
 		boolean found = false;
-		
+
 		r.beginObject();
-		while(r.hasNext()) {
+		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("Code".equals(name)) {
 				cacheCode = r.nextString();
@@ -72,8 +73,12 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 				archived = r.nextBoolean();
 			} else if ("IsPremium".equals(name)) {
 				premiumListing = r.nextBoolean();
-			} else if ("UTCPlaceDate".equals(name)) {
+			} else if ("DateCreated".equals(name)) {
 				created = JsonParser.parseJsonDate(r.nextString());
+			} else if ("UTCPlaceDate".equals(name)) {
+				placed = JsonParser.parseJsonDate(r.nextString());
+			} else if ("DateLastUpdate".equals(name)) {
+				lastUpdated = JsonParser.parseJsonDate(r.nextString());
 			} else if ("PlacedBy".equals(name)) {
 				contactName = r.nextString();
 			} else if ("ContainerType".equals(name)) {
@@ -87,7 +92,8 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 			}
 		}
 		r.endObject();
-		
-		return new SimpleGeocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived, premiumListing, created, contactName, containerType, trackableCount, found);
+
+		return new SimpleGeocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available,
+				archived, premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found);
 	}
 }

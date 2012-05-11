@@ -23,7 +23,7 @@ public class JsonParser {
 	private static final Logger logger = Logger.getLogger(JsonParser.class);
 	
 	protected static Date parseJsonDate(String date) {
-		Pattern DATE_PATTERN = Pattern.compile("/Date\\((\\d+)([-+]\\d{4})?\\)/");
+		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
 
 		Matcher m = DATE_PATTERN.matcher(date);
 		if (m.matches()) {
