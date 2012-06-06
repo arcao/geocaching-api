@@ -11,6 +11,7 @@ public class LiveGeocachingApiException extends GeocachingApiException {
   
   public LiveGeocachingApiException(Status status) {
     super(status.getStatusMessage());
+    this.status = status;
   }
   
   public StatusCode getStatusCode() {
