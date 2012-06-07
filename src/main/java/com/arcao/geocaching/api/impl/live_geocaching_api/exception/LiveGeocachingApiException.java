@@ -7,28 +7,33 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser
 public class LiveGeocachingApiException extends GeocachingApiException {
   private static final long serialVersionUID = 4459503722935685091L;
   
-  protected Status status;
+  protected StatusCode statusCode;
+  protected int originalStatusCode;
+  protected String exceptionDetails;
   
   public LiveGeocachingApiException(Status status) {
     super(status.getStatusMessage());
-    this.status = status;
+
+    statusCode = status.getStatusCode();
+    originalStatusCode = status.getOriginalStatusCode();
+    exceptionDetails = status.getExceptionDetails();
   }
   
   public StatusCode getStatusCode() {
-    return status.getStatusCode();
+    return statusCode;
   }
   
   public int getOriginalStatusCode() {
-    return status.getOriginalStatusCode();
+    return originalStatusCode;
   }
   
   public String getExceptionDetails() {
-    return status.getExceptionDetails();
+    return exceptionDetails;
   }
   
   @Override
   public String toString() {
-    return super.toString() + " (" + status.getOriginalStatusCode() + ")";
+    return super.toString() + " (" + originalStatusCode + ")";
   }
 
 }
