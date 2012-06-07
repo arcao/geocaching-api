@@ -21,7 +21,7 @@ And add dependency to geocaching-api artifact:
 		<dependency>
 			<groupId>com.arcao</groupId>
 			<artifactId>geocaching-api</artifactId>
-			<version>1.4.4</version>
+			<version>1.5.3</version>
 		</dependency>
     ...
 </dependencies>
