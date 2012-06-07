@@ -30,6 +30,7 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
 import com.arcao.geocaching.api.exception.InvalidSessionException;
+import com.arcao.geocaching.api.exception.NetworkException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
 import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
@@ -492,7 +493,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 	
-	protected JsonReader callGet(String function) throws GeocachingApiException {
+	protected JsonReader callGet(String function) throws NetworkException {
 		InputStream is = null;
 		InputStreamReader isr = null;
 
@@ -529,11 +530,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			return new JsonReader(isr);
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
-			throw new GeocachingApiException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
 		}
 	}
 
-	protected JsonReader callPost(String function, String postBody) throws GeocachingApiException {
+	protected JsonReader callPost(String function, String postBody) throws NetworkException {
 		InputStream is = null;
 		InputStreamReader isr = null;
 
@@ -589,7 +590,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			return new JsonReader(isr);			
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
-			throw new GeocachingApiException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
+			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
 		}
 	}
 	
