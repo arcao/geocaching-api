@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonWriter;
 public class CacheCodeFilter implements Filter {
 	private static final String NAME = "CacheCode";
 	
-	protected String[] caches;
+	protected final String[] caches;
 	
 	public CacheCodeFilter(String... caches) {
 		this.caches = caches;

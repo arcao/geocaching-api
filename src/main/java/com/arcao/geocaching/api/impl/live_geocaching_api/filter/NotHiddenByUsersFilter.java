@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonWriter;
 public class NotHiddenByUsersFilter implements Filter {
 	private static final String NAME = "NotHiddenByUsers";
 	
-	protected String[] userNames;
+	protected final String[] userNames;
 	
 	public NotHiddenByUsersFilter(String... userNames) {
 		this.userNames = userNames;

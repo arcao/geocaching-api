@@ -8,9 +8,9 @@ import com.google.gson.stream.JsonWriter;
 public class PointRadiusFilter implements Filter {
 	private static final String NAME = "PointRadius"; 
 	
-	protected long distanceInMeters;
-	protected double latitude;
-	protected double longitude;
+	protected final long distanceInMeters;
+	protected final double latitude;
+	protected final double longitude;
 	
 	public PointRadiusFilter(double latitude, double longitude, long distanceInMeters) {
 		this.latitude = latitude;

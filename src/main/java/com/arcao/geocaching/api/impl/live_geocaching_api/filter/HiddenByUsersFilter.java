@@ -4,17 +4,13 @@ import java.io.IOException;
 
 import com.google.gson.stream.JsonWriter;
 
-public class NotFoundByUsersFilter implements Filter {
-	private static final String NAME = "NotFoundByUsers";
+public class HiddenByUsersFilter implements Filter {
+	private static final String NAME = "HiddenByUsers";
 	
 	protected final String[] userNames;
 	
-	public NotFoundByUsersFilter(String... userNames) {
+	public HiddenByUsersFilter(String... userNames) {
 		this.userNames = userNames;
-	}
-	
-	public String[] getUserNames() {
-		return userNames;
 	}
 	
 	public boolean isValid() {
@@ -29,7 +25,7 @@ public class NotFoundByUsersFilter implements Filter {
 		
 		return valid;
 	}
-
+	
 	public void writeJson(JsonWriter w) throws IOException {
 		w.name(NAME);
 		w.beginObject();
@@ -42,9 +38,8 @@ public class NotFoundByUsersFilter implements Filter {
 		w.endArray();
 		w.endObject(); 
 	}
-
+	
 	public String getName() {
 		return NAME;
 	}
-
 }

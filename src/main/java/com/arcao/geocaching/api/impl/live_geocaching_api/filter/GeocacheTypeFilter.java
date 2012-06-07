@@ -9,9 +9,9 @@ import com.google.gson.stream.JsonWriter;
 public class GeocacheTypeFilter implements Filter {
 	private static final String NAME = "GeocacheType";
 
-	protected CacheType[] cacheTypes;
+	protected final CacheType[] cacheTypes;
 	
-	public GeocacheTypeFilter(CacheType[] cacheTypes) {
+	public GeocacheTypeFilter(CacheType... cacheTypes) {
 		this.cacheTypes = cacheTypes;
 	}
 	
