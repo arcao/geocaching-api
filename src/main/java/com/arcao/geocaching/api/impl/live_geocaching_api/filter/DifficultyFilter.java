@@ -28,7 +28,7 @@ public class DifficultyFilter implements Filter {
 	}
 
 	public boolean isValid() {
-		return min != 1 && max != 5;
+		return min != 1 || max != 5;
 	}
 	
 	public void writeJson(JsonWriter w) throws IOException {
