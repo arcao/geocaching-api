@@ -58,28 +58,28 @@ import com.google.gson.stream.MalformedJsonException;
  *
  */
 public class LiveGeocachingApi extends AbstractGeocachingApi {
-  private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
+	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
 	protected static final String BASE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
-	
+
 	protected final String consumerKey;
 	protected final String licenseKey;
-	
+
 	private boolean sessionValid = false;
-	
+
 	/**
 	 * Create a new instance of LiveGeocachingApi with specified consumer key and license key.
 	 * @param consumerKey consumer key
 	 * @param licenseKey license key
 	 */
 	public LiveGeocachingApi(String consumerKey, String licenseKey) {
-    this.consumerKey = consumerKey;
-    this.licenseKey = licenseKey;
-  }
-	
+		this.consumerKey = consumerKey;
+		this.licenseKey = licenseKey;
+	}
+
 	@Override
 	public void openSession(String session) throws GeocachingApiException {
-	  super.openSession(session);
-	  sessionValid = true;
+		super.openSession(session);
+		sessionValid = true;
 	}
 
 	public void openSession(String username, String password) throws GeocachingApiException {
@@ -90,11 +90,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 					"&username=" + URLEncoder.encode(username, "UTF-8") +
 					"&password=" + URLEncoder.encode(password, "UTF-8") +
 					"&format=json"
-			);
+					);
 
 			r.beginObject();
 			checkError(r);
-			
+
 			while (r.hasNext()) {
 				String name = r.nextName();
 				if ("UserGuid".equals(name)) {
@@ -108,18 +108,18 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			logger.debug("Session: " + session);
 			sessionValid = true;
 		} catch (UnsupportedEncodingException e) {
-		  logger.error(e.toString(), e);
+			logger.error(e.toString(), e);
 			session = null;
 		} catch (IOException e) {
-		  logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
 				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
-		  
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
 		}
 	}
-	
+
 	public void closeSession() {
 		session = null;
 	}
@@ -127,12 +127,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	public boolean isSessionValid() {
 		return sessionValid;
 	}
-	
+
 	public List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount,
 			Filter[] filters) throws GeocachingApiException {
-		
+
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
-		
+
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -140,24 +140,24 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.name("AccessToken").value(session);
 			w.name("IsLite").value(isLite);
 			w.name("MaxPerPage").value(maxPerPage);
-			
+
 			if (geocacheLogCount >= 0)
 				w.name("GeocacheLogCount").value(geocacheLogCount);
-			
+
 			if (trackableLogCount >= 0)
 				w.name("TrackableLogCount").value(trackableLogCount);
-			
+
 			for (Filter filter : filters) {
 				if (filter.isValid())
 					filter.writeJson(w);
 			}
 			w.endObject();
 			w.close();
-			
+
 			JsonReader r = callPost("SearchForGeocaches?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
-			
+
 			while(r.hasNext()) {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
@@ -175,365 +175,365 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			return list;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
+			if (!isGsonException(e)) {
 				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+			}
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
 		}
 	}
-	
+
 	public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
-	  List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
-    
-    try {
-      StringWriter sw = new StringWriter();
-      JsonWriter w = new JsonWriter(sw);
-      w.beginObject();
-      w.name("AccessToken").value(session);
-      w.name("IsLite").value(isLite);
-      w.name("StartIndex").value(startIndex);
-      w.name("MaxPerPage").value(maxPerPage);
-      
-      if (geocacheLogCount >= 0)
-        w.name("GeocacheLogCount").value(geocacheLogCount);
-      
-      if (trackableLogCount >= 0)
-        w.name("TrackableLogCount").value(trackableLogCount);
-      
-      w.endObject();
-      w.close();
-      
-      JsonReader r = callPost("GetMoreGeocaches?format=json", sw.toString());
-      r.beginObject();
-      checkError(r);
-      
-      while(r.hasNext()) {
-        String name = r.nextName();
-        if ("Geocaches".equals(name)) {
-          if (isLite) {
-            list = SimpleGeocacheJsonParser.parseList(r);
-          } else {
-            list = GeocacheJsonParser.parseList(r);
-          }
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
-      return list;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
+		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
+
+		try {
+			StringWriter sw = new StringWriter();
+			JsonWriter w = new JsonWriter(sw);
+			w.beginObject();
+			w.name("AccessToken").value(session);
+			w.name("IsLite").value(isLite);
+			w.name("StartIndex").value(startIndex);
+			w.name("MaxPerPage").value(maxPerPage);
+
+			if (geocacheLogCount >= 0)
+				w.name("GeocacheLogCount").value(geocacheLogCount);
+
+			if (trackableLogCount >= 0)
+				w.name("TrackableLogCount").value(trackableLogCount);
+
+			w.endObject();
+			w.close();
+
+			JsonReader r = callPost("GetMoreGeocaches?format=json", sw.toString());
+			r.beginObject();
+			checkError(r);
+
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Geocaches".equals(name)) {
+					if (isLite) {
+						list = SimpleGeocacheJsonParser.parseList(r);
+					} else {
+						list = GeocacheJsonParser.parseList(r);
+					}
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+			return list;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
 				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
-      
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
 
 	public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
-	  List<Trackable> list = null;
-    
-    try {
-      JsonReader r;
-      
-      if (trackableCode.toLowerCase().startsWith("tb")) {
-        r = callGet(
-            "GetTrackablesByTBCode?accessToken=" + session +
-            "&tbCode=" + trackableCode + 
-            "&trackableLogCount=" + trackableLogCount +
-            "&format=json"
-        );
-      } else {
-        r = callGet(
-            "GetTrackablesByTrackingNumber?accessToken=" + session +
-            "&trackingNumber=" + trackableCode + 
-            "&trackableLogCount=" + trackableLogCount +
-            "&format=json"
-        );
-      }
-      
-      r.beginObject();
-      checkError(r);
-      while(r.hasNext()) {
-        String name = r.nextName();
-        if ("Trackables".equals(name)) {
-          list = TrackableJsonParser.parseList(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
-      
-      if (list == null || list.size() == 0)
-        return null;
-      
-      if (!trackableCode.toLowerCase().startsWith("tb")) {
-        list.get(0).setLookupCode(trackableCode);
-      }
-      
-      return list.get(0);
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+		List<Trackable> list = null;
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+		try {
+			JsonReader r;
+
+			if (trackableCode.toLowerCase().startsWith("tb")) {
+				r = callGet(
+						"GetTrackablesByTBCode?accessToken=" + session +
+						"&tbCode=" + trackableCode + 
+						"&trackableLogCount=" + trackableLogCount +
+						"&format=json"
+						);
+			} else {
+				r = callGet(
+						"GetTrackablesByTrackingNumber?accessToken=" + session +
+						"&trackingNumber=" + trackableCode + 
+						"&trackableLogCount=" + trackableLogCount +
+						"&format=json"
+						);
+			}
+
+			r.beginObject();
+			checkError(r);
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Trackables".equals(name)) {
+					list = TrackableJsonParser.parseList(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+
+			if (list == null || list.size() == 0)
+				return null;
+
+			if (!trackableCode.toLowerCase().startsWith("tb")) {
+				list.get(0).setLookupCode(trackableCode);
+			}
+
+			return list.get(0);
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
 
 	public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
-	  List<Trackable> list = new ArrayList<Trackable>();
-    
-    try {
-      JsonReader r = callGet(
-            "GetTrackablesInCache?accessToken=" + session +
-            "&cacheCode=" + cacheCode +
-            "&startIndex=" + startIndex + 
-            "&maxPerPage=" + maxPerPage + 
-            "&trackableLogCount=" + trackableLogCount +
-            "&format=json"
-      );
-      
-      r.beginObject();
-      checkError(r);
-      while(r.hasNext()) {
-        String name = r.nextName();
-        if ("Trackables".equals(name)) {
-          list = TrackableJsonParser.parseList(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
-      
-      return list;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+		List<Trackable> list = new ArrayList<Trackable>();
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+		try {
+			JsonReader r = callGet(
+					"GetTrackablesInCache?accessToken=" + session +
+					"&cacheCode=" + cacheCode +
+					"&startIndex=" + startIndex + 
+					"&maxPerPage=" + maxPerPage + 
+					"&trackableLogCount=" + trackableLogCount +
+					"&format=json"
+					);
+
+			r.beginObject();
+			checkError(r);
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Trackables".equals(name)) {
+					list = TrackableJsonParser.parseList(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+
+			return list;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
 
 	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode,  int startIndex, int maxPerPage) throws GeocachingApiException {
-	  List<CacheLog> list = new ArrayList<CacheLog>();
-    
-    try {
-      JsonReader r = callGet(
-            "GetGeocacheLogsByCacheCode?accessToken=" + session +
-            "&cacheCode=" + cacheCode +
-            "&startIndex=" + startIndex + 
-            "&maxPerPage=" + maxPerPage + 
-            "&format=json"
-      );
-      
-      r.beginObject();
-      checkError(r);
-      while(r.hasNext()) {
-        String name = r.nextName();
-        if ("Logs".equals(name)) {
-          list = CacheLogJsonParser.parseList(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
-      
-      return list;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+		List<CacheLog> list = new ArrayList<CacheLog>();
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+		try {
+			JsonReader r = callGet(
+					"GetGeocacheLogsByCacheCode?accessToken=" + session +
+					"&cacheCode=" + cacheCode +
+					"&startIndex=" + startIndex + 
+					"&maxPerPage=" + maxPerPage + 
+					"&format=json"
+					);
+
+			r.beginObject();
+			checkError(r);
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Logs".equals(name)) {
+					list = CacheLogJsonParser.parseList(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+
+			return list;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
-	
+
 	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
 			boolean favoriteThisCache) throws GeocachingApiException {
-    CacheLog cacheLog = null;
-    
-    try {
-      StringWriter sw = new StringWriter();
-      JsonWriter w = new JsonWriter(sw);
-      w.beginObject();
-      w.name("AccessToken").value(session);
-      w.name("CacheCode").value(cacheCode);
-      w.name("WptLogTypeId").value(cacheLogType.getFriendlyName());
-      w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
-      w.name("PromoteToLog").value(publish);
-      if (imageData != null) {
-        w.name("ImageData");
-        imageData.writeJson(w);
-      }
-      w.name("FavoriteThisCache").value(favoriteThisCache);
-      
-      w.endObject();
-      w.close();
-      
-      JsonReader r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString());
-      r.beginObject();
-      checkError(r);
-      
-      while(r.hasNext()) {
-        String name = r.nextName();
-        if ("Log".equals(name)) {
-          cacheLog = CacheLogJsonParser.parse(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
-      return cacheLog;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+		CacheLog cacheLog = null;
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+		try {
+			StringWriter sw = new StringWriter();
+			JsonWriter w = new JsonWriter(sw);
+			w.beginObject();
+			w.name("AccessToken").value(session);
+			w.name("CacheCode").value(cacheCode);
+			w.name("WptLogTypeId").value(cacheLogType.getFriendlyName());
+			w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
+			w.name("PromoteToLog").value(publish);
+			if (imageData != null) {
+				w.name("ImageData");
+				imageData.writeJson(w);
+			}
+			w.name("FavoriteThisCache").value(favoriteThisCache);
+
+			w.endObject();
+			w.close();
+
+			JsonReader r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString());
+			r.beginObject();
+			checkError(r);
+
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Log".equals(name)) {
+					cacheLog = CacheLogJsonParser.parse(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+			return cacheLog;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
-	
+
 	public UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData) throws GeocachingApiException {
 		throw new GeocachingApiException("Not implemented.");
 	}
-	
+
 	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
-	  if (note == null || note.length() == 0) {
-	    deleteCachePersonalNote(cacheCode);
-	    return;
-	  }
-	  
-	  try {
-      StringWriter sw = new StringWriter();
-      JsonWriter w = new JsonWriter(sw);
-      w.beginObject();
-      w.name("AccessToken").value(session);
-      w.name("CacheCode").value(cacheCode);
-      w.name("Note").value(note);      
-      w.endObject();
-      w.close();
-      
-      JsonReader r = callPost("UpdateCacheNote?format=json", sw.toString());
-      r.beginObject();
-      checkError(r);
-      
-      while(r.hasNext()) {
-        r.nextName();
-        r.skipValue();
-      }
-      r.endObject();
-      r.close();
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+		if (note == null || note.length() == 0) {
+			deleteCachePersonalNote(cacheCode);
+			return;
+		}
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+		try {
+			StringWriter sw = new StringWriter();
+			JsonWriter w = new JsonWriter(sw);
+			w.beginObject();
+			w.name("AccessToken").value(session);
+			w.name("CacheCode").value(cacheCode);
+			w.name("Note").value(note);      
+			w.endObject();
+			w.close();
+
+			JsonReader r = callPost("UpdateCacheNote?format=json", sw.toString());
+			r.beginObject();
+			checkError(r);
+
+			while(r.hasNext()) {
+				r.nextName();
+				r.skipValue();
+			}
+			r.endObject();
+			r.close();
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
-	
+
 	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
-    try {
-      JsonReader r = callGet(
-          "DeleteCacheNote?accessToken=" + session +
-           "&cacheCode=" + cacheCode +
-           "&format=json"
-      );
-      r.beginObject();
-      checkError(r);
+		try {
+			JsonReader r = callGet(
+					"DeleteCacheNote?accessToken=" + session +
+					"&cacheCode=" + cacheCode +
+					"&format=json"
+					);
+			r.beginObject();
+			checkError(r);
 
-      while (r.hasNext()) {
-        r.nextName();
-        r.skipValue();
-      }
-      r.endObject();
-      r.close();
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
+			while (r.hasNext()) {
+				r.nextName();
+				r.skipValue();
+			}
+			r.endObject();
+			r.close();
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
 				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+			}
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
-	
-  public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
-    List<TrackableLog> list = new ArrayList<TrackableLog>();
 
-    try {
-      JsonReader r = callGet(
-          "GetGeocacheLogsByCacheCode?accessToken=" + session +
-              "&tbCode=" + trackableCode +
-              "&startIndex=" + startIndex +
-              "&maxPerPage=" + maxPerPage +
-              "&format=json"
-          );
+	public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
+		List<TrackableLog> list = new ArrayList<TrackableLog>();
 
-      r.beginObject();
-      checkError(r);
-      while (r.hasNext()) {
-        String name = r.nextName();
-        if ("TrackableLogs".equals(name)) {
-          list = TrackableLogJsonParser.parseList(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
+		try {
+			JsonReader r = callGet(
+					"GetGeocacheLogsByCacheCode?accessToken=" + session +
+					"&tbCode=" + trackableCode +
+					"&startIndex=" + startIndex +
+					"&maxPerPage=" + maxPerPage +
+					"&format=json"
+					);
 
-      return list;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-		  if (!isGsonException(e)) {
+			r.beginObject();
+			checkError(r);
+			while (r.hasNext()) {
+				String name = r.nextName();
+				if ("TrackableLogs".equals(name)) {
+					list = TrackableLogJsonParser.parseList(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+
+			return list;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
 				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		  }
+			}
 
-		  throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
-  }
-	
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
+	}
+
 	// -------------------- Helper methods ----------------------------------------
-	
+
 	protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
 		if ("Status".equals(r.nextName())) {
 			StatusJsonParser.Status status = StatusJsonParser.parse(r);
-			
+
 			switch (status.getStatusCode()) {
 				case OK:
 					return;
-//				case NotAuthorized:
+					//				case NotAuthorized:
 				case UserDidNotAuthorize:
 				case UserTokenNotValid:
 				case SessionExpired:
-				  sessionValid = false;
+					sessionValid = false;
 					throw new InvalidSessionException(status.getStatusMessage());
 				case AccountNotFound:
-				  sessionValid = false;
+					sessionValid = false;
 					throw new InvalidCredentialsException(status.getStatusMessage());
 				default:
 					throw new LiveGeocachingApiException(status);
 			}
 		} else {
-		  throw new GeocachingApiException("Missing Status in a response.");
+			throw new GeocachingApiException("Missing Status in a response.");
 		}
 	}
-	
+
 	protected JsonReader callGet(String function) throws NetworkException {
 		InputStream is = null;
 		InputStreamReader isr = null;
@@ -580,15 +580,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		InputStreamReader isr = null;
 
 		logger.debug("Posting " + maskPassword(function));
-		
+
 		try {
 			byte[] data = postBody.getBytes("UTF-8");
-			
+
 			URL url = new URL(BASE_URL + function);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			con.setDoOutput(true);
-			
+
 			// important! sometimes GC API takes too long to return response
 			con.setConnectTimeout(30000);
 			con.setReadTimeout(30000);
@@ -602,14 +602,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
 			OutputStream os = con.getOutputStream();
-						
+
 			logger.debug("Body: " + postBody);
 			os.write(data);
 			os.flush();
 			os.close();
-			
+
 			if (con.getResponseCode() < 400) {
-		    is = con.getInputStream();
+				is = con.getInputStream();
 			} else {
 				is = con.getErrorStream();
 			}
@@ -627,14 +627,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			isr = new InputStreamReader(is, "UTF-8");
-			
+
 			return new JsonReader(isr);			
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
 		}
 	}
-	
+
 	protected String maskPassword(String input) {
 		int start;
 		if ((start = input.indexOf("&Password=")) == -1)
@@ -642,7 +642,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 		return input.substring(0, start + 10) + "******" + input.substring(input.indexOf('&', start + 10));
 	}
-	
+
 	protected boolean isGsonException(Throwable t) {
 		return IOException.class.equals(t.getClass()) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
 	}
