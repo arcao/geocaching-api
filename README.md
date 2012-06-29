@@ -1,3 +1,6 @@
+Geocaching API for Java
+=======================
+
 Java implementation of Groundspeak's Geocaching Live API.
 
 Released builds are available from a private maven repository. So add bellow to
@@ -30,10 +33,14 @@ And add dependency to geocaching-api artifact:
 Get the source
 --------------
 
-Fork the project source code on [github](https://github.com/arcao/geocaching-api):
+Fork the project source code on [github][geocaching-api]:
 
 	git clone git://github.com/arcao/geocaching-api.git
 
+Get latest binaries
+-------------------
+
+Binaries you can found in [my maven repository][binaries].
 
 Required libraries (maven dependencies)
 ---------------------------------------
@@ -43,13 +50,23 @@ Required libraries (maven dependencies)
 - junit 4.10 (only for run tests)
 - commons-lang3 3.1
 
+Examples
+--------
+
+Example codes how to use geocaching-api library you can found in [geocaching-api-examples] repository.
+
 License
 -------
 
-geocaching-api is distributed under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+geocaching-api is distributed under [Apache License, Version 2.0][license].
 
 Contact
 -------
 
 - author: Martin Sloup aka arcao
 - questions: arcao@arcao.com
+
+[license]: http://www.apache.org/licenses/LICENSE-2.0
+[geocaching-api]: https://github.com/arcao/geocaching-api
+[geocaching-api-examples]: https://github.com/arcao/geocaching-api-examples
+[binaries]: http://maven.arcao.com/com/arcao/geocaching-api/
