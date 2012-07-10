@@ -1,5 +1,10 @@
 package com.arcao.geocaching.api.data.type;
 
+/**
+ * Enumeration for all existing Cache types.
+ * 
+ * @author arcao
+ */
 public enum CacheType {
 	/** This is the original cache type consisting, at a bare minimum, a container and a log book. Normally you'll find a tupperware container, ammo box, or bucket filled with goodies, or smaller container ("micro cache") too small to contain items except for a log book. The coordinates listed on the traditional cache page is the exact location for the cache. */
 	Traditional("Traditional Cache", 2),
@@ -51,23 +56,41 @@ public enum CacheType {
 		return friendlyName;
 	}
 
+	/**
+	 * Get a friendly name of cache type
+	 * @return friendly name
+	 */
 	public String getFriendlyName() {
 		return friendlyName;
 	}
 
+	/**
+	 * Get a Groundspeak cache type id
+	 * @return	Gropunspeak Id
+	 */
 	public int getGroundSpeakId() {
 		return groundSpeakId;
 	}
 
-	public static CacheType parseCacheType(String cache) {
+	/**
+	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If cacheTypeName doesn't correspond with any CacheType enum item the default {@link #Unknown} is used.
+	 * @param cacheTypeName friendly name
+	 * @return cache type
+	 */
+	public static CacheType parseCacheType(String cacheTypeName) {
 		for (CacheType type : values()) {
-			if (type.toString().equals(cache))
+			if (type.toString().equals(cacheTypeName))
 				return type;
 		}
 
 		return Unknown;
 	}
 	
+	/**
+	 * Get a cache type from Groundspeak Id. If grounspeakId doesn't correspond with any CacheType enum item the default {@link #Unknown} is used.
+	 * @param groundSpeakId Groundspeak Id
+	 * @return cache type
+	 */
 	public static CacheType parseCacheTypeByGroundSpeakId(int groundSpeakId) {
 		for (CacheType type : values()) {
 			if (type.getGroundSpeakId() == groundSpeakId)
