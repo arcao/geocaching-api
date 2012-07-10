@@ -7,7 +7,7 @@ public enum ContainerType {
 	Regular("Regular", 3),
 	Large("Large", 4),
 	Huge("Huge", 5),
-	Other("Other", -1);
+	Other("Other", 6);
 
 	private final String friendlyName;
 	private final int groundSpeakId;
