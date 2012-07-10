@@ -36,7 +36,7 @@ public class TrackableLogJsonParser extends JsonParser {
     boolean archived = false;
     String guid = null;
     String text = null;
-    TrackableLogType type = TrackableLogType.Unknown;
+    TrackableLogType type = TrackableLogType.WriteNote;
     User loggedBy = User.EMPTY;
     Date createDate = null;
     double updatedLatitude = Double.NaN;

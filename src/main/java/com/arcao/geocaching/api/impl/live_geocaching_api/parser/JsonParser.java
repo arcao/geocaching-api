@@ -188,7 +188,7 @@ public class JsonParser {
 	}
 	
 	protected static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
-    TrackableLogType trackableLogType = TrackableLogType.Unknown;
+    TrackableLogType trackableLogType = TrackableLogType.WriteNote;
     r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();

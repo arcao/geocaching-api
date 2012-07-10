@@ -1,16 +1,15 @@
 package com.arcao.geocaching.api.data.type;
 
 public enum TrackableLogType {
-  WriteNote("", 4, States.IN_CACHE | States.WITH_PERSON),
-  PickUp("", 13, States.IN_CACHE),
-  DropOff("", 14, States.IN_CACHE | States.WITH_PERSON),
-  MarkAsMissing("", 16, States.IN_CACHE | States.WITH_PERSON),
-  Grab("", 19, States.WITH_PERSON),
-  Discovered("", 48, States.IN_CACHE | States.WITH_PERSON),
-  MoveToCollection("", 69, States.WITH_PERSON),
-  MoveToInventory("", 70, States.WITH_PERSON),
-  Visited("", 75, States.WITH_PERSON),
-  Unknown("", -1, States.DEFAULT);
+  WriteNote("Write note", 4, States.IN_CACHE | States.WITH_PERSON),
+  PickUp("Retrieve It from a Cache", 13, States.IN_CACHE),
+  DropOff("Dropped Off", 14, States.IN_CACHE | States.WITH_PERSON),
+  MarkAsMissing("Mark Missing", 16, States.IN_CACHE | States.WITH_PERSON),
+  Grab("Grab It (Not from a Cache)", 19, States.WITH_PERSON),
+  Discovered("Discovered It", 48, States.IN_CACHE | States.WITH_PERSON),
+  MoveToCollection("Move To Collection", 69, States.WITH_PERSON),
+  MoveToInventory("Move To Inventory", 70, States.WITH_PERSON),
+  Visited("Visited", 75, States.WITH_PERSON);
       
   private final String friendlyName;
   private final int groundSpeakId;
@@ -49,7 +48,7 @@ public enum TrackableLogType {
         return type;
     }
 
-    return Unknown;
+    return WriteNote;
   }
   
   public static TrackableLogType parseTrackableLogTypeByGroundSpeakId(int groundSpeakId) {
@@ -58,11 +57,10 @@ public enum TrackableLogType {
         return type;
     }
 
-    return Unknown;
+    return WriteNote;
   }
 
   private interface States {
-    static final int DEFAULT = 0;
     static final int IN_CACHE = 1;
     static final int WITH_PERSON = 2;  
   }
