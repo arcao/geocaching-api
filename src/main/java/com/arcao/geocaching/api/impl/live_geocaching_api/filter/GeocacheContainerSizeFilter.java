@@ -34,7 +34,7 @@ public class GeocacheContainerSizeFilter implements Filter {
 	public void writeJson(JsonWriter w) throws IOException {
 		w.name(NAME);
 		w.beginObject();
-		w.name("GeocacheTypeIds");
+		w.name("GeocacheContainerSizeIds");
 		w.beginArray();
 		for (ContainerType containerType : containerTypes) {
 			if (containerType != null)
