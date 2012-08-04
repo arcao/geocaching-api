@@ -24,7 +24,7 @@ public class JsonParser {
 	
 	protected static Date parseJsonDate(String date) {
 		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
-
+		
 		Matcher m = DATE_PATTERN.matcher(date);
 		if (m.matches()) {
 			long time = Long.parseLong(m.group(1));
@@ -40,6 +40,10 @@ public class JsonParser {
 	
 	protected static CacheType parseCacheType(JsonReader r) throws IOException {
 		CacheType cacheType = CacheType.Unknown;
+		
+		if (isNextNull(r))
+			return cacheType;
+		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
@@ -55,6 +59,10 @@ public class JsonParser {
 	
 	protected static ContainerType parseContainerType(JsonReader r) throws IOException {
 		ContainerType containerType = ContainerType.NotChosen;
+		
+		if (isNextNull(r))
+			return containerType;
+		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
@@ -70,10 +78,9 @@ public class JsonParser {
 	
 	protected static MemberType parseMemberType(JsonReader r) throws IOException {
 		MemberType memberType = MemberType.Basic;
-		if (r.peek() == JsonToken.NULL) {
-			r.nextNull();
+
+		if (isNextNull(r))
 			return memberType;
-		}
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -92,10 +99,8 @@ public class JsonParser {
 		double latitude = Double.NaN;
 		double longitude = Double.NaN;
 	  
-		if (r.peek() == JsonToken.NULL) {
-			r.nextNull();
+		if (isNextNull(r))
 			return new Coordinates(latitude, longitude);
-		}
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -113,6 +118,9 @@ public class JsonParser {
 	}
 	
 	protected static User parseUser(JsonReader r) throws IOException {
+		if (isNextNull(r))
+			return null;
+		
 		String avatarUrl = "";
 		int findCount = 0;
 		int hideCount = 0;
@@ -126,7 +134,7 @@ public class JsonParser {
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
-			if ("AvatarURL".equals(name)) {
+			if ("AvatarUrl".equals(name)) {
 				avatarUrl = r.nextString();
 			} else if ("FindCount".equals(name)) {
 				findCount = r.nextInt();
@@ -189,6 +197,10 @@ public class JsonParser {
 	
 	protected static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
     TrackableLogType trackableLogType = TrackableLogType.WriteNote;
+    
+		if (isNextNull(r))
+			return trackableLogType;
+    
     r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();
@@ -201,4 +213,13 @@ public class JsonParser {
     r.endObject();
     return trackableLogType;
   }
+	
+	protected static boolean isNextNull(JsonReader r) throws IOException {
+		if (r.peek() == JsonToken.NULL) {
+			r.nextNull();
+			return true;
+		}
+		
+		return false;
+	}
 }
