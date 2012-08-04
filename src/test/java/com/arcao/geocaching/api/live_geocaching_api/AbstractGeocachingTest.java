@@ -8,21 +8,15 @@ import com.arcao.geocaching.api.impl.LiveGeocachingApi;
 public abstract class AbstractGeocachingTest {
   protected static GeocachingApi api = null;
   
-  // Please do not use this keys in production. It's only for testing!!!
-  protected static final String CONSUMER_KEY = "90C7F340-7998-477D-B4D3-AC48A9A0F560";
-  protected static final String LICENCE_KEY = "55BBC3C1-24CF-4D1B-B7EC-7A8E75DAB7D1";//"40940392-0C8E-487B-BC40-EA250D6D9AE0";
-  
-  protected static final String ANONYMOUS_USER = "";
-  protected static final String ANONYMOUS_PASSWORD = "";
+  // Please do not use this in production. It's only for testing!!!
+  protected static final String TEST_USER = "geocaching-api";
+  protected static final String TEST_AUTH_TOKEN = "u5HIMAyRXz1MsZ5ylHHzOjkkuFs="; // generated via oAuth example, see: https://github.com/arcao/geocaching-api-examples
 
   @BeforeClass
   public static void setUp() throws Exception {
-    api = new LiveGeocachingApi(CONSUMER_KEY, LICENCE_KEY);
+    api = new LiveGeocachingApi();
     
-    String user = System.getProperty("gc.user", ANONYMOUS_USER);
-    String password = System.getProperty("gc.password", ANONYMOUS_PASSWORD);
-    
-    api.openSession(user, password);
+    api.openSession(TEST_AUTH_TOKEN);
   }
 
 }
