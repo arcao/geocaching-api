@@ -78,11 +78,11 @@ public class ImageData implements JsonSerializable {
     if (imageData == null)
       return;
     
-    w.beginObject();
-    w.name("FileCaption").value(name);
-    w.name("FileDescription").value(description);
-    w.name("FileName").value(fileName);
-    w.name("base64ImageData").value(new String(imageData));
+    w.beginObject()
+    	.name("FileCaption").value(name)
+    	.name("FileDescription").value(description)
+    	.name("FileName").value(fileName)
+    	.name("base64ImageData").value(new String(imageData));
     w.endObject();
   } 
 }
