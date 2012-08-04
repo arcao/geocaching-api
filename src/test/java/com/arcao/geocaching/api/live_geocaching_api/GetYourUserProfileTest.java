@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.arcao.geocaching.api.data.DeviceInfo;
@@ -22,8 +21,7 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
 			null);
 	
 	@Test
-	@Ignore
-  public void getYourUserProfileSimpleTest() throws Exception {	
+	public void getYourUserProfileSimpleTest() throws Exception {	
 		UserProfile userProfile = api.getYourUserProfile(false, false, false, false, false, false, DEVICE_INFO);
 		
 		Assert.assertNull(userProfile.getChallengesStats());
