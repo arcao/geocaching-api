@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.CacheLog;
+import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.FieldNote;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.ImageData;
@@ -51,7 +52,9 @@ public interface GeocachingApi {
    * @throws GeocachingApiException
    *           If Geocaching API error occurs
    * @since 1.0
+   * @deprecated Use {@link #openSession(String)} with oAuth authorization token instead
    */
+  @Deprecated
   void openSession(String username, String password) throws GeocachingApiException;
 
   /**
@@ -190,7 +193,7 @@ public interface GeocachingApi {
       throws GeocachingApiException;
 
   /**
-   * Get a information about user
+   * Get an information about user
    * 
    * @param favoritePointData
    *          include favorites points
@@ -206,8 +209,34 @@ public interface GeocachingApi {
    * @throws GeocachingApiException
    *           If error occurs during getting information
    * @since 1.2
+   * @deprecated use {@link #getYourUserProfile(boolean, boolean, boolean, boolean, boolean, boolean, DeviceInfo)} instead
    */
+  @Deprecated
   UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData)
+      throws GeocachingApiException;
+  
+  /**
+   * Get an information about user
+   * @param challengesData 
+   *          include challanges data
+   * @param favoritePointData
+   *          include favorites points
+   * @param geocacheData
+   *          include information about caches
+   * @param publicProfileData
+   *          include public profile information
+   * @param souvenirData
+   *          include souvenirs
+   * @param trackableData
+   *          include trackables
+   * @param deviceInfo
+   *          information about used device
+   * @return UserProfile object with selected information
+   * @throws GeocachingApiException
+   *           If error occurs during getting information
+   * @since 1.2
+   */
+  UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData, DeviceInfo deviceInfo)
       throws GeocachingApiException;
 
   /**

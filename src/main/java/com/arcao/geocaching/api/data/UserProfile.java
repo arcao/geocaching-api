@@ -1,27 +1,61 @@
 package com.arcao.geocaching.api.data;
 
 import java.lang.reflect.Method;
+import java.util.List;
+
+import com.arcao.geocaching.api.data.userprofile.ChallengeStats;
+import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
+import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
+import com.arcao.geocaching.api.data.userprofile.GlobalStats;
+import com.arcao.geocaching.api.data.userprofile.PublicProfile;
+import com.arcao.geocaching.api.data.userprofile.TrackableStats;
 
 
 public class UserProfile {
-	//private final List<FavoritePoint> favoritePoints;
-	//private final GeocacheFindStats findStats;
-	//private final PublicProfile publicProfile;
-	//private final List<Souvenir> souvenirs;
-	//private final GlobalStats globalStats;
-	//private final TrackableStats trackableStats;
+	private final ChallengeStats challengesStats;
+	private final FavoritePointStats favoritePointsStats;
+	private final GeocacheFindStats geocacheFindStats;
+	private final PublicProfile publicProfile;
+	private final List<Souvenir> souvenirs;
+	private final GlobalStats globalStats;
+	private final TrackableStats trackableStats;
 	private final User user;
 	
-	public UserProfile(/*List<FavoritePoint> favoritePoints, GeocacheFindStats findStats, PublicProfile publicProfile, List<Souvenir> souvenirs,
-			GlobalStats globalStats, TrackableStats trackableStats,*/ User user) {
-/*		this.favoritePoints = favoritePoints;
-		this.findStats = findStats;
+	public UserProfile(ChallengeStats challengesStats, FavoritePointStats favoritePointsStats, GeocacheFindStats geocacheFindStats, PublicProfile publicProfile, List<Souvenir> souvenirs,
+			GlobalStats globalStats, TrackableStats trackableStats, User user) {
+		this.challengesStats = challengesStats;
+		this.favoritePointsStats = favoritePointsStats;
+		this.geocacheFindStats = geocacheFindStats;
 		this.publicProfile = publicProfile;
 		this.souvenirs = souvenirs;
 		this.globalStats = globalStats;
-		this.trackableStats = trackableStats;*/
+		this.trackableStats = trackableStats;
 		this.user = user;
 	}
+	
+	public ChallengeStats getChallengesStats() {
+	  return challengesStats;
+  }
+	
+	public FavoritePointStats getFavoritePointsStats() {
+	  return favoritePointsStats;
+  }
+	
+	public GeocacheFindStats getGeocacheFindStats() {
+	  return geocacheFindStats;
+  }
+	
+	public PublicProfile getPublicProfile() {
+	  return publicProfile;
+  }
+	
+	public List<Souvenir> getSouvenirs() {
+	  return souvenirs;
+  }
+	
+	public GlobalStats getGlobalStats() {
+	  return globalStats;
+  }
 	
 	public User getUser() {
     return user;

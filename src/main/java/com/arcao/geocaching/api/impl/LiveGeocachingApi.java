@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.data.CacheLog;
+import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
@@ -41,6 +42,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.SimpleGeocacheJs
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.UserProfileParser;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
 
@@ -70,11 +72,22 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	 * Create a new instance of LiveGeocachingApi with specified consumer key and license key.
 	 * @param consumerKey consumer key
 	 * @param licenseKey license key
+	 * @deprecated Use oAuth, {@link #LiveGeocachingApi()} and {@link #openSession(String)} with authorization token instead.
 	 */
-	public LiveGeocachingApi(String consumerKey, String licenseKey) {
+	@Deprecated
+  public LiveGeocachingApi(String consumerKey, String licenseKey) {
 		this.consumerKey = consumerKey;
 		this.licenseKey = licenseKey;
 	}
+	
+	/**
+	 * Create a new instance of LiveGeocachingApi
+	 */
+	public LiveGeocachingApi() {
+		consumerKey = null;
+		licenseKey = null;
+	}
+
 
 	@Override
 	public void openSession(String session) throws GeocachingApiException {
@@ -82,7 +95,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		sessionValid = true;
 	}
 
+	@Deprecated
 	public void openSession(String username, String password) throws GeocachingApiException {
+		if (consumerKey == null || licenseKey == null)
+			throw new IllegalStateException("Missing ConsumerKey or License key or bot.");
+		
 		try {
 			JsonReader r = callGet(
 					"GetUserCredentials?consumerKey=" + consumerKey +
@@ -406,8 +423,55 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-	public UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData) throws GeocachingApiException {
-		throw new GeocachingApiException("Not implemented.");
+	public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
+			boolean trackableData, DeviceInfo deviceInfo) throws GeocachingApiException {
+		UserProfile userProfile = null;
+		
+		try {
+			StringWriter sw = new StringWriter();
+			JsonWriter w = new JsonWriter(sw);
+			w.beginObject();
+			w.name("AccessToken").value(session);
+			w.name("ProfileOptions").beginObject()
+				.name("ChallengesData").value(challengesData)
+				.name("FavoritePointData").value(favoritePointData)
+				.name("GeocacheData").value(geocacheData)
+				.name("PublicProfileData").value(publicProfileData)
+				.name("SouvenirData").value(souvenirData)
+				.name("TrackableData").value(trackableData);
+			w.endObject();
+			
+			if (deviceInfo != null) {
+				w.name("DeviceInfo");
+				deviceInfo.writeJson(w);
+			}
+			
+			w.endObject();
+			w.close();
+
+			JsonReader r = callPost("GetYourUserProfile?format=json", sw.toString());
+			r.beginObject();
+			checkError(r);
+
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("Profile".equals(name)) {
+					userProfile = UserProfileParser.parse(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
+			return userProfile;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
 	}
 
 	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {

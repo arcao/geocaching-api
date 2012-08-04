@@ -7,6 +7,7 @@ import com.arcao.geocaching.api.data.FieldNote;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
+import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
@@ -49,5 +50,10 @@ public abstract class AbstractGeocachingApi implements GeocachingApi {
   public CacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
     return createFieldNoteAndPublish(fieldNote.getCacheCode(), fieldNote.getLogType(), fieldNote.getDateLogged(), fieldNote.getNote(), publish, imageData,
         favoriteThisCache);
+  }
+  
+  @Deprecated
+  public UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData) throws GeocachingApiException {
+    return getYourUserProfile(false, favoritePointData, geocacheData, publicProfileData, souvenirData, trackableData, null);
   }
 }
