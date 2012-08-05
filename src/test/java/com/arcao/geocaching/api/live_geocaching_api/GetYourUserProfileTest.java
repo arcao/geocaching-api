@@ -27,12 +27,12 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
 		Assert.assertNull(userProfile.getChallengesStats());
 		Assert.assertNull(userProfile.getFavoritePointsStats());
 		Assert.assertNull(userProfile.getGeocacheFindStats());
-		Assert.assertNull(userProfile.getGlobalStats());
 		Assert.assertNull(userProfile.getPublicProfile());
 		Assert.assertNotNull(userProfile.getSouvenirs());
 		Assert.assertEquals(0, userProfile.getSouvenirs().size());
 		
 		Assert.assertNotNull(userProfile);
+		Assert.assertNotNull(userProfile.getGlobalStats());
 		Assert.assertNotNull(userProfile.getUser());
 	}
 
