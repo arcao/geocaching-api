@@ -581,10 +581,10 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			switch (status.getStatusCode()) {
 				case OK:
 					return;
-					//				case NotAuthorized:
 				case UserDidNotAuthorize:
 				case UserTokenNotValid:
 				case SessionExpired:
+				case AccessTokenNotValid:
 					sessionValid = false;
 					throw new InvalidSessionException(status.getStatusMessage());
 				case AccountNotFound:
@@ -701,7 +701,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 	protected String maskPassword(String input) {
 		int start;
-		if ((start = input.indexOf("&Password=")) == -1)
+		if ((start = input.indexOf("&password=")) == -1)
 			return input;
 
 		return input.substring(0, start + 10) + "******" + input.substring(input.indexOf('&', start + 10));
