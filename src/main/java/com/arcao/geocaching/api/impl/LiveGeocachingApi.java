@@ -61,10 +61,14 @@ import com.google.gson.stream.MalformedJsonException;
  */
 public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
-	protected static final String BASE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc/";
+	
+	/** Default Live Geocaching API service URL */
+	public static final String DEFAULT_SERVICE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc";
 
 	protected final String consumerKey;
 	protected final String licenseKey;
+	
+	protected final String serviceUrl;
 
 	private boolean sessionValid = false;
 
@@ -78,14 +82,24 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
   public LiveGeocachingApi(String consumerKey, String licenseKey) {
 		this.consumerKey = consumerKey;
 		this.licenseKey = licenseKey;
+		this.serviceUrl = DEFAULT_SERVICE_URL;
 	}
 	
 	/**
-	 * Create a new instance of LiveGeocachingApi
+	 * Create a new instance of LiveGeocachingApi with service URL {@value #DEFAULT_SERVICE_URL}
 	 */
 	public LiveGeocachingApi() {
+		this(DEFAULT_SERVICE_URL);
+	}
+	
+	/**
+	 * Create a new instance of LiveGeocachingApi with custom service URL
+	 * @param serviceUrl Live Geocaching API service URL
+	 */
+	public LiveGeocachingApi(String serviceUrl) {
 		consumerKey = null;
 		licenseKey = null;
+		this.serviceUrl = serviceUrl;
 	}
 
 
@@ -605,7 +619,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		logger.debug("Getting " + maskPassword(function));
 
 		try {
-			URL url = new URL(BASE_URL + function);
+			URL url = new URL(serviceUrl + "/" + function);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			// important! sometimes GC API takes too long to return response
@@ -648,7 +662,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		try {
 			byte[] data = postBody.getBytes("UTF-8");
 
-			URL url = new URL(BASE_URL + function);
+			URL url = new URL(serviceUrl + "/" + function);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			con.setDoOutput(true);
