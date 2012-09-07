@@ -722,6 +722,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	protected boolean isGsonException(Throwable t) {
-		return IOException.class.equals(t.getClass()) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
+		// This IOException mess will be fixed in a next GSON release
+		return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
 	}
 }
