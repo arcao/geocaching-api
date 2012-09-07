@@ -24,7 +24,7 @@ public class Geocache extends SimpleGeocache {
   private final String personalNote;
   private final List<ImageData> images;
 
-  public Geocache(String cacheCode, String name, Coordinates coordinates,
+  public Geocache(long id, String cacheCode, String name, Coordinates coordinates,
       CacheType cacheType, float difficultyRating,
       float terrainRating, User author,
       boolean available, boolean archived, boolean premiumListing,
@@ -33,7 +33,7 @@ public class Geocache extends SimpleGeocache {
       String longDescrition, String hint, List<CacheLog> cacheLogs,
       List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote,
       List<ImageData> images) {
-    super(cacheCode, name, coordinates, cacheType, difficultyRating,
+    super(id, cacheCode, name, coordinates, cacheType, difficultyRating,
         terrainRating, author, available, archived,
         premiumListing, created, placed, lastUpdate, contactName, containerType, trackableCount, found);
     this.lastVisited = lastVisited;

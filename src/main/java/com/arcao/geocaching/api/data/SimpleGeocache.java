@@ -11,6 +11,7 @@ import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 
 public class SimpleGeocache {
+	private final long id;
 	private final String cacheCode;
 	private final String name;
 	private final Coordinates coordinates;
@@ -34,12 +35,13 @@ public class SimpleGeocache {
 		GPX_TIME_FMT.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
 	}
 
-	public SimpleGeocache(String cacheCode, String name, Coordinates coordinates,
+	public SimpleGeocache(long id, String cacheCode, String name, Coordinates coordinates,
 			CacheType cacheType, float difficultyRating,
 			float terrainRating, User author,
 			boolean available, boolean archived, boolean premiumListing,
 			Date created, Date placed, Date lastUpdated, String contactName, ContainerType containerType,
 			int trackableCount, boolean found) {
+		this.id = id;
 		this.cacheCode = cacheCode;
 		this.name = name;
 		this.coordinates = coordinates;
@@ -58,6 +60,10 @@ public class SimpleGeocache {
 		this.trackableCount = trackableCount;
 		this.found = found;
 	}
+	
+	public long getId() {
+	  return id;
+  }
 
 	public String getCacheCode() {
 		return cacheCode;

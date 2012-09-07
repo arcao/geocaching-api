@@ -29,6 +29,7 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 	}
 
 	public static SimpleGeocache parse(JsonReader r) throws IOException {
+		long id = 0;
 		String cacheCode = "";
 		String cacheName = "";
 		double longitude = Double.NaN;
@@ -51,7 +52,9 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
-			if ("Code".equals(name)) {
+			if ("ID".equals(name)) {
+				id = r.nextLong();
+			} else if ("Code".equals(name)) {
 				cacheCode = r.nextString();
 			} else if ("Name".equals(name)) {
 				cacheName = r.nextString();
@@ -93,7 +96,7 @@ public class SimpleGeocacheJsonParser extends JsonParser {
 		}
 		r.endObject();
 
-		return new SimpleGeocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available,
+		return new SimpleGeocache(id, cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available,
 				archived, premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found);
 	}
 }

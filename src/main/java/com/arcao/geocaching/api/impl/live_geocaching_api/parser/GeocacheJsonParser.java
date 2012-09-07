@@ -36,6 +36,7 @@ public class GeocacheJsonParser extends JsonParser {
 	}
 
 	public static Geocache parse(JsonReader r) throws IOException {
+		long id = 0;
 		String cacheCode = "";
 		String cacheName = "";
 		double longitude = Double.NaN;
@@ -71,7 +72,9 @@ public class GeocacheJsonParser extends JsonParser {
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
-			if ("Code".equals(name)) {
+			if ("ID".equals(name)) {
+				id = r.nextLong();
+			} else if ("Code".equals(name)) {
 				cacheCode = r.nextString();
 			} else if ("Name".equals(name)) {
 				cacheName = r.nextString();
@@ -139,7 +142,7 @@ public class GeocacheJsonParser extends JsonParser {
 		}
 		r.endObject();
 
-		return new Geocache(cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived,
+		return new Geocache(id, cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived,
 				premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found, lastVisited, countryName, stateName, shortDescription,
 				longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
 	}

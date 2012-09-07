@@ -26,6 +26,7 @@ public class CacheLogJsonParser extends JsonParser {
 	}
 
 	public static CacheLog parse(JsonReader r) throws IOException {
+		long id = 0;
 		Date created = new Date(0);
 		Date visited = new Date(0);
 		CacheLogType cacheLogType = CacheLogType.Unknown;
@@ -35,7 +36,9 @@ public class CacheLogJsonParser extends JsonParser {
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
-			if ("UTCCreateDate".equals(name)) {
+			if ("ID".equals(name)) {
+				id = r.nextLong();
+			} else if ("UTCCreateDate".equals(name)) {
 				created = JsonParser.parseJsonDate(r.nextString());
 			} else if ("VisitDate".equals(name)) {
 				visited = JsonParser.parseJsonDate(r.nextString());
@@ -51,7 +54,7 @@ public class CacheLogJsonParser extends JsonParser {
 		}
 		r.endObject();
 
-		return new CacheLog(created, visited, cacheLogType, author, text);
+		return new CacheLog(id, created, visited, cacheLogType, author, text);
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {

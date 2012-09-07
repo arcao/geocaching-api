@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class Trackable {
+	private final long id;
 	private final String guid;
 	private final String name;
 	private final String goal;
@@ -20,10 +21,11 @@ public class Trackable {
 
 	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
-	public Trackable(String guid, String name, String goal, String description,
+	public Trackable(long id, String guid, String name, String goal, String description,
 			String trackableTypeName, String trackableTypeImage,
 			User owner, String currentCacheCode,
 			User currentOwner, String trackingNumber, List<TrackableLog> trackableLogs) {
+		this.id = id;
 		this.guid = guid;
 		this.name = name;
 		this.goal = goal;
@@ -39,6 +41,10 @@ public class Trackable {
 
 		lookupCode = "";
 	}
+	
+	public long getId() {
+	  return id;
+  }
 
 	public String getGuid() {
 		return guid;

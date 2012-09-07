@@ -5,12 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.User;
 import com.google.gson.stream.JsonToken;
 
 public class TrackableJsonParser extends JsonParser {
+	private static final Logger logger = Logger.getLogger(TrackableJsonParser.class);
+	
 	public static List<Trackable> parseList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
@@ -26,6 +30,7 @@ public class TrackableJsonParser extends JsonParser {
 	}
 	
 	public static Trackable parse(JsonReader r) throws IOException {
+		long id = 0;
 		String guid = "";
 		String travelBugName = "";
 		String goal = "";
@@ -70,6 +75,12 @@ public class TrackableJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new Trackable(guid, travelBugName, goal, description, travelBugTypeName, travelBugTypeImage, owner, currentCacheCode, currentOwner, trackingNumber, trackableLogs);
+		try {
+			id = Long.parseLong(guid);
+		} catch (NumberFormatException e) {
+			logger.error("Error ocurs while converting guid to id", e);
+		}
+		
+		return new Trackable(id, guid, travelBugName, goal, description, travelBugTypeName, travelBugTypeImage, owner, currentCacheCode, currentOwner, trackingNumber, trackableLogs);
 	}
 }
