@@ -38,6 +38,21 @@ public class JsonParser {
 		return new Date(0);
 	}
 	
+	protected static Date parseJsonUTCDate(String date) {
+		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
+		
+		Matcher m = DATE_PATTERN.matcher(date);
+		if (m.matches()) {
+			long time = Long.parseLong(m.group(1));
+			// zone is always zero for UTC
+			long zone = 0;
+			return new Date(time + zone);
+		}
+
+		logger.error("parseJsonDate failed: " + date);
+		return new Date(0);
+	}
+	
 	protected static CacheType parseCacheType(JsonReader r) throws IOException {
 		CacheType cacheType = CacheType.Unknown;
 		
