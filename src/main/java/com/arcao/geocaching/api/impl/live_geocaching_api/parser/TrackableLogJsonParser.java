@@ -67,7 +67,7 @@ public class TrackableLogJsonParser extends JsonParser {
       } else if ("LoggedBy".equals(name)) {
         loggedBy = parseUser(r);
       } else if ("UTCCreateDate".equals(name)) {
-        createDate = parseJsonDate(r.nextString());
+        createDate = parseJsonUTCDate(r.nextString());
       } else if ("UpdatedLatitude".equals(name)) {
         updatedLatitude = r.nextDouble();
       } else if ("UpdatedLongitude".equals(name)) {

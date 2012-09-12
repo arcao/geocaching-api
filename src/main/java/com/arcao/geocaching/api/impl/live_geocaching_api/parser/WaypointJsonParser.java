@@ -43,7 +43,7 @@ public class WaypointJsonParser extends JsonParser {
 			} else if ("Latitude".equals(name)) {
 				latitude = r.nextDouble();
 			} else if ("UTCEnteredDate".equals(name)) {
-				time = parseJsonDate(r.nextString());
+				time = parseJsonUTCDate(r.nextString());
 			} else if ("Code".equals(name)) {
 				waypointCode = r.nextString();
 			} else if ("Name".equals(name)) {

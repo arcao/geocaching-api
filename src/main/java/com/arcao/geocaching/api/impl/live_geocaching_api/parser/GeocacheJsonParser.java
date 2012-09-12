@@ -103,7 +103,7 @@ public class GeocacheJsonParser extends JsonParser {
 			} else if ("DateCreated".equals(name)) {
 				created = JsonParser.parseJsonDate(r.nextString());
 			} else if ("UTCPlaceDate".equals(name)) {
-				placed = JsonParser.parseJsonDate(r.nextString());
+				placed = JsonParser.parseJsonUTCDate(r.nextString());
 			} else if ("DateLastUpdate".equals(name)) {
 				lastUpdated = JsonParser.parseJsonDate(r.nextString());
 			} else if ("DateLastVisited".equals(name)) {

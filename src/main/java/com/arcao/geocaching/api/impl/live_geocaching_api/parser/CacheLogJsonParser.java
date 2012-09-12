@@ -39,7 +39,7 @@ public class CacheLogJsonParser extends JsonParser {
 			if ("ID".equals(name)) {
 				id = r.nextLong();
 			} else if ("UTCCreateDate".equals(name)) {
-				created = JsonParser.parseJsonDate(r.nextString());
+				created = JsonParser.parseJsonUTCDate(r.nextString());
 			} else if ("VisitDate".equals(name)) {
 				visited = JsonParser.parseJsonDate(r.nextString());
 			} else if ("LogType".equals(name)) {

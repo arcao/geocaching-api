@@ -48,7 +48,7 @@ public class UserWaypointsJsonParser extends JsonParser {
 			} else if ("Longitude".equals(name)) {
 				longitude = r.nextDouble();
 			} else if ("UTCDate".equals(name)) {
-				date = parseJsonDate(r.nextString());
+				date = parseJsonUTCDate(r.nextString());
 			} else if ("UserId".equals(name)) {
 				userId = r.nextInt();
 			} else {
