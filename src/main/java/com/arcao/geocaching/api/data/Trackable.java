@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
 
 public class Trackable {
@@ -16,15 +17,21 @@ public class Trackable {
 	private final User currentOwner;
 	private final String trackingNumber;
 	private String lookupCode;
+	private final Date created;
+	private final boolean allowedToBeCollected;
+	private final boolean inCollection;
+	private final boolean archived;
 	
 	private final List<TrackableLog> trackableLogs;
+	private final List<ImageData> images;
 
 	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
 	public Trackable(long id, String guid, String name, String goal, String description,
 			String trackableTypeName, String trackableTypeImage,
 			User owner, String currentCacheCode,
-			User currentOwner, String trackingNumber, List<TrackableLog> trackableLogs) {
+			User currentOwner, String trackingNumber, Date created,
+			boolean allowedToBeCollected, boolean inCollection, boolean archived, List<TrackableLog> trackableLogs, List<ImageData> images) {
 		this.id = id;
 		this.guid = guid;
 		this.name = name;
@@ -36,8 +43,13 @@ public class Trackable {
 		this.currentCacheCode = currentCacheCode;
 		this.currentOwner = currentOwner;
 		this.trackingNumber = trackingNumber;
+		this.created = created;
+		this.allowedToBeCollected = allowedToBeCollected;
+		this.inCollection = inCollection;
+		this.archived = archived; 
 		
 		this.trackableLogs = trackableLogs;
+		this.images = images;
 
 		lookupCode = "";
 	}
@@ -97,6 +109,26 @@ public class Trackable {
 	public String getTrackablePage() {
 	  return String.format(TRACKABLE_URL, trackingNumber);
 	}
+	
+	public Date getCreated() {
+	  return created;
+  }
+	
+	public boolean isAllowedToBeCollected() {
+	  return allowedToBeCollected;
+  }
+	
+	public boolean isInCollection() {
+	  return inCollection;
+  }
+	
+	public boolean isArchived() {
+	  return archived;
+  }
+	
+	public List<ImageData> getImages() {
+	  return images;
+  }
 
 	@Override
 	public String toString() {
