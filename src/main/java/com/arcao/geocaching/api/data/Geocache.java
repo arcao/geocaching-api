@@ -16,6 +16,7 @@ public class Geocache extends SimpleGeocache {
   private final String shortDescription;
   private final String longDescription;
   private final String hint;
+  private final int favoritePoints;
   private final List<CacheLog> cacheLogs;
   private final List<Trackable> trackables;
   private final List<Waypoint> waypoints;
@@ -30,7 +31,7 @@ public class Geocache extends SimpleGeocache {
       boolean available, boolean archived, boolean premiumListing,
       Date created, Date placed, Date lastUpdate, String contactName, ContainerType containerType,
       int trackableCount, boolean found, Date lastVisited, String countryName, String stateName, String shortDescription,
-      String longDescrition, String hint, List<CacheLog> cacheLogs,
+      String longDescrition, String hint, int favoritePoints, List<CacheLog> cacheLogs,
       List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote,
       List<ImageData> images) {
     super(id, cacheCode, name, coordinates, cacheType, difficultyRating,
@@ -42,6 +43,7 @@ public class Geocache extends SimpleGeocache {
     this.shortDescription = shortDescription;
     this.longDescription = longDescrition;
     this.hint = hint;
+    this.favoritePoints = favoritePoints;
     this.cacheLogs = cacheLogs;
     this.trackables = trackables;
     this.waypoints = waypoints;
@@ -73,6 +75,10 @@ public class Geocache extends SimpleGeocache {
 
   public String getHint() {
     return hint;
+  }
+  
+  public int getFavoritePoints() {
+    return favoritePoints;
   }
 
   public List<CacheLog> getCacheLogs() {

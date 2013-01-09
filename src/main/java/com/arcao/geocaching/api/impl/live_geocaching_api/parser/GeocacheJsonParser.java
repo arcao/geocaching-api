@@ -61,6 +61,7 @@ public class GeocacheJsonParser extends JsonParser {
 		String shortDescription = "";
 		String longDescription = "";
 		String encodedHints = "";
+		int favoritePoints = 0;
 		List<CacheLog> cacheLogs = new ArrayList<CacheLog>();
 		List<Trackable> trackables = new ArrayList<Trackable>();
 		List<Waypoint> waypoints = new ArrayList<Waypoint>();
@@ -136,6 +137,8 @@ public class GeocacheJsonParser extends JsonParser {
 				personalNote = r.nextString();
 			} else if ("Images".equals(name)) {
 				images = ImageDataJsonParser.parseList(r);
+			} else if ("FavoritePoints".equals(name)) {
+        favoritePoints = r.nextInt();
 			} else {
 				r.skipValue();
 			}
@@ -144,6 +147,6 @@ public class GeocacheJsonParser extends JsonParser {
 
 		return new Geocache(id, cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived,
 				premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found, lastVisited, countryName, stateName, shortDescription,
-				longDescription, encodedHints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
+				longDescription, encodedHints, favoritePoints, cacheLogs, trackables, waypoints, attributes, userWaypoints, personalNote, images);
 	}
 }
