@@ -37,9 +37,9 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
     Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
+    Assert.assertEquals(1.0F, cache.getTerrainRating(), 0);
     Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(true, cache.isAvailable());
+    Assert.assertEquals(false, cache.isAvailable());
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
   }
@@ -63,16 +63,16 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
     Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
+    Assert.assertEquals(1.0F, cache.getTerrainRating(), 0);
     Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(true, cache.isAvailable());
+    Assert.assertEquals(false, cache.isAvailable());
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
 
     Assert.assertNotSame("", cache.getCountryName());
     Assert.assertNotSame("", cache.getStateName());
 
-    Assert.assertEquals(8, cache.getWaypoints().size());
+    Assert.assertEquals(10, cache.getWaypoints().size());
 
     Assert.assertEquals(5, cache.getCacheLogs().size());
     for (CacheLog cacheLog : cache.getCacheLogs()) {
