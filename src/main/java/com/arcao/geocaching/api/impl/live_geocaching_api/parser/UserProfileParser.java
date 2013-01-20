@@ -9,7 +9,6 @@ import com.arcao.geocaching.api.data.Souvenir;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.UserProfile;
-import com.arcao.geocaching.api.data.userprofile.ChallengeStats;
 import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
 import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
 import com.arcao.geocaching.api.data.userprofile.GlobalStats;
@@ -22,7 +21,6 @@ public class UserProfileParser extends JsonParser {
 		if (isNextNull(r))
 			return null;
 
-		ChallengeStats challengesStats = null;
 		FavoritePointStats favoritePointsStats = null;
 		GeocacheFindStats geocacheFindStats = null;
 		PublicProfile publicProfile = null;
@@ -34,9 +32,7 @@ public class UserProfileParser extends JsonParser {
 		r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();
-      if ("Challenges".equals(name)) {
-      	challengesStats = parseChallengeStats(r);
-      } else if ("FavoritePoints".equals(name)) {
+      if ("FavoritePoints".equals(name)) {
       	favoritePointsStats = parseFavoritePointStats(r);
       } else if ("Geocaches".equals(name)) {
       	geocacheFindStats = parseGeocacheFindStats(r);
@@ -55,21 +51,7 @@ public class UserProfileParser extends JsonParser {
     r.endObject();
 
 		
-		return new UserProfile(challengesStats, favoritePointsStats, geocacheFindStats, publicProfile, souvenirs, globalStats, trackableStats, user);
-	}
-	
-	protected static ChallengeStats parseChallengeStats(JsonReader r) throws IOException {
-		if (isNextNull(r))
-			return null;
-
-		r.beginObject();
-    while(r.hasNext()) {
-    	String name = r.nextName();
-      r.skipValue();
-    }
-    r.endObject();
-		
-		return new ChallengeStats();
+		return new UserProfile(favoritePointsStats, geocacheFindStats, publicProfile, souvenirs, globalStats, trackableStats, user);
 	}
 	
 	protected static FavoritePointStats parseFavoritePointStats(JsonReader r) throws IOException {

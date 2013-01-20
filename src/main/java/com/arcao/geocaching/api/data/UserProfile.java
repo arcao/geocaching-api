@@ -3,7 +3,6 @@ package com.arcao.geocaching.api.data;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.arcao.geocaching.api.data.userprofile.ChallengeStats;
 import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
 import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
 import com.arcao.geocaching.api.data.userprofile.GlobalStats;
@@ -12,7 +11,6 @@ import com.arcao.geocaching.api.data.userprofile.TrackableStats;
 
 
 public class UserProfile {
-	private final ChallengeStats challengesStats;
 	private final FavoritePointStats favoritePointsStats;
 	private final GeocacheFindStats geocacheFindStats;
 	private final PublicProfile publicProfile;
@@ -21,9 +19,8 @@ public class UserProfile {
 	private final TrackableStats trackableStats;
 	private final User user;
 	
-	public UserProfile(ChallengeStats challengesStats, FavoritePointStats favoritePointsStats, GeocacheFindStats geocacheFindStats, PublicProfile publicProfile, List<Souvenir> souvenirs,
+	public UserProfile(FavoritePointStats favoritePointsStats, GeocacheFindStats geocacheFindStats, PublicProfile publicProfile, List<Souvenir> souvenirs,
 			GlobalStats globalStats, TrackableStats trackableStats, User user) {
-		this.challengesStats = challengesStats;
 		this.favoritePointsStats = favoritePointsStats;
 		this.geocacheFindStats = geocacheFindStats;
 		this.publicProfile = publicProfile;
@@ -32,10 +29,6 @@ public class UserProfile {
 		this.trackableStats = trackableStats;
 		this.user = user;
 	}
-	
-	public ChallengeStats getChallengesStats() {
-	  return challengesStats;
-  }
 	
 	public FavoritePointStats getFavoritePointsStats() {
 	  return favoritePointsStats;
@@ -55,6 +48,10 @@ public class UserProfile {
 	
 	public GlobalStats getGlobalStats() {
 	  return globalStats;
+  }
+	
+	public TrackableStats getTrackableStats() {
+    return trackableStats;
   }
 	
 	public User getUser() {
