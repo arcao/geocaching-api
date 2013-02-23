@@ -43,21 +43,6 @@ public interface GeocachingApi {
   void openSession(String session) throws GeocachingApiException;
 
   /**
-   * Open a new session and log-in user
-   * 
-   * @param username
-   *          user name
-   * @param password
-   *          password
-   * @throws GeocachingApiException
-   *           If Geocaching API error occurs
-   * @since 1.0
-   * @deprecated Use {@link #openSession(String)} with oAuth authorization token instead
-   */
-  @Deprecated
-  void openSession(String username, String password) throws GeocachingApiException;
-
-  /**
    * Close current used session
    * 
    * @since 1.0
@@ -190,29 +175,6 @@ public interface GeocachingApi {
    * @since 1.1
    */
   List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount)
-      throws GeocachingApiException;
-
-  /**
-   * Get an information about user
-   * 
-   * @param favoritePointData
-   *          include favorites points
-   * @param geocacheData
-   *          include information about caches
-   * @param publicProfileData
-   *          include public profile information
-   * @param souvenirData
-   *          include souvenirs
-   * @param trackableData
-   *          include trackables
-   * @return UserProfile object with selected information
-   * @throws GeocachingApiException
-   *           If error occurs during getting information
-   * @since 1.2
-   * @deprecated use {@link #getYourUserProfile(boolean, boolean, boolean, boolean, boolean, boolean, DeviceInfo)} instead
-   */
-  @Deprecated
-  UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData)
       throws GeocachingApiException;
   
   /**

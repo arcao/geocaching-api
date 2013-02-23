@@ -6,10 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,19 +71,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private boolean sessionValid = false;
 
 	/**
-	 * Create a new instance of LiveGeocachingApi with specified consumer key and license key.
-	 * @param consumerKey consumer key
-	 * @param licenseKey license key
-	 * @deprecated Use oAuth, {@link #LiveGeocachingApi()} and {@link #openSession(String)} with authorization token instead.
-	 */
-	@Deprecated
-  public LiveGeocachingApi(String consumerKey, String licenseKey) {
-		this.consumerKey = consumerKey;
-		this.licenseKey = licenseKey;
-		this.serviceUrl = DEFAULT_SERVICE_URL;
-	}
-	
-	/**
 	 * Create a new instance of LiveGeocachingApi with service URL {@value #DEFAULT_SERVICE_URL}
 	 */
 	public LiveGeocachingApi() {
@@ -107,48 +92,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	public void openSession(String session) throws GeocachingApiException {
 		super.openSession(session);
 		sessionValid = true;
-	}
-
-	@Deprecated
-	public void openSession(String username, String password) throws GeocachingApiException {
-		if (consumerKey == null || licenseKey == null)
-			throw new IllegalStateException("Missing ConsumerKey or License key or bot.");
-		
-		try {
-			JsonReader r = callGet(
-					"GetUserCredentials?consumerKey=" + consumerKey +
-					"&licenseKey=" + licenseKey + 
-					"&username=" + URLEncoder.encode(username, "UTF-8") +
-					"&password=" + URLEncoder.encode(password, "UTF-8") +
-					"&format=json"
-					);
-
-			r.beginObject();
-			checkError(r);
-
-			while (r.hasNext()) {
-				String name = r.nextName();
-				if ("UserGuid".equals(name)) {
-					session = r.nextString();
-				} else {
-					r.skipValue();
-				}
-			}
-			r.endObject();
-			r.close();
-			logger.debug("Session: " + session);
-			sessionValid = true;
-		} catch (UnsupportedEncodingException e) {
-			logger.error(e.toString(), e);
-			session = null;
-		} catch (IOException e) {
-			logger.error(e.toString(), e);
-			if (!isGsonException(e)) {
-				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-			}
-
-			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
 	}
 
 	public void closeSession() {
@@ -616,7 +559,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		InputStream is = null;
 		InputStreamReader isr = null;
 
-		logger.debug("Getting " + maskPassword(function));
+		logger.debug("Getting " + maskParameterValues(function));
 
 		try {
 			URL url = new URL(serviceUrl + "/" + function);
@@ -657,7 +600,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		InputStream is = null;
 		InputStreamReader isr = null;
 
-		logger.debug("Posting " + maskPassword(function));
+		logger.debug("Posting " + maskParameterValues(function));
 
 		try {
 			byte[] data = postBody.getBytes("UTF-8");
@@ -681,7 +624,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 			OutputStream os = con.getOutputStream();
 
-			logger.debug("Body: " + postBody);
+			logger.debug("Body: " + maskJsonParameterValues(postBody));
 			os.write(data);
 			os.flush();
 			os.close();
@@ -713,15 +656,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-	protected String maskPassword(String input) {
-		int start;
-		if ((start = input.indexOf("&password=")) == -1)
-			return input;
+  protected String maskParameterValues(String function) {
+    function = function.replaceAll("(access[Tt]oken=)([^&]+)", "$1******");
+    return function;
+  }
 
-		return input.substring(0, start + 10) + "******" + input.substring(input.indexOf('&', start + 10));
-	}
-
-	protected boolean isGsonException(Throwable t) {
+  protected String maskJsonParameterValues(String postBody) {
+    postBody = postBody.replaceAll("([Aa]ccess[Tt]oken\\s*:\\s*')([^']+)(')", "$1******$3");
+    return postBody;
+  }
+  
+  protected boolean isGsonException(Throwable t) {
 		// This IOException mess will be fixed in a next GSON release
 		return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
 	}
