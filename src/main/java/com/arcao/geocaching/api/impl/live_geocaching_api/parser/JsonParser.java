@@ -97,6 +97,11 @@ public class JsonParser {
 		if (isNextNull(r))
 			return memberType;
 		
+		if (r.peek() == JsonToken.NUMBER) {
+		  memberType = MemberType.parseMemeberTypeByGroundSpeakId(r.nextInt());
+		  return memberType;
+    }
+		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();

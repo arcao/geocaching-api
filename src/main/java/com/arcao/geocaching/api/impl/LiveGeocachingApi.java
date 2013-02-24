@@ -25,6 +25,7 @@ import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.UserProfile;
+import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
@@ -33,6 +34,7 @@ import com.arcao.geocaching.api.exception.NetworkException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
 import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.ApiLimitsJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLogJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
@@ -528,6 +530,39 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
 		}
 	}
+	
+	public ApiLimits getApiLimits() throws GeocachingApiException {
+	  ApiLimits apiLimits = null;
+	  
+	  try {
+      JsonReader r = callGet(
+          "GetAPILimits?accessToken=" + session +
+          "&format=json"
+          );
+
+      r.beginObject();
+      checkError(r);
+      while (r.hasNext()) {
+        String name = r.nextName();
+        if ("Limits".equals(name)) {
+          apiLimits = ApiLimitsJsonParser.parse(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+      r.close();
+
+      return apiLimits;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      if (!isGsonException(e)) {
+        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+      }
+
+      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+    }
+  }
 
 	// -------------------- Helper methods ----------------------------------------
 

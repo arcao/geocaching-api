@@ -12,6 +12,7 @@ import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.UserProfile;
+import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
@@ -279,4 +280,13 @@ public interface GeocachingApi {
    * @since 1.5.1
    */
   List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException;
+  
+  /**
+   * Returns the API limits applied on currently logged user or null if this information isn't available. 
+   * @return API limits object
+   * @throws GeocachingApiException 
+   *           If error occurs during getting information
+   * @since 1.5.10
+   */
+  ApiLimits getApiLimits() throws GeocachingApiException;
 }
