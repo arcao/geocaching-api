@@ -18,6 +18,7 @@ import java.util.zip.InflaterInputStream;
 import org.apache.log4j.Logger;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.ImageData;
@@ -63,18 +64,18 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
 	
 	/** Default Live Geocaching API service URL */
+	@Deprecated
 	public static final String DEFAULT_SERVICE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc";
 
-	protected final String consumerKey;
-	protected final String licenseKey;
-	
 	protected final String serviceUrl;
 
 	private boolean sessionValid = false;
 
 	/**
 	 * Create a new instance of LiveGeocachingApi with service URL {@value #DEFAULT_SERVICE_URL}
+	 * @deprecated Use {@link #LiveGeocachingApi(GeocachingApiConfiguration)} instead.
 	 */
+	@Deprecated
 	public LiveGeocachingApi() {
 		this(DEFAULT_SERVICE_URL);
 	}
@@ -82,13 +83,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	/**
 	 * Create a new instance of LiveGeocachingApi with custom service URL
 	 * @param serviceUrl Live Geocaching API service URL
+   * @deprecated Use {@link #LiveGeocachingApi(GeocachingApiConfiguration)} instead.
 	 */
+	@Deprecated
 	public LiveGeocachingApi(String serviceUrl) {
-		consumerKey = null;
-		licenseKey = null;
 		this.serviceUrl = serviceUrl;
 	}
-
+	
+	/**
+	 * Create a new instance of LiveGeocachingApi with configuration specified by configuration parameter
+	 * @param configuration configuration object
+	 */
+	public LiveGeocachingApi(GeocachingApiConfiguration configuration) {
+    this.serviceUrl = configuration.getApiServiceEntryPointUrl();
+  }
 
 	@Override
 	public void openSession(String session) throws GeocachingApiException {
