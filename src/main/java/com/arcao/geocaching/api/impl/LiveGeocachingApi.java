@@ -723,7 +723,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	protected String maskJsonParameterValues(String postBody) {
-		postBody = postBody.replaceAll("([Aa]ccess[Tt]oken\\s*:\\s*')([^']+)(')", "$1******$3");
+		postBody = postBody.replaceAll("(\"[Aa]ccess[Tt]oken\"\\s*:\\s*\")([^\"]+)(\")", "$1******$3");
 		return postBody;
 	}
 
