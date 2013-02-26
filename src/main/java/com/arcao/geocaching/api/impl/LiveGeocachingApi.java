@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
+import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.ImageData;
@@ -36,6 +37,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
 import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.ApiLimitsJsonParser;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLimitsJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLogJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
@@ -68,6 +70,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	public static final String DEFAULT_SERVICE_URL = "https://api.groundspeak.com/LiveV6/geocaching.svc";
 
 	protected final String serviceUrl;
+	protected CacheLimits lastCacheLimits = null;
 
 	private boolean sessionValid = false;
 
@@ -83,7 +86,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	/**
 	 * Create a new instance of LiveGeocachingApi with custom service URL
 	 * @param serviceUrl Live Geocaching API service URL
-   * @deprecated Use {@link #LiveGeocachingApi(GeocachingApiConfiguration)} instead.
+	 * @deprecated Use {@link #LiveGeocachingApi(GeocachingApiConfiguration)} instead.
 	 */
 	@Deprecated
 	public LiveGeocachingApi(String serviceUrl) {
@@ -95,8 +98,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	 * @param configuration configuration object
 	 */
 	public LiveGeocachingApi(GeocachingApiConfiguration configuration) {
-    this.serviceUrl = configuration.getApiServiceEntryPointUrl();
-  }
+		this.serviceUrl = configuration.getApiServiceEntryPointUrl();
+	}
 
 	@Override
 	public void openSession(String session) throws GeocachingApiException {
@@ -150,6 +153,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 					} else {
 						list = GeocacheJsonParser.parseList(r);
 					}
+				} else if ("CacheLimits".equals(name)) {
+					lastCacheLimits = CacheLimitsJsonParser.parse(r);
 				} else {
 					r.skipValue();
 				}
@@ -200,6 +205,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 					} else {
 						list = GeocacheJsonParser.parseList(r);
 					}
+				} else if ("CacheLimits".equals(name)) {
+					lastCacheLimits = CacheLimitsJsonParser.parse(r);
 				} else {
 					r.skipValue();
 				}
@@ -453,7 +460,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.beginObject();
 			w.name("AccessToken").value(session);
 			w.name("CacheCode").value(cacheCode);
-			w.name("Note").value(note);      
+			w.name("Note").value(note);
 			w.endObject();
 			w.close();
 
@@ -540,39 +547,46 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 	
 	public ApiLimits getApiLimits() throws GeocachingApiException {
-	  ApiLimits apiLimits = null;
-	  
-	  try {
-      JsonReader r = callGet(
-          "GetAPILimits?accessToken=" + session +
-          "&format=json"
-          );
+		ApiLimits apiLimits = null;
+		
+		try {
+			JsonReader r = callGet(
+					"GetAPILimits?accessToken=" + session +
+					"&format=json"
+					);
 
-      r.beginObject();
-      checkError(r);
-      while (r.hasNext()) {
-        String name = r.nextName();
-        if ("Limits".equals(name)) {
-          apiLimits = ApiLimitsJsonParser.parse(r);
-        } else {
-          r.skipValue();
-        }
-      }
-      r.endObject();
-      r.close();
+			r.beginObject();
+			checkError(r);
+			while (r.hasNext()) {
+				String name = r.nextName();
+				if ("Limits".equals(name)) {
+					apiLimits = ApiLimitsJsonParser.parse(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+			r.close();
 
-      return apiLimits;
-    } catch (IOException e) {
-      logger.error(e.toString(), e);
-      if (!isGsonException(e)) {
-        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-      }
+			return apiLimits;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
 
-      throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
-    }
-  }
+			throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+		}
+	}
+	
+	public CacheLimits getLastCacheLimits() {
+		return lastCacheLimits;
+	}
 
 	// -------------------- Helper methods ----------------------------------------
+	protected void prepareRequest() {
+		lastCacheLimits = null;
+	}	
 
 	protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
 		if ("Status".equals(r.nextName())) {
@@ -601,6 +615,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected JsonReader callGet(String function) throws NetworkException {
 		InputStream is = null;
 		InputStreamReader isr = null;
+		
+		prepareRequest();
 
 		logger.debug("Getting " + maskParameterValues(function));
 
@@ -644,6 +660,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		InputStreamReader isr = null;
 
 		logger.debug("Posting " + maskParameterValues(function));
+		
+		prepareRequest();
 
 		try {
 			byte[] data = postBody.getBytes("UTF-8");
@@ -699,17 +717,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-  protected String maskParameterValues(String function) {
-    function = function.replaceAll("(access[Tt]oken=)([^&]+)", "$1******");
-    return function;
-  }
+	protected String maskParameterValues(String function) {
+		function = function.replaceAll("(access[Tt]oken=)([^&]+)", "$1******");
+		return function;
+	}
 
-  protected String maskJsonParameterValues(String postBody) {
-    postBody = postBody.replaceAll("([Aa]ccess[Tt]oken\\s*:\\s*')([^']+)(')", "$1******$3");
-    return postBody;
-  }
-  
-  protected boolean isGsonException(Throwable t) {
+	protected String maskJsonParameterValues(String postBody) {
+		postBody = postBody.replaceAll("([Aa]ccess[Tt]oken\\s*:\\s*')([^']+)(')", "$1******$3");
+		return postBody;
+	}
+
+	protected boolean isGsonException(Throwable t) {
 		// This IOException mess will be fixed in a next GSON release
 		return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
 	}

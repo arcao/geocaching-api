@@ -3,6 +3,7 @@ package com.arcao.geocaching.api;
 import java.util.Date;
 import java.util.List;
 
+import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.FieldNote;
@@ -282,11 +283,22 @@ public interface GeocachingApi {
   List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException;
   
   /**
-   * Returns the API limits applied on currently logged user or null if this information isn't available. 
+   * Returns the API limits applied on currently logged user or null if this
+   * information isn't available.
+   * 
    * @return API limits object
-   * @throws GeocachingApiException 
+   * @throws GeocachingApiException
    *           If error occurs during getting information
    * @since 1.5.10
    */
   ApiLimits getApiLimits() throws GeocachingApiException;
+  
+  /**
+   * Return the cache limits received with a last Geocache request. If the last
+   * request was not Geocache request, returns null.
+   * 
+   * @return cache limits or null
+   * @since 1.5.10
+   */
+  CacheLimits getLastCacheLimits();
 }

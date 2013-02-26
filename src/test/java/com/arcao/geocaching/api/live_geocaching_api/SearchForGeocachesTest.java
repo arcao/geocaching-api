@@ -6,6 +6,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.SimpleGeocache;
@@ -37,11 +38,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
     Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.0F, cache.getTerrainRating(), 0);
+    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
     Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(false, cache.isAvailable());
+    Assert.assertEquals(true, cache.isAvailable());
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
+    
+    CacheLimits limits = api.getLastCacheLimits();
+    Assert.assertNotNull(limits);
   }
 
   @Test
@@ -63,16 +67,16 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotSame(Double.NaN, cache.getLatitude());
     Assert.assertNotSame(Double.NaN, cache.getLongitude());
     Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.0F, cache.getTerrainRating(), 0);
+    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
     Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(false, cache.isAvailable());
+    Assert.assertEquals(true, cache.isAvailable());
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
 
     Assert.assertNotSame("", cache.getCountryName());
     Assert.assertNotSame("", cache.getStateName());
 
-    Assert.assertEquals(10, cache.getWaypoints().size());
+    Assert.assertEquals(8, cache.getWaypoints().size());
 
     Assert.assertEquals(5, cache.getCacheLogs().size());
     for (CacheLog cacheLog : cache.getCacheLogs()) {
@@ -84,6 +88,9 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     }
 
     // TODO more tests
+    
+    CacheLimits limits = api.getLastCacheLimits();
+    Assert.assertNotNull(limits);
   }
 
   @Test
@@ -94,5 +101,9 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
             new PointRadiusFilter(50, 14, 60000)
         }).size()
         );
+
+    CacheLimits limits = api.getLastCacheLimits();
+    Assert.assertNotNull(limits);
   }
+  
 }
