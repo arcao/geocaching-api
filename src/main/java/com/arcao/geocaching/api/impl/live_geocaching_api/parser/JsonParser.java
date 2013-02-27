@@ -98,7 +98,7 @@ public class JsonParser {
 			return memberType;
 		
 		if (r.peek() == JsonToken.NUMBER) {
-		  memberType = MemberType.parseMemeberTypeByGroundSpeakId(r.nextInt());
+		  memberType = MemberType.parseMemeberTypeByGroundSpeakId(r.nextInt() / 10);
 		  return memberType;
     }
 		
