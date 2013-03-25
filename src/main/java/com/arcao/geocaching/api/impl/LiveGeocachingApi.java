@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -232,14 +233,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 			if (trackableCode.toLowerCase().startsWith("tb")) {
 				r = callGet(
-						"GetTrackablesByTBCode?accessToken=" + session +
+						"GetTrackablesByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 						"&tbCode=" + trackableCode + 
 						"&trackableLogCount=" + trackableLogCount +
 						"&format=json"
 						);
 			} else {
 				r = callGet(
-						"GetTrackablesByTrackingNumber?accessToken=" + session +
+						"GetTrackablesByTrackingNumber?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 						"&trackingNumber=" + trackableCode + 
 						"&trackableLogCount=" + trackableLogCount +
 						"&format=json"
@@ -282,7 +283,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 		try {
 			JsonReader r = callGet(
-					"GetTrackablesInCache?accessToken=" + session +
+					"GetTrackablesInCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&startIndex=" + startIndex + 
 					"&maxPerPage=" + maxPerPage + 
@@ -319,7 +320,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 		try {
 			JsonReader r = callGet(
-					"GetGeocacheLogsByCacheCode?accessToken=" + session +
+					"GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&startIndex=" + startIndex + 
 					"&maxPerPage=" + maxPerPage + 
@@ -487,7 +488,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
 		try {
 			JsonReader r = callGet(
-					"DeleteCacheNote?accessToken=" + session +
+					"DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&format=json"
 					);
@@ -515,7 +516,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 		try {
 			JsonReader r = callGet(
-					"GetGeocacheLogsByCacheCode?accessToken=" + session +
+					"GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&tbCode=" + trackableCode +
 					"&startIndex=" + startIndex +
 					"&maxPerPage=" + maxPerPage +
@@ -551,7 +552,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		
 		try {
 			JsonReader r = callGet(
-					"GetAPILimits?accessToken=" + session +
+					"GetAPILimits?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&format=json"
 					);
 
@@ -718,7 +719,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	protected String maskParameterValues(String function) {
-		function = function.replaceAll("(access[Tt]oken=)([^&]+)", "$1******");
+		function = function.replaceAll("([Aa]ccess[Tt]oken=)([^&]+)", "$1******");
 		return function;
 	}
 
