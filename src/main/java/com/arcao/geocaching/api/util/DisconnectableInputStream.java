@@ -31,7 +31,7 @@ public class DisconnectableInputStream extends InputStream {
   @Override
   public void close() throws IOException {
     try {
-      super.close();
+      in.close();
     } finally {
       con.disconnect();
     }
