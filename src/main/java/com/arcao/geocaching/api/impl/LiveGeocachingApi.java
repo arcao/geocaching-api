@@ -112,6 +112,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
 
+		JsonReader r = null;
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -133,7 +134,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.endObject();
 			w.close();
 
-			JsonReader r = callPost("SearchForGeocaches?format=json", sw.toString());
+			r = callPost("SearchForGeocaches?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
 
@@ -152,7 +153,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 			return list;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
@@ -161,12 +161,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+		} finally {
+		  closeJsonReader(r); 
 		}
 	}
 
-	public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
+  public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
 
+		JsonReader r = null;
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -185,7 +188,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.endObject();
 			w.close();
 
-			JsonReader r = callPost("GetMoreGeocaches?format=json", sw.toString());
+			r = callPost("GetMoreGeocaches?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
 
@@ -204,7 +207,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 			return list;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
@@ -213,14 +215,16 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
 		List<Trackable> list = null;
 
+		JsonReader r = null;
 		try {
-			JsonReader r;
 
 			if (trackableCode.toLowerCase().startsWith("tb")) {
 				r = callGet(
@@ -249,7 +253,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 
 			if (list == null || list.size() == 0)
 				return null;
@@ -266,14 +269,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
 		List<Trackable> list = new ArrayList<Trackable>();
 
+		JsonReader r = null;
 		try {
-			JsonReader r = callGet(
+			r = callGet(
 					"GetTrackablesInCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&startIndex=" + startIndex + 
@@ -293,7 +299,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 
 			return list;
 		} catch (IOException e) {
@@ -303,14 +308,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode,  int startIndex, int maxPerPage) throws GeocachingApiException {
 		List<CacheLog> list = new ArrayList<CacheLog>();
 
+		JsonReader r = null;
 		try {
-			JsonReader r = callGet(
+			r = callGet(
 					"GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&startIndex=" + startIndex + 
@@ -329,7 +337,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 
 			return list;
 		} catch (IOException e) {
@@ -339,13 +346,16 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
 			boolean favoriteThisCache) throws GeocachingApiException {
 		CacheLog cacheLog = null;
 
+		JsonReader r = null;
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -364,7 +374,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.endObject();
 			w.close();
 
-			JsonReader r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString());
+			r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
 
@@ -377,7 +387,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 			return cacheLog;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
@@ -386,13 +395,16 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
 			boolean trackableData, DeviceInfo deviceInfo) throws GeocachingApiException {
 		UserProfile userProfile = null;
 		
+		JsonReader r = null;
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -415,7 +427,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.endObject();
 			w.close();
 
-			JsonReader r = callPost("GetYourUserProfile?format=json", sw.toString());
+			r = callPost("GetYourUserProfile?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
 
@@ -428,7 +440,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 			return userProfile;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
@@ -437,7 +448,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
@@ -446,6 +459,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			return;
 		}
 
+		JsonReader r = null;
 		try {
 			StringWriter sw = new StringWriter();
 			JsonWriter w = new JsonWriter(sw);
@@ -456,7 +470,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.endObject();
 			w.close();
 
-			JsonReader r = callPost("UpdateCacheNote?format=json", sw.toString());
+			r = callPost("UpdateCacheNote?format=json", sw.toString());
 			r.beginObject();
 			checkError(r);
 
@@ -465,7 +479,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				r.skipValue();
 			}
 			r.endObject();
-			r.close();
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
 			if (!isGsonException(e)) {
@@ -473,12 +486,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
+	  JsonReader r = null;
 		try {
-			JsonReader r = callGet(
+			r = callGet(
 					"DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&cacheCode=" + cacheCode +
 					"&format=json"
@@ -491,7 +507,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				r.skipValue();
 			}
 			r.endObject();
-			r.close();
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
 			if (!isGsonException(e)) {
@@ -499,14 +514,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 
 	public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
 		List<TrackableLog> list = new ArrayList<TrackableLog>();
 
+		JsonReader r = null;
 		try {
-			JsonReader r = callGet(
+			r = callGet(
 					"GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&tbCode=" + trackableCode +
 					"&startIndex=" + startIndex +
@@ -525,7 +543,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 
 			return list;
 		} catch (IOException e) {
@@ -535,14 +552,17 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 	
 	public ApiLimits getApiLimits() throws GeocachingApiException {
 		ApiLimits apiLimits = null;
 		
+		JsonReader r = null;
 		try {
-			JsonReader r = callGet(
+			r = callGet(
 					"GetAPILimits?accessToken=" + URLEncoder.encode(session, "UTF-8") +
 					"&format=json"
 					);
@@ -558,7 +578,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				}
 			}
 			r.endObject();
-			r.close();
 
 			return apiLimits;
 		} catch (IOException e) {
@@ -568,7 +587,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-		}
+    } finally {
+      closeJsonReader(r); 
+    }
 	}
 	
 	public CacheLimits getLastCacheLimits() {
@@ -766,5 +787,16 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected boolean isGsonException(Throwable t) {
 		// This IOException mess will be fixed in a next GSON release
 		return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
-	}	
+	}
+	
+	protected void closeJsonReader(JsonReader r) {
+	  if (r == null)
+	    return;
+
+	  try {
+	    r.close();
+	  } catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	  }
+	}
 }
