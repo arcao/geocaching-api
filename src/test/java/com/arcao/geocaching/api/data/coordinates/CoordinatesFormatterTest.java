@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.data.coordinates;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.junit.Test;
@@ -12,7 +11,7 @@ public class CoordinatesFormatterTest {
   private static final double refLatitude = 49.0 + 56.031 / 60.0;
   private static final double refLongitude = 8.0 + 38.564 / 60.0;
   private static final Coordinates refCoordinates = new Coordinates(refLatitude, refLongitude);
-  private static final char decSymbol = new DecimalFormatSymbols().getDecimalSeparator();
+  private static final char decSymbol = '.'; //in coordinates we always use a dot!
   
   @Test
   public void testLatLonDecDegree() throws ParseException {
