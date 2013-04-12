@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.data.coordinates;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.junit.Test;
