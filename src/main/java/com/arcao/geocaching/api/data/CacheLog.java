@@ -18,23 +18,26 @@ public class CacheLog {
 	private final CacheLogType cacheLogType;
 	private final User author;
 	private final String text;
+	private final String cacheCode;
 
 	/**
 	 * Create a new instance of cache log and fill it with data
 	 * @param id unique identificator
+	 * @param cacheCode the gccode of the cache
 	 * @param created date when the cache log was created (logged) on Geocaching site
 	 * @param visited date when the cache was visited (found)
 	 * @param cacheLogType type of log
 	 * @param author author of log
 	 * @param text text of log
 	 */
-	public CacheLog(long id, Date created, Date visited, CacheLogType cacheLogType, User author, String text) {
+	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author, String text) {
 		this.id = id;
 		this.created = created;
 		this.visited = visited;
 		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
+		this.cacheCode=cacheCode;
 	}
 
 	/**
@@ -103,5 +106,13 @@ public class CacheLog {
 			sb.append(", ");
 		}
 		return sb.toString();
+	}
+
+	public CacheLogType getCacheLogType() {
+		return cacheLogType;
+	}
+
+	public String getCacheCode() {
+		return cacheCode;
 	}
 }

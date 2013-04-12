@@ -32,12 +32,15 @@ public class CacheLogJsonParser extends JsonParser {
 		CacheLogType cacheLogType = CacheLogType.Unknown;
 		User author = User.EMPTY;
 		String text = "";
+		String cacheCode = "";
 
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("ID".equals(name)) {
 				id = r.nextLong();
+			} else if ("CacheCode".equals(name)) {
+				cacheCode = r.nextString();
 			} else if ("UTCCreateDate".equals(name)) {
 				created = JsonParser.parseJsonUTCDate(r.nextString());
 			} else if ("VisitDate".equals(name)) {
@@ -54,7 +57,7 @@ public class CacheLogJsonParser extends JsonParser {
 		}
 		r.endObject();
 
-		return new CacheLog(id, created, visited, cacheLogType, author, text);
+		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text);
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
