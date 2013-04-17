@@ -162,11 +162,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
 		} finally {
-		  closeJsonReader(r); 
+			closeJsonReader(r); 
 		}
 	}
 
-  public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
+	public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
 		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
 
 		JsonReader r = null;
@@ -215,9 +215,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
@@ -269,9 +269,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
@@ -308,12 +308,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
-	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode,  int startIndex, int maxPerPage) throws GeocachingApiException {
+	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
 		List<CacheLog> list = new ArrayList<CacheLog>();
 
 		JsonReader r = null;
@@ -346,9 +346,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
@@ -395,9 +395,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
@@ -448,9 +448,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
@@ -486,13 +486,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
-	  JsonReader r = null;
+		JsonReader r = null;
 		try {
 			r = callGet(
 					"DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
@@ -514,9 +514,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 
 	public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
@@ -552,9 +552,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 	
 	public ApiLimits getApiLimits() throws GeocachingApiException {
@@ -587,9 +587,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			}
 
 			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
-    } finally {
-      closeJsonReader(r); 
-    }
+		} finally {
+			closeJsonReader(r); 
+		}
 	}
 	
 	public CacheLimits getLastCacheLimits() {
@@ -725,44 +725,44 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
 			if (con.getResponseCode() >= 400) {
-        is = con.getErrorStream();
-      } else {
-        is = con.getInputStream();
-      }
-      
-      final String encoding = con.getContentEncoding();
+				is = con.getErrorStream();
+			} else {
+				is = con.getInputStream();
+			}
 
-      if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-        logger.debug("callPost(): GZIP OK");
-        is = new GZIPInputStream(is);
-      } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-        logger.debug("callPost(): DEFLATE OK");
-        is = new InflaterInputStream(is, new Inflater(true));
-      } else {
-        logger.debug("callPost(): WITHOUT COMPRESSION");
-      }
-      
-      if (con.getResponseCode() >= 400) {
-        isr = new InputStreamReader(is, "UTF-8");
-        
-        StringBuilder sb = new StringBuilder();
-        char buffer[] = new char[1024];
-        int len = 0;
-        
-        while ((len = isr.read(buffer)) != 0) {
-          sb.append(buffer, 0, len);
-        }
-        
-        isr.close();
-                
-        // read error response
-        throw new InvalidResponseException(sb.toString());
-      }
+			final String encoding = con.getContentEncoding();
+
+			if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+				logger.debug("callPost(): GZIP OK");
+				is = new GZIPInputStream(is);
+			} else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+				logger.debug("callPost(): DEFLATE OK");
+				is = new InflaterInputStream(is, new Inflater(true));
+			} else {
+				logger.debug("callPost(): WITHOUT COMPRESSION");
+			}
+
+			if (con.getResponseCode() >= 400) {
+				isr = new InputStreamReader(is, "UTF-8");
+
+				StringBuilder sb = new StringBuilder();
+				char buffer[] = new char[1024];
+				int len = 0;
+
+				while ((len = isr.read(buffer)) != -1) {
+					sb.append(buffer, 0, len);
+				}
+
+				isr.close();
+
+				// read error response
+				throw new InvalidResponseException(sb.toString());
+			}
 
 			isr = new InputStreamReader(new DisconnectableInputStream(is, con), "UTF-8");
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
-		  throw e;
+			throw e;
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
@@ -805,9 +805,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			os.close();
 			
 			if (con.getResponseCode() >= 400) {
-			  is = con.getErrorStream();
+				is = con.getErrorStream();
 			} else {
-			  is = con.getInputStream();
+				is = con.getInputStream();
 			}
 			
 			final String encoding = con.getContentEncoding();
@@ -821,30 +821,29 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			} else {
 				logger.debug("callPost(): WITHOUT COMPRESSION");
 			}
-			
+
 			if (con.getResponseCode() >= 400) {
-        isr = new InputStreamReader(is, "UTF-8");
-        
-        StringBuilder sb = new StringBuilder();
-        char buffer[] = new char[1024];
-        int len = 0;
-        
-        while ((len = isr.read(buffer)) != 0) {
-          sb.append(buffer, 0, len);
-        }
-        
-        isr.close();
-                
-        // read error response
-        throw new InvalidResponseException(sb.toString());
-      }
-			
+				isr = new InputStreamReader(is, "UTF-8");
+
+				StringBuilder sb = new StringBuilder();
+				char buffer[] = new char[1024];
+				int len = 0;
+
+				while ((len = isr.read(buffer)) != -1) {
+					sb.append(buffer, 0, len);
+				}
+
+				isr.close();
+
+				// read error response
+				throw new InvalidResponseException(sb.toString());
+			}
 
 			isr = new InputStreamReader(new DisconnectableInputStream(is, con), "UTF-8");
 
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
-		  throw e;
+			throw e;
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
 			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
@@ -867,13 +866,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 	
 	protected void closeJsonReader(JsonReader r) {
-	  if (r == null)
-	    return;
-
-	  try {
-	    r.close();
-	  } catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	  }
+		if (r == null)
+			return;
+		
+		try {
+			r.close();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 }
