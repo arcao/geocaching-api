@@ -343,6 +343,7 @@ public interface GeocachingApi {
 	 * @return list of cache logs
 	 * @throws GeocachingApiException
 	 *             If error occurs during getting information
+	 * @since 1.5.13
 	 */
 	List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
 }
