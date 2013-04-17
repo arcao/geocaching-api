@@ -1,28 +1,30 @@
 package com.arcao.geocaching.api.data.type;
 
 public enum CacheLogType {
-	Unknown("Unknown"),
-	FoundIt("Found it"),
-	DidntFindIt("Didn't find it"),
-	WriteNote("Write note"),
-	NeedsMaintenance("Needs Maintenance"),
-	OwnerMaintenance("Owner Maintenance"),
-	PublishListing("Publish Listing"),
-	EnableListing("Enable Listing"),
-	TemporarilyDisableListing("Temporarily Disable Listing"),
-	UpdateCoordinates("Update Coordinates"),
-	Announcement("Announcement"),
-	WillAttend("Will Attend"),
-	Attended("Attended"),
-	PostReviewerNote("Post Reviewer Note"),
-	NeedsArchived("Needs Archived"),
-	WebcamPhotoTaken("Webcam Photo Taken"),
-	RetractListing("Retract Listing");
+	Unknown("Unknown", 0),
+	FoundIt("Found it", 2),
+	DidntFindIt("Didn't find it", 3),
+	WriteNote("Write note", 4),
+	NeedsMaintenance("Needs Maintenance", 45),
+	OwnerMaintenance("Owner Maintenance", 46),
+	PublishListing("Publish Listing", 24),
+	EnableListing("Enable Listing", 23),
+	TemporarilyDisableListing("Temporarily Disable Listing", 22),
+	UpdateCoordinates("Update Coordinates", 47),
+	Announcement("Announcement", 74),
+	WillAttend("Will Attend", 9),
+	Attended("Attended", 10),
+	PostReviewerNote("Post Reviewer Note", 68),
+	NeedsArchived("Needs Archived", 7),
+	WebcamPhotoTaken("Webcam Photo Taken", 11),
+	RetractListing("Retract Listing", 25);
 
 	private final String friendlyName;
+	private final int groundspeakId;
 
-	private CacheLogType(String friendlyName) {
+	private CacheLogType(String friendlyName, int groundspeakId) {
 		this.friendlyName = friendlyName;
+		this.groundspeakId = groundspeakId;
 	}
 
 	@Override
@@ -32,6 +34,10 @@ public enum CacheLogType {
 
 	public String getFriendlyName() {
 		return friendlyName;
+	}
+	
+	public int getGroundspeakId() {
+		return groundspeakId;
 	}
 
 	public static CacheLogType parseLogType(String log) {

@@ -13,12 +13,12 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
  */
 public class CacheLog {
 	private final long id;
+	private final String cacheCode;
 	private final Date visited;
 	private final Date created;
 	private final CacheLogType cacheLogType;
 	private final User author;
 	private final String text;
-	private final String cacheCode;
 
 	/**
 	 * Create a new instance of cache log and fill it with data
@@ -32,12 +32,12 @@ public class CacheLog {
 	 */
 	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author, String text) {
 		this.id = id;
+		this.cacheCode=cacheCode;
 		this.created = created;
 		this.visited = visited;
 		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
-		this.cacheCode=cacheCode;
 	}
 
 	/**
@@ -48,6 +48,14 @@ public class CacheLog {
 	  return id;
   }
 
+	/**
+	 * Get a gccode of the cache
+	 * @return gccode of the cache
+	 */
+	public String getCacheCode() {
+		return cacheCode;
+	}
+	
 	/**
 	 * Get a date when the cache log was created (logged) on Geocaching site
 	 * @return date
@@ -106,13 +114,5 @@ public class CacheLog {
 			sb.append(", ");
 		}
 		return sb.toString();
-	}
-
-	public CacheLogType getCacheLogType() {
-		return cacheLogType;
-	}
-
-	public String getCacheCode() {
-		return cacheCode;
 	}
 }

@@ -45,22 +45,6 @@ public interface GeocachingApi {
 	void openSession(String session) throws GeocachingApiException;
 
 	/**
-	 * Open a new session and log-in user
-	 * 
-	 * @param username
-	 *            user name
-	 * @param password
-	 *            password
-	 * @throws GeocachingApiException
-	 *             If Geocaching API error occurs
-	 * @since 1.0
-	 * @deprecated Use {@link #openSession(String)} with oAuth authorization
-	 *             token instead
-	 */
-	@Deprecated
-	void openSession(String username, String password) throws GeocachingApiException;
-
-	/**
 	 * Close current used session
 	 * 
 	 * @since 1.0
@@ -89,21 +73,6 @@ public interface GeocachingApi {
 	 * @since 1.1
 	 */
 	Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException;
-
-	/**
-	 * Get the users geocache logs for a cache
-	 * 
-	 * @param userName
-	 * @param startDate
-	 * @param endDate
-	 * @param logTypes
-	 * @param excludeArchived
-	 * @param startIndex
-	 * @param maxPerPage
-	 * @return
-	 * @throws GeocachingApiException
-	 */
-	List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
 
 	/**
 	 * Get a list of trackables which is currently placed in a cache.
@@ -353,4 +322,27 @@ public interface GeocachingApi {
 	 * @since 1.5.10
 	 */
 	CacheLimits getLastCacheLimits();
+
+	/**
+	 * Get a list of users geocache logs
+	 * 
+	 * @param userName
+	 *            user name
+	 * @param startDate
+	 *            start date or null
+	 * @param endDate
+	 *            end date or null
+	 * @param logTypes
+	 *            array of geocache log types to filter (must contains at least one Geocache log type) 
+	 * @param excludeArchived
+	 *            exclude archived geocaches
+	 * @param startIndex
+	 *            count of logs to skip
+	 * @param maxPerPage
+	 *            count of logs to get
+	 * @return list of cache logs
+	 * @throws GeocachingApiException
+	 *             If error occurs during getting information
+	 */
+	List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
 }
