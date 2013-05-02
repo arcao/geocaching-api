@@ -62,6 +62,9 @@ public class CacheLogJsonParser extends JsonParser {
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
 		CacheLogType cacheLogType = CacheLogType.Unknown;
+		
+		if (isNextNull(r))
+			return cacheLogType;
 
 		r.beginObject();
 		while (r.hasNext()) {
