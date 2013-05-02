@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 import org.junit.BeforeClass;
 
 import com.arcao.geocaching.api.GeocachingApi;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.impl.LiveGeocachingApi;
 
 public abstract class AbstractGeocachingTest {
@@ -18,9 +19,15 @@ public abstract class AbstractGeocachingTest {
 
   @BeforeClass
   public static void setUp() throws Exception {
-    api = new LiveGeocachingApi(STAGGING_SERVICE_URL);
+    api = new LiveGeocachingApi(new TestGeocachingApiConfiguration());
     
     api.openSession(TEST_AUTH_TOKEN);
+  }
+  
+  private static class TestGeocachingApiConfiguration implements GeocachingApiConfiguration {
+		public String getApiServiceEntryPointUrl() {
+			return STAGGING_SERVICE_URL;
+		}
   }
 
 }
