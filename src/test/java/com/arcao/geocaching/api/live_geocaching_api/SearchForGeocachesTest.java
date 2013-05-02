@@ -14,6 +14,7 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.MemberType;
+import com.arcao.geocaching.api.impl.live_geocaching_api.filter.BookmarksExcludeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilter;
 
@@ -106,4 +107,17 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(limits);
   }
   
+  @Test
+  public void searchForGeocachesBookmarksExcludeFilterSimpleGeocacheTest() throws Exception {
+    Assert.assertEquals(
+        3,
+        api.searchForGeocaches(true, 3, 0, 0, new Filter[] {
+            new PointRadiusFilter(50, 14, 60000),
+            new BookmarksExcludeFilter(true, null)
+        }).size()
+        );
+
+    CacheLimits limits = api.getLastCacheLimits();
+    Assert.assertNotNull(limits);
+  }
 }
