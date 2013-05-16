@@ -73,17 +73,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected CacheLimits lastCacheLimits = null;
 
 	private boolean sessionValid = false;
-	
-	/**
-	 * Create a new instance of LiveGeocachingApi with custom service URL
-	 * @param serviceUrl Live Geocaching API service URL
-	 * @deprecated Use {@link #LiveGeocachingApi(GeocachingApiConfiguration)} instead.
-	 */
-	@Deprecated
-	public LiveGeocachingApi(String serviceUrl) {
-		this.serviceUrl = serviceUrl;
-	}
-	
+		
 	/**
 	 * Create a new instance of LiveGeocachingApi with configuration specified by configuration parameter
 	 * @param configuration configuration object
