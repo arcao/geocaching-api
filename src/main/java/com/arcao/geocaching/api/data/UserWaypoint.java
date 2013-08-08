@@ -12,8 +12,9 @@ public class UserWaypoint {
 	private final Coordinates coordinates;
 	private final Date date;
 	private final int userId;
+	private final boolean correctedCoordinate;
 	
-	public UserWaypoint(String cacheCode, String description, long id, Coordinates coordinates, Date date, int userId) {
+	public UserWaypoint(String cacheCode, String description, long id, Coordinates coordinates, Date date, int userId, boolean correctedCoordinate) {
 		super();
 		this.cacheCode = cacheCode;
 		this.description = description;
@@ -21,6 +22,7 @@ public class UserWaypoint {
 		this.coordinates = coordinates;
 		this.date = date;
 		this.userId = userId;
+		this.correctedCoordinate = correctedCoordinate;
 	}
 	
 	public String getCacheCode() {
@@ -53,6 +55,10 @@ public class UserWaypoint {
 	
 	public int getUserId() {
 		return userId;
+	}
+	
+	public boolean isCorrectedCoordinate() {
+		return correctedCoordinate;
 	}
 	
 	public String getUserWaypointCode(int index) {

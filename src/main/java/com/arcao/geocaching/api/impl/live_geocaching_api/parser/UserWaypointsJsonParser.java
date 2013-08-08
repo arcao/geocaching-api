@@ -33,6 +33,7 @@ public class UserWaypointsJsonParser extends JsonParser {
 		double longitude = Double.NaN;
 		Date date = new Date(0);
 		int userId = 0;
+		boolean correctedCoordinate = false;
 		
 		r.beginObject();
 		while(r.hasNext()) {
@@ -51,12 +52,14 @@ public class UserWaypointsJsonParser extends JsonParser {
 				date = parseJsonUTCDate(r.nextString());
 			} else if ("UserId".equals(name)) {
 				userId = r.nextInt();
+			} else if ("IsCorrectedCoordinate".equals(name)) {
+				correctedCoordinate = r.nextBoolean();
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 		
-		return new UserWaypoint(cacheCode, description, id, new Coordinates(latitude, longitude), date, userId);
+		return new UserWaypoint(cacheCode, description, id, new Coordinates(latitude, longitude), date, userId, correctedCoordinate);
 	}
 }
