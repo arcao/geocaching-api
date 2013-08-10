@@ -48,16 +48,71 @@ public enum StatusCode {
   TrackableUnableToBeMarkedMissing(43),
   TrackableMustBeInCache(44),
   TrackableRequiredCacheCode(45),
-  NotEnoughFavoritePPoints(46),
+  NotEnoughFavoritePoints(46),
   CacheAlreadyRated(47),
   CacheNotLoggedYet(48),
   FailedToFavoriteCache(49),
   FailedToUnfavoriteCache(50),
   CacheNotFavoritedYet(51),
+  UnableToRetrieveUsersAvailableFavoritePoints(52),
+  UnableToRetrieveUsersWhoFavoritedCache(53),
+  FailedToRetrieveFavoritedCache(54),
   StoredSearchNotFound(55),
+  
+  // NotHiddenByUser filter
+  WrongUserCountForNotHiddenByUserFilter(56),
+  AtLeastBasicMembershipRequiredForNotHiddenByUserFilter(57),
+  PremiumMembershipRequiredForNotHiddenByUserFilter(58),
+  
+  // HiddenByUser filter
+  WrongUserCountForHiddenByUserFilter(59),
+  AtLeastBasicMembershipRequiredForHiddenByUserFilter(60),  
+  PremiumMembershipRequiredForHiddenByUserFilter(61),
+  
+  // BookmarksExclude filter
   InvalidBookmarkListId(62),
-  NoClampingFilterProvided(89),
+  AccountNotValidForRetrieveBookmarks(63),
+  PremiumMembershipRequiredForBookmarksExcludeFilter(64),
+  
+  // TrackableCount filter
+  InvalidValueForMinMaxTrackables(65),
+  PremiumMembershipRequiredForTrackableCountFilter(66),
+  
+  // Terrain filter
+  InvalidValueForMinMaxTerrain(76),
+  PremiumMembershipRequiredForTerrainFilter(77),
+
+  // Terrain filter
+  InvalidValueForMinMaxDifficulty(78),
+  PremiumMembershipRequiredForDifficultyFilter(79),
+
+  // FavoritePoints filter
+  MissingValueForMinMaxFavoritePoints(80),
+  MinFavoritePointsCannotBeGreaterThanMaxFavoritePoints(81),
+  NonNegativeValueRequiredForMinMaxFavoritePoints(82),
+  NonNegativeValueRequiredForMinFavoritePoints(83),
+  NonNegativeValueRequiredForMaxFavoritePoints(84),
+  PremiumMembershipRequiredForFavoritePointsFilter(85),
+  
+  // GeocacheName filter
+  MissingValueForGeocacheName(86),
+  PremiumMembershipRequiredForGeocacheNameFilter(87),
+  
+  FilterNotImplemented(88),
+  CacheCodeFilterOrPointRadiusFilterRequired(89),
   MethodNotSupplied(90),
+  
+  // GeocacheType filter
+  InvalidValueForGeocacheTypeIds(91),
+  
+  // GeocacheContainerSize filter
+  InvalidValueForGeocacheContainerSizeIds(92),
+  PremiumMembershipRequiredForGeocacheContainerSizeFilter(93),
+  
+  UnableToRetrieveUserProfile(99),
+  PublicProfileNotFound(103),
+  
+  MaximumRequestsPerPageExceeded(113),
   CacheLimitExceeded(118),
   CacheLimitExceededInRequest(132),
   UserNotFound(139),
