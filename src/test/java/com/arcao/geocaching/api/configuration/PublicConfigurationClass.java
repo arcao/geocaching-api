@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.configuration;
 
-import com.arcao.geocaching.api.configuration.OAuthGeocachingApiConfiguration;
 
 public class PublicConfigurationClass implements OAuthGeocachingApiConfiguration {
 
@@ -27,5 +26,13 @@ public class PublicConfigurationClass implements OAuthGeocachingApiConfiguration
   public String getOAuthAccessUrl() {
     return null;
   }
+
+	public int getConnectTimeout() {
+		return 0;
+	}
+
+	public int getReadTimeout() {
+		return 0;
+	}
 
 }

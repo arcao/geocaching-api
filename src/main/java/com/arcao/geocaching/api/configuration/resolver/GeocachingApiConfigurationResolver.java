@@ -1,4 +1,4 @@
-package com.arcao.geocaching.api.configuration;
+package com.arcao.geocaching.api.configuration.resolver;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 
 /**
  * Resolver implementation for configuration classes

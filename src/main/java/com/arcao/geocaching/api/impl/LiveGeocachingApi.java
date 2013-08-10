@@ -69,7 +69,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
 	
 	/** Default Live Geocaching API service URL */
-	protected final String serviceUrl;
+	protected final GeocachingApiConfiguration configuration;
 	protected CacheLimits lastCacheLimits = null;
 
 	private boolean sessionValid = false;
@@ -79,7 +79,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	 * @param configuration configuration object
 	 */
 	public LiveGeocachingApi(GeocachingApiConfiguration configuration) {
-		this.serviceUrl = configuration.getApiServiceEntryPointUrl();
+		this.configuration = configuration;
 	}
 
 	@Override
@@ -701,12 +701,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		logger.debug("Getting " + maskParameterValues(function));
 
 		try {
-			URL url = new URL(serviceUrl + "/" + function);
+			URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(30000);
-			con.setReadTimeout(30000);
+			con.setConnectTimeout(configuration.getConnectTimeout());
+			con.setReadTimeout(configuration.getReadTimeout());
 
 			con.setRequestMethod("GET");
 			//con.setRequestProperty("User-Agent", "Geocaching/4.0 CFNetwork/459 Darwin/10.0.0d3");
@@ -770,14 +770,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		try {
 			byte[] data = postBody.getBytes("UTF-8");
 
-			URL url = new URL(serviceUrl + "/" + function);
+			URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
 			con.setDoOutput(true);
 
 			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(30000);
-			con.setReadTimeout(30000);
+			con.setConnectTimeout(configuration.getConnectTimeout());
+			con.setReadTimeout(configuration.getReadTimeout());
 
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type", "application/json");

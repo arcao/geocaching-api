@@ -3,6 +3,8 @@ package com.arcao.geocaching.api.configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.arcao.geocaching.api.configuration.resolver.GeocachingApiConfigurationResolver;
+
 public class GeocachingApiConfigurationResolverTest {
 
   @Test
@@ -47,6 +49,14 @@ public class GeocachingApiConfigurationResolverTest {
     public String getOAuthAccessUrl() {
       return null;
     }
+
+		public int getConnectTimeout() {
+			return 0;
+		}
+
+		public int getReadTimeout() {
+			return 0;
+		}
     
   }
 }
