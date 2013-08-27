@@ -48,7 +48,6 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.UserProfileParser;
-import com.arcao.geocaching.api.util.DisconnectableInputStream;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
 
@@ -749,7 +748,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				throw new InvalidResponseException(sb.toString());
 			}
 
-			isr = new InputStreamReader(new DisconnectableInputStream(is, con), "UTF-8");
+			isr = new InputStreamReader(is, "UTF-8");
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
 			throw e;
@@ -829,7 +828,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				throw new InvalidResponseException(sb.toString());
 			}
 
-			isr = new InputStreamReader(new DisconnectableInputStream(is, con), "UTF-8");
+			isr = new InputStreamReader(is, "UTF-8");
 
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
