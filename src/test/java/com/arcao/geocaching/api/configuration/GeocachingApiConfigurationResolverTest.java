@@ -3,52 +3,66 @@ package com.arcao.geocaching.api.configuration;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultStaggingGeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.resolver.GeocachingApiConfigurationResolver;
 
 public class GeocachingApiConfigurationResolverTest {
 
-  @Test
-  public void resolveStringTest() {
-    GeocachingApiConfiguration conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, InnerConfigurationClass.class.getName());
-    Assert.assertNotNull(conf);
-    
-    conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, PublicConfigurationClass.class.getName());
-    Assert.assertNotNull(conf);
-  }
-  
-  @Test
-  public void resolveClassTest() {
-    GeocachingApiConfiguration conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, InnerConfigurationClass.class);
-    Assert.assertNotNull(conf);
-    
-    conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, PublicConfigurationClass.class);
-    Assert.assertNotNull(conf);
-  }
-  
-  protected static class InnerConfigurationClass implements OAuthGeocachingApiConfiguration {
-    public String getApiServiceEntryPointUrl() {
-      return null;
-    }
+	@Test
+	public void resolveStringTest() {
+		GeocachingApiConfiguration conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, InnerConfigurationClass.class.getName());
+		Assert.assertNotNull(conf);
 
-    public String getConsumerKey() {
-      return null;
-    }
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, PublicConfigurationClass.class.getName());
+		Assert.assertNotNull(conf);
 
-    public String getConsumerSecret() {
-      return null;
-    }
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultProductionGeocachingApiConfiguration.class.getName());
+		Assert.assertNotNull(conf);
 
-    public String getOAuthAuthorizeUrl() {
-      return null;
-    }
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStaggingGeocachingApiConfiguration.class.getName());
+		Assert.assertNotNull(conf);
+	}
 
-    public String getOAuthRequestUrl() {
-      return null;
-    }
+	@Test
+	public void resolveClassTest() {
+		GeocachingApiConfiguration conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, InnerConfigurationClass.class);
+		Assert.assertNotNull(conf);
 
-    public String getOAuthAccessUrl() {
-      return null;
-    }
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, PublicConfigurationClass.class);
+		Assert.assertNotNull(conf);
+
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultProductionGeocachingApiConfiguration.class);
+		Assert.assertNotNull(conf);
+
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStaggingGeocachingApiConfiguration.class);
+		Assert.assertNotNull(conf);
+	}
+
+	public static class InnerConfigurationClass implements OAuthGeocachingApiConfiguration {
+		public String getApiServiceEntryPointUrl() {
+			return null;
+		}
+
+		public String getConsumerKey() {
+			return null;
+		}
+
+		public String getConsumerSecret() {
+			return null;
+		}
+
+		public String getOAuthAuthorizeUrl() {
+			return null;
+		}
+
+		public String getOAuthRequestUrl() {
+			return null;
+		}
+
+		public String getOAuthAccessUrl() {
+			return null;
+		}
 
 		public int getConnectTimeout() {
 			return 0;
@@ -57,6 +71,5 @@ public class GeocachingApiConfigurationResolverTest {
 		public int getReadTimeout() {
 			return 0;
 		}
-    
-  }
+	}
 }
