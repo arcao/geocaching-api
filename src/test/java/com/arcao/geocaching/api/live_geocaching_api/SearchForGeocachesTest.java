@@ -74,6 +74,9 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertEquals(false, cache.isFound());
     Assert.assertEquals(false, cache.isPremiumListing());
 
+    Assert.assertEquals(true, cache.isShortDescriptionHtml());
+    Assert.assertEquals(true, cache.isLongDescriptionHtml());
+    
     Assert.assertNotSame("", cache.getCountryName());
     Assert.assertNotSame("", cache.getStateName());
 

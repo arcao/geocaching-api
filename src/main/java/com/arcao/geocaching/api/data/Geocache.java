@@ -14,7 +14,9 @@ public class Geocache extends SimpleGeocache {
   private final String countryName;
   private final String stateName;
   private final String shortDescription;
+  private final boolean shortDescriptionHtml;
   private final String longDescription;
+  private final boolean longDescriptionHtml;
   private final String hint;
   private final int favoritePoints;
   private final List<CacheLog> cacheLogs;
@@ -31,7 +33,7 @@ public class Geocache extends SimpleGeocache {
       boolean available, boolean archived, boolean premiumListing,
       Date created, Date placed, Date lastUpdate, String contactName, ContainerType containerType,
       int trackableCount, boolean found, Date lastVisited, String countryName, String stateName, String shortDescription,
-      String longDescrition, String hint, int favoritePoints, List<CacheLog> cacheLogs,
+      boolean shortDescriptionHtml, String longDescrition, boolean longDescriptionHtml, String hint, int favoritePoints, List<CacheLog> cacheLogs,
       List<Trackable> trackables, List<Waypoint> waypoints, List<AttributeType> attributes, List<UserWaypoint> userWaypoints, String personalNote,
       List<ImageData> images) {
     super(id, cacheCode, name, coordinates, cacheType, difficultyRating,
@@ -41,7 +43,9 @@ public class Geocache extends SimpleGeocache {
     this.countryName = countryName;
     this.stateName = stateName;
     this.shortDescription = shortDescription;
+    this.shortDescriptionHtml = shortDescriptionHtml;
     this.longDescription = longDescrition;
+    this.longDescriptionHtml = longDescriptionHtml;
     this.hint = hint;
     this.favoritePoints = favoritePoints;
     this.cacheLogs = cacheLogs;
@@ -68,10 +72,18 @@ public class Geocache extends SimpleGeocache {
   public String getShortDescription() {
     return shortDescription;
   }
+  
+  public boolean isShortDescriptionHtml() {
+		return shortDescriptionHtml;
+	}
 
   public String getLongDescription() {
     return longDescription;
   }
+  
+  public boolean isLongDescriptionHtml() {
+		return longDescriptionHtml;
+	}
 
   public String getHint() {
     return hint;
@@ -129,3 +141,4 @@ public class Geocache extends SimpleGeocache {
     return sb.toString();
   }
 }
+
