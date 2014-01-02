@@ -102,4 +102,28 @@ public class CoordinatesParserTest {
     assertEquals(-refLatitude, CoordinatesParser.parseLatitude("-49° 56.031", false), 1e-8);
     assertEquals(-refLongitude, CoordinatesParser.parseLongitude("-8° 38.564", false), 1e-8);
   }
+
+  @Test
+  public void testParseTooBigCoordinatesNumber() throws ParseException {
+    Coordinates point = CoordinatesParser.parse("N 123456789123456789 | N 123456789123456789");
+    assertNotNull(point);
+  }
+
+  @Test
+  public void testParseTooBigLatitudeNumber() throws ParseException {
+    CoordinatesParser.parseLatitude("N 123456789123456789");
+    assertTrue(true);
+  }
+
+  @Test
+  public void testParseTooBigLongitudeNumber() throws ParseException {
+    CoordinatesParser.parseLongitude("W 123456789123456789");
+    assertTrue(true);
+  }
+
+  @Test
+  public void testParseCoordinatesNumberAndNormalize() throws ParseException {
+    final Coordinates point = new Coordinates(refLatitude, refLongitude);
+    assertTrue(point.equals(CoordinatesParser.parse("N 229° 56.031 | E 368° 38.564")));
+  }
 }

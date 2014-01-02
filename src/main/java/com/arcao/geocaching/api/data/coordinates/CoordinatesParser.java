@@ -95,7 +95,7 @@ public class CoordinatesParser {
     
     if (matcher.find()) {
       double sign = matcher.group(1).equalsIgnoreCase("S") || matcher.group(1).equalsIgnoreCase("W") ? -1.0 : 1.0;
-      double degree = Integer.valueOf(matcher.group(2)).doubleValue();
+      double degree = Double.parseDouble(matcher.group(2));
       
       if (degree < 0) {
         sign = -1;
@@ -106,7 +106,7 @@ public class CoordinatesParser {
       double seconds = 0.0;
 
       if (matcher.group(3) != null) {
-          minutes = Integer.valueOf(matcher.group(3)).doubleValue();
+          minutes = Double.parseDouble(matcher.group(3));
 
           if (matcher.group(4) != null) {
               seconds = Double.parseDouble("0." + matcher.group(4)) * 60.0;
@@ -115,7 +115,22 @@ public class CoordinatesParser {
           }
       }
 
-      return new ParseResult(sign * (degree + minutes / 60.0 + seconds / 3600.0), matcher.start(), matcher.group().length());
+      double result = sign * (degree + minutes / 60.0 + seconds / 3600.0);
+
+      // normalize result
+      switch (coordinateType) {
+        case LON_UNSAFE:
+        case LON:
+          result = normalize(result, -180, 180);
+          break;
+        case LAT_UNSAFE:
+        case LAT:
+        default:
+          result = normalize(result, -90, 90);
+          break;
+      }
+
+      return new ParseResult(result, matcher.start(), matcher.group().length());
     } else {
   
         // Nothing found with "N 52...", try to match string as decimaldegree
@@ -132,7 +147,21 @@ public class CoordinatesParser {
     }
     throw new ParseException("Could not parse coordinate: \"" + coordinate + "\"", 0);
   }
-  
+
+  /**
+   * Normalizes any number to an arbitrary range by assuming the range wraps around when going below min or above max
+   * @param value input
+   * @param start range start
+   * @param end range end
+   * @return normalized number
+   */
+  protected static double normalize(double value, double start, double end) {
+    final double width       = end - start;
+    final double offsetValue = value - start; // value relative to 0
+
+    return (offsetValue - (Math.floor(offsetValue / width ) * width)) + start ; // + start to reset back to start of original range
+  }
+
   protected static class ParseResult {
     final double result;
     final int matcherPos;
