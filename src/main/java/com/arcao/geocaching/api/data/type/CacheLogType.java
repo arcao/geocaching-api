@@ -17,7 +17,9 @@ public enum CacheLogType {
 	PostReviewerNote("Post Reviewer Note", 68),
 	NeedsArchived("Needs Archived", 7),
 	WebcamPhotoTaken("Webcam Photo Taken", 11),
-	RetractListing("Retract Listing", 25);
+	RetractListing("Retract Listing", 25),
+	Archive("Archive", 5),
+	Unarchive("Unarchive", 1);
 
 	private final String friendlyName;
 	private final int groundspeakId;
@@ -35,17 +37,17 @@ public enum CacheLogType {
 	public String getFriendlyName() {
 		return friendlyName;
 	}
-	
+
 	public int getGroundspeakId() {
 		return groundspeakId;
 	}
 
 	public static CacheLogType parseLogType(String log) {
-		for (CacheLogType type : values()) {
+		for (final CacheLogType type : values()) {
 			if (type.getFriendlyName().equals(log))
 				return type;
 		}
 
-		return WriteNote;
+		return Unknown;
 	}
 }
