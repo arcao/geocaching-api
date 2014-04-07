@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.CacheLog;
+import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.google.gson.stream.JsonToken;
@@ -33,6 +34,7 @@ public class CacheLogJsonParser extends JsonParser {
 		User author = User.EMPTY;
 		String text = "";
 		String cacheCode = "";
+		List<ImageData> images = new ArrayList<ImageData>();
 
 		r.beginObject();
 		while (r.hasNext()) {
@@ -51,13 +53,15 @@ public class CacheLogJsonParser extends JsonParser {
 				author = parseUser(r);
 			} else if ("LogText".equals(name)) {
 				text = r.nextString();
+			} else if ("Images".equals(name)) {
+				images = ImageDataJsonParser.parseList(r);
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 
-		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text);
+		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text, images);
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {

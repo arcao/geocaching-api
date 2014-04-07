@@ -21,7 +21,7 @@ public class Trackable {
 	private final boolean allowedToBeCollected;
 	private final boolean inCollection;
 	private final boolean archived;
-	
+
 	private final List<TrackableLog> trackableLogs;
 	private final List<ImageData> images;
 
@@ -46,14 +46,14 @@ public class Trackable {
 		this.created = created;
 		this.allowedToBeCollected = allowedToBeCollected;
 		this.inCollection = inCollection;
-		this.archived = archived; 
-		
+		this.archived = archived;
+
 		this.trackableLogs = trackableLogs;
 		this.images = images;
 
 		lookupCode = "";
 	}
-	
+
 	public long getId() {
 	  return id;
   }
@@ -101,40 +101,44 @@ public class Trackable {
 	public String getLookupCode() {
 		return lookupCode;
 	}
-	
+
 	public void setLookupCode(String lookupCode) {
     this.lookupCode = lookupCode;
   }
-	
+
 	public String getTrackablePage() {
 	  return String.format(TRACKABLE_URL, trackingNumber);
 	}
-	
+
 	public Date getCreated() {
 	  return created;
   }
-	
+
 	public boolean isAllowedToBeCollected() {
 	  return allowedToBeCollected;
   }
-	
+
 	public boolean isInCollection() {
 	  return inCollection;
   }
-	
+
 	public boolean isArchived() {
 	  return archived;
   }
-	
+
+	public List<TrackableLog> getTrackableLogs() {
+		return trackableLogs;
+	}
+
 	public List<ImageData> getImages() {
-	  return images;
-  }
+		return images;
+	}
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
-		for (Method m : getClass().getMethods()) {
+		for (final Method m : getClass().getMethods()) {
 			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
 					m.getParameterTypes().length != 0 ||
 					void.class.equals(m.getReturnType()))
@@ -144,7 +148,7 @@ public class Trackable {
 			sb.append(':');
 			try {
 				sb.append(m.invoke(this, new Object[0]));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 			}
 			sb.append(", ");
 		}

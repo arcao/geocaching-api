@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.data;
 
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 
 import com.arcao.geocaching.api.data.type.CacheLogType;
 
@@ -19,6 +20,7 @@ public class CacheLog {
 	private final CacheLogType cacheLogType;
 	private final User author;
 	private final String text;
+	private final List<ImageData> images;
 
 	/**
 	 * Create a new instance of cache log and fill it with data
@@ -30,7 +32,7 @@ public class CacheLog {
 	 * @param author author of log
 	 * @param text text of log
 	 */
-	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author, String text) {
+	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author, String text, List<ImageData> images) {
 		this.id = id;
 		this.cacheCode=cacheCode;
 		this.created = created;
@@ -38,6 +40,7 @@ public class CacheLog {
 		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
+		this.images = images;
 	}
 
 	/**
@@ -95,6 +98,14 @@ public class CacheLog {
 	public String getText() {
 		return text;
 	}
+	
+	/**
+	 * Get the images attached to log 
+	 * @return images
+	 */
+	public List<ImageData> getImages() {
+    return images;
+  }
 
 	@Override
 	public String toString() {
