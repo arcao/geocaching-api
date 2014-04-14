@@ -12,6 +12,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
+import com.arcao.geocaching.api.data.TrackableTravel;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.type.CacheLogType;
@@ -92,6 +93,17 @@ public interface GeocachingApi {
 	 */
 	List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException;
 
+	/**
+	 * Get a list of complete travel track of specified trackable.
+	 * @param trackableCode
+	 *            trackable code
+	 * @return information about trackable travel track
+	 * @throws GeocachingApiException
+	 *             If error occurs during getting information
+	 * @since 1.20
+	 */
+	List<TrackableTravel> getTrackableTravelList(String trackableCode) throws GeocachingApiException;
+	
 	/**
 	 * Get a list of cache logs in given cache.
 	 * 

@@ -27,6 +27,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
+import com.arcao.geocaching.api.data.TrackableTravel;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.type.CacheLogType;
@@ -47,6 +48,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.SimpleGeocacheJs
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableTravelJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.UserProfileParser;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
@@ -300,6 +302,43 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		} finally {
 			closeJsonReader(r); 
 		}
+	}
+	
+	public List<TrackableTravel> getTrackableTravelList(String trackableCode) throws GeocachingApiException {
+		List<TrackableTravel> list = new ArrayList<TrackableTravel>();
+
+		JsonReader r = null;
+		try {
+			r = callGet(
+					"GetTrackableTravelList?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+					"&tbCode=" + trackableCode +
+					"&format=json"
+					);
+
+			r.beginObject();
+			checkError(r);
+			while(r.hasNext()) {
+				String name = r.nextName();
+				if ("TrackableTravels".equals(name)) {
+					list = TrackableTravelJsonParser.parseList(r);
+				} else {
+					r.skipValue();
+				}
+			}
+			r.endObject();
+
+			return list;
+		} catch (IOException e) {
+			logger.error(e.toString(), e);
+			if (!isGsonException(e)) {
+				throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			}
+
+			throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+		} finally {
+			closeJsonReader(r); 
+		}
+
 	}
 
 	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
