@@ -10,6 +10,7 @@ import java.text.ParseException;
  * @since 1.5
  */
 public class Coordinates {
+	protected static final double AVERAGE_RADIUS_OF_EARTH = 6371000.0;
   protected static final CoordinatesFormatter LAT_LON_DECMINUTE_FORMAT = new CoordinatesFormatter(CoordinatesFormatter.LAT_LON_DECMINUTE);
 
   private final double latitude;
@@ -193,6 +194,88 @@ public class Coordinates {
   public String toString() {
     return toString(LAT_LON_DECMINUTE_FORMAT);
   }
+  
+  /**
+   * Get a distance in meters between this coordinates and specified coordinates  
+   * @param to
+   * @return distance in meters
+   */
+  public double distanceTo(Coordinates to) {
+  	double[] results = new double[1];
+  	
+  	computeDistanceAndBearingFast(this, to, results);
+  	
+  	return results[0];
+  }
+  
+	/**
+	 * Computes the approximate distance in meters between two coordinates, and
+	 * optionally the initial and final bearings bearings of the shortest path between
+	 * them.
+	 * 
+	 * <p>
+	 * The computed distance is stored in <code>results[0]</code>. If results has length 2,
+	 * the initial bearing is stored in <code>results[1]</code>. If results has
+	 * length 3, the final bearing is stored in <code>results[2]</code>.
+	 * 
+	 * <p>
+	 * Compute is based on <a href="http://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a>.
+	 * Precision is around 99.9%.
+	 * 
+	 * @param source
+	 *          source coordinates
+	 * @param destination
+	 *          destination coordinates
+	 * @param results
+	 *          array where first index is distance in meters, second index is initial bearing in degree
+	 *          and third index is final bearing in degree
+	 */
+	public static void computeDistanceAndBearingFast(Coordinates source, Coordinates destination, double[] results) {
+		if (results == null || results.length < 1 || results.length > 3)
+			throw new IllegalArgumentException("Results has to be initialized array of size 1, 2 or 3.");
+		
+		double lat1 = source.latitude;
+		double lon1 = source.longitude;
+		double lat2 = destination.latitude;
+		double lon2 = destination.longitude;
+		
+		// convert lat/long to radians
+		lat1 *= Math.PI / 180.0;
+		lat2 *= Math.PI / 180.0;
+		lon1 *= Math.PI / 180.0;
+		lon2 *= Math.PI / 180.0;
+		
+		// prepare variables
+		double cosLat1 = Math.cos(lat1);
+		double cosLat2 = Math.cos(lat2);
+		double sinDLat2 = Math.sin((lat2 - lat1) / 2.0);
+		double sinDLon2 = Math.sin((lon2 - lon1) / 2.0);
+
+		// compute values
+		double a = sinDLat2 * sinDLat2 + cosLat1 * cosLat2 * sinDLon2 * sinDLon2;
+		double d = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
+		
+		// convert to metres
+		results[0] = d * AVERAGE_RADIUS_OF_EARTH;
+		
+		// compute initial bearing
+		if (results.length > 1) {
+			double sinLambda = Math.sin(lon2 - lon1);
+			double cosLambda = Math.cos(lon2 - lon1);
+			
+			double y = sinLambda * cosLat2;
+			double x = cosLat1 * Math.sin(lat2) - Math.sin(lat1) * cosLat2 * cosLambda;
+			results[1] = Math.toDegrees(Math.atan2(y, x));
+			
+			// compute final bearing
+			if (results.length > 2) {
+				y = sinLambda * cosLat1;
+				x = - Math.sin(lat1) * cosLat2 + cosLat1 * Math.sin(lat2) * cosLambda;
+				results[2] = Math.toDegrees(Math.atan2(y, x));
+			}
+		}
+	}
+  
 
   @Override
   public boolean equals(Object obj) {
