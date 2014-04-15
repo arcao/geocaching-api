@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
-import com.arcao.geocaching.api.configuration.impl.DefaultStaggingGeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.resolver.GeocachingApiConfigurationResolver;
 
 public class GeocachingApiConfigurationResolverTest {
@@ -20,7 +20,7 @@ public class GeocachingApiConfigurationResolverTest {
 		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultProductionGeocachingApiConfiguration.class.getName());
 		Assert.assertNotNull(conf);
 
-		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStaggingGeocachingApiConfiguration.class.getName());
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStagingGeocachingApiConfiguration.class.getName());
 		Assert.assertNotNull(conf);
 	}
 
@@ -35,7 +35,7 @@ public class GeocachingApiConfigurationResolverTest {
 		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultProductionGeocachingApiConfiguration.class);
 		Assert.assertNotNull(conf);
 
-		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStaggingGeocachingApiConfiguration.class);
+		conf = GeocachingApiConfigurationResolver.resolve(GeocachingApiConfiguration.class, DefaultStagingGeocachingApiConfiguration.class);
 		Assert.assertNotNull(conf);
 	}
 
