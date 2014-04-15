@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
 import com.arcao.geocaching.api.util.Base64;
@@ -84,5 +85,26 @@ public class ImageData implements JsonSerializable {
     	.name("FileName").value(fileName)
     	.name("base64ImageData").value(new String(imageData));
     w.endObject();
-  } 
+  }
+  
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder();
+
+		for (final Method m : getClass().getMethods()) {
+			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
+					m.getParameterTypes().length != 0 ||
+					void.class.equals(m.getReturnType()))
+				continue;
+
+			sb.append(m.getName());
+			sb.append(':');
+			try {
+				sb.append(m.invoke(this, new Object[0]));
+			} catch (final Exception e) {
+			}
+			sb.append(", ");
+		}
+		return sb.toString();
+	}
 }
