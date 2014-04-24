@@ -14,7 +14,7 @@ public abstract class AbstractGeocachingTest {
 
   @BeforeClass
   public static void setUp() throws Exception {
-    api = new LiveGeocachingApi(new DefaultStagingGeocachingApiConfiguration());
+    api = new LiveGeocachingApi.Builder().setConfiguration(new DefaultStagingGeocachingApiConfiguration()).build();
 
     api.openSession(TEST_AUTH_TOKEN);
   }

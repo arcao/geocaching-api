@@ -2,24 +2,20 @@ package com.arcao.geocaching.api.impl;
 
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
-import java.net.HttpURLConnection;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import org.apache.log4j.Logger;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.DeviceInfo;
@@ -37,6 +33,8 @@ import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.InvalidSessionException;
 import com.arcao.geocaching.api.exception.NetworkException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
+import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
+import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.JsonDownloader;
 import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.ApiLimitsJsonParser;
@@ -69,8 +67,9 @@ import com.google.gson.stream.MalformedJsonException;
 public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
 	
-	/** Default Live Geocaching API service URL */
 	protected final GeocachingApiConfiguration configuration;
+	protected JsonDownloader downloader;
+	
 	protected CacheLimits lastCacheLimits = null;
 
 	private boolean sessionValid = false;
@@ -79,8 +78,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	 * Create a new instance of LiveGeocachingApi with configuration specified by configuration parameter
 	 * @param configuration configuration object
 	 */
-	public LiveGeocachingApi(GeocachingApiConfiguration configuration) {
+	protected LiveGeocachingApi(GeocachingApiConfiguration configuration, JsonDownloader downloader) {
 		this.configuration = configuration;
+		this.downloader = downloader;
 	}
 
 	@Override
@@ -731,148 +731,35 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	}
 
 	protected JsonReader callGet(String function) throws NetworkException, InvalidResponseException {
-		InputStream is = null;
-		InputStreamReader isr = null;
-		
 		prepareRequest();
 
 		logger.debug("Getting " + maskParameterValues(function));
 
 		try {
 			URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(configuration.getConnectTimeout());
-			con.setReadTimeout(configuration.getReadTimeout());
-
-			con.setRequestMethod("GET");
-			//con.setRequestProperty("User-Agent", "Geocaching/4.0 CFNetwork/459 Darwin/10.0.0d3");
-			con.setRequestProperty("Accept", "application/json");
-			con.setRequestProperty("Accept-Language", "en-US");
-			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
-
-			if (con.getResponseCode() >= 400) {
-				is = con.getErrorStream();
-			} else {
-				is = con.getInputStream();
-			}
-
-			final String encoding = con.getContentEncoding();
-
-			if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-				logger.debug("callPost(): GZIP OK");
-				is = new GZIPInputStream(is);
-			} else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-				logger.debug("callPost(): DEFLATE OK");
-				is = new InflaterInputStream(is, new Inflater(true));
-			} else {
-				logger.debug("callPost(): WITHOUT COMPRESSION");
-			}
-
-			if (con.getResponseCode() >= 400) {
-				isr = new InputStreamReader(is, "UTF-8");
-
-				StringBuilder sb = new StringBuilder();
-				char buffer[] = new char[1024];
-				int len = 0;
-
-				while ((len = isr.read(buffer)) != -1) {
-					sb.append(buffer, 0, len);
-				}
-
-				isr.close();
-
-				// read error response
-				throw new InvalidResponseException(sb.toString());
-			}
-
-			isr = new InputStreamReader(is, "UTF-8");
-			return new JsonReader(isr);
-		} catch (InvalidResponseException e) {
-			throw e;
-		} catch (Exception e) {
+			return downloader.get(url);
+		} catch (MalformedURLException e) {
 			logger.error(e.toString(), e);
 			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
 		}
 	}
 
 	protected JsonReader callPost(String function, String postBody) throws NetworkException, InvalidResponseException {
-		InputStream is = null;
-		InputStreamReader isr = null;
-
-		logger.debug("Posting " + maskParameterValues(function));
-		
 		prepareRequest();
 
+		logger.debug("Posting " + maskParameterValues(function));
+		logger.debug("Body: " + maskJsonParameterValues(postBody));
+
+
 		try {
-			byte[] data = postBody.getBytes("UTF-8");
-
+			byte[] postData = postBody.getBytes("UTF-8");
 			URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-			con.setDoOutput(true);
-
-			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(configuration.getConnectTimeout());
-			con.setReadTimeout(configuration.getReadTimeout());
-
-			con.setRequestMethod("POST");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Content-Length", Integer.toString(data.length));
-			//con.setRequestProperty("User-Agent", "Geocaching/4.0 CFNetwork/459 Darwin/10.0.0d3");
-			con.setRequestProperty("Accept", "application/json");
-			con.setRequestProperty("Accept-Language", "en-US");
-			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
-
-			OutputStream os = con.getOutputStream();
-
-			logger.debug("Body: " + maskJsonParameterValues(postBody));
-			os.write(data);
-			os.flush();
-			os.close();
 			
-			if (con.getResponseCode() >= 400) {
-				is = con.getErrorStream();
-			} else {
-				is = con.getInputStream();
-			}
-			
-			final String encoding = con.getContentEncoding();
-
-			if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-				logger.debug("callPost(): GZIP OK");
-				is = new GZIPInputStream(is);
-			} else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-				logger.debug("callPost(): DEFLATE OK");
-				is = new InflaterInputStream(is, new Inflater(true));
-			} else {
-				logger.debug("callPost(): WITHOUT COMPRESSION");
-			}
-
-			if (con.getResponseCode() >= 400) {
-				isr = new InputStreamReader(is, "UTF-8");
-
-				StringBuilder sb = new StringBuilder();
-				char buffer[] = new char[1024];
-				int len = 0;
-
-				while ((len = isr.read(buffer)) != -1) {
-					sb.append(buffer, 0, len);
-				}
-
-				isr.close();
-
-				// read error response
-				throw new InvalidResponseException(sb.toString());
-			}
-
-			isr = new InputStreamReader(is, "UTF-8");
-
-			return new JsonReader(isr);
-		} catch (InvalidResponseException e) {
-			throw e;
-		} catch (Exception e) {
+			return downloader.post(url, postData);
+		} catch (MalformedURLException e) {
+			logger.error(e.toString(), e);
+			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+		} catch (UnsupportedEncodingException e) {
 			logger.error(e.toString(), e);
 			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
 		}
@@ -901,6 +788,53 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			r.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * Builder for {@link LiveGeocachingApi}
+	 * @author arcao
+	 */
+	public static class Builder {
+		protected GeocachingApiConfiguration configuration;
+		protected JsonDownloader downloader;
+		
+		/**
+		 * Set a {@link GeocachingApiConfiguration} where is stored configuration
+		 * @param configuration instance of {@link GeocachingApiConfiguration} implementation
+		 * @return this Builder
+		 */
+		public Builder setConfiguration(GeocachingApiConfiguration configuration) {
+			this.configuration = configuration;
+			return this;
+		}
+		
+		/**
+		 * Set a instance of {@link JsonDownloader} which will take care for downloading data
+		 * @param downloader instance of {@link JsonDownloader} implementation
+		 * @return this Builder
+		 */
+		public Builder setDownloader(JsonDownloader downloader) {
+			this.downloader = downloader;
+			return this;
+		}
+		
+		/**
+		 * Create a new instance of LiveGeocachingApi.<br>
+		 * If configuration is not set, the instance of {@link DefaultProductionGeocachingApiConfiguration} is used.<br>
+		 * If downloader is not set, the instance of {@link DefaultJsonDownloader} is used. 
+		 * @return new instance of LiveGeocachingApi
+		 */
+		public LiveGeocachingApi build() {
+			if (configuration == null) {
+				configuration = new DefaultProductionGeocachingApiConfiguration();
+			}
+			
+			if (downloader == null) {
+				downloader = new DefaultJsonDownloader(configuration);
+			}
+			
+			return new LiveGeocachingApi(configuration, downloader);
 		}
 	}
 }
