@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import com.arcao.geocaching.api.data.userprofile.PublicProfile;
 import com.arcao.geocaching.api.data.userprofile.TrackableStats;
 
 
-public class UserProfile {
+public class UserProfile implements Serializable {
+	private static final long serialVersionUID = 872593420072537813L;
+
 	private final FavoritePointStats favoritePointsStats;
 	private final GeocacheFindStats geocacheFindStats;
 	private final PublicProfile publicProfile;

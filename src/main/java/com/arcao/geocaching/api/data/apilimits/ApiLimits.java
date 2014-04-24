@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data.apilimits;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.type.MemberType;
@@ -9,8 +10,10 @@ import com.arcao.geocaching.api.data.type.MemberType;
  * @author arcao
  *
  */
-public class ApiLimits {
-  private final List<CacheLimit> cacheLimits;
+public class ApiLimits implements Serializable {
+	private static final long serialVersionUID = -3608995080972521881L;
+
+	private final List<CacheLimit> cacheLimits;
   private final boolean enforceCacheLimits;
   private final boolean enforceLiteCacheLimits;
   private final boolean enforceMethodLimits;

@@ -1,11 +1,15 @@
 package com.arcao.geocaching.api.data.apilimits;
 
+import java.io.Serializable;
+
 /**
  * Container class for a method limit information
  * @author arcao
  */
-public class MethodLimit {
-  private final int period;
+public class MethodLimit implements Serializable {
+	private static final long serialVersionUID = 3914171011300602155L;
+	
+	private final int period;
   private final long limit;
   private final String methodName;
   private final boolean partnerMethod;

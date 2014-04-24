@@ -1,13 +1,16 @@
 package com.arcao.geocaching.api.data;
 
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
 
-public class User {
-  public static final User EMPTY = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
+public class User implements Serializable {
+	private static final long serialVersionUID = 1808891631464643511L;
+
+	public static final User EMPTY = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
   
 	private final String avatarUrl;
 	private final int findCount;

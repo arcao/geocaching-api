@@ -1,8 +1,11 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
-public class Souvenir {
+public class Souvenir implements Serializable {
+	private static final long serialVersionUID = -1185578859898344877L;
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

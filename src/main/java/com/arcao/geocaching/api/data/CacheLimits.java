@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 /**
@@ -7,8 +8,10 @@ import java.lang.reflect.Method;
  * @author arcao
  *
  */
-public class CacheLimits {
-  private final int cacheLeft;
+public class CacheLimits implements Serializable {
+	private static final long serialVersionUID = 907830786611718961L;
+
+	private final int cacheLeft;
   private final int currentCacheCount;
   private final int maxCacheCount;
 

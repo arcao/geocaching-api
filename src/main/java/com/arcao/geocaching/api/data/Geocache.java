@@ -10,7 +10,9 @@ import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 
 public class Geocache extends SimpleGeocache {
-  private final Date lastVisited;
+	private static final long serialVersionUID = 7938069911500506011L;
+
+	private final Date lastVisited;
   private final String countryName;
   private final String stateName;
   private final String shortDescription;

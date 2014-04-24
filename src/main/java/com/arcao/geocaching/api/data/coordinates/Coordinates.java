@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data.coordinates;
 
+import java.io.Serializable;
 import java.text.ParseException;
 
 /**
@@ -9,7 +10,9 @@ import java.text.ParseException;
  * @author arcao
  * @since 1.5
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
+	private static final long serialVersionUID = 1044000671539652241L;
+
 	protected static final double AVERAGE_RADIUS_OF_EARTH = 6372797.560856;
 	protected static final CoordinatesFormatter LAT_LON_DECMINUTE_FORMAT = new CoordinatesFormatter(CoordinatesFormatter.LAT_LON_DECMINUTE);
 

@@ -1,14 +1,17 @@
 package com.arcao.geocaching.api.data;
 
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.WaypointType;
 
-public class Waypoint {
-  private final Coordinates coordinates;
+public class Waypoint implements Serializable {
+	private static final long serialVersionUID = -7183357014183017947L;
+
+	private final Coordinates coordinates;
 	private final Date time;
 	private final String waypointCode;
 	private final String name;

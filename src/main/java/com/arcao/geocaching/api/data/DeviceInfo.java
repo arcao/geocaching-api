@@ -1,12 +1,15 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
 import com.google.gson.stream.JsonWriter;
 
-public class DeviceInfo implements JsonSerializable {
+public class DeviceInfo implements JsonSerializable, Serializable {
+	private static final long serialVersionUID = 7352443462642812711L;
+
 	private final int applicationCurrentMemoryUsage;
 	private final int applicationPeakMemoryUsage;
 	private final String applicationSoftwareVersion;

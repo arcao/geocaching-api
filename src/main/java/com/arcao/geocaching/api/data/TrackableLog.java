@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
@@ -7,8 +8,10 @@ import java.util.List;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.TrackableLogType;
 
-public class TrackableLog {
-  private final int cacheID;
+public class TrackableLog implements Serializable {
+	private static final long serialVersionUID = -8616502691991228922L;
+
+	private final int cacheID;
   private final String code;
   private final int id;
   private final List<ImageData> images;

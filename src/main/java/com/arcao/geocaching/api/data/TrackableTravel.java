@@ -1,11 +1,14 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 
-public class TrackableTravel {
+public class TrackableTravel implements Serializable {
+	private static final long serialVersionUID = 61007459728740881L;
+
 	private final long cacheID;
 	private final Date dateLogged;
 	private final Coordinates coordinates;

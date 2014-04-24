@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +9,9 @@ import java.util.TimeZone;
 
 import com.arcao.geocaching.api.data.type.CacheLogType;
 
-public class FieldNote {
+public class FieldNote implements Serializable {
+	private static final long serialVersionUID = 249144828657285091L;
+
 	protected static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
 	static {

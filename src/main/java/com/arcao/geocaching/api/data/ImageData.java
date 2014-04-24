@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.data;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
@@ -10,8 +11,10 @@ import com.arcao.geocaching.api.util.Base64;
 import com.arcao.geocaching.api.util.Base64OutputStream;
 import com.google.gson.stream.JsonWriter;
 
-public class ImageData implements JsonSerializable {
-  private final String description;
+public class ImageData implements JsonSerializable, Serializable {
+	private static final long serialVersionUID = 1116404414881607691L;
+
+	private final String description;
   private final String mobileUrl;
   private final String name;
   private final String thumbUrl;

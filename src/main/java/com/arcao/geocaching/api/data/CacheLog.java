@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +13,9 @@ import com.arcao.geocaching.api.data.type.CacheLogType;
  * @author arcao
  * 
  */
-public class CacheLog {
+public class CacheLog implements Serializable {
+	private static final long serialVersionUID = 9088433857246687793L;
+
 	private final long id;
 	private final String cacheCode;
 	private final Date visited;

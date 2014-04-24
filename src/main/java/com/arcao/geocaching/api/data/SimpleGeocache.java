@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,9 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 
-public class SimpleGeocache {
+public class SimpleGeocache implements Serializable {
+	private static final long serialVersionUID = 8329679481723682422L;
+
 	private final long id;
 	private final String cacheCode;
 	private final String name;

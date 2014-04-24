@@ -1,11 +1,14 @@
 package com.arcao.geocaching.api.data;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 
-public class UserWaypoint {
+public class UserWaypoint implements Serializable {
+	private static final long serialVersionUID = 2635449057331423781L;
+
 	private final String cacheCode;
 	private final String description;
 	private final long id;
