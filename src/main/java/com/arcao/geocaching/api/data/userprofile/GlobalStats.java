@@ -1,8 +1,11 @@
 package com.arcao.geocaching.api.data.userprofile;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
-public class GlobalStats {
+public class GlobalStats implements Serializable {
+	private static final long serialVersionUID = 7066712324435905861L;
+
 	private final long accountsLogged;
 	private final long activeCaches;
 	private final long activeCountries;

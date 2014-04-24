@@ -1,11 +1,14 @@
 package com.arcao.geocaching.api.data.userprofile;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.Trackable;
 
-public class TrackableStats {
+public class TrackableStats implements Serializable {
+	private static final long serialVersionUID = 8539963736459413400L;
+
 	private final int trackableFindCount;
 	private final List<Trackable> trackableFindTypes;
 	private final int trackableOwnedCount;

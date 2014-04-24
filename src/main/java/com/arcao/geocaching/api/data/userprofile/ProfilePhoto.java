@@ -1,8 +1,11 @@
 package com.arcao.geocaching.api.data.userprofile;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 
-public class ProfilePhoto {
+public class ProfilePhoto implements Serializable {
+	private static final long serialVersionUID = 5557754921065357998L;
+
 	private final String photoDescription;
 	private final String photoFilename;
 	private final String photoName;

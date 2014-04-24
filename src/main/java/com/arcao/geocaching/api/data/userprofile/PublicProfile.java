@@ -1,9 +1,12 @@
 package com.arcao.geocaching.api.data.userprofile;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-public class PublicProfile {
+public class PublicProfile implements Serializable {
+	private static final long serialVersionUID = 7624712344301138677L;
+
 	private final String forumTitle;
 	private final Date lastVisit;
 	private final String location;
