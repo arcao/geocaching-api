@@ -358,4 +358,20 @@ public interface GeocachingApi {
 	 * @since 1.5.13
 	 */
 	List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
+	
+	/**
+	 * Get a user's owned trackables
+	 * @param startIndex
+	 *            count of trackables to skip
+	 * @param maxPerPage
+	 *            count of trackables to get
+	 * @param trackableLogCount
+	 *            count of trackables to get
+	 * @param collectionOnly
+	 *            gets only trackables which are in collection
+	 * @return list of trackables
+	 * @throws GeocachingApiException
+	 *             If error occurs during getting information
+	 */
+	List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount, boolean collectionOnly) throws GeocachingApiException;
 }
