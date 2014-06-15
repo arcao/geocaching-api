@@ -41,7 +41,9 @@ public enum CacheType {
 	/** Groundspeak Lost and Found Celebration */
 	GroudspeakLostAndFoundCelebration("Groundspeak Lost and Found Celebration", 3774),
 	/** Groundspeak Block Party */
-	GroundspeakBlockParty("Groundspeak Block Party", 4738);
+	GroundspeakBlockParty("Groundspeak Block Party", 4738),
+	/** A Giga-Event cache is similar to an Event Cache but it is much larger.  In order to qualify as a Giga Event, the event cache must be attended by 5000+ people.  Typically, Giga Events are usually annual events and can attract geocachers from all over the world. */
+	GigaEvent("Giga-Event Cache", 7005);
 	
 	private final String friendlyName;
 	private final int groundSpeakId;
