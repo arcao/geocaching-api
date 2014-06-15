@@ -1,11 +1,11 @@
 package com.arcao.geocaching.api.data.type;
 
 public enum WaypointType {
-	QuestionToAnswer("Question to Answer", "puzzle.jpg"),
 	FinalLocation("Final Location", "flag.jpg"),
 	ParkingArea("Parking Area", "pkg.jpg"),
+	VirtualStage("Virtual Stage", "puzzle.jpg"),
+	PhysicalStage("Physical Stage", "stage.jpg"),
 	Trailhead("Trailhead", "trailhead.jpg"),
-	StagesOfAMulticache("Stages of a Multicache", "stage.jpg"),
 	ReferencePoint("Reference Point", "waypoint.jpg");
 
 	private final String friendlyName;
