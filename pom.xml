@@ -4,7 +4,7 @@
 
 	<groupId>com.arcao</groupId>
 	<artifactId>geocaching-api</artifactId>
-	<version>1.5.23-SNAPSHOT</version>
+	<version>1.5.23</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -65,7 +65,7 @@
 		<url>http://github.com/arcao/geocaching-api</url>
 		<connection>scm:git:http://github.com/arcao/geocaching-api.git</connection>
 		<developerConnection>scm:git:git@github.com:arcao/geocaching-api.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>geocaching-api-1.5.23</tag>
   </scm>
 
 	<repositories>
