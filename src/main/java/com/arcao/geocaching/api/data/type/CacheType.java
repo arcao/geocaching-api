@@ -11,7 +11,7 @@ public enum CacheType {
 	/** A multi-cache ("multiple") involves two or more locations, the final location being a physical container. There are many variations, but most multi-caches have a hint to find the second cache, and the second cache has hints to the third, and so on. An offset cache (where you go to a location and get hints to the actual cache) is considered a multi-cache. */
 	Multi("Multi-cache", 3),
 	/** A Mystery Cache is the “catch-all” of cache types, this form of cache can involve complicated puzzles you will first need to solve to determine the coordinates. The only commonality of this cache type is that the coordinates listed are not of the actual cache location but a general reference point, such as a nearby parking location. Due to the increasing creativity of geocaching this becomes the staging ground for new and unique challenges. */
-	Unknown("Unknown Cache", 8),
+	Mystery("Mystery Cache", 8),
 	/** A virtual cache is a cache that exists in a form of a location. Depending on the cache "hider," a virtual cache could be to answer a question about a location, an interesting spot, a task, etc. The reward for these caches is the location itself and sharing information about your visit.  <br /><br />  Because of the nature of these geocaches, you must actually visit the location and acquire the coordinates there before you can post. In addition, although many locations are interesting, a virtual cache should be out of the ordinary enough to warrant logging a visit.  <br /><br />  Virtuals are now considered <a href="http://www.waymarking.com">waymarks on Waymarking.com</a>. */
 	Virtual("Virtual Cache", 4),
 	/** An Earthcache is an educational form of a <i>virtual cache</i>.  The reward for these caches is learning more about the planet on which we live - its landscapes, its geology or the minerals and fossils that are found there.  Many Earthcaches are in National Parks.  Some are multi-cache in form, and some have a physical log book located in or close to a Visitor Center. Earthcaches are developed in association with the Geological Society of America.  For more information go to <a href="http://www.geosociety.org/earthcache/ ">http://www.geosociety.org/earthcache/</a> */
@@ -75,7 +75,7 @@ public enum CacheType {
 	}
 
 	/**
-	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If cacheTypeName doesn't correspond with any CacheType enum item the default {@link #Unknown} is used.
+	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If cacheTypeName doesn't correspond with any CacheType enum item the default {@link #Mystery} is used.
 	 * @param cacheTypeName friendly name
 	 * @return cache type
 	 */
@@ -85,11 +85,11 @@ public enum CacheType {
 				return type;
 		}
 
-		return Unknown;
+		return Mystery;
 	}
 	
 	/**
-	 * Get a cache type from Groundspeak Id. If grounspeakId doesn't correspond with any CacheType enum item the default {@link #Unknown} is used.
+	 * Get a cache type from Groundspeak Id. If grounspeakId doesn't correspond with any CacheType enum item the default {@link #Mystery} is used.
 	 * @param groundSpeakId Groundspeak Id
 	 * @return cache type
 	 */
@@ -99,7 +99,7 @@ public enum CacheType {
 				return type;
 		}
 
-		return Unknown;
+		return Mystery;
 	}
 	
 }

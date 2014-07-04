@@ -54,7 +54,7 @@ public class JsonParser {
 	}
 	
 	protected static CacheType parseCacheType(JsonReader r) throws IOException {
-		CacheType cacheType = CacheType.Unknown;
+		CacheType cacheType = CacheType.Mystery;
 		
 		if (isNextNull(r))
 			return cacheType;
