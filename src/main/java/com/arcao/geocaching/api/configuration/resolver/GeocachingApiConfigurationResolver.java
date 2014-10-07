@@ -5,7 +5,8 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 
@@ -15,7 +16,7 @@ import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
  *
  */
 public class GeocachingApiConfigurationResolver {
-  private static final Logger logger = Logger.getLogger(GeocachingApiConfigurationResolver.class);
+  private static final Logger logger = LoggerFactory.getLogger(GeocachingApiConfigurationResolver.class);
 
   protected static Map<String, GeocachingApiConfiguration> configurationMap;
 

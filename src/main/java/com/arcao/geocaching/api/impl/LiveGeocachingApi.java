@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
@@ -65,7 +66,7 @@ import com.google.gson.stream.MalformedJsonException;
  *
  */
 public class LiveGeocachingApi extends AbstractGeocachingApi {
-	private static final Logger logger = Logger.getLogger(LiveGeocachingApi.class);
+	private static final Logger logger = LoggerFactory.getLogger(LiveGeocachingApi.class);
 	
 	protected final GeocachingApiConfiguration configuration;
 	protected JsonDownloader downloader;

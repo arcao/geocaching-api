@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.Trackable;
@@ -15,7 +16,7 @@ import com.arcao.geocaching.api.data.User;
 import com.google.gson.stream.JsonToken;
 
 public class TrackableJsonParser extends JsonParser {
-	private static final Logger logger = Logger.getLogger(TrackableJsonParser.class);
+	private static final Logger logger = LoggerFactory.getLogger(TrackableJsonParser.class);
 	
 	public static List<Trackable> parseList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {

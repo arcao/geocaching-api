@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
@@ -20,7 +21,7 @@ import com.arcao.geocaching.api.data.type.TrackableLogType;
 import com.google.gson.stream.JsonToken;
 
 public class JsonParser {
-	private static final Logger logger = Logger.getLogger(JsonParser.class);
+	private static final Logger logger = LoggerFactory.getLogger(JsonParser.class);
 	
 	protected static Date parseJsonDate(String date) {
 		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");

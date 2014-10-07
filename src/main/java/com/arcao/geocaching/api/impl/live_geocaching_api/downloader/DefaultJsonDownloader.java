@@ -9,7 +9,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
@@ -21,7 +22,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
  * @author arcao
  */
 public class DefaultJsonDownloader implements JsonDownloader {
-	private static final Logger logger = Logger.getLogger(DefaultJsonDownloader.class);
+	private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
 	
 	private final GeocachingApiConfiguration configuration;
 

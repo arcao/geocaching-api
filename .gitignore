@@ -1,5 +1,26 @@
+# Java class files
+*.class
 
-/target
-/.settings
-/.classpath
-/.project
+# generated files
+target/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# InteliJ Idea
+.idea/
+.gradle
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
