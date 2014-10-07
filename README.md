@@ -46,10 +46,10 @@ Binaries you can found in [my maven repository][binaries].
 Required libraries (maven dependencies)
 ---------------------------------------
 
-- log4j 1.2.16
-- gson 2.2.2 (bundled and realocated classpath in release / snapshot jar archive)
-- junit 4.10 (only for run tests)
-- commons-lang3 3.1
+- SLS4J - 1.7.7 (slf4j-log4j12 used by default)
+- gson - 2.3
+- junit 4.11 (only for run tests)
+- commons-lang3 3.3.2
 
 Examples
 --------
