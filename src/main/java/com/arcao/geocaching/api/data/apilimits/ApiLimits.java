@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.type.MemberType;
+import com.arcao.geocaching.api.util.DebugUtils;
 
 /**
  * Container class for API limits related to currently logged user
@@ -130,5 +131,10 @@ public class ApiLimits implements Serializable {
    */
   public boolean isValidateIPCounts() {
     return validateIPCounts;
-  }  
+  }
+
+  @Override
+  public String toString() {
+    return DebugUtils.toString(this);
+  }
 }

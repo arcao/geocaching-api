@@ -1,7 +1,8 @@
 package com.arcao.geocaching.api.data;
 
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
-import java.lang.reflect.Method;
 
 /**
  * Container for current state of Geocache retrieve limit information
@@ -9,9 +10,9 @@ import java.lang.reflect.Method;
  *
  */
 public class CacheLimits implements Serializable {
-	private static final long serialVersionUID = 907830786611718961L;
+  private static final long serialVersionUID = 907830786611718961L;
 
-	private final int cacheLeft;
+  private final int cacheLeft;
   private final int currentCacheCount;
   private final int maxCacheCount;
 
@@ -31,7 +32,7 @@ public class CacheLimits implements Serializable {
   
   /**
    * Returns the count of caches which was used from a limit
-   * @return 
+   * @return count of caches which was used from a limit
    */
   public int getCurrentCacheCount() {
     return currentCacheCount;
@@ -47,22 +48,6 @@ public class CacheLimits implements Serializable {
   
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-
-		for (final Method m : getClass().getMethods()) {
-			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-					m.getParameterTypes().length != 0 ||
-					void.class.equals(m.getReturnType()))
-				continue;
-
-			sb.append(m.getName());
-			sb.append(':');
-			try {
-				sb.append(m.invoke(this, new Object[0]));
-			} catch (final Exception e) {
-			}
-			sb.append(", ");
-		}
-		return sb.toString();
+		return DebugUtils.toString(this);
 	}
 }

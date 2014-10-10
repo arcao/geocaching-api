@@ -7,9 +7,9 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser
 public class LiveGeocachingApiException extends GeocachingApiException {
 	private static final long serialVersionUID = 4459503722935685091L;
 
-	protected StatusCode statusCode;
-	protected int originalStatusCode;
-	protected String exceptionDetails;
+	protected final StatusCode statusCode;
+	protected final int originalStatusCode;
+	protected final String exceptionDetails;
 
 	public LiveGeocachingApiException(Status status) {
 		super(status.getStatusMessage());
@@ -37,12 +37,7 @@ public class LiveGeocachingApiException extends GeocachingApiException {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(super.toString());
-		sb.append(" (").append(originalStatusCode).append(")");
-
-		return sb.toString();
+        return super.toString() + " (" + originalStatusCode + ")";
 	}
 
 	private static class LiveGeocachingApiRemoteException extends Exception {

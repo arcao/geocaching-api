@@ -16,11 +16,9 @@ public class BookmarksExcludeFilter implements Filter {
 	}
 	
 	public boolean isValid() {
-		if ((bookmarkListIds == null || bookmarkListIds.length == 0) && excludeIgnoreList == null)
-			return false;
-				
-		return true;
-	}
+        return !((bookmarkListIds == null || bookmarkListIds.length == 0) && excludeIgnoreList == null);
+
+    }
 	
 	public void writeJson(JsonWriter w) throws IOException {
 		w.name(NAME);
@@ -36,7 +34,7 @@ public class BookmarksExcludeFilter implements Filter {
 		}
 		
 		if (excludeIgnoreList != null)
-			w.name("ExcludeIgnoreList").value(excludeIgnoreList.booleanValue());
+			w.name("ExcludeIgnoreList").value(excludeIgnoreList);
 		
 		w.endObject(); 
 	}

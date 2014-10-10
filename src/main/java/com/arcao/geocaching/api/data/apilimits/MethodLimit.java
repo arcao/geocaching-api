@@ -1,5 +1,7 @@
 package com.arcao.geocaching.api.data.apilimits;
 
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
 
 /**
@@ -51,5 +53,10 @@ public class MethodLimit implements Serializable {
    */
   public boolean isPartnerMethod() {
     return partnerMethod;
+  }
+
+  @Override
+  public String toString() {
+    return DebugUtils.toString(this);
   }
 }

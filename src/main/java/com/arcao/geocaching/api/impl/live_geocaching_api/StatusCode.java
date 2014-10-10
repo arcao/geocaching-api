@@ -116,10 +116,10 @@ public enum StatusCode {
   CacheLimitExceeded(118),
   CacheLimitExceededInRequest(132),
   UserNotFound(139),
-  NumberOfCallsExceded(140),
+  NumberOfCallsExceeded(140),
   AccessTokenNotValid(141),
   Other(-1);
-	private int code;
+	private final int code;
 	
 	private StatusCode(int code) {
 		this.code = code;

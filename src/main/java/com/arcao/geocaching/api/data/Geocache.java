@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
+import com.arcao.geocaching.api.util.DebugUtils;
 
 public class Geocache extends SimpleGeocache {
 	private static final long serialVersionUID = 7938069911500506011L;
@@ -125,22 +125,7 @@ public class Geocache extends SimpleGeocache {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-
-    for (Method m : getClass().getMethods()) {
-      if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-          m.getParameterTypes().length != 0 ||
-          void.class.equals(m.getReturnType()))
-        continue;
-
-      sb.append(m.getName());
-      sb.append(':');
-      try {
-        sb.append(m.invoke(this, new Object[0]));
-      } catch (Exception e) {}
-      sb.append(", ");
-    }
-    return sb.toString();
+    return DebugUtils.toString(this);
   }
 }
 

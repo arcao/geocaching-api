@@ -1,5 +1,7 @@
 package com.arcao.geocaching.api.data.apilimits;
 
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
 
 /**
@@ -31,5 +33,10 @@ public class CacheLimit implements Serializable {
    */
   public long getPeriod() {
     return period;
+  }
+
+  @Override
+  public String toString() {
+    return DebugUtils.toString(this);
   }
 }

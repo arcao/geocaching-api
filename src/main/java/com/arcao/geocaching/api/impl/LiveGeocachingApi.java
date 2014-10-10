@@ -69,7 +69,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	private static final Logger logger = LoggerFactory.getLogger(LiveGeocachingApi.class);
 	
 	protected final GeocachingApiConfiguration configuration;
-	protected JsonDownloader downloader;
+	protected final JsonDownloader downloader;
 	
 	protected CacheLimits lastCacheLimits = null;
 

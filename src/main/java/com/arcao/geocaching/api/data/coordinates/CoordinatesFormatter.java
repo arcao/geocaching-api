@@ -10,6 +10,8 @@ import java.math.RoundingMode;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class for formating geographic coordinates represented by Coordinates class
@@ -19,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
  * @since 1.5
  */
 public class CoordinatesFormatter {
+  private static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
+
   /** Example: "10,123456 -0,123456" */
   public static final int LAT_LON_DECDEGREE = 0;
 
@@ -196,7 +200,9 @@ public class CoordinatesFormatter {
       try {
         lat = Double.parseDouble(latDeg + "." + addZeros(Integer.parseInt(latDegFrac), 5));
         lon = Double.parseDouble(lonDeg + "." + addZeros(Integer.parseInt(lonDegFrac), 5));
-      } catch (NumberFormatException e) {}
+      } catch (NumberFormatException e) {
+        logger.error(e.getMessage(), e);
+      }
       lat *= "S".equalsIgnoreCase(latDir) ? -1 : 1;
       lon *= "W".equalsIgnoreCase(lonDir) ? -1 : 1;
       return new Coordinates(lat, lon);
@@ -248,7 +254,9 @@ public class CoordinatesFormatter {
       try {
         lat = Double.parseDouble(latDeg) + Double.parseDouble(latMin + "." + addZeros(Integer.parseInt(latMinFrac), 3)) / D60;
         lon = Double.parseDouble(lonDeg) + Double.parseDouble(lonMin + "." + addZeros(Integer.parseInt(lonMinFrac), 3)) / D60;
-      } catch (NumberFormatException e) {}
+      } catch (NumberFormatException e) {
+        logger.error(e.getMessage(), e);
+      }
       lat *= "S".equalsIgnoreCase(latDir) ? -1 : 1;
       lon *= "W".equalsIgnoreCase(lonDir) ? -1 : 1;
       return new Coordinates(lat, lon);
@@ -308,7 +316,9 @@ public class CoordinatesFormatter {
             / D3600;
         lon = Double.parseDouble(lonDeg) + Double.parseDouble(lonMin) / D60 + Double.parseDouble(lonSec + "." + addZeros(Integer.parseInt(lonSecFrac), 3))
             / D3600;
-      } catch (NumberFormatException e) {}
+      } catch (NumberFormatException e) {
+        logger.error(e.getMessage(), e);
+      }
       lat *= "S".equalsIgnoreCase(latDir) ? -1 : 1;
       lon *= "W".equalsIgnoreCase(lonDir) ? -1 : 1;
       return new Coordinates(lat, lon);

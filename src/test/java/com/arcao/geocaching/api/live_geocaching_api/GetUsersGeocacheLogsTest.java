@@ -3,8 +3,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 import java.util.Date;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 

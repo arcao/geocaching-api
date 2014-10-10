@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +9,7 @@ import java.util.TimeZone;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
+import com.arcao.geocaching.api.util.DebugUtils;
 
 public class SimpleGeocache implements Serializable {
 	private static final long serialVersionUID = 8329679481723682422L;
@@ -146,21 +146,6 @@ public class SimpleGeocache implements Serializable {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		for (Method m : getClass().getMethods()) {
-			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-					m.getParameterTypes().length != 0 ||
-					void.class.equals(m.getReturnType()))
-				continue;
-
-			sb.append(m.getName());
-			sb.append(':');
-			try {
-				sb.append(m.invoke(this, new Object[0]));
-			} catch (Exception e) {}
-			sb.append(", ");
-		}
-		return sb.toString();
+    return DebugUtils.toString(this);
 	}
 }

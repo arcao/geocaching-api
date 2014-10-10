@@ -1,10 +1,10 @@
 package com.arcao.geocaching.api.data.userprofile;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.util.DebugUtils;
 
 public class TrackableStats implements Serializable {
 	private static final long serialVersionUID = 8539963736459413400L;
@@ -39,21 +39,6 @@ public class TrackableStats implements Serializable {
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		for (Method m : getClass().getMethods()) {
-			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-					m.getParameterTypes().length != 0 ||
-					void.class.equals(m.getReturnType()))
-				continue;
-
-			sb.append(m.getName());
-			sb.append(':');
-			try {
-				sb.append(m.invoke(this, new Object[0]));
-			} catch (Exception e) {}
-			sb.append(", ");
-		}
-		return sb.toString();
+    return DebugUtils.toString(this);
 	}
 }

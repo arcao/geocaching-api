@@ -20,7 +20,7 @@ public class TrackableCountFilter implements Filter {
   }
 
 	public boolean isValid() {
-		if (min != null && max != null && min.intValue() > max.intValue())
+		if (min != null && max != null && min > max)
 			return false;
 		
 	  return (min != null || max != null);

@@ -4,11 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
 import com.arcao.geocaching.api.util.Base64;
 import com.arcao.geocaching.api.util.Base64OutputStream;
+import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.gson.stream.JsonWriter;
 
 public class ImageData implements JsonSerializable, Serializable {
@@ -63,7 +63,7 @@ public class ImageData implements JsonSerializable, Serializable {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     Base64OutputStream b64os = new Base64OutputStream(bos, Base64.NO_CLOSE | Base64.NO_WRAP);
     
-    int bytesReaded = 0;
+    int bytesReaded;
     byte[] buffer = new byte[8192];
     while((bytesReaded = is.read(buffer)) != -1) {
       b64os.write(buffer, 0, bytesReaded);
@@ -92,22 +92,6 @@ public class ImageData implements JsonSerializable, Serializable {
   
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder();
-
-		for (final Method m : getClass().getMethods()) {
-			if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-					m.getParameterTypes().length != 0 ||
-					void.class.equals(m.getReturnType()))
-				continue;
-
-			sb.append(m.getName());
-			sb.append(':');
-			try {
-				sb.append(m.invoke(this, new Object[0]));
-			} catch (final Exception e) {
-			}
-			sb.append(", ");
-		}
-		return sb.toString();
+    return DebugUtils.toString(this);
 	}
 }

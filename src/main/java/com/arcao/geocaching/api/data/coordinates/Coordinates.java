@@ -200,7 +200,7 @@ public class Coordinates implements Serializable {
 
 	/**
 	 * Get a distance in meters between this coordinates and specified coordinates  
-	 * @param to
+	 * @param to Coordinates object
 	 * @return distance in meters
 	 * @since 1.20
 	 */

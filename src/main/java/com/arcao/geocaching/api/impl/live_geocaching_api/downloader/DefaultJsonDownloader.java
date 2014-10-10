@@ -35,8 +35,8 @@ public class DefaultJsonDownloader implements JsonDownloader {
 	}
 
 	public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
-		InputStream is = null;
-		InputStreamReader isr = null;
+		InputStream is;
+		InputStreamReader isr;
 
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -74,7 +74,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 
 				StringBuilder sb = new StringBuilder();
 				char buffer[] = new char[1024];
-				int len = 0;
+				int len;
 
 				while ((len = isr.read(buffer)) != -1) {
 					sb.append(buffer, 0, len);
@@ -97,8 +97,8 @@ public class DefaultJsonDownloader implements JsonDownloader {
 	}
 
 	public JsonReader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
-		InputStream is = null;
-		InputStreamReader isr = null;
+		InputStream is;
+		InputStreamReader isr;
 
 		try {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -146,7 +146,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 
 				StringBuilder sb = new StringBuilder();
 				char buffer[] = new char[1024];
-				int len = 0;
+				int len;
 
 				while ((len = isr.read(buffer)) != -1) {
 					sb.append(buffer, 0, len);

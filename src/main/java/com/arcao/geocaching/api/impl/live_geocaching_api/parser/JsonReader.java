@@ -6,7 +6,7 @@ import java.io.Reader;
 import com.google.gson.stream.JsonToken;
 
 public class JsonReader {
-	com.google.gson.stream.JsonReader r;
+	private final com.google.gson.stream.JsonReader r;
 	
 	public JsonReader(Reader in) {
 		r = new com.google.gson.stream.JsonReader(in);
