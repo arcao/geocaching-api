@@ -23,7 +23,10 @@ public class JsonParser {
 	
 	protected static Date parseJsonDate(String date) {
 		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
-		
+
+    if (date == null)
+      return null;
+
 		Matcher m = DATE_PATTERN.matcher(date);
 		if (m.matches()) {
 			long time = Long.parseLong(m.group(1));
@@ -39,7 +42,10 @@ public class JsonParser {
 	
 	protected static Date parseJsonUTCDate(String date) {
 		Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
-		
+
+    if (date == null)
+      return null;
+
 		Matcher m = DATE_PATTERN.matcher(date);
 		if (m.matches()) {
 			long time = Long.parseLong(m.group(1));

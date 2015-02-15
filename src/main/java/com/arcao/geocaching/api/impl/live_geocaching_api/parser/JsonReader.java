@@ -118,7 +118,7 @@ public class JsonReader {
 	 *     this reader is closed.
 	 */
 	public String nextString() throws IOException {
-		return nextString("");
+		return nextString(null);
 	}
 	
 	public String nextString(String defaultValue) throws IOException {
