@@ -1,5 +1,6 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
+import com.arcao.geocaching.api.GeocachingApi;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,6 +14,8 @@ import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.BookmarksExcludeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilter;
+
+import java.util.Arrays;
 
 public class SearchForGeocachesTest extends AbstractGeocachingTest {
   protected final static String CACHE_CODE = "GCY81P";
@@ -96,9 +99,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
   public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws Exception {
     Assert.assertEquals(
         3,
-        api.searchForGeocaches(true, 3, 0, 0, new Filter[] {
-            new PointRadiusFilter(50, 14, 60000)
-        }).size()
+        api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
+                Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
         );
 
     CacheLimits limits = api.getLastCacheLimits();
@@ -109,10 +111,10 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
   public void searchForGeocachesBookmarksExcludeFilterSimpleGeocacheTest() throws Exception {
     Assert.assertEquals(
         3,
-        api.searchForGeocaches(true, 3, 0, 0, new Filter[] {
-            new PointRadiusFilter(50, 14, 60000),
-            new BookmarksExcludeFilter(true, null)
-        }).size()
+        api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0, Arrays.asList(
+                new PointRadiusFilter(50, 14, 60000),
+                new BookmarksExcludeFilter(true, null)
+          ), null).size()
         );
 
     CacheLimits limits = api.getLastCacheLimits();
