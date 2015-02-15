@@ -1,19 +1,12 @@
 package com.arcao.geocaching.api;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import com.arcao.geocaching.api.data.CacheLog;
-import com.arcao.geocaching.api.data.FieldNote;
-import com.arcao.geocaching.api.data.Geocache;
-import com.arcao.geocaching.api.data.ImageData;
-import com.arcao.geocaching.api.data.UserProfile;
+import com.arcao.geocaching.api.data.*;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
-import com.google.gson.stream.JsonWriter;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstract class of Geocaching API
@@ -38,13 +31,13 @@ public abstract class AbstractGeocachingApi implements GeocachingApi {
   }
 
   @Deprecated
-  public Geocache getCache(String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException {
-    return getCache(ResultQuality.FULL, cacheCode, cacheLogCount, trackableCount);
+  public Geocache getCache(String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
+    return getCache(ResultQuality.FULL, cacheCode, cacheLogCount, trackableLogCount);
   }
 
   @Override
-  public Geocache getCache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException {
-    List<Geocache> list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableCount,
+  public Geocache getCache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
+    List<Geocache> list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableLogCount,
             Arrays.asList((Filter) new CacheCodeFilter(cacheCode)), null);
 
     if (list.size() == 0)
@@ -65,14 +58,12 @@ public abstract class AbstractGeocachingApi implements GeocachingApi {
 
   @Override
   @Deprecated
-  @SuppressWarnings("unchecked")
   public List<Geocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount, Filter[] filters) throws GeocachingApiException {
     return searchForGeocaches(isLite ? ResultQuality.LITE : ResultQuality.FULL, maxPerPage, geocacheLogCount, trackableLogCount, Arrays.asList(filters), null);
   }
 
   @Override
   @Deprecated
-  @SuppressWarnings("unchecked")
   public List<Geocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
     return getMoreGeocaches(isLite ? ResultQuality.LITE : ResultQuality.FULL, startIndex, maxPerPage, geocacheLogCount, trackableLogCount);
   }

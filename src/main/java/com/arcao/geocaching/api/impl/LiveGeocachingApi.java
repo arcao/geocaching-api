@@ -94,7 +94,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		return sessionValid;
 	}
 
-  @Override
   public List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
 		List<Geocache> list = new ArrayList<Geocache>();
     lastSearchResultsFound = 0;
@@ -164,7 +163,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-  @Override
   public List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
 		List<Geocache> list = new ArrayList<Geocache>();
     lastSearchResultsFound = 0;

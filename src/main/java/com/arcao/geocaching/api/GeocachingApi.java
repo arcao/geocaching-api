@@ -139,8 +139,8 @@ public interface GeocachingApi {
 	 *            cache code
 	 * @param cacheLogCount
 	 *            count of logs to get
-	 * @param trackableCount
-	 *            count of trackables to get
+	 * @param trackableLogCount
+	 *            count of trackable logs to get
 	 * @return full cache information
 	 * @throws GeocachingApiException
 	 *             If error occurs during getting information
@@ -148,7 +148,7 @@ public interface GeocachingApi {
 	 * @since 1.0
 	 */
   @Deprecated
-	Geocache getCache(String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException;
+	Geocache getCache(String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
 
   /**
    * Get an information about cache.
@@ -159,14 +159,14 @@ public interface GeocachingApi {
    *            cache code
    * @param cacheLogCount
    *            count of logs to get
-   * @param trackableCount
-   *            count of trackables to get
+   * @param trackableLogCount
+   *            count of trackable logs to get
    * @return full cache information
    * @throws GeocachingApiException
    *             If error occurs during getting information
    * @since 1.0
    */
-  Geocache getCache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableCount) throws GeocachingApiException;
+  Geocache getCache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
 
   /**
 	 * Search for geocaches and return list of found.
