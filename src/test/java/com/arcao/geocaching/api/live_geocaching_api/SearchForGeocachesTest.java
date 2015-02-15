@@ -51,7 +51,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
   @Test
   public void getGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 5, 0);
+    Geocache cache = api.getCache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 5, 0);
 
     Assert.assertNotNull(cache);
     Assert.assertNotNull(cache.getOwner());
