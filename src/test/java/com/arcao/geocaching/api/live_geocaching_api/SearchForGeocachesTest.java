@@ -22,7 +22,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
   @Test
   public void getSimpleGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCacheSimple(CACHE_CODE);
+    Geocache cache = api.getCache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
 
     Assert.assertNotNull(cache);
     Assert.assertNotNull(cache.getOwner());
@@ -46,11 +46,12 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     
     CacheLimits limits = api.getLastCacheLimits();
     Assert.assertNotNull(limits);
+    Assert.assertEquals(1, api.getLastSearchResultsFound());
   }
 
   @Test
   public void getGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(CACHE_CODE, 5, 0);
+    Geocache cache = api.getCache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 5, 0);
 
     Assert.assertNotNull(cache);
     Assert.assertNotNull(cache.getOwner());
@@ -93,6 +94,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     
     CacheLimits limits = api.getLastCacheLimits();
     Assert.assertNotNull(limits);
+    Assert.assertEquals(1, api.getLastSearchResultsFound());
   }
 
   @Test
@@ -105,6 +107,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
     CacheLimits limits = api.getLastCacheLimits();
     Assert.assertNotNull(limits);
+    Assert.assertNotSame(0, api.getLastSearchResultsFound());
   }
   
   @Test
@@ -119,5 +122,6 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
     CacheLimits limits = api.getLastCacheLimits();
     Assert.assertNotNull(limits);
+    Assert.assertNotSame(0, api.getLastSearchResultsFound());
   }
 }

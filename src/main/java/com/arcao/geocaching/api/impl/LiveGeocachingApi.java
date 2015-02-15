@@ -66,6 +66,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected final JsonDownloader downloader;
 	
 	protected CacheLimits lastCacheLimits = null;
+  protected int lastSearchResultsFound = 0;
 
 	private boolean sessionValid = false;
 		
@@ -96,6 +97,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
   @Override
   public List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
 		List<Geocache> list = new ArrayList<Geocache>();
+    lastSearchResultsFound = 0;
 
 		JsonReader r = null;
 		try {
@@ -142,6 +144,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 					list = GeocacheJsonParser.parseList(r);
 				} else if ("CacheLimits".equals(name)) {
 					lastCacheLimits = CacheLimitsJsonParser.parse(r);
+        } else if ("TotalMatchingCaches".equals(name)) {
+          lastSearchResultsFound = r.nextInt();
 				} else {
 					r.skipValue();
 				}
@@ -163,6 +167,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
   @Override
   public List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
 		List<Geocache> list = new ArrayList<Geocache>();
+    lastSearchResultsFound = 0;
 
 		JsonReader r = null;
 		try {
@@ -194,7 +199,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 					list = GeocacheJsonParser.parseList(r);
 				} else if ("CacheLimits".equals(name)) {
 					lastCacheLimits = CacheLimitsJsonParser.parse(r);
-				} else {
+        } else if ("TotalMatchingCaches".equals(name)) {
+          lastSearchResultsFound = r.nextInt();
+        } else {
 					r.skipValue();
 				}
 			}
@@ -667,8 +674,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	public CacheLimits getLastCacheLimits() {
 		return lastCacheLimits;
 	}
-	
-	public List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
+
+  public int getLastSearchResultsFound() {
+    return lastSearchResultsFound;
+  }
+
+  public List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
 		List<CacheLog> list = new ArrayList<CacheLog>();
 		
 		if (userName == null || userName.length() == 0)
@@ -748,6 +759,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	// -------------------- Helper methods ----------------------------------------
 	protected void prepareRequest() {
 		lastCacheLimits = null;
+    lastSearchResultsFound = 0;
 	}	
 
 	protected void checkError(JsonReader r) throws GeocachingApiException, IOException {

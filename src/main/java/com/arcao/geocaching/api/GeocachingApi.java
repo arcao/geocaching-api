@@ -400,6 +400,14 @@ public interface GeocachingApi {
 	 */
 	CacheLimits getLastCacheLimits();
 
+  /**
+   * Return count of Geocaches found in a last Geocache request. If the
+   * last request was not Geocache request, returns <tt>0</tt>.
+   * @return count of Geocaches found
+   * @since 1.6
+   */
+  int getLastSearchResultsFound();
+
 	/**
 	 * Get a list of users geocache logs
 	 * 
