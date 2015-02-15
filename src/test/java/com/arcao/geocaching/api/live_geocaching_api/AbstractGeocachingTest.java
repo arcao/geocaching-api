@@ -1,10 +1,10 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
+import com.arcao.geocaching.api.GeocachingApi;
+import com.arcao.geocaching.api.impl.LiveGeocachingApi;
 import org.junit.BeforeClass;
 
-import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
-import com.arcao.geocaching.api.impl.LiveGeocachingApi;
 
 public abstract class AbstractGeocachingTest {
   protected static GeocachingApi api = null;
@@ -14,7 +14,7 @@ public abstract class AbstractGeocachingTest {
 
   @BeforeClass
   public static void setUp() throws Exception {
-    api = new LiveGeocachingApi.Builder().setConfiguration(new DefaultStagingGeocachingApiConfiguration()).build();
+    api = LiveGeocachingApi.Builder.liveGeocachingApi().withConfiguration(new DefaultStagingGeocachingApiConfiguration()).build();
 
     api.openSession(TEST_AUTH_TOKEN);
   }

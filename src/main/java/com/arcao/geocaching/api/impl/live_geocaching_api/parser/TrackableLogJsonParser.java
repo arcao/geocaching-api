@@ -36,11 +36,10 @@ public class TrackableLogJsonParser extends JsonParser {
     boolean archived = false;
     String guid = null;
     String text = null;
-    TrackableLogType type = TrackableLogType.WriteNote;
-    User loggedBy = User.EMPTY;
+    TrackableLogType type = null;
+    User loggedBy = null;
     Date createDate = null;
-    double updatedLatitude = Double.NaN;
-    double updatedLongitude = Double.NaN;
+    Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
     String url = null;
     Date visitDate = null;
 
@@ -69,9 +68,9 @@ public class TrackableLogJsonParser extends JsonParser {
       } else if ("UTCCreateDate".equals(name)) {
         createDate = parseJsonUTCDate(r.nextString());
       } else if ("UpdatedLatitude".equals(name)) {
-        updatedLatitude = r.nextDouble();
+        updatedCoordinates.withLatitude(r.nextDouble());
       } else if ("UpdatedLongitude".equals(name)) {
-        updatedLongitude = r.nextDouble();
+        updatedCoordinates.withLongitude(r.nextDouble());
       } else if ("Url".equals(name)) {
         url = r.nextString();
       } else if ("VisitDate".equals(name)) {
@@ -82,6 +81,6 @@ public class TrackableLogJsonParser extends JsonParser {
     }
     r.endObject();
 
-    return new TrackableLog(cacheID, code, id, images, archived, guid, text, type, loggedBy, createDate, new Coordinates(updatedLatitude, updatedLongitude), url, visitDate);
+    return new TrackableLog(cacheID, code, id, images, archived, guid, text, type, loggedBy, createDate, updatedCoordinates.build(), url, visitDate);
   }
 }

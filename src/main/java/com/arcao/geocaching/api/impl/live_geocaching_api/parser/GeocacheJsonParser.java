@@ -2,30 +2,19 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.Geocache;
-import com.arcao.geocaching.api.data.ImageData;
-import com.arcao.geocaching.api.data.SimpleGeocache;
-import com.arcao.geocaching.api.data.Trackable;
-import com.arcao.geocaching.api.data.User;
-import com.arcao.geocaching.api.data.UserWaypoint;
-import com.arcao.geocaching.api.data.Waypoint;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.AttributeType;
-import com.arcao.geocaching.api.data.type.CacheType;
-import com.arcao.geocaching.api.data.type.ContainerType;
 import com.google.gson.stream.JsonToken;
 
 public class GeocacheJsonParser extends JsonParser {
-	public static List<SimpleGeocache> parseList(JsonReader r) throws IOException {
+	public static List<Geocache> parseList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
 		}
 
-		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
+		List<Geocache> list = new ArrayList<Geocache>();
 		r.beginArray();
 
 		while (r.hasNext()) {
@@ -36,124 +25,104 @@ public class GeocacheJsonParser extends JsonParser {
 	}
 
 	public static Geocache parse(JsonReader r) throws IOException {
-		long id = 0;
-		String cacheCode = "";
-		String cacheName = "";
-		double longitude = Double.NaN;
-		double latitude = Double.NaN;
-		CacheType cacheType = CacheType.Mystery;
-		float difficultyRating = 1;
-		float terrainRating = 1;
-		User author = User.EMPTY;
-		boolean available = false;
-		boolean archived = false;
-		boolean premiumListing = false;
-		String countryName = "";
-		String stateName = "";
-		Date created = new Date(0);
-		Date placed = new Date(0);
-		Date lastUpdated = new Date(0);
-		Date lastVisited = new Date(0);
-		String contactName = "";
-		ContainerType containerType = ContainerType.NotChosen;
-		int trackableCount = 0;
-		boolean found = false;
-		String shortDescription = "";
-		boolean shortDescriptionHtml = false;
-		String longDescription = "";
-		boolean longDescriptionHtml = false;
-		String encodedHints = "";
-		int favoritePoints = 0;
-		List<CacheLog> cacheLogs = new ArrayList<CacheLog>();
-		List<Trackable> trackables = new ArrayList<Trackable>();
-		List<Waypoint> waypoints = new ArrayList<Waypoint>();
-		List<AttributeType> attributes = new ArrayList<AttributeType>();
-		List<UserWaypoint> userWaypoints = new ArrayList<UserWaypoint>();
-		String personalNote = "";
-		List<ImageData> images = new ArrayList<ImageData>();
+    Geocache.Builder geocache = Geocache.Builder.geocache();
+    Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
 
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("ID".equals(name)) {
-				id = r.nextLong();
+        geocache.withId(r.nextLong());
 			} else if ("Code".equals(name)) {
-				cacheCode = r.nextString();
+        geocache.withCode(r.nextString());
 			} else if ("Name".equals(name)) {
-				cacheName = r.nextString();
+        geocache.withName(r.nextString());
 			} else if ("Longitude".equals(name)) {
-				longitude = r.nextDouble();
+        coordinates.withLongitude(r.nextDouble());
 			} else if ("Latitude".equals(name)) {
-				latitude = r.nextDouble();
+        coordinates.withLatitude(r.nextDouble());
 			} else if ("CacheType".equals(name)) {
-				cacheType = parseCacheType(r);
+        geocache.withCacheType(parseCacheType(r));
 			} else if ("Difficulty".equals(name)) {
-				difficultyRating = (float) r.nextDouble();
+        geocache.withDifficulty((float) r.nextDouble());
 			} else if ("Terrain".equals(name)) {
-				terrainRating = (float) r.nextDouble();
+        geocache.withTerrain((float) r.nextDouble());
 			} else if ("Owner".equals(name)) {
-				author = parseUser(r);
+        geocache.withOwner(parseUser(r));
 			} else if ("Available".equals(name)) {
-				available = r.nextBoolean();
+        geocache.withAvailable(r.nextBoolean());
 			} else if ("Archived".equals(name)) {
-				archived = r.nextBoolean();
+        geocache.withArchived(r.nextBoolean());
 			} else if ("IsPremium".equals(name)) {
-				premiumListing = r.nextBoolean();
+        geocache.withPremium(r.nextBoolean());
 			} else if ("Country".equals(name)) {
-				countryName = r.nextString();
+        geocache.withCountryName(r.nextString());
 			} else if ("State".equals(name)) {
-				stateName = r.nextString();
+        geocache.withStateName(r.nextString());
 			} else if ("DateCreated".equals(name)) {
-				created = JsonParser.parseJsonDate(r.nextString());
+        geocache.withCreateDate(JsonParser.parseJsonDate(r.nextString()));
+      } else if ("PublishDateUtc".equals(name)) {
+        geocache.withPublishDate(JsonParser.parseJsonUTCDate(r.nextString()));
 			} else if ("UTCPlaceDate".equals(name)) {
-				placed = JsonParser.parseJsonUTCDate(r.nextString());
+        geocache.withPlaceDate(JsonParser.parseJsonUTCDate(r.nextString()));
 			} else if ("DateLastUpdate".equals(name)) {
-				lastUpdated = JsonParser.parseJsonDate(r.nextString());
+        geocache.withLastUpdateDate(JsonParser.parseJsonDate(r.nextString()));
 			} else if ("DateLastVisited".equals(name)) {
-				lastVisited = JsonParser.parseJsonDate(r.nextString());
-			} else if ("PlacedBy".equals(name)) {
-				contactName = r.nextString();
+        geocache.withLastVisitDate(JsonParser.parseJsonDate(r.nextString()));
+      } else if ("PlacedBy".equals(name)) {
+        geocache.withPlacedBy(r.nextString());
 			} else if ("ContainerType".equals(name)) {
-				containerType = parseContainerType(r);
+        geocache.withContainerType(parseContainerType(r));
 			} else if ("TrackableCount".equals(name)) {
-				trackableCount = r.nextInt();
+        geocache.withTrackableCount(r.nextInt());
 			} else if ("HasbeenFoundbyUser".equals(name)) {
-				found = r.nextBoolean();
+        geocache.withFoundByUser(r.nextBoolean());
 			} else if ("ShortDescription".equals(name)) {
-				shortDescription = r.nextString();
+        geocache.withShortDescription(r.nextString());
 			} else if ("ShortDescriptionIsHtml".equals(name)) {
-				shortDescriptionHtml = r.nextBoolean();
+        geocache.withShortDescriptionHtml(r.nextBoolean());
 			} else if ("LongDescription".equals(name)) {
-				longDescription = r.nextString();
+        geocache.withLongDescription(r.nextString());
 			} else if ("LongDescriptionIsHtml".equals(name)) {
-				longDescriptionHtml = r.nextBoolean();
+        geocache.withLongDescriptionHtml(r.nextBoolean());
 			} else if ("EncodedHints".equals(name)) {
-				encodedHints = r.nextString();
+        geocache.withHint(r.nextString());
 			} else if ("GeocacheLogs".equals(name)) {
-				cacheLogs = CacheLogJsonParser.parseList(r);
+        geocache.withCacheLogs(CacheLogJsonParser.parseList(r));
 			} else if ("Trackables".equals(name)) {
-				trackables = TrackableJsonParser.parseList(r);
+        geocache.withTrackables(TrackableJsonParser.parseList(r));
 			} else if ("AdditionalWaypoints".equals(name)) {
-				waypoints = WaypointJsonParser.parseList(r);
+        geocache.withWaypoints(WaypointJsonParser.parseList(r));
 			} else if ("Attributes".equals(name)) {
-				attributes = parseAttributteList(r);
+        geocache.withAttributes(parseAttributeList(r));
 			} else if ("UserWaypoints".equals(name)) {
-				userWaypoints = UserWaypointsJsonParser.parseList(r);
+        geocache.withUserWaypoints(UserWaypointsJsonParser.parseList(r));
 			} else if ("GeocacheNote".equals(name)) {
-				personalNote = r.nextString();
+        geocache.withPersonalNote(r.nextString());
 			} else if ("Images".equals(name)) {
-				images = ImageDataJsonParser.parseList(r);
+        geocache.withImages(ImageDataJsonParser.parseList(r));
 			} else if ("FavoritePoints".equals(name)) {
-        favoritePoints = r.nextInt();
+        geocache.withFavoritePoints(r.nextInt());
+      } else if ("CanCacheBeFavorited".equals(name)) {
+        geocache.withFavoritable(r.nextBoolean());
+      } else if ("FoundDate".equals(name)) {
+        geocache.withFoundDate(JsonParser.parseJsonDate(r.nextString()));
+      } else if ("HasbeenFavoritedbyUser".equals(name)) {
+        geocache.withFavoritedByUser(r.nextBoolean());
+      } else if ("ImageCount".equals(name)) {
+        geocache.withImageCount(r.nextInt());
+      } else if ("IsRecommended".equals(name)) {
+        geocache.withRecommended(r.nextBoolean());
+      } else if ("TrackableCount".equals(name)) {
+        geocache.withTrackableCount(r.nextInt());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 
-		return new Geocache(id, cacheCode, cacheName, new Coordinates(latitude, longitude), cacheType, difficultyRating, terrainRating, author, available, archived,
-				premiumListing, created, placed, lastUpdated, contactName, containerType, trackableCount, found, lastVisited, countryName, stateName, shortDescription,
-				shortDescriptionHtml, longDescription, longDescriptionHtml, encodedHints, favoritePoints, cacheLogs, trackables, waypoints, attributes, userWaypoints, 
-				personalNote, images);
+    geocache.withCoordinates(coordinates.build());
+
+		return geocache.build();
 	}
 }

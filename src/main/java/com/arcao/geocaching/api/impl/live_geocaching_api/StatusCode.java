@@ -129,7 +129,7 @@ public enum StatusCode {
 		return code;
 	}
 	
-	public static StatusCode parseStatusCode(int code) {
+	public static StatusCode getByCode(int code) {
 		for (StatusCode statusCode : values()) {
 			if (statusCode.getCode() == code)
 				return statusCode;

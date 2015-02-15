@@ -283,4 +283,34 @@ public class Coordinates implements Serializable {
 
 		return false;
 	}
+
+
+  public static class Builder {
+    private double latitude = Double.NaN;
+    private double longitude = Double.NaN;
+
+    private Builder() {
+    }
+
+    public static Builder coordinates() {
+      return new Builder();
+    }
+
+    public Builder withLatitude(double latitude) {
+      this.latitude = latitude;
+      return this;
+    }
+
+    public Builder withLongitude(double longitude) {
+      this.longitude = longitude;
+      return this;
+    }
+
+    public Coordinates build() {
+      if (Double.isNaN(latitude) || Double.isNaN(longitude))
+        return null;
+
+      return new Coordinates(latitude, longitude);
+    }
+  }
 }

@@ -28,12 +28,12 @@ public class CacheLogJsonParser extends JsonParser {
 
 	public static CacheLog parse(JsonReader r) throws IOException {
 		long id = 0;
-		Date created = new Date(0);
-		Date visited = new Date(0);
-		CacheLogType cacheLogType = CacheLogType.Unknown;
-		User author = User.EMPTY;
-		String text = "";
-		String cacheCode = "";
+		Date created = null;
+		Date visited = null;
+		CacheLogType cacheLogType = null;
+		User author = null;
+		String text = null;
+		String cacheCode = null;
 		List<ImageData> images = new ArrayList<ImageData>();
 
 		r.beginObject();
@@ -65,7 +65,7 @@ public class CacheLogJsonParser extends JsonParser {
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
-		CacheLogType cacheLogType = CacheLogType.Unknown;
+		CacheLogType cacheLogType = null;
 		
 		if (isNextNull(r))
 			return cacheLogType;
@@ -74,7 +74,7 @@ public class CacheLogJsonParser extends JsonParser {
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("WptLogTypeName".equals(name)) {
-				cacheLogType = CacheLogType.parseLogType(r.nextString());
+				cacheLogType = CacheLogType.getByName(r.nextString());
 			} else {
 				r.skipValue();
 			}

@@ -10,69 +10,168 @@ import com.arcao.geocaching.api.util.DebugUtils;
 public class User implements Serializable {
 	private static final long serialVersionUID = 1808891631464643511L;
 
-	public static final User EMPTY = new User("", 0, 0, new Coordinates(Double.NaN, Double.NaN), 0, false, MemberType.Guest, "", "");
-  
-	private final String avatarUrl;
-	private final int findCount;
-	private final int hideCount;
-	private final Coordinates homeCoordinates;
 	private final long id;
-	private final boolean admin;
-	private final MemberType memberType;
 	private final String publicGuid;
 	private final String userName;
-	
-	public User(String avatarUrl, int findCount, int hideCount, Coordinates homeCoordinates, long id, boolean admin, MemberType memberType, String publicGuid,
-			String userName) {
-		this.avatarUrl = avatarUrl;
-		this.findCount = findCount;
-		this.hideCount = hideCount;
-		this.homeCoordinates = homeCoordinates;
-		this.id = id;
-		this.admin = admin;
-		this.memberType = memberType;
-		this.publicGuid = publicGuid;
-		this.userName = userName;
-	}
+	private final String avatarUrl;
+	private final Coordinates homeCoordinates;
+	private final boolean admin;
+	private final MemberType memberType;
+	private final int findCount;
+	private final int hideCount;
+  private final int galleryImageCount;
 
-	public String getAvatarUrl() {
-		return avatarUrl;
-	}
+  private User(
+          long id,
+          String publicGuid,
+          String userName,
+          String avatarUrl,
+          Coordinates homeCoordinates,
+          boolean admin,
+          MemberType memberType,
+          int findCount,
+          int hideCount,
+          int galleryImageCount) {
+    this.id = id;
+    this.publicGuid = publicGuid;
+    this.userName = userName;
+    this.avatarUrl = avatarUrl;
+    this.homeCoordinates = homeCoordinates;
+    this.admin = admin;
+    this.memberType = memberType;
+    this.findCount = findCount;
+    this.hideCount = hideCount;
+    this.galleryImageCount = galleryImageCount;
+  }
 
-	public int getFindCount() {
-		return findCount;
-	}
+  public long getId() {
+    return id;
+  }
 
-	public int getHideCount() {
-		return hideCount;
-	}
+  public String getPublicGuid() {
+    return publicGuid;
+  }
 
-	public Coordinates getHomeCoordinates() {
-		return homeCoordinates;
-	}
+  public String getUserName() {
+    return userName;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
 
-	public boolean isAdmin() {
-		return admin;
-	}
+  public Coordinates getHomeCoordinates() {
+    return homeCoordinates;
+  }
 
-	public MemberType getMemberType() {
-		return memberType;
-	}
+  public boolean isAdmin() {
+    return admin;
+  }
 
-	public String getPublicGuid() {
-		return publicGuid;
-	}
+  public MemberType getMemberType() {
+    return memberType;
+  }
 
-	public String getUserName() {
-		return userName;
-	}
-	
-	@Override
+  public int getFindCount() {
+    return findCount;
+  }
+
+  public int getHideCount() {
+    return hideCount;
+  }
+
+  public int getGalleryImageCount() {
+    return galleryImageCount;
+  }
+
+  @Override
 	public String toString() {
     return DebugUtils.toString(this);
 	}
+
+
+  public static class Builder {
+    private long id;
+    private String publicGuid;
+    private String userName;
+    private String avatarUrl;
+    private Coordinates homeCoordinates;
+    private boolean admin;
+    private MemberType memberType;
+    private int findCount;
+    private int hideCount;
+    private int galleryImageCount;
+
+    private Builder() {
+    }
+
+    public static Builder user() {
+      return new Builder();
+    }
+
+    public Builder withId(long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder withPublicGuid(String publicGuid) {
+      this.publicGuid = publicGuid;
+      return this;
+    }
+
+    public Builder withUserName(String userName) {
+      this.userName = userName;
+      return this;
+    }
+
+    public Builder withAvatarUrl(String avatarUrl) {
+      this.avatarUrl = avatarUrl;
+      return this;
+    }
+
+    public Builder withHomeCoordinates(Coordinates homeCoordinates) {
+      this.homeCoordinates = homeCoordinates;
+      return this;
+    }
+
+    public Builder withAdmin(boolean admin) {
+      this.admin = admin;
+      return this;
+    }
+
+    public Builder withMemberType(MemberType memberType) {
+      this.memberType = memberType;
+      return this;
+    }
+
+    public Builder withFindCount(int findCount) {
+      this.findCount = findCount;
+      return this;
+    }
+
+    public Builder withHideCount(int hideCount) {
+      this.hideCount = hideCount;
+      return this;
+    }
+
+    public Builder withGalleryImageCount(int galleryImageCount) {
+      this.galleryImageCount = galleryImageCount;
+      return this;
+    }
+
+    public User build() {
+      return new User(
+              id,
+              publicGuid,
+              userName,
+              avatarUrl,
+              homeCoordinates,
+              admin,
+              memberType,
+              findCount,
+              hideCount,
+              galleryImageCount
+      );
+    }
+  }
 }

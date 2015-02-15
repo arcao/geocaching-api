@@ -2,7 +2,7 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.exception;
 
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.StatusCode;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser.Status;
+import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
 
 public class LiveGeocachingApiException extends GeocachingApiException {
 	private static final long serialVersionUID = 4459503722935685091L;
@@ -12,10 +12,10 @@ public class LiveGeocachingApiException extends GeocachingApiException {
 	protected final String exceptionDetails;
 
 	public LiveGeocachingApiException(Status status) {
-		super(status.getStatusMessage());
+		super(status.getMessage());
 
 		statusCode = status.getStatusCode();
-		originalStatusCode = status.getOriginalStatusCode();
+		originalStatusCode = status.getCode();
 		exceptionDetails = status.getExceptionDetails();
 
 		if (exceptionDetails != null && exceptionDetails.length() > 0) {

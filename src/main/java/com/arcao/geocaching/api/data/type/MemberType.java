@@ -6,25 +6,25 @@ public enum MemberType {
 	Charter("Charter", 2),
 	Premium("Premium", 3);
 
-	private final String friendlyName;
-	private final int groundSpeakId;
+	private final String name;
+	private final int id;
 	
-	private MemberType(String friendlyName, int groundSpeakId) {
-		this.friendlyName = friendlyName;
-		this.groundSpeakId = groundSpeakId;
+	private MemberType(String name, int id) {
+		this.name = name;
+		this.id = id;
 	}
 	
-	public String getFriendlyName() {
-		return friendlyName;
+	public String getName() {
+		return name;
 	}
 	
-	public int getGroundSpeakId() {
-		return groundSpeakId;
+	public int getId() {
+		return id;
 	}
 	
-	public static MemberType parseMemeberTypeByGroundSpeakId(int groundSpeakId) {
+	public static MemberType getById(int id) {
 		for (MemberType memberType : values()) {
-			if (memberType.groundSpeakId == groundSpeakId)
+			if (memberType.id == id)
 				return memberType;
 		}
 		

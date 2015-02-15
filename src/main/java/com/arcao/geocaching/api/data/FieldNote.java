@@ -48,7 +48,7 @@ public class FieldNote implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format("%s,%s,%s,\"%s\"", cacheCode, DATE_FORMAT.format(dateLogged), cacheLogType.getFriendlyName(), safeNote(note));
+		return String.format("%s,%s,%s,\"%s\"", cacheCode, DATE_FORMAT.format(dateLogged), cacheLogType.getName(), safeNote(note));
 	}
 	
 	public static FieldNote parseLine(String line) {
@@ -59,7 +59,7 @@ public class FieldNote implements Serializable {
 			note = note.substring(1, note.length() - 1);
 		
 		try {
-			return new FieldNote(items[0], DATE_FORMAT.parse(items[1]), CacheLogType.parseLogType(items[2]), note);
+			return new FieldNote(items[0], DATE_FORMAT.parse(items[1]), CacheLogType.getByName(items[2]), note);
 		} catch (ParseException e) {
 			return null;
 		}

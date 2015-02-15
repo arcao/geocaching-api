@@ -2,9 +2,7 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +34,7 @@ public class JsonParser {
 		}
 
 		logger.error("parseJsonDate failed: " + date);
-		return new Date(0);
+		return null;
 	}
 	
 	protected static Date parseJsonUTCDate(String date) {
@@ -51,11 +49,11 @@ public class JsonParser {
 		}
 
 		logger.error("parseJsonDate failed: " + date);
-		return new Date(0);
+		return null;
 	}
 	
 	protected static CacheType parseCacheType(JsonReader r) throws IOException {
-		CacheType cacheType = CacheType.Mystery;
+		CacheType cacheType = null;
 		
 		if (isNextNull(r))
 			return cacheType;
@@ -64,7 +62,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("GeocacheTypeId".equals(name)) {
-				cacheType = CacheType.parseCacheTypeByGroundSpeakId(r.nextInt());
+				cacheType = CacheType.getById(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -83,7 +81,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("ContainerTypeId".equals(name)) {
-				containerType = ContainerType.parseContainerTypeByGroundSpeakId(r.nextInt());
+				containerType = ContainerType.getById(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -93,13 +91,13 @@ public class JsonParser {
 	}
 	
 	protected static MemberType parseMemberType(JsonReader r) throws IOException {
-		MemberType memberType = MemberType.Basic;
+		MemberType memberType = null;
 
 		if (isNextNull(r))
 			return memberType;
 		
 		if (r.peek() == JsonToken.NUMBER) {
-		  memberType = MemberType.parseMemeberTypeByGroundSpeakId(r.nextInt() / 10);
+		  memberType = MemberType.getById(r.nextInt() / 10);
 		  return memberType;
     }
 		
@@ -107,7 +105,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("MemberTypeId".equals(name)) {
-				memberType = MemberType.parseMemeberTypeByGroundSpeakId(r.nextInt());
+				memberType = MemberType.getById(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -117,72 +115,63 @@ public class JsonParser {
 	}
 	
 	protected static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
-		double latitude = Double.NaN;
-		double longitude = Double.NaN;
-	  
 		if (isNextNull(r))
-			return new Coordinates(latitude, longitude);
-		
+			return null;
+
+    Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
+
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("Latitude".equals(name)) {
-				latitude = (float) r.nextDouble();
+        coordinates.withLatitude((float) r.nextDouble());
 			} else if ("Longitude".equals(name)) {
-				longitude = (float) r.nextDouble();
+        coordinates.withLongitude((float) r.nextDouble());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		return new Coordinates(latitude, longitude);
+		return coordinates.build();
 	}
 	
 	protected static User parseUser(JsonReader r) throws IOException {
 		if (isNextNull(r))
 			return null;
-		
-		String avatarUrl = "";
-		int findCount = 0;
-		int hideCount = 0;
-		Coordinates homeCoordinates = new Coordinates(Double.NaN, Double.NaN);
-		long id = 0;
-		boolean admin = false;
-		MemberType memberType = null;
-		String publicGuid = "";
-		String userName = "";
-		
+
+    User.Builder user = User.Builder.user();
+
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("AvatarUrl".equals(name)) {
-				avatarUrl = r.nextString();
+				user.withAvatarUrl(r.nextString());
 			} else if ("FindCount".equals(name)) {
-				findCount = r.nextInt();
+        user.withFindCount(r.nextInt());
 			} else if ("HideCount".equals(name)) {
-				hideCount = r.nextInt();
+        user.withHideCount(r.nextInt());
 			} else if ("HomeCoordinates".equals(name)) {
-				homeCoordinates = parseHomeCoordinates(r);
+        user.withHomeCoordinates(parseHomeCoordinates(r));
 			} else if ("Id".equals(name)) {
-				id = r.nextLong();
+        user.withId(r.nextLong());
 			} else if ("IsAdmin".equals(name)) {
-				admin = r.nextBoolean();
+        user.withAdmin(r.nextBoolean());
 			} else if ("MemberType".equals(name)) {
-				memberType = parseMemberType(r);
+        user.withMemberType(parseMemberType(r));
 			} else if ("PublicGuid".equals(name)) {
-				publicGuid = r.nextString();
+        user.withPublicGuid(r.nextString());
 			} else if ("UserName".equals(name)) {
-				userName = r.nextString();
+        user.withUserName(r.nextString());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 		
-		return new User(avatarUrl, findCount, hideCount, homeCoordinates, id, admin, memberType, publicGuid, userName);
+		return user.build();
 	}
 	
-	protected static AttributeType parseAttributte(JsonReader r) throws IOException {
+	protected static AttributeType parseAttribute(JsonReader r) throws IOException {
 		int id = 1;
 		boolean on = false;
 		
@@ -199,25 +188,28 @@ public class JsonParser {
 		}
 		r.endObject();
 		
-		return AttributeType.parseAttributeTypeByGroundSpeakId(id, on);
+		return AttributeType.getById(id, on);
 	}
 	
-	protected static List<AttributeType> parseAttributteList(JsonReader r) throws IOException {
+	protected static EnumSet<AttributeType> parseAttributeList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
 		}
-		
-		List<AttributeType> list = new ArrayList<AttributeType>();
+
+    EnumSet<AttributeType> attributeSet = EnumSet.noneOf(AttributeType.class);
 		r.beginArray();
 		while(r.hasNext()) {
-			list.add(parseAttributte(r));
+      AttributeType attribute = parseAttribute(r);
+      if (attribute != null) {
+        attributeSet.add(attribute);
+      }
 		}
 		r.endArray();
-		return list;
+		return attributeSet;
 	}
 	
 	protected static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
-    TrackableLogType trackableLogType = TrackableLogType.WriteNote;
+    TrackableLogType trackableLogType = null;
     
 		if (isNextNull(r))
 			return trackableLogType;
@@ -226,7 +218,7 @@ public class JsonParser {
     while(r.hasNext()) {
       String name = r.nextName();
       if ("WptLogTypeId".equals(name)) {
-        trackableLogType = TrackableLogType.parseTrackableLogTypeByGroundSpeakId(r.nextInt());
+        trackableLogType = TrackableLogType.getById(r.nextInt());
       } else {
         r.skipValue();
       }

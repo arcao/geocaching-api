@@ -24,11 +24,11 @@ public class ImageDataJsonParser extends JsonParser {
   }
 
   private static ImageData parse(JsonReader r) throws IOException {
-    String description = "";
-    String mobileUrl = "";
-    String imageName = "";
-    String thumbUrl = "";
-    String url = "";
+    String description = null;
+    String mobileUrl = null;
+    String imageName = null;
+    String thumbUrl = null;
+    String url = null;
     
     r.beginObject();
     while(r.hasNext()) {

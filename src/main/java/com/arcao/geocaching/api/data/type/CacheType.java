@@ -45,61 +45,61 @@ public enum CacheType {
 	/** A Giga-Event cache is similar to an Event Cache but it is much larger.  In order to qualify as a Giga Event, the event cache must be attended by 5000+ people.  Typically, Giga Events are usually annual events and can attract geocachers from all over the world. */
 	GigaEvent("Giga-Event Cache", 7005);
 	
-	private final String friendlyName;
-	private final int groundSpeakId;
+	private final String name;
+	private final int id;
 
-	private CacheType(String friendlyName, int groundSpeakId) {
-		this.friendlyName = friendlyName;
-		this.groundSpeakId = groundSpeakId;
+	private CacheType(String name, int id) {
+		this.name = name;
+		this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return friendlyName;
+		return name;
 	}
 
 	/**
 	 * Get a friendly name of cache type
 	 * @return friendly name
 	 */
-	public String getFriendlyName() {
-		return friendlyName;
+	public String getName() {
+		return name;
 	}
 
 	/**
 	 * Get a Groundspeak cache type id
 	 * @return	Gropunspeak Id
 	 */
-	public int getGroundSpeakId() {
-		return groundSpeakId;
+	public int getId() {
+		return id;
 	}
 
 	/**
-	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If cacheTypeName doesn't correspond with any CacheType enum item the default {@link #Mystery} is used.
-	 * @param cacheTypeName friendly name
+	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If name doesn't correspond with any CacheType enum item the null is returned.
+	 * @param name friendly name
 	 * @return cache type
 	 */
-	public static CacheType parseCacheType(String cacheTypeName) {
+	public static CacheType getByName(String name) {
 		for (CacheType type : values()) {
-			if (type.toString().equals(cacheTypeName))
+			if (type.name.equals(name))
 				return type;
 		}
 
-		return Mystery;
+		return null;
 	}
 	
 	/**
-	 * Get a cache type from Groundspeak Id. If grounspeakId doesn't correspond with any CacheType enum item the default {@link #Mystery} is used.
-	 * @param groundSpeakId Groundspeak Id
+	 * Get a cache type from Groundspeak Id. If Groundspeak Id doesn't correspond with any CacheType enum item the null is returned.
+	 * @param id Groundspeak Id
 	 * @return cache type
 	 */
-	public static CacheType parseCacheTypeByGroundSpeakId(int groundSpeakId) {
+	public static CacheType getById(int id) {
 		for (CacheType type : values()) {
-			if (type.getGroundSpeakId() == groundSpeakId)
+			if (type.id == id)
 				return type;
 		}
 
-		return Mystery;
+		return null;
 	}
 	
 }

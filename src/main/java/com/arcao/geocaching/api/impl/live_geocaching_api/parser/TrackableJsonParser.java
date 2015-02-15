@@ -34,14 +34,14 @@ public class TrackableJsonParser extends JsonParser {
 	
 	public static Trackable parse(JsonReader r) throws IOException {
 		long id = 0;
-		String guid = "";
-		String travelBugName = "";
-		String goal = "";
-		String description = "";
-		String travelBugTypeName = "";
-		String travelBugTypeImage = "";
-		User owner = User.EMPTY;
-		String currentCacheCode = "";
+		String guid = null;
+		String travelBugName = null;
+		String goal = null;
+		String description = null;
+		String travelBugTypeName = null;
+		String travelBugTypeImage = null;
+		User owner = null;
+		String currentCacheCode = null;
 		User currentOwner = null;
 		String trackingNumber = "";
 		Date created = new Date(0);

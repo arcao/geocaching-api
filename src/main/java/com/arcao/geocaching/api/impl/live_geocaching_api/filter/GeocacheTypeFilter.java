@@ -35,7 +35,7 @@ public class GeocacheTypeFilter implements Filter {
 		w.beginArray();
 		for (CacheType cacheType : cacheTypes) {
 			if (cacheType != null)
-				w.value(cacheType.getGroundSpeakId());
+				w.value(cacheType.getId());
 		}
 		w.endArray();
 		w.endObject();

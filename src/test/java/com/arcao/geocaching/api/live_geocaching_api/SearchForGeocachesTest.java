@@ -1,14 +1,11 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
-import java.util.Date;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.Geocache;
-import com.arcao.geocaching.api.data.SimpleGeocache;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
@@ -22,27 +19,27 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
   @Test
   public void getSimpleGeocacheByCacheCodeTest() throws Exception {
-    SimpleGeocache cache = api.getCacheSimple(CACHE_CODE);
+    Geocache cache = api.getCacheSimple(CACHE_CODE);
 
     Assert.assertNotNull(cache);
-    Assert.assertNotNull(cache.getAuthor());
-    Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
-    Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
+    Assert.assertNotNull(cache.getOwner());
+    Assert.assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
+    Assert.assertEquals(CACHE_CODE, cache.getCode());
     Assert.assertEquals(CacheType.Multi, cache.getCacheType());
-    Assert.assertNotSame("", cache.getContactName());
+    Assert.assertNotNull(cache.getPlacedBy());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
-    Assert.assertNotSame(new Date(0), cache.getCreated());
-    Assert.assertNotSame(new Date(0), cache.getPlaced());
-    Assert.assertNotSame(new Date(0), cache.getLastUpdated());
-    Assert.assertEquals(1.5F, cache.getDifficultyRating(), 0);
-    Assert.assertNotSame(Double.NaN, cache.getLatitude());
-    Assert.assertNotSame(Double.NaN, cache.getLongitude());
-    Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
-    Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(true, cache.isAvailable());
-    Assert.assertEquals(false, cache.isFound());
-    Assert.assertEquals(false, cache.isPremiumListing());
+    Assert.assertNotNull(cache.getCreateDate());
+    Assert.assertNotNull(cache.getPlaceDate());
+    Assert.assertNotNull(cache.getLastUpdateDate());
+    Assert.assertEquals(1.5F, cache.getDifficulty(), 0);
+    Assert.assertEquals(1.5F, cache.getTerrain(), 0);
+    Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
+    Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
+    Assert.assertNotNull(cache.getName());
+    Assert.assertFalse(cache.isArchived());
+    Assert.assertTrue(cache.isAvailable());
+    Assert.assertFalse(cache.isFoundByUser());
+    Assert.assertFalse(cache.isPremium());
     
     CacheLimits limits = api.getLastCacheLimits();
     Assert.assertNotNull(limits);
@@ -50,44 +47,43 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
   @Test
   public void getGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(CACHE_CODE, 5, -1);
+    Geocache cache = api.getCache(CACHE_CODE, 5, 0);
 
     Assert.assertNotNull(cache);
-    Assert.assertNotNull(cache.getAuthor());
-    Assert.assertNotSame(MemberType.Guest, cache.getAuthor().getMemberType());
-    Assert.assertEquals(CACHE_CODE, cache.getCacheCode());
+    Assert.assertNotNull(cache.getOwner());
+    Assert.assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
+    Assert.assertEquals(CACHE_CODE, cache.getCode());
     Assert.assertEquals(CacheType.Multi, cache.getCacheType());
-    Assert.assertNotSame("", cache.getContactName());
+    Assert.assertNotNull(cache.getPlacedBy());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
-    Assert.assertNotSame(new Date(0), cache.getCreated());
-    Assert.assertNotSame(new Date(0), cache.getPlaced());
-    Assert.assertNotSame(new Date(0), cache.getLastUpdated());
-    Assert.assertNotSame(new Date(0), cache.getLastVisited());
-    Assert.assertEquals(1.5F, cache.getDifficultyRating(), 0);
-    Assert.assertNotSame(Double.NaN, cache.getLatitude());
-    Assert.assertNotSame(Double.NaN, cache.getLongitude());
-    Assert.assertNotSame("", cache.getName());
-    Assert.assertEquals(1.5F, cache.getTerrainRating(), 0);
-    Assert.assertEquals(false, cache.isArchived());
-    Assert.assertEquals(true, cache.isAvailable());
-    Assert.assertEquals(false, cache.isFound());
-    Assert.assertEquals(false, cache.isPremiumListing());
+    Assert.assertNotNull(cache.getCreateDate());
+    Assert.assertNotNull(cache.getPlaceDate());
+    Assert.assertNotNull(cache.getLastUpdateDate());
+    Assert.assertEquals(1.5F, cache.getDifficulty(), 0);
+    Assert.assertEquals(1.5F, cache.getTerrain(), 0);
+    Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
+    Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
+    Assert.assertNotNull(cache.getName());
+    Assert.assertFalse(cache.isArchived());
+    Assert.assertTrue(cache.isAvailable());
+    Assert.assertFalse(cache.isFoundByUser());
+    Assert.assertFalse(cache.isPremium());
 
-    Assert.assertEquals(true, cache.isShortDescriptionHtml());
-    Assert.assertEquals(true, cache.isLongDescriptionHtml());
+    Assert.assertTrue(cache.isShortDescriptionHtml());
+    Assert.assertTrue(cache.isLongDescriptionHtml());
     
-    Assert.assertNotSame("", cache.getCountryName());
-    Assert.assertNotSame("", cache.getStateName());
+    Assert.assertNotNull(cache.getCountryName());
+    Assert.assertNotNull(cache.getStateName());
 
     Assert.assertEquals(8, cache.getWaypoints().size());
 
     Assert.assertEquals(5, cache.getCacheLogs().size());
     for (CacheLog cacheLog : cache.getCacheLogs()) {
-      Assert.assertNotSame("", cacheLog.getAuthor());
-      Assert.assertNotSame(new Date(0), cacheLog.getCreated());
-      Assert.assertNotSame(new Date(0), cacheLog.getVisited());
+      Assert.assertNotNull(cacheLog.getAuthor());
+      Assert.assertNotNull(cacheLog.getCreated());
+      Assert.assertNotNull(cacheLog.getVisited());
       Assert.assertNotSame(CacheLogType.Unknown, cacheLog.getLogType());
-      Assert.assertNotSame("", cacheLog.getText());
+      Assert.assertNotNull(cacheLog.getText());
     }
 
     // TODO more tests

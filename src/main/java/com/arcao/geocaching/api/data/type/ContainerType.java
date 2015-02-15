@@ -9,39 +9,39 @@ public enum ContainerType {
 	Huge("Huge", 5),
 	Other("Other", 6);
 
-	private final String friendlyName;
-	private final int groundSpeakId;
+	private final String name;
+	private final int id;
 
-	private ContainerType(String friendlyName, int groundSpeakId) {
-		this.friendlyName = friendlyName;
-		this.groundSpeakId = groundSpeakId;
+	private ContainerType(String name, int id) {
+		this.name = name;
+		this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return friendlyName;
+		return name;
 	}
 
-	public String getFriendlyName() {
-		return friendlyName;
+	public String getName() {
+		return name;
 	}
 	
-	public int getGroundSpeakId() {
-		return groundSpeakId;
+	public int getId() {
+		return id;
 	}
 
-	public static ContainerType parseContainerType(String container) {
+	public static ContainerType getByName(String name) {
 		for (ContainerType type : values()) {
-			if (type.toString().equals(container))
+			if (type.name.equals(name))
 				return type;
 		}
 
 		return Other;
 	}
 	
-	public static ContainerType parseContainerTypeByGroundSpeakId(int groundSpeakId) {
+	public static ContainerType getById(int id) {
 		for (ContainerType type : values()) {
-			if (type.getGroundSpeakId() == groundSpeakId)
+			if (type.id == id)
 				return type;
 		}
 

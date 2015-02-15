@@ -11,21 +11,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.arcao.geocaching.api.data.*;
+import com.arcao.geocaching.api.data.sort.SortBy;
+import com.arcao.geocaching.api.data.sort.SortOrder;
+import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
-import com.arcao.geocaching.api.data.CacheLimits;
-import com.arcao.geocaching.api.data.CacheLog;
-import com.arcao.geocaching.api.data.DeviceInfo;
-import com.arcao.geocaching.api.data.ImageData;
-import com.arcao.geocaching.api.data.SimpleGeocache;
-import com.arcao.geocaching.api.data.Trackable;
-import com.arcao.geocaching.api.data.TrackableLog;
-import com.arcao.geocaching.api.data.TrackableTravel;
-import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
@@ -43,7 +38,6 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLimitsJsonP
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLogJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.SimpleGeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
@@ -99,10 +93,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		return sessionValid;
 	}
 
-	public List<SimpleGeocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount,
-			Filter[] filters) throws GeocachingApiException {
-
-		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
+  @Override
+  public List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
+		List<Geocache> list = new ArrayList<Geocache>();
 
 		JsonReader r = null;
 		try {
@@ -110,7 +103,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			JsonWriter w = new JsonWriter(sw);
 			w.beginObject();
 			w.name("AccessToken").value(session);
-			w.name("IsLite").value(isLite);
+			w.name("IsLite").value(resultQuality == ResultQuality.LITE);
+      w.name("IsSummaryOnly").value(resultQuality == ResultQuality.SUMMARY);
 			w.name("MaxPerPage").value(maxPerPage);
 
 			if (geocacheLogCount >= 0)
@@ -119,11 +113,23 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			if (trackableLogCount >= 0)
 				w.name("TrackableLogCount").value(trackableLogCount);
 
-			for (Filter filter : filters) {
-				if (filter.isValid())
-					filter.writeJson(w);
-			}
-			w.endObject();
+      if (filters != null) {
+        for (Filter filter : filters) {
+          if (filter.isValid())
+            filter.writeJson(w);
+        }
+      }
+
+      if (sortByList != null && sortByList.size() > 0) {
+        w.name("SortBys").beginArray();
+        for (SortBy sortBy : sortByList) {
+          w.name("SortFilterId").value(sortBy.getKey().getId());
+          w.name("AscendingOrder").value(sortBy.getOrder() == SortOrder.ASCENDING);
+        }
+        w.endArray();
+      }
+
+      w.endObject();
 			w.close();
 
 			r = callPost("SearchForGeocaches?format=json", sw.toString());
@@ -133,11 +139,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			while(r.hasNext()) {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
-					if (isLite) {
-						list = SimpleGeocacheJsonParser.parseList(r);
-					} else {
-						list = GeocacheJsonParser.parseList(r);
-					}
+					list = GeocacheJsonParser.parseList(r);
 				} else if ("CacheLimits".equals(name)) {
 					lastCacheLimits = CacheLimitsJsonParser.parse(r);
 				} else {
@@ -158,8 +160,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-	public List<SimpleGeocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
-		List<SimpleGeocache> list = new ArrayList<SimpleGeocache>();
+  @Override
+  public List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
+		List<Geocache> list = new ArrayList<Geocache>();
 
 		JsonReader r = null;
 		try {
@@ -167,7 +170,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			JsonWriter w = new JsonWriter(sw);
 			w.beginObject();
 			w.name("AccessToken").value(session);
-			w.name("IsLite").value(isLite);
+      w.name("IsLite").value(resultQuality == ResultQuality.LITE);
+      w.name("IsSummaryOnly").value(resultQuality == ResultQuality.SUMMARY);
 			w.name("StartIndex").value(startIndex);
 			w.name("MaxPerPage").value(maxPerPage);
 
@@ -187,11 +191,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			while(r.hasNext()) {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
-					if (isLite) {
-						list = SimpleGeocacheJsonParser.parseList(r);
-					} else {
-						list = GeocacheJsonParser.parseList(r);
-					}
+					list = GeocacheJsonParser.parseList(r);
 				} else if ("CacheLimits".equals(name)) {
 					lastCacheLimits = CacheLimitsJsonParser.parse(r);
 				} else {
@@ -391,7 +391,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.beginObject();
 			w.name("AccessToken").value(session);
 			w.name("CacheCode").value(cacheCode);
-			w.name("WptLogTypeId").value(cacheLogType.getFriendlyName());
+			w.name("WptLogTypeId").value(cacheLogType.getName());
 			w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
 			w.name("PromoteToLog").value(publish);
 			if (imageData != null) {
@@ -704,7 +704,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			JsonWriter logs = w.name("LogTypes").beginArray();
 
 			for (CacheLogType cacheLogType : logTypes) {
-				logs.value(cacheLogType.getGroundspeakId());
+				logs.value(cacheLogType.getId());
 			}
 
 			logs.endArray();
@@ -752,7 +752,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 	protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
 		if ("Status".equals(r.nextName())) {
-			StatusJsonParser.Status status = StatusJsonParser.parse(r);
+			Status status = StatusJsonParser.parse(r);
 
 			switch (status.getStatusCode()) {
 				case OK:
@@ -762,10 +762,10 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				case SessionExpired:
 				case AccessTokenNotValid:
 					sessionValid = false;
-					throw new InvalidSessionException(status.getStatusMessage());
+					throw new InvalidSessionException(status.getMessage());
 				case AccountNotFound:
 					sessionValid = false;
-					throw new InvalidCredentialsException(status.getStatusMessage());
+					throw new InvalidCredentialsException(status.getMessage());
 				default:
 					throw new LiveGeocachingApiException(status);
 			}
@@ -842,13 +842,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	public static class Builder {
 		protected GeocachingApiConfiguration configuration;
 		protected JsonDownloader downloader;
-		
-		/**
+
+    private Builder() {
+    }
+
+    public static Builder liveGeocachingApi() {
+      return new Builder();
+    }
+
+    /**
 		 * Set a {@link GeocachingApiConfiguration} where is stored configuration
 		 * @param configuration instance of {@link GeocachingApiConfiguration} implementation
 		 * @return this Builder
 		 */
-		public Builder setConfiguration(GeocachingApiConfiguration configuration) {
+		public Builder withConfiguration(GeocachingApiConfiguration configuration) {
 			this.configuration = configuration;
 			return this;
 		}
@@ -858,7 +865,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		 * @param downloader instance of {@link JsonDownloader} implementation
 		 * @return this Builder
 		 */
-		public Builder setDownloader(JsonDownloader downloader) {
+		public Builder withDownloader(JsonDownloader downloader) {
 			this.downloader = downloader;
 			return this;
 		}

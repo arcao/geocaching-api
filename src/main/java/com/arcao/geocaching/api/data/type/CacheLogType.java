@@ -21,33 +21,33 @@ public enum CacheLogType {
 	Archive("Archive", 5),
 	Unarchive("Unarchive", 1);
 
-	private final String friendlyName;
-	private final int groundspeakId;
+	private final String name;
+	private final int id;
 
-	private CacheLogType(String friendlyName, int groundspeakId) {
-		this.friendlyName = friendlyName;
-		this.groundspeakId = groundspeakId;
+	private CacheLogType(String name, int id) {
+		this.name = name;
+		this.id = id;
 	}
 
 	@Override
 	public String toString() {
-		return friendlyName;
+		return name;
 	}
 
-	public String getFriendlyName() {
-		return friendlyName;
+	public String getName() {
+		return name;
 	}
 
-	public int getGroundspeakId() {
-		return groundspeakId;
+	public int getId() {
+		return id;
 	}
 
-	public static CacheLogType parseLogType(String log) {
+	public static CacheLogType getByName(String name) {
 		for (final CacheLogType type : values()) {
-			if (type.getFriendlyName().equals(log))
+			if (type.getName().equals(name))
 				return type;
 		}
 
-		return Unknown;
+		return null;
 	}
 }

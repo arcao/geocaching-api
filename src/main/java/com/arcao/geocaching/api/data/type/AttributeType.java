@@ -162,12 +162,12 @@ public enum AttributeType {
 		return imageUrl;
 	}
 	
-	public static AttributeType parseAttributeTypeByGroundSpeakId(int groundSpeakId, boolean on) {
+	public static AttributeType getById(int id, boolean on) {
 		for (AttributeType type : values()) {
-			if (type.getId() == groundSpeakId && type.isOn() == on)
+			if (type.id == id && type.isOn() == on)
 				return type;
 		}
 		
-		return (on) ? DogsYes : DogsNo;
+		return null;
 	}
 }
