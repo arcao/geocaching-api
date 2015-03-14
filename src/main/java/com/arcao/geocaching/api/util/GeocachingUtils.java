@@ -90,7 +90,11 @@ public class GeocachingUtils {
 
     // 0 - FFFF = base16; G000 - ... = base 31
     if (code.length() <= 4 && code.charAt(0) < 'G') {
-      return Long.parseLong(code, 16);
+      try {
+        return Long.parseLong(code, 16);
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("Only chars " + BASE_31_CHARS + " are supported.");
+      }
     } else {
       return base31Decode(code) - CACHE_CODE_BASE31_MAGIC_NUMBER;
     }

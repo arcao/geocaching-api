@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -28,6 +29,19 @@ public class GeocachingUtilsTest {
     assertEquals(1272588, GeocachingUtils.cacheCodeToCacheId("GC1TG15"));
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidCacheCodeToCacheId1() {
+    GeocachingUtils.cacheCodeToCacheId("GC*-/");
+    fail();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidCacheCodeToCacheId2() {
+    GeocachingUtils.cacheCodeToCacheId("GCIL");
+    fail();
+  }
+
+
   @Test
   public void testCacheIdToCacheCode() {
     assertEquals("GC0",     GeocachingUtils.cacheIdToCacheCode(0));
@@ -36,4 +50,5 @@ public class GeocachingUtilsTest {
     assertEquals("GCH000",  GeocachingUtils.cacheIdToCacheCode(95327));
     assertEquals("GC1TG15", GeocachingUtils.cacheIdToCacheCode(1272588));
   }
+
 }
