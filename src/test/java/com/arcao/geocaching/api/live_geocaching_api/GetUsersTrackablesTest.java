@@ -12,6 +12,6 @@ public class GetUsersTrackablesTest extends AbstractGeocachingTest {
 	@Test
 	public void simpleGetUsersTrackablesTest() throws GeocachingApiException {
 		List<Trackable> trackables = api.getUsersTrackables(0, 30, 0, false);
-		Assert.assertEquals(2, trackables.size()); // from staging geocaching.com website
+		Assert.assertEquals(6, trackables.size()); // from staging geocaching.com website
 	}
 }

@@ -36,12 +36,12 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getPlaceDate());
     Assert.assertNotNull(cache.getLastUpdateDate());
     Assert.assertEquals(1.5F, cache.getDifficulty(), 0);
-    Assert.assertEquals(1.5F, cache.getTerrain(), 0);
+    Assert.assertEquals(1F, cache.getTerrain(), 0);
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
     Assert.assertNotNull(cache.getName());
     Assert.assertFalse(cache.isArchived());
-    Assert.assertTrue(cache.isAvailable());
+    Assert.assertFalse(cache.isAvailable());
     Assert.assertFalse(cache.isFoundByUser());
     Assert.assertFalse(cache.isPremium());
     Assert.assertNotSame(0, cache.getImageCount());
@@ -67,18 +67,18 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getPlaceDate());
     Assert.assertNotNull(cache.getLastUpdateDate());
     Assert.assertEquals(1.5F, cache.getDifficulty(), 0);
-    Assert.assertEquals(1.5F, cache.getTerrain(), 0);
+    Assert.assertEquals(1F, cache.getTerrain(), 0);
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
     Assert.assertNotNull(cache.getName());
     Assert.assertFalse(cache.isArchived());
-    Assert.assertTrue(cache.isAvailable());
+    Assert.assertFalse(cache.isAvailable());
     Assert.assertFalse(cache.isFoundByUser());
     Assert.assertFalse(cache.isPremium());
     Assert.assertSame(0, cache.getImageCount()); // NOTE: It's not returned for SUMMARY
 
     // ResultQuality.SUMMARY
-    Assert.assertEquals(8, cache.getWaypoints().size());
+    Assert.assertEquals(10, cache.getWaypoints().size());
     Assert.assertNotNull(cache.getHint());
     Assert.assertNotNull(cache.getShortDescription());
     Assert.assertTrue(cache.isShortDescriptionHtml());
@@ -106,18 +106,18 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getPlaceDate());
     Assert.assertNotNull(cache.getLastUpdateDate());
     Assert.assertEquals(1.5F, cache.getDifficulty(), 0);
-    Assert.assertEquals(1.5F, cache.getTerrain(), 0);
+    Assert.assertEquals(1F, cache.getTerrain(), 0);
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
     Assert.assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
     Assert.assertNotNull(cache.getName());
     Assert.assertFalse(cache.isArchived());
-    Assert.assertTrue(cache.isAvailable());
+    Assert.assertFalse(cache.isAvailable());
     Assert.assertFalse(cache.isFoundByUser());
     Assert.assertFalse(cache.isPremium());
     Assert.assertNotSame(0, cache.getImageCount());
 
     // ResultQuality.SUMMARY
-    Assert.assertEquals(8, cache.getWaypoints().size());
+    Assert.assertEquals(10, cache.getWaypoints().size());
     Assert.assertNotNull(cache.getHint());
     Assert.assertNotNull(cache.getShortDescription());
     Assert.assertTrue(cache.isShortDescriptionHtml());

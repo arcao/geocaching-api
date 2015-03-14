@@ -11,7 +11,7 @@ import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 public class GetTrackableTravelListTest extends AbstractGeocachingTest {
 	private static final String TRACKABLE_CODE = "TB3GW4D";
-	private static final double TRACKING_HISTORY = 135.7; // source: http://staging.geocaching.com/track/details.aspx?id=2862183
+	private static final double TRACKING_HISTORY = 144.03; // source: http://staging.geocaching.com/track/details.aspx?id=2862183
 	
 	@Test
 	public void simpleGetTrackableTravelListTest() throws GeocachingApiException {
