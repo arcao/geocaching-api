@@ -5,9 +5,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.arcao.geocaching.api.data.CacheLimits;
-import com.arcao.geocaching.api.data.CacheLog;
+import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.Geocache;
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.data.type.CacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.MemberType;
@@ -128,13 +128,13 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getCountryName());
     Assert.assertNotNull(cache.getStateName());
 
-    Assert.assertEquals(5, cache.getCacheLogs().size());
-    for (CacheLog cacheLog : cache.getCacheLogs()) {
-      Assert.assertNotNull(cacheLog.getAuthor());
-      Assert.assertNotNull(cacheLog.getCreated());
-      Assert.assertNotNull(cacheLog.getVisited());
-      Assert.assertNotSame(CacheLogType.Unknown, cacheLog.getLogType());
-      Assert.assertNotNull(cacheLog.getText());
+    Assert.assertEquals(5, cache.getGeocacheLogs().size());
+    for (GeocacheLog geocacheLog : cache.getGeocacheLogs()) {
+      Assert.assertNotNull(geocacheLog.getAuthor());
+      Assert.assertNotNull(geocacheLog.getCreated());
+      Assert.assertNotNull(geocacheLog.getVisited());
+      Assert.assertNotSame(GeocacheLogType.Unknown, geocacheLog.getLogType());
+      Assert.assertNotNull(geocacheLog.getText());
     }
 
     Assert.assertNotNull(cache.getAttributes());

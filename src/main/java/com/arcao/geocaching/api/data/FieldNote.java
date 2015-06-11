@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 
 public class FieldNote implements Serializable {
 	private static final long serialVersionUID = 249144828657285091L;
@@ -19,14 +19,14 @@ public class FieldNote implements Serializable {
 	}
 	
 	private final String cacheCode;
-	private final CacheLogType cacheLogType;
+	private final GeocacheLogType geocacheLogType;
 	private final Date dateLogged;
 	private final String note;
 	
-	public FieldNote(String cacheCode, Date dateLogged, CacheLogType cacheLogType, String note) {
+	public FieldNote(String cacheCode, Date dateLogged, GeocacheLogType geocacheLogType, String note) {
 		this.cacheCode = cacheCode;
 		this.dateLogged = dateLogged;
-		this.cacheLogType = cacheLogType;
+		this.geocacheLogType = geocacheLogType;
 		this.note = note;
 	}
 
@@ -38,8 +38,8 @@ public class FieldNote implements Serializable {
 		return dateLogged;
 	}
 
-	public CacheLogType getLogType() {
-		return cacheLogType;
+	public GeocacheLogType getLogType() {
+		return geocacheLogType;
 	}
 
 	public String getNote() {
@@ -48,7 +48,7 @@ public class FieldNote implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format("%s,%s,%s,\"%s\"", cacheCode, DATE_FORMAT.format(dateLogged), cacheLogType.getName(), safeNote(note));
+		return String.format("%s,%s,%s,\"%s\"", cacheCode, DATE_FORMAT.format(dateLogged), geocacheLogType.getName(), safeNote(note));
 	}
 	
 	public static FieldNote parseLine(String line) {
@@ -59,7 +59,7 @@ public class FieldNote implements Serializable {
 			note = note.substring(1, note.length() - 1);
 		
 		try {
-			return new FieldNote(items[0], DATE_FORMAT.parse(items[1]), CacheLogType.getByName(items[2]), note);
+			return new FieldNote(items[0], DATE_FORMAT.parse(items[1]), GeocacheLogType.getByName(items[2]), note);
 		} catch (ParseException e) {
 			return null;
 		}

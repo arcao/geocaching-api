@@ -57,7 +57,7 @@ public class Geocache implements Serializable {
   private final EnumSet<AttributeType> attributes;
   private final String countryName;
   private final Date createDate;
-  private final List<CacheLog> cacheLogs;
+  private final List<GeocacheLog> geocacheLogs;
   private final List<ImageData> images;
   private final String stateName;
 
@@ -104,7 +104,7 @@ public class Geocache implements Serializable {
           EnumSet<AttributeType> attributes,
           String countryName,
           Date createDate,
-          List<CacheLog> cacheLogs,
+          List<GeocacheLog> geocacheLogs,
           List<ImageData> images,
           String stateName) {
     this.archived = archived;
@@ -144,7 +144,7 @@ public class Geocache implements Serializable {
     this.attributes = attributes != null ? attributes : EnumSet.noneOf(AttributeType.class);
     this.countryName = countryName;
     this.createDate = createDate;
-    this.cacheLogs = cacheLogs != null ? cacheLogs : Collections.<CacheLog>emptyList();
+    this.geocacheLogs = geocacheLogs != null ? geocacheLogs : Collections.<GeocacheLog>emptyList();
     this.images = images != null ? images : Collections.<ImageData>emptyList();
     this.stateName = stateName;
   }
@@ -297,8 +297,8 @@ public class Geocache implements Serializable {
     return createDate;
   }
 
-  public List<CacheLog> getCacheLogs() {
-    return cacheLogs;
+  public List<GeocacheLog> getGeocacheLogs() {
+    return geocacheLogs;
   }
 
   public List<ImageData> getImages() {
@@ -353,7 +353,7 @@ public class Geocache implements Serializable {
     private EnumSet<AttributeType> attributes;
     private String countryName;
     private Date createDate;
-    private List<CacheLog> cacheLogs;
+    private List<GeocacheLog> geocacheLogs;
     private List<ImageData> images;
     private String stateName;
 
@@ -549,8 +549,8 @@ public class Geocache implements Serializable {
       return this;
     }
 
-    public Builder withCacheLogs(List<CacheLog> cacheLogs) {
-      this.cacheLogs = cacheLogs;
+    public Builder withCacheLogs(List<GeocacheLog> geocacheLogs) {
+      this.geocacheLogs = geocacheLogs;
       return this;
     }
 
@@ -608,7 +608,7 @@ public class Geocache implements Serializable {
               attributes,
               countryName,
               createDate,
-              cacheLogs,
+              geocacheLogs,
               images,
               stateName
       );

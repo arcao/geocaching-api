@@ -88,7 +88,7 @@ public class GeocacheJsonParser extends JsonParser {
 			} else if ("EncodedHints".equals(name)) {
         geocache.withHint(r.nextString());
 			} else if ("GeocacheLogs".equals(name)) {
-        geocache.withCacheLogs(CacheLogJsonParser.parseList(r));
+        geocache.withCacheLogs(GeocacheLogJsonParser.parseList(r));
 			} else if ("Trackables".equals(name)) {
         geocache.withTrackables(TrackableJsonParser.parseList(r));
 			} else if ("AdditionalWaypoints".equals(name)) {

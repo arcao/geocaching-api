@@ -2,23 +2,20 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.arcao.geocaching.api.data.CacheLog;
-import com.arcao.geocaching.api.data.ImageData;
-import com.arcao.geocaching.api.data.User;
+import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.google.gson.stream.JsonToken;
 
-public class CacheLogJsonParser extends JsonParser {
-	public static List<CacheLog> parseList(JsonReader r) throws IOException {
+public class GeocacheLogJsonParser extends JsonParser {
+	public static List<GeocacheLog> parseList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
 		}
 
-		List<CacheLog> list = new ArrayList<CacheLog>();
+		List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 		r.beginArray();
 		while (r.hasNext()) {
 			list.add(parse(r));
@@ -27,8 +24,8 @@ public class CacheLogJsonParser extends JsonParser {
 		return list;
 	}
 
-	public static CacheLog parse(JsonReader r) throws IOException {
-		CacheLog.Builder geocacheLog = CacheLog.Builder.cacheLog();
+	public static GeocacheLog parse(JsonReader r) throws IOException {
+		GeocacheLog.Builder geocacheLog = GeocacheLog.Builder.geocacheLog();
 		Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
 
 		r.beginObject();
@@ -71,22 +68,22 @@ public class CacheLogJsonParser extends JsonParser {
 		return geocacheLog.build();
 	}
 
-	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
-		CacheLogType cacheLogType = null;
+	protected static GeocacheLogType parseLogType(JsonReader r) throws IOException {
+		GeocacheLogType geocacheLogType = null;
 		
 		if (isNextNull(r))
-			return cacheLogType;
+			return geocacheLogType;
 
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("WptLogTypeName".equals(name)) {
-				cacheLogType = CacheLogType.getByName(r.nextString());
+				geocacheLogType = GeocacheLogType.getByName(r.nextString());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		return cacheLogType;
+		return geocacheLogType;
 	}
 }

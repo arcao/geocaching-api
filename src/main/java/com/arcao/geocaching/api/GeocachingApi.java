@@ -6,7 +6,7 @@ import java.util.List;
 import com.arcao.geocaching.api.data.*;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.sort.SortBy;
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 
@@ -103,7 +103,7 @@ public interface GeocachingApi {
 	List<TrackableTravel> getTrackableTravelList(String trackableCode) throws GeocachingApiException;
 	
 	/**
-	 * Get a list of cache logs in given cache.
+	 * Get a list of geocache logs in given cache.
 	 * 
 	 * @param cacheCode
 	 *            cache code
@@ -116,7 +116,7 @@ public interface GeocachingApi {
 	 *             If error occurs during getting information
 	 * @since 1.1
 	 */
-	List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
+	List<GeocacheLog> getGeocacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
 
 	/**
 	 * Get a basic information about cache.
@@ -308,7 +308,7 @@ public interface GeocachingApi {
 	 * 
 	 * @param cacheCode
 	 *            geocache which can own this field note
-	 * @param cacheLogType
+	 * @param geocacheLogType
 	 *            type of log
 	 * @param dateLogged
 	 *            when cache was found
@@ -327,7 +327,7 @@ public interface GeocachingApi {
 	 *             If error occurs during sending field note
 	 * @since 1.1
 	 */
-	CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
+	GeocacheLog createFieldNoteAndPublish(String cacheCode, GeocacheLogType geocacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
 
 	/**
 	 * Create field note and publish them or store them to list of Field notes
@@ -348,7 +348,7 @@ public interface GeocachingApi {
 	 *             If error occurs during sending field note
 	 * @since 1.1
 	 */
-	CacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
+	GeocacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
 
 	/**
 	 * Store a personal note for specified cache. If note parameter is null or
@@ -430,7 +430,7 @@ public interface GeocachingApi {
 	 *             If error occurs during getting information
 	 * @since 1.5.13
 	 */
-	List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
+	List<GeocacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
 	
 	/**
 	 * Get a user's owned trackables

@@ -1,6 +1,6 @@
 package com.arcao.geocaching.api.data.type;
 
-public enum CacheLogType {
+public enum GeocacheLogType {
 	Unknown("Unknown", 0),
 	FoundIt("Found it", 2),
 	DidntFindIt("Didn't find it", 3),
@@ -24,7 +24,7 @@ public enum CacheLogType {
 	private final String name;
 	private final int id;
 
-	private CacheLogType(String name, int id) {
+	GeocacheLogType(String name, int id) {
 		this.name = name;
 		this.id = id;
 	}
@@ -42,8 +42,8 @@ public enum CacheLogType {
 		return id;
 	}
 
-	public static CacheLogType getByName(String name) {
-		for (final CacheLogType type : values()) {
+	public static GeocacheLogType getByName(String name) {
+		for (final GeocacheLogType type : values()) {
 			if (type.getName().equals(name))
 				return type;
 		}

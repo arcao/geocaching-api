@@ -6,23 +6,23 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.util.DebugUtils;
 
 /**
- * CacheLog class keep all information cache log.
+ * GeocacheLog class keep all information cache log.
  * 
  * @author arcao
  * 
  */
-public class CacheLog implements Serializable {
+public class GeocacheLog implements Serializable {
 	private static final long serialVersionUID = 9088433857246687793L;
 
 	private final long id;
 	private final String cacheCode;
 	private final Date visited;
 	private final Date created;
-	private final CacheLogType cacheLogType;
+	private final GeocacheLogType geocacheLogType;
 	private final User author;
 	private final String text;
 	private final List<ImageData> images;
@@ -37,7 +37,7 @@ public class CacheLog implements Serializable {
 	 * @param cacheCode the gccode of the cache
 	 * @param created date when the cache log was created (logged) on Geocaching site
 	 * @param visited date when the cache was visited (found)
-	 * @param cacheLogType type of log
+	 * @param geocacheLogType type of log
 	 * @param author author of log
 	 * @param text text of log
 	 * @param updatedCoordinates updated coordinates
@@ -45,13 +45,13 @@ public class CacheLog implements Serializable {
 	 * @param archived true if log is archived
 	 * @param undeletable true if log can not be deleted
 	 */
-	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author,
-									String text, List<ImageData> images, Coordinates updatedCoordinates, boolean approved, boolean archived, boolean undeletable) {
+	public GeocacheLog(long id, String cacheCode, Date created, Date visited, GeocacheLogType geocacheLogType, User author,
+										 String text, List<ImageData> images, Coordinates updatedCoordinates, boolean approved, boolean archived, boolean undeletable) {
 		this.id = id;
 		this.cacheCode=cacheCode;
 		this.created = created;
 		this.visited = visited;
-		this.cacheLogType = cacheLogType;
+		this.geocacheLogType = geocacheLogType;
 		this.author = author;
 		this.text = text;
 		this.images = images != null ? images : Collections.<ImageData>emptyList();
@@ -97,8 +97,8 @@ public class CacheLog implements Serializable {
 	 * Get a type of log
 	 * @return type of log
 	 */
-	public CacheLogType getLogType() {
-		return cacheLogType;
+	public GeocacheLogType getLogType() {
+		return geocacheLogType;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class CacheLog implements Serializable {
 		private String cacheCode;
 		private Date visited;
 		private Date created;
-		private CacheLogType cacheLogType;
+		private GeocacheLogType geocacheLogType;
 		private User author;
 		private String text;
 		private List<ImageData> images;
@@ -180,7 +180,7 @@ public class CacheLog implements Serializable {
 		private Builder() {
 		}
 
-		public static Builder cacheLog() {
+		public static Builder geocacheLog() {
 			return new Builder();
 		}
 
@@ -204,8 +204,8 @@ public class CacheLog implements Serializable {
 			return this;
 		}
 
-		public Builder withCacheLogType(CacheLogType cacheLogType) {
-			this.cacheLogType = cacheLogType;
+		public Builder withCacheLogType(GeocacheLogType geocacheLogType) {
+			this.geocacheLogType = geocacheLogType;
 			return this;
 		}
 
@@ -244,13 +244,13 @@ public class CacheLog implements Serializable {
 			return this;
 		}
 
-		public CacheLog build() {
-			return new CacheLog(
+		public GeocacheLog build() {
+			return new GeocacheLog(
 							id,
 							cacheCode,
 							created,
 							visited,
-							cacheLogType,
+							geocacheLogType,
 							author,
 							text,
 							images,

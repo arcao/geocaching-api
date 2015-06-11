@@ -22,7 +22,7 @@ import com.arcao.geocaching.api.AbstractGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
-import com.arcao.geocaching.api.data.type.CacheLogType;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
@@ -35,7 +35,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachin
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.ApiLimitsJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLimitsJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLogJsonParser;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheLogJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
@@ -347,8 +347,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 	}
 
-	public List<CacheLog> getCacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
-		List<CacheLog> list = new ArrayList<CacheLog>();
+	public List<GeocacheLog> getGeocacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
+		List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 
 		JsonReader r = null;
 		try {
@@ -365,7 +365,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			while(r.hasNext()) {
 				String name = r.nextName();
 				if ("Logs".equals(name)) {
-					list = CacheLogJsonParser.parseList(r);
+					list = GeocacheLogJsonParser.parseList(r);
 				} else {
 					r.skipValue();
 				}
@@ -385,9 +385,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-	public CacheLog createFieldNoteAndPublish(String cacheCode, CacheLogType cacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
+	public GeocacheLog createFieldNoteAndPublish(String cacheCode, GeocacheLogType geocacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
 			boolean favoriteThisCache) throws GeocachingApiException {
-		CacheLog cacheLog = null;
+		GeocacheLog geocacheLog = null;
 
 		JsonReader r = null;
 		try {
@@ -396,7 +396,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			w.beginObject();
 			w.name("AccessToken").value(session);
 			w.name("CacheCode").value(cacheCode);
-			w.name("WptLogTypeId").value(cacheLogType.getName());
+			w.name("WptLogTypeId").value(geocacheLogType.getName());
 			w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
 			w.name("PromoteToLog").value(publish);
 			if (imageData != null) {
@@ -415,13 +415,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			while(r.hasNext()) {
 				String name = r.nextName();
 				if ("Log".equals(name)) {
-					cacheLog = CacheLogJsonParser.parse(r);
+					geocacheLog = GeocacheLogJsonParser.parse(r);
 				} else {
 					r.skipValue();
 				}
 			}
 			r.endObject();
-			return cacheLog;
+			return geocacheLog;
 		} catch (IOException e) {
 			logger.error(e.toString(), e);
 			if (!isGsonException(e)) {
@@ -677,14 +677,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     return lastSearchResultsFound;
   }
 
-  public List<CacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, CacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
-		List<CacheLog> list = new ArrayList<CacheLog>();
+  public List<GeocacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
+		List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 		
 		if (userName == null || userName.length() == 0)
 			throw new IllegalArgumentException("You must specify user name.");
 		
 		if (logTypes == null || logTypes.length == 0)
-			throw new IllegalArgumentException("You must specify at least one CacheLogType.");
+			throw new IllegalArgumentException("You must specify at least one GeocacheLogType.");
 
 		JsonReader r = null;
 		try {
@@ -712,8 +712,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			// Cache log type filter
 			JsonWriter logs = w.name("LogTypes").beginArray();
 
-			for (CacheLogType cacheLogType : logTypes) {
-				logs.value(cacheLogType.getId());
+			for (GeocacheLogType geocacheLogType : logTypes) {
+				logs.value(geocacheLogType.getId());
 			}
 
 			logs.endArray();
@@ -732,7 +732,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 			while (r.hasNext()) {
 				String name = r.nextName();
 				if ("Logs".equals(name)) {
-					list = CacheLogJsonParser.parseList(r);
+					list = GeocacheLogJsonParser.parseList(r);
 					break;
 				} else {
 					r.skipValue();
