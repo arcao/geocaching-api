@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.ImageData;
+import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
@@ -29,58 +30,48 @@ public class TrackableLogJsonParser extends JsonParser {
   }
   
   public static TrackableLog parse(JsonReader r) throws IOException {
-    int cacheID = 0;
-    String code = null;
-    int id = 0;
-    List<ImageData> images = new ArrayList<ImageData>();
-    boolean archived = false;
-    String guid = null;
-    String text = null;
-    TrackableLogType type = null;
-    User loggedBy = null;
-    Date createDate = null;
+    TrackableLog.Builder trackableLog = TrackableLog.Builder.trackableLog();
     Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
-    String url = null;
-    Date visitDate = null;
 
-    
     r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();
       if ("CacheId".equals(name)) {
-        cacheID = r.nextInt();
+        trackableLog.withCacheID(r.nextInt());
       } else if ("Code".equals(name)) {
-        code = r.nextString();
+        trackableLog.withCode(r.nextString());
       } else if ("ID".equals(name)) {
-        id = r.nextInt();
+        trackableLog.withId(r.nextInt());
       } else if ("Images".equals(name)) {
-        images = ImageDataJsonParser.parseList(r);
+        trackableLog.withImages(ImageDataJsonParser.parseList(r));
       } else if ("IsArchived".equals(name)) {
-        archived = r.nextBoolean();
+        trackableLog.withArchived(r.nextBoolean());
       } else if ("LogGuid".equals(name)) {
-        guid = r.nextString();
+        trackableLog.withGuid(r.nextString());
       } else if ("LogText".equals(name)) {
-        text = r.nextString();
+        trackableLog.withText(r.nextString());
       } else if ("LogType".equals(name)) {
-        type = parseTrackableLogType(r);
+        trackableLog.withType( parseTrackableLogType(r));
       } else if ("LoggedBy".equals(name)) {
-        loggedBy = parseUser(r);
+        trackableLog.withLoggedBy(parseUser(r));
       } else if ("UTCCreateDate".equals(name)) {
-        createDate = parseJsonUTCDate(r.nextString());
+        trackableLog.withCreated(parseJsonUTCDate(r.nextString()));
       } else if ("UpdatedLatitude".equals(name)) {
         updatedCoordinates.withLatitude(r.nextDouble());
       } else if ("UpdatedLongitude".equals(name)) {
         updatedCoordinates.withLongitude(r.nextDouble());
       } else if ("Url".equals(name)) {
-        url = r.nextString();
+        trackableLog.withUrl(r.nextString());
       } else if ("VisitDate".equals(name)) {
-        visitDate = parseJsonDate(r.nextString());
+        trackableLog.withVisited(parseJsonDate(r.nextString()));
       } else {
         r.skipValue();
       }
     }
     r.endObject();
 
-    return new TrackableLog(cacheID, code, id, images, archived, guid, text, type, loggedBy, createDate, updatedCoordinates.build(), url, visitDate);
+    trackableLog.withUpdatedCoordinates(updatedCoordinates.build());
+
+    return trackableLog.build();
   }
 }

@@ -100,4 +100,109 @@ public class TrackableLog implements Serializable {
 	public String toString() {
     return DebugUtils.toString(this);
 	}
+
+  public static class Builder {
+    private int cacheID;
+    private String code;
+    private int id;
+    private List<ImageData> images;
+    private boolean archived;
+    private String guid;
+    private String text;
+    private TrackableLogType type;
+    private User loggedBy;
+    private Date created;
+    private Coordinates updatedCoordinates;
+    private String url;
+    private Date visited;
+
+    private Builder() {
+    }
+
+    public static Builder trackableLog() {
+      return new Builder();
+    }
+
+    public Builder withCacheID(int cacheID) {
+      this.cacheID = cacheID;
+      return this;
+    }
+
+    public Builder withCode(String code) {
+      this.code = code;
+      return this;
+    }
+
+    public Builder withId(int id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder withImages(List<ImageData> images) {
+      this.images = images;
+      return this;
+    }
+
+    public Builder withArchived(boolean archived) {
+      this.archived = archived;
+      return this;
+    }
+
+    public Builder withGuid(String guid) {
+      this.guid = guid;
+      return this;
+    }
+
+    public Builder withText(String text) {
+      this.text = text;
+      return this;
+    }
+
+    public Builder withType(TrackableLogType type) {
+      this.type = type;
+      return this;
+    }
+
+    public Builder withLoggedBy(User loggedBy) {
+      this.loggedBy = loggedBy;
+      return this;
+    }
+
+    public Builder withCreated(Date created) {
+      this.created = created;
+      return this;
+    }
+
+    public Builder withUpdatedCoordinates(Coordinates updatedCoordinates) {
+      this.updatedCoordinates = updatedCoordinates;
+      return this;
+    }
+
+    public Builder withUrl(String url) {
+      this.url = url;
+      return this;
+    }
+
+    public Builder withVisited(Date visited) {
+      this.visited = visited;
+      return this;
+    }
+
+    public TrackableLog build() {
+      return new TrackableLog(
+              cacheID,
+              code,
+              id,
+              images,
+              archived,
+              guid,
+              text,
+              type,
+              loggedBy,
+              created,
+              updatedCoordinates,
+              url,
+              visited);
+    }
+  }
 }
