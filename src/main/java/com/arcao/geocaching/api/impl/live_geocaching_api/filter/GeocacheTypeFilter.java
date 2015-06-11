@@ -3,25 +3,25 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.filter;
 
 import java.io.IOException;
 
-import com.arcao.geocaching.api.data.type.CacheType;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.google.gson.stream.JsonWriter;
 
 public class GeocacheTypeFilter implements Filter {
 	private static final String NAME = "GeocacheType";
 
-	protected final CacheType[] cacheTypes;
+	protected final GeocacheType[] geocacheTypes;
 	
-	public GeocacheTypeFilter(CacheType... cacheTypes) {
-		this.cacheTypes = cacheTypes;
+	public GeocacheTypeFilter(GeocacheType... geocacheTypes) {
+		this.geocacheTypes = geocacheTypes;
 	}
 	
 	public boolean isValid() {
-		if (cacheTypes == null || cacheTypes.length == 0)
+		if (geocacheTypes == null || geocacheTypes.length == 0)
 			return false;
 		
 		boolean valid = false;
-		for (CacheType cacheType : cacheTypes) {
-			if (cacheType != null)
+		for (GeocacheType geocacheType : geocacheTypes) {
+			if (geocacheType != null)
 				valid = true;
 		}
 		
@@ -33,9 +33,9 @@ public class GeocacheTypeFilter implements Filter {
 		w.beginObject();
 		w.name("GeocacheTypeIds");
 		w.beginArray();
-		for (CacheType cacheType : cacheTypes) {
-			if (cacheType != null)
-				w.value(cacheType.getId());
+		for (GeocacheType geocacheType : geocacheTypes) {
+			if (geocacheType != null)
+				w.value(geocacheType.getId());
 		}
 		w.endArray();
 		w.endObject();

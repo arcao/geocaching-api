@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
-import com.arcao.geocaching.api.data.type.CacheType;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.util.DebugUtils;
 
@@ -18,7 +18,7 @@ public class Geocache implements Serializable {
   // ResultQuality.LITE
   private final boolean archived;
   private final boolean available;
-  private final CacheType cacheType;
+  private final GeocacheType geocacheType;
   private final boolean favoritable;
   private final String code;
   private final ContainerType containerType;
@@ -65,7 +65,7 @@ public class Geocache implements Serializable {
           // ResultQuality.LITE
           boolean archived,
           boolean available,
-          CacheType cacheType,
+          GeocacheType geocacheType,
           boolean favoritable,
           String code,
           ContainerType containerType,
@@ -109,7 +109,7 @@ public class Geocache implements Serializable {
           String stateName) {
     this.archived = archived;
     this.available = available;
-    this.cacheType = cacheType;
+    this.geocacheType = geocacheType;
     this.favoritable = favoritable;
     this.code = code;
     this.containerType = containerType;
@@ -157,8 +157,8 @@ public class Geocache implements Serializable {
     return available;
   }
 
-  public CacheType getCacheType() {
-    return cacheType;
+  public GeocacheType getGeocacheType() {
+    return geocacheType;
   }
 
   public boolean isFavoritable() {
@@ -318,7 +318,7 @@ public class Geocache implements Serializable {
   public static class Builder {
     private boolean archived;
     private boolean available;
-    private CacheType cacheType;
+    private GeocacheType geocacheType;
     private boolean favoritable;
     private String code;
     private ContainerType containerType;
@@ -374,8 +374,8 @@ public class Geocache implements Serializable {
       return this;
     }
 
-    public Builder withCacheType(CacheType cacheType) {
-      this.cacheType = cacheType;
+    public Builder withCacheType(GeocacheType geocacheType) {
+      this.geocacheType = geocacheType;
       return this;
     }
 
@@ -569,7 +569,7 @@ public class Geocache implements Serializable {
               // ResultQuality.LITE
               archived,
               available,
-              cacheType,
+              geocacheType,
               favoritable,
               code,
               containerType,

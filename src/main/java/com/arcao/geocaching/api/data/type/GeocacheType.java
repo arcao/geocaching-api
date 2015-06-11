@@ -5,7 +5,7 @@ package com.arcao.geocaching.api.data.type;
  * 
  * @author arcao
  */
-public enum CacheType {
+public enum GeocacheType {
 	/** This is the original cache type consisting, at a bare minimum, a container and a log book. Normally you'll find a tupperware container, ammo box, or bucket filled with goodies, or smaller container ("micro cache") too small to contain items except for a log book. The coordinates listed on the traditional cache page is the exact location for the cache. */
 	Traditional("Traditional Cache", 2),
 	/** A multi-cache ("multiple") involves two or more locations, the final location being a physical container. There are many variations, but most multi-caches have a hint to find the second cache, and the second cache has hints to the third, and so on. An offset cache (where you go to a location and get hints to the actual cache) is considered a multi-cache. */
@@ -48,7 +48,7 @@ public enum CacheType {
 	private final String name;
 	private final int id;
 
-	private CacheType(String name, int id) {
+	private GeocacheType(String name, int id) {
 		this.name = name;
 		this.id = id;
 	}
@@ -75,12 +75,12 @@ public enum CacheType {
 	}
 
 	/**
-	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If name doesn't correspond with any CacheType enum item the null is returned.
+	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If name doesn't correspond with any GeocacheType enum item the null is returned.
 	 * @param name friendly name
 	 * @return cache type
 	 */
-	public static CacheType getByName(String name) {
-		for (CacheType type : values()) {
+	public static GeocacheType getByName(String name) {
+		for (GeocacheType type : values()) {
 			if (type.name.equals(name))
 				return type;
 		}
@@ -89,12 +89,12 @@ public enum CacheType {
 	}
 	
 	/**
-	 * Get a cache type from Groundspeak Id. If Groundspeak Id doesn't correspond with any CacheType enum item the null is returned.
+	 * Get a cache type from Groundspeak Id. If Groundspeak Id doesn't correspond with any GeocacheType enum item the null is returned.
 	 * @param id Groundspeak Id
 	 * @return cache type
 	 */
-	public static CacheType getById(int id) {
-		for (CacheType type : values()) {
+	public static GeocacheType getById(int id) {
+		for (GeocacheType type : values()) {
 			if (type.id == id)
 				return type;
 		}

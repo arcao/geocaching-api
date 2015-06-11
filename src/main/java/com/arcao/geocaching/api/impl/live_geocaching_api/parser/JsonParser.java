@@ -6,16 +6,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.arcao.geocaching.api.data.type.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.AttributeType;
-import com.arcao.geocaching.api.data.type.CacheType;
-import com.arcao.geocaching.api.data.type.ContainerType;
-import com.arcao.geocaching.api.data.type.MemberType;
-import com.arcao.geocaching.api.data.type.TrackableLogType;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.google.gson.stream.JsonToken;
 
 public class JsonParser {
@@ -58,23 +55,23 @@ public class JsonParser {
 		return null;
 	}
 	
-	protected static CacheType parseCacheType(JsonReader r) throws IOException {
-		CacheType cacheType = null;
+	protected static GeocacheType parseGeocacheType(JsonReader r) throws IOException {
+		GeocacheType geocacheType = null;
 		
 		if (isNextNull(r))
-			return cacheType;
+			return geocacheType;
 		
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("GeocacheTypeId".equals(name)) {
-				cacheType = CacheType.getById(r.nextInt());
+				geocacheType = GeocacheType.getById(r.nextInt());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		return cacheType;
+		return geocacheType;
 	}
 	
 	protected static ContainerType parseContainerType(JsonReader r) throws IOException {

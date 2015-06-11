@@ -8,7 +8,7 @@ import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
-import com.arcao.geocaching.api.data.type.CacheType;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.BookmarksExcludeFilter;
@@ -29,7 +29,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getOwner());
     Assert.assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
     Assert.assertEquals(CACHE_CODE, cache.getCode());
-    Assert.assertEquals(CacheType.Multi, cache.getCacheType());
+    Assert.assertEquals(GeocacheType.Multi, cache.getGeocacheType());
     Assert.assertNotNull(cache.getPlacedBy());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotNull(cache.getCreateDate());
@@ -60,7 +60,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getOwner());
     Assert.assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
     Assert.assertEquals(CACHE_CODE, cache.getCode());
-    Assert.assertEquals(CacheType.Multi, cache.getCacheType());
+    Assert.assertEquals(GeocacheType.Multi, cache.getGeocacheType());
     Assert.assertNotNull(cache.getPlacedBy());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotNull(cache.getCreateDate());
@@ -99,7 +99,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getOwner());
     Assert.assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
     Assert.assertEquals(CACHE_CODE, cache.getCode());
-    Assert.assertEquals(CacheType.Multi, cache.getCacheType());
+    Assert.assertEquals(GeocacheType.Multi, cache.getGeocacheType());
     Assert.assertNotNull(cache.getPlacedBy());
     Assert.assertEquals(ContainerType.Micro, cache.getContainerType());
     Assert.assertNotNull(cache.getCreateDate());

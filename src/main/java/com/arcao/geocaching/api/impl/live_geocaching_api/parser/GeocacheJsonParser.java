@@ -41,8 +41,8 @@ public class GeocacheJsonParser extends JsonParser {
         coordinates.withLongitude(r.nextDouble());
 			} else if ("Latitude".equals(name)) {
         coordinates.withLatitude(r.nextDouble());
-			} else if ("CacheType".equals(name)) {
-        geocache.withCacheType(parseCacheType(r));
+			} else if ("GeocacheType".equals(name)) {
+        geocache.withCacheType(parseGeocacheType(r));
 			} else if ("Difficulty".equals(name)) {
         geocache.withDifficulty((float) r.nextDouble());
 			} else if ("Terrain".equals(name)) {
