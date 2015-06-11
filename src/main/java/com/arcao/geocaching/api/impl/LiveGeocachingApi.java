@@ -141,7 +141,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
 					list = GeocacheJsonParser.parseList(r);
-				} else if ("GeocacheLimits".equals(name)) {
+				} else if ("CacheLimits".equals(name)) {
 					lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
         } else if ("TotalMatchingCaches".equals(name)) {
           lastSearchResultsFound = r.nextInt();
@@ -195,7 +195,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
 					list = GeocacheJsonParser.parseList(r);
-				} else if ("GeocacheLimits".equals(name)) {
+				} else if ("CacheLimits".equals(name)) {
 					lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
         } else if ("TotalMatchingCaches".equals(name)) {
           lastSearchResultsFound = r.nextInt();
