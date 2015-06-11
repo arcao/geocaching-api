@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.arcao.geocaching.api.util.DebugUtils;
 
@@ -25,6 +26,10 @@ public class CacheLog implements Serializable {
 	private final User author;
 	private final String text;
 	private final List<ImageData> images;
+	private final Coordinates updatedCoordinates;
+	private final boolean approved;
+	private final boolean archived;
+	private final boolean undeletable;
 
 	/**
 	 * Create a new instance of cache log and fill it with data
@@ -35,8 +40,13 @@ public class CacheLog implements Serializable {
 	 * @param cacheLogType type of log
 	 * @param author author of log
 	 * @param text text of log
+	 * @param updatedCoordinates updated coordinates
+	 * @param approved true if log is approved
+	 * @param archived true if log is archived
+	 * @param undeletable true if log can not be deleted
 	 */
-	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author, String text, List<ImageData> images) {
+	public CacheLog(long id, String cacheCode, Date created, Date visited, CacheLogType cacheLogType, User author,
+									String text, List<ImageData> images, Coordinates updatedCoordinates, boolean approved, boolean archived, boolean undeletable) {
 		this.id = id;
 		this.cacheCode=cacheCode;
 		this.created = created;
@@ -45,6 +55,10 @@ public class CacheLog implements Serializable {
 		this.author = author;
 		this.text = text;
 		this.images = images != null ? images : Collections.<ImageData>emptyList();
+		this.updatedCoordinates = updatedCoordinates;
+		this.approved = approved;
+		this.archived = archived;
+		this.undeletable = undeletable;
 	}
 
 	/**
@@ -110,6 +124,38 @@ public class CacheLog implements Serializable {
 	public List<ImageData> getImages() {
     return images;
   }
+
+	/**
+	 * Get an updated coordinates
+	 * @return updated coordinates
+	 */
+	public Coordinates getUpdatedCoordinates() {
+		return updatedCoordinates;
+	}
+
+	/**
+	 * Return true if log is approved
+	 * @return log approved?
+	 */
+	public boolean isApproved() {
+		return approved;
+	}
+
+	/**
+	 * Return true if log is archived
+	 * @return log archived?
+	 */
+	public boolean isArchived() {
+		return archived;
+	}
+
+	/**
+	 * Return true if log can not be deleted
+	 * @return can not be deleted?
+	 */
+	public boolean isUndeletable() {
+		return undeletable;
+	}
 
 	@Override
 	public String toString() {

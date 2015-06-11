@@ -8,6 +8,7 @@ import java.util.List;
 import com.arcao.geocaching.api.data.CacheLog;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.User;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.CacheLogType;
 import com.google.gson.stream.JsonToken;
 
@@ -35,6 +36,10 @@ public class CacheLogJsonParser extends JsonParser {
 		String text = null;
 		String cacheCode = null;
 		List<ImageData> images = new ArrayList<ImageData>();
+		Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
+		boolean approved = false;
+		boolean archived = false;
+		boolean undeletable = false;
 
 		r.beginObject();
 		while (r.hasNext()) {
@@ -55,13 +60,23 @@ public class CacheLogJsonParser extends JsonParser {
 				text = r.nextString();
 			} else if ("Images".equals(name)) {
 				images = ImageDataJsonParser.parseList(r);
+			} else if ("UpdatedLatitude".equals(name)) {
+				updatedCoordinates.withLatitude(r.nextDouble());
+			} else if ("UpdatedLongitude".equals(name)) {
+				updatedCoordinates.withLongitude(r.nextDouble());
+			} else if ("IsApproved".equals(name)) {
+				approved = r.nextBoolean();
+			} else if ("IsArchived".equals(name)) {
+				archived = r.nextBoolean();
+			} else if ("CannotDelete".equals(name)) {
+				undeletable = r.nextBoolean();
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 
-		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text, images);
+		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text, images, updatedCoordinates.build(), approved, archived, undeletable);
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
