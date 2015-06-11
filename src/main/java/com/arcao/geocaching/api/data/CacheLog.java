@@ -161,4 +161,103 @@ public class CacheLog implements Serializable {
 	public String toString() {
     return DebugUtils.toString(this);
 	}
+
+
+	public static class Builder {
+		private long id;
+		private String cacheCode;
+		private Date visited;
+		private Date created;
+		private CacheLogType cacheLogType;
+		private User author;
+		private String text;
+		private List<ImageData> images;
+		private Coordinates updatedCoordinates;
+		private boolean approved;
+		private boolean archived;
+		private boolean undeletable;
+
+		private Builder() {
+		}
+
+		public static Builder cacheLog() {
+			return new Builder();
+		}
+
+		public Builder withId(long id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder withCacheCode(String cacheCode) {
+			this.cacheCode = cacheCode;
+			return this;
+		}
+
+		public Builder withVisited(Date visited) {
+			this.visited = visited;
+			return this;
+		}
+
+		public Builder withCreated(Date created) {
+			this.created = created;
+			return this;
+		}
+
+		public Builder withCacheLogType(CacheLogType cacheLogType) {
+			this.cacheLogType = cacheLogType;
+			return this;
+		}
+
+		public Builder withAuthor(User author) {
+			this.author = author;
+			return this;
+		}
+
+		public Builder withText(String text) {
+			this.text = text;
+			return this;
+		}
+
+		public Builder withImages(List<ImageData> images) {
+			this.images = images;
+			return this;
+		}
+
+		public Builder withUpdatedCoordinates(Coordinates updatedCoordinates) {
+			this.updatedCoordinates = updatedCoordinates;
+			return this;
+		}
+
+		public Builder withApproved(boolean approved) {
+			this.approved = approved;
+			return this;
+		}
+
+		public Builder withArchived(boolean archived) {
+			this.archived = archived;
+			return this;
+		}
+
+		public Builder withUndeletable(boolean undeletable) {
+			this.undeletable = undeletable;
+			return this;
+		}
+
+		public CacheLog build() {
+			return new CacheLog(
+							id,
+							cacheCode,
+							created,
+							visited,
+							cacheLogType,
+							author,
+							text,
+							images,
+							updatedCoordinates,
+							approved,
+							archived,
+							undeletable);
+		}
+	}
 }

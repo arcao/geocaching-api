@@ -28,55 +28,47 @@ public class CacheLogJsonParser extends JsonParser {
 	}
 
 	public static CacheLog parse(JsonReader r) throws IOException {
-		long id = 0;
-		Date created = null;
-		Date visited = null;
-		CacheLogType cacheLogType = null;
-		User author = null;
-		String text = null;
-		String cacheCode = null;
-		List<ImageData> images = new ArrayList<ImageData>();
+		CacheLog.Builder geocacheLog = CacheLog.Builder.cacheLog();
 		Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
-		boolean approved = false;
-		boolean archived = false;
-		boolean undeletable = false;
 
 		r.beginObject();
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("ID".equals(name)) {
-				id = r.nextLong();
+				geocacheLog.withId(r.nextLong());
 			} else if ("CacheCode".equals(name)) {
-				cacheCode = r.nextString();
+				geocacheLog.withCacheCode(r.nextString());
 			} else if ("UTCCreateDate".equals(name)) {
-				created = JsonParser.parseJsonUTCDate(r.nextString());
+				geocacheLog.withCreated(JsonParser.parseJsonUTCDate(r.nextString()));
 			} else if ("VisitDate".equals(name)) {
-				visited = JsonParser.parseJsonDate(r.nextString());
+				geocacheLog.withVisited(JsonParser.parseJsonDate(r.nextString()));
 			} else if ("LogType".equals(name)) {
-				cacheLogType = parseLogType(r);
+				geocacheLog.withCacheLogType(parseLogType(r));
 			} else if ("Finder".equals(name)) {
-				author = parseUser(r);
+				geocacheLog.withAuthor(parseUser(r));
 			} else if ("LogText".equals(name)) {
-				text = r.nextString();
+				geocacheLog.withText(r.nextString());
 			} else if ("Images".equals(name)) {
-				images = ImageDataJsonParser.parseList(r);
+				geocacheLog.withImages(ImageDataJsonParser.parseList(r));
 			} else if ("UpdatedLatitude".equals(name)) {
 				updatedCoordinates.withLatitude(r.nextDouble());
 			} else if ("UpdatedLongitude".equals(name)) {
 				updatedCoordinates.withLongitude(r.nextDouble());
 			} else if ("IsApproved".equals(name)) {
-				approved = r.nextBoolean();
+				geocacheLog.withApproved(r.nextBoolean());
 			} else if ("IsArchived".equals(name)) {
-				archived = r.nextBoolean();
+				geocacheLog.withArchived(r.nextBoolean());
 			} else if ("CannotDelete".equals(name)) {
-				undeletable = r.nextBoolean();
+				geocacheLog.withUndeletable(r.nextBoolean());
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
 
-		return new CacheLog(id, cacheCode, created, visited, cacheLogType, author, text, images, updatedCoordinates.build(), approved, archived, undeletable);
+		geocacheLog.withUpdatedCoordinates(updatedCoordinates.build());
+
+		return geocacheLog.build();
 	}
 
 	protected static CacheLogType parseLogType(JsonReader r) throws IOException {
