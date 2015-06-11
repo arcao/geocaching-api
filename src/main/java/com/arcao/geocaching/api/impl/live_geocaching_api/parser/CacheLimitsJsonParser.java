@@ -2,10 +2,10 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 import java.io.IOException;
 
-import com.arcao.geocaching.api.data.CacheLimits;
+import com.arcao.geocaching.api.data.GeocacheLimits;
 
 public class CacheLimitsJsonParser extends JsonParser {
-  public static CacheLimits parse(JsonReader r) throws IOException {
+  public static GeocacheLimits parse(JsonReader r) throws IOException {
     int cacheLeft = 0;
     int currentCacheCount = 0;
     int maxCacheCount = 0;
@@ -25,6 +25,6 @@ public class CacheLimitsJsonParser extends JsonParser {
     }
     r.endObject();
 
-    return new CacheLimits(cacheLeft, currentCacheCount, maxCacheCount);
+    return new GeocacheLimits(cacheLeft, currentCacheCount, maxCacheCount);
   }
 }

@@ -26,7 +26,7 @@ public class ApiLimitsJsonParser extends JsonParser {
     r.beginObject();
     while (r.hasNext()) {
       String name = r.nextName();
-      if ("CacheLimits".equals(name)) {
+      if ("GeocacheLimits".equals(name)) {
         cacheLimits = parseCacheLimits(r);
       } else if ("EnforceCacheLimits".equals(name)) {
         enforceCacheLimits = r.nextBoolean();

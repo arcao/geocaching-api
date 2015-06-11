@@ -118,40 +118,8 @@ public interface GeocachingApi {
 	 */
 	List<GeocacheLog> getGeocacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
 
-	/**
-	 * Get a basic information about cache.
-	 * 
-	 * @param cacheCode
-	 *            cache code
-	 * @return basic cache information
-	 * @throws GeocachingApiException
-	 *             If error occurs during getting information
-   * @deprecated Will be removed in future. Please use {@link #getCache(ResultQuality, String, int, int)}
-	 * @since 1.0
-	 */
-  @Deprecated
-  Geocache getCacheSimple(String cacheCode) throws GeocachingApiException;
-
-	/**
-	 * Get a full information about cache.
-	 * 
-	 * @param cacheCode
-	 *            cache code
-	 * @param cacheLogCount
-	 *            count of logs to get
-	 * @param trackableLogCount
-	 *            count of trackable logs to get
-	 * @return full cache information
-	 * @throws GeocachingApiException
-	 *             If error occurs during getting information
-   * @deprecated Will be removed in future. Please use {@link #getCache(ResultQuality, String, int, int)}
-	 * @since 1.0
-	 */
-  @Deprecated
-	Geocache getCache(String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
-
   /**
-   * Get an information about cache.
+   * Get an information about geocache.
    *
    * @param resultQuality
    *            How much data will be returned
@@ -166,30 +134,7 @@ public interface GeocachingApi {
    *             If error occurs during getting information
    * @since 1.0
    */
-  Geocache getCache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
-
-  /**
-	 * Search for geocaches and return list of found.
-	 * 
-	 * @param isLite
-	 *            true if return a basic information about caches or false for
-	 *            full information about caches
-	 * @param maxPerPage
-	 *            count of caches to get
-	 * @param geocacheLogCount
-	 *            count of logs to get
-	 * @param trackableLogCount
-	 *            count of trackables to get
-	 * @param filters
-	 *            used filters while searching
-	 * @return list of found caches
-	 * @throws GeocachingApiException
-	 *             If error occurs during searching caches
-	 * @since 1.1
-   * @deprecated Will be removed in future. Please use {@link #searchForGeocaches(ResultQuality, int, int, int, java.util.List, java.util.List)}
-	 */
-  @Deprecated
-	List<Geocache> searchForGeocaches(boolean isLite, int maxPerPage, int geocacheLogCount, int trackableLogCount, Filter[] filters) throws GeocachingApiException;
+  Geocache getGeocache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
 
   /**
    * Search for geocaches and return list of found.
@@ -212,29 +157,6 @@ public interface GeocachingApi {
   List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException;
 
   /**
-	 * Retrieve next geocaches searched by searchForGeocaches method.
-   *
-	 * @param isLite
-	 *            true if return a basic information about caches or fales for
-	 *            full information about caches
-	 * @param startIndex
-	 *            count of caches to skip
-	 * @param maxPerPage
-	 *            count of caches to get
-	 * @param geocacheLogCount
-	 *            count of caches to get
-	 * @param trackableLogCount
-	 *            count of trackables to get
-	 * @return list of found caches
-	 * @throws GeocachingApiException
-	 *             If error occurs during searching caches
-	 * @since 1.1
-   * @deprecated Will be removed in future. Please use {@link #getMoreGeocaches(ResultQuality, int, int, int, int)}
-	 */
-  @Deprecated
-	List<Geocache> getMoreGeocaches(boolean isLite, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException;
-
-  /**
    * Retrieve next geocaches searched by searchForGeocaches method.
    *
    * @param resultQuality
@@ -253,30 +175,6 @@ public interface GeocachingApi {
    * @since 1.6
    */
   List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException;
-
-  /**
-	 * Get an information about user
-	 * 
-	 * @param favoritePointData
-	 *            include favorites points
-	 * @param geocacheData
-	 *            include information about caches
-	 * @param publicProfileData
-	 *            include public profile information
-	 * @param souvenirData
-	 *            include souvenirs
-	 * @param trackableData
-	 *            include trackables
-	 * @return UserProfile object with selected information
-	 * @throws GeocachingApiException
-	 *             If error occurs during getting information
-	 * @since 1.2
-	 * @deprecated use
-	 *             {@link #getYourUserProfile(boolean, boolean, boolean, boolean, boolean, boolean, DeviceInfo)}
-	 *             instead
-	 */
-	@Deprecated
-	UserProfile getYourUserProfile(boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData) throws GeocachingApiException;
 
 	/**
 	 * Get an information about user
@@ -351,7 +249,7 @@ public interface GeocachingApi {
 	GeocacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
 
 	/**
-	 * Store a personal note for specified cache. If note parameter is null or
+	 * Store a personal note for specified geocache. If note parameter is null or
 	 * empty the note will be removed.
 	 * 
 	 * @param cacheCode
@@ -362,7 +260,7 @@ public interface GeocachingApi {
 	 *             If error occurs during personal note storing
 	 * @since 1.4.2
 	 */
-	void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
+	void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
 
 	/**
 	 * Get a list of trackable logs for given public trackable code.
@@ -398,7 +296,7 @@ public interface GeocachingApi {
 	 * @return cache limits or null
 	 * @since 1.5.10
 	 */
-	CacheLimits getLastCacheLimits();
+	GeocacheLimits getLastGeocacheLimits();
 
   /**
    * Return count of Geocaches found in a last Geocache request. If the

@@ -1,10 +1,10 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.GeocachingApi;
+import com.arcao.geocaching.api.data.GeocacheLimits;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.arcao.geocaching.api.data.CacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
@@ -22,7 +22,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
   @Test
   public void getLiteGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
+    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
 
     // ResultQuality.LITE
     Assert.assertNotNull(cache);
@@ -46,14 +46,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertFalse(cache.isPremium());
     Assert.assertNotSame(0, cache.getImageCount());
     
-    CacheLimits limits = api.getLastCacheLimits();
+    GeocacheLimits limits = api.getLastGeocacheLimits();
     Assert.assertNotNull(limits);
     Assert.assertEquals(1, api.getLastSearchResultsFound());
   }
 
   @Test
   public void getSummaryGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(GeocachingApi.ResultQuality.SUMMARY, CACHE_CODE, 0, 0);
+    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.SUMMARY, CACHE_CODE, 0, 0);
 
     // ResultQuality.LITE
     Assert.assertNotNull(cache);
@@ -85,14 +85,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getLongDescription());
     Assert.assertTrue(cache.isLongDescriptionHtml());
 
-    CacheLimits limits = api.getLastCacheLimits();
+    GeocacheLimits limits = api.getLastGeocacheLimits();
     Assert.assertNotNull(limits);
     Assert.assertEquals(1, api.getLastSearchResultsFound());
   }
 
   @Test
   public void getFullGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getCache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 5, 0);
+    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 5, 0);
 
     // ResultQuality.LITE
     Assert.assertNotNull(cache);
@@ -144,7 +144,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     Assert.assertNotNull(cache.getImages());
     Assert.assertFalse(cache.getImages().isEmpty());
 
-    CacheLimits limits = api.getLastCacheLimits();
+    GeocacheLimits limits = api.getLastGeocacheLimits();
     Assert.assertNotNull(limits);
     Assert.assertEquals(1, api.getLastSearchResultsFound());
   }
@@ -157,7 +157,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
                 Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
         );
 
-    CacheLimits limits = api.getLastCacheLimits();
+    GeocacheLimits limits = api.getLastGeocacheLimits();
     Assert.assertNotNull(limits);
     Assert.assertNotSame(0, api.getLastSearchResultsFound());
   }
@@ -172,7 +172,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
           ), null).size()
         );
 
-    CacheLimits limits = api.getLastCacheLimits();
+    GeocacheLimits limits = api.getLastGeocacheLimits();
     Assert.assertNotNull(limits);
     Assert.assertNotSame(0, api.getLastSearchResultsFound());
   }

@@ -65,7 +65,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 	protected final GeocachingApiConfiguration configuration;
 	protected final JsonDownloader downloader;
 	
-	protected CacheLimits lastCacheLimits = null;
+	protected GeocacheLimits lastGeocacheLimits = null;
   protected int lastSearchResultsFound = 0;
 
 	private boolean sessionValid = false;
@@ -141,8 +141,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
 					list = GeocacheJsonParser.parseList(r);
-				} else if ("CacheLimits".equals(name)) {
-					lastCacheLimits = CacheLimitsJsonParser.parse(r);
+				} else if ("GeocacheLimits".equals(name)) {
+					lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
         } else if ("TotalMatchingCaches".equals(name)) {
           lastSearchResultsFound = r.nextInt();
 				} else {
@@ -195,8 +195,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 				String name = r.nextName();
 				if ("Geocaches".equals(name)) {
 					list = GeocacheJsonParser.parseList(r);
-				} else if ("CacheLimits".equals(name)) {
-					lastCacheLimits = CacheLimitsJsonParser.parse(r);
+				} else if ("GeocacheLimits".equals(name)) {
+					lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
         } else if ("TotalMatchingCaches".equals(name)) {
           lastSearchResultsFound = r.nextInt();
         } else {
@@ -530,7 +530,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 
-	public void setCachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
+	public void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
 		if (note == null || note.length() == 0) {
 			deleteCachePersonalNote(cacheCode);
 			return;
@@ -669,8 +669,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 		}
 	}
 	
-	public CacheLimits getLastCacheLimits() {
-		return lastCacheLimits;
+	public GeocacheLimits getLastGeocacheLimits() {
+		return lastGeocacheLimits;
 	}
 
   public int getLastSearchResultsFound() {
@@ -756,7 +756,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
 	// -------------------- Helper methods ----------------------------------------
 	protected void prepareRequest() {
-		lastCacheLimits = null;
+		lastGeocacheLimits = null;
     lastSearchResultsFound = 0;
 	}	
 
