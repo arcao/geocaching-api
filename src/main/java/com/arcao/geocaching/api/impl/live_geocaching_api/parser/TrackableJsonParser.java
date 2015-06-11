@@ -16,8 +16,6 @@ import com.arcao.geocaching.api.data.User;
 import com.google.gson.stream.JsonToken;
 
 public class TrackableJsonParser extends JsonParser {
-	private static final Logger logger = LoggerFactory.getLogger(TrackableJsonParser.class);
-	
 	public static List<Trackable> parseList(JsonReader r) throws IOException {
 		if (r.peek() != JsonToken.BEGIN_ARRAY) {
 			r.skipValue();
@@ -33,72 +31,49 @@ public class TrackableJsonParser extends JsonParser {
 	}
 	
 	public static Trackable parse(JsonReader r) throws IOException {
-		long id = 0;
-		String guid = null;
-		String travelBugName = null;
-		String goal = null;
-		String description = null;
-		String travelBugTypeName = null;
-		String travelBugTypeImage = null;
-		User owner = null;
-		String currentCacheCode = null;
-		User currentOwner = null;
-		String trackingNumber = "";
-		Date created = new Date(0);
-		boolean allowedToBeCollected = false;
-		boolean inCollection = false;
-		boolean archived = false;
-		
-		List<TrackableLog> trackableLogs = new ArrayList<TrackableLog>();
-		List<ImageData> images = new ArrayList<ImageData>();
+		Trackable.Builder trackable = Trackable.Builder.trackable();
 
 		r.beginObject();
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("Id".equals(name)) {
-				guid = r.nextString();
+				trackable.withId(r.nextLong());
 			} else if ("Name".equals(name)) {
-				travelBugName = r.nextString();
+				trackable.withName(r.nextString());
 			} else if ("CurrentGoal".equals(name)) {
-				goal = r.nextString();
+				trackable.withGoal(r.nextString());
 			} else if ("Description".equals(name)) {
-				description = r.nextString();
+				trackable.withDescription(r.nextString());
 			} else if ("TBTypeName".equals(name)) {
-				travelBugTypeName = r.nextString();
+				trackable.withTrackableTypeName(r.nextString());
 			} else if ("IconUrl".equals(name)) {
-				travelBugTypeImage = r.nextString();
+				trackable.withTrackableTypeImage(r.nextString());
 			} else if ("OriginalOwner".equals(name)) {
-				owner = parseUser(r);
+				trackable.withOwner(parseUser(r));
 			} else if ("CurrentGeocacheCode".equals(name)) {
-				currentCacheCode = r.nextString();
+				trackable.withCurrentCacheCode(r.nextString());
 			} else if ("CurrentOwner".equals(name)) {
-				currentOwner = parseUser(r);
+				trackable.withCurrentOwner(parseUser(r));
 			} else if ("Code".equals(name)) {
-				trackingNumber = r.nextString();
+				trackable.withTrackingNumber(r.nextString());
 			} else if ("DateCreated".equals(name)) {
-				created = parseJsonDate(r.nextString());
+				trackable.withCreated(parseJsonDate(r.nextString()));
 			} else if ("AllowedToBeCollected".equals(name)) {
-				allowedToBeCollected = r.nextBoolean();
+				trackable.withAllowedToBeCollected(r.nextBoolean());
 			} else if ("InCollection".equals(name)) {
-				inCollection = r.nextBoolean();
+				trackable.withInCollection(r.nextBoolean());
 			} else if ("Archived".equals(name)) {
-				archived = r.nextBoolean();
+				trackable.withArchived(r.nextBoolean());
 			} else if ("Images".equals(name)) {
-				images = ImageDataJsonParser.parseList(r);
+				trackable.withImages(ImageDataJsonParser.parseList(r));
 			} else if ("TrackableLogs".equals(name)) {
-        trackableLogs = TrackableLogJsonParser.parseList(r);
+        trackable.withTrackableLogs(TrackableLogJsonParser.parseList(r));
 			} else {
 				r.skipValue();
 			}
 		}
 		r.endObject();
-		
-		try {
-			id = Long.parseLong(guid);
-		} catch (NumberFormatException e) {
-			logger.error("Error ocurs while converting guid to id", e);
-		}
-		
-		return new Trackable(id, guid, travelBugName, goal, description, travelBugTypeName, travelBugTypeImage, owner, currentCacheCode, currentOwner, trackingNumber, created, allowedToBeCollected, inCollection, archived, trackableLogs, images);
+
+		return trackable.build();
 	}
 }

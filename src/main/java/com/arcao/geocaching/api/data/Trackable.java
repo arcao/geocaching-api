@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -11,7 +12,6 @@ public class Trackable implements Serializable {
 	private static final long serialVersionUID = 5984147222015866863L;
 
 	private final long id;
-	private final String guid;
 	private final String name;
 	private final String goal;
 	private final String description;
@@ -32,13 +32,12 @@ public class Trackable implements Serializable {
 
 	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
-	public Trackable(long id, String guid, String name, String goal, String description,
+	public Trackable(long id, String name, String goal, String description,
 			String trackableTypeName, String trackableTypeImage,
 			User owner, String currentCacheCode,
 			User currentOwner, String trackingNumber, Date created,
 			boolean allowedToBeCollected, boolean inCollection, boolean archived, List<TrackableLog> trackableLogs, List<ImageData> images) {
 		this.id = id;
-		this.guid = guid;
 		this.name = name;
 		this.goal = goal;
 		this.description = description;
@@ -62,10 +61,6 @@ public class Trackable implements Serializable {
 	public long getId() {
 	  return id;
   }
-
-	public String getGuid() {
-		return guid;
-	}
 
 	public String getName() {
 		return name;
@@ -142,5 +137,144 @@ public class Trackable implements Serializable {
 	@Override
 	public String toString() {
     return DebugUtils.toString(this);
+	}
+
+
+	public static class Builder {
+		private long id;
+		private String name;
+		private String goal;
+		private String description;
+		private String trackableTypeName;
+		private String trackableTypeImage;
+		private User owner;
+		private String currentCacheCode;
+		private User currentOwner;
+		private String trackingNumber;
+		private String lookupCode;
+		private Date created;
+		private boolean allowedToBeCollected;
+		private boolean inCollection;
+		private boolean archived;
+		private List<TrackableLog> trackableLogs;
+		private List<ImageData> images;
+
+		private Builder() {
+		}
+
+		public static Builder trackable() {
+			return new Builder();
+		}
+
+		public Builder withId(long id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder withName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Builder withGoal(String goal) {
+			this.goal = goal;
+			return this;
+		}
+
+		public Builder withDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public Builder withTrackableTypeName(String trackableTypeName) {
+			this.trackableTypeName = trackableTypeName;
+			return this;
+		}
+
+		public Builder withTrackableTypeImage(String trackableTypeImage) {
+			this.trackableTypeImage = trackableTypeImage;
+			return this;
+		}
+
+		public Builder withOwner(User owner) {
+			this.owner = owner;
+			return this;
+		}
+
+		public Builder withCurrentCacheCode(String currentCacheCode) {
+			this.currentCacheCode = currentCacheCode;
+			return this;
+		}
+
+		public Builder withCurrentOwner(User currentOwner) {
+			this.currentOwner = currentOwner;
+			return this;
+		}
+
+		public Builder withTrackingNumber(String trackingNumber) {
+			this.trackingNumber = trackingNumber;
+			return this;
+		}
+
+		public Builder withLookupCode(String lookupCode) {
+			this.lookupCode = lookupCode;
+			return this;
+		}
+
+		public Builder withCreated(Date created) {
+			this.created = created;
+			return this;
+		}
+
+		public Builder withAllowedToBeCollected(boolean allowedToBeCollected) {
+			this.allowedToBeCollected = allowedToBeCollected;
+			return this;
+		}
+
+		public Builder withInCollection(boolean inCollection) {
+			this.inCollection = inCollection;
+			return this;
+		}
+
+		public Builder withArchived(boolean archived) {
+			this.archived = archived;
+			return this;
+		}
+
+		public Builder withTrackableLogs(List<TrackableLog> trackableLogs) {
+			this.trackableLogs = trackableLogs;
+			return this;
+		}
+
+		public Builder withImages(List<ImageData> images) {
+			this.images = images;
+			return this;
+		}
+
+		public Trackable build() {
+			Trackable t = new Trackable (
+							id,
+							name,
+							goal,
+							description,
+							trackableTypeName,
+							trackableTypeImage,
+							owner,
+							currentCacheCode,
+							currentOwner,
+							trackingNumber,
+							created,
+							allowedToBeCollected,
+							inCollection,
+							archived,
+							trackableLogs,
+							images);
+
+			if (!StringUtils.isEmpty(lookupCode)) {
+				t.setLookupCode(lookupCode);
+			}
+
+			return t;
+		}
 	}
 }
