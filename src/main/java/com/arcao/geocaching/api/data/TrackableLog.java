@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class TrackableLog implements Serializable {
     this.cacheID = cacheID;
     this.code = code;
     this.id = id;
-    this.images = images;
+    this.images = images != null ? images : Collections.<ImageData>emptyList();
     this.archived = archived;
     this.guid = guid;
     this.text = text;

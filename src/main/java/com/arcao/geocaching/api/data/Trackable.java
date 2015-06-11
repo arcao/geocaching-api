@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.data;
 import com.arcao.geocaching.api.util.DebugUtils;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +53,8 @@ public class Trackable implements Serializable {
 		this.inCollection = inCollection;
 		this.archived = archived;
 
-		this.trackableLogs = trackableLogs;
-		this.images = images;
+		this.trackableLogs = trackableLogs != null ? trackableLogs : Collections.<TrackableLog>emptyList();
+		this.images = images != null ? images : Collections.<ImageData>emptyList();
 
 		lookupCode = "";
 	}

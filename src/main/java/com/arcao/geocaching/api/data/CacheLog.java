@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class CacheLog implements Serializable {
 		this.cacheLogType = cacheLogType;
 		this.author = author;
 		this.text = text;
-		this.images = images;
+		this.images = images != null ? images : Collections.<ImageData>emptyList();
 	}
 
 	/**

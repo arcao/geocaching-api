@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
@@ -27,7 +28,7 @@ public class UserProfile implements Serializable {
 		this.favoritePointsStats = favoritePointsStats;
 		this.geocacheFindStats = geocacheFindStats;
 		this.publicProfile = publicProfile;
-		this.souvenirs = souvenirs;
+		this.souvenirs = souvenirs != null ? souvenirs : Collections.<Souvenir>emptyList();
 		this.globalStats = globalStats;
 		this.trackableStats = trackableStats;
 		this.user = user;

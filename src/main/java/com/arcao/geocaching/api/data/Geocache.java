@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -132,19 +133,19 @@ public class Geocache implements Serializable {
     this.terrain = terrain;
     this.trackableCount = trackableCount;
     this.placeDate = placeDate;
-    this.waypoints = waypoints;
+    this.waypoints = waypoints != null ? waypoints : Collections.<Waypoint>emptyList();
     this.hint = hint;
     this.longDescription = longDescription;
     this.longDescriptionHtml = longDescriptionHtml;
     this.shortDescription = shortDescription;
     this.shortDescriptionHtml = shortDescriptionHtml;
-    this.trackables = trackables;
-    this.userWaypoints = userWaypoints;
-    this.attributes = attributes;
+    this.trackables = trackables != null ? trackables : Collections.<Trackable>emptyList();
+    this.userWaypoints = userWaypoints != null ? userWaypoints : Collections.<UserWaypoint>emptyList();
+    this.attributes = attributes != null ? attributes : EnumSet.noneOf(AttributeType.class);
     this.countryName = countryName;
     this.createDate = createDate;
-    this.cacheLogs = cacheLogs;
-    this.images = images;
+    this.cacheLogs = cacheLogs != null ? cacheLogs : Collections.<CacheLog>emptyList();
+    this.images = images != null ? images : Collections.<ImageData>emptyList();
     this.stateName = stateName;
   }
 
