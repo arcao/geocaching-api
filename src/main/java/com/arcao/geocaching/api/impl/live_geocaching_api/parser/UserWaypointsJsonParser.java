@@ -29,8 +29,7 @@ public class UserWaypointsJsonParser extends JsonParser {
 		String cacheCode = "";
 		String description = "";
 		long id = 0;
-		double latitude = Double.NaN;
-		double longitude = Double.NaN;
+		Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
 		Date date = new Date(0);
 		int userId = 0;
 		boolean correctedCoordinate = false;
@@ -45,9 +44,9 @@ public class UserWaypointsJsonParser extends JsonParser {
 			} else if ("Id".equals(name)) {
 				id = r.nextLong();
 			} else if ("Latitude".equals(name)) {
-				latitude = r.nextDouble();
+				coordinates.withLatitude(r.nextDouble());
 			} else if ("Longitude".equals(name)) {
-				longitude = r.nextDouble();
+				coordinates.withLongitude(r.nextDouble());
 			} else if ("UTCDate".equals(name)) {
 				date = parseJsonUTCDate(r.nextString());
 			} else if ("UserId".equals(name)) {
@@ -60,6 +59,6 @@ public class UserWaypointsJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new UserWaypoint(cacheCode, description, id, new Coordinates(latitude, longitude), date, userId, correctedCoordinate);
+		return new UserWaypoint(cacheCode, description, id, coordinates.build(), date, userId, correctedCoordinate);
 	}
 }

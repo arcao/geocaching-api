@@ -28,9 +28,8 @@ public class TrackableTravelJsonParser  extends JsonParser {
   public static TrackableTravel parse(JsonReader r) throws IOException {
     int cacheID = 0;
     Date dateLogged = null;
-    double latitude = Double.NaN;
-    double longitude = Double.NaN;
-    
+    Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
+
     r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();
@@ -39,15 +38,15 @@ public class TrackableTravelJsonParser  extends JsonParser {
       } else if ("DateLogged".equals(name)) {
       	dateLogged = parseJsonDate(r.nextString());
       } else if ("Latitude".equals(name)) {
-        latitude = r.nextDouble();
+        coordinates.withLatitude(r.nextDouble());
       } else if ("Longitude".equals(name)) {
-        longitude = r.nextDouble();
+        coordinates.withLongitude(r.nextDouble());
       } else {
         r.skipValue();
       }
     }
     r.endObject();
 
-    return new TrackableTravel(cacheID, dateLogged, new Coordinates(latitude, longitude));
+    return new TrackableTravel(cacheID, dateLogged, coordinates.build());
   }
 }

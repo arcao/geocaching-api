@@ -27,8 +27,7 @@ public class WaypointJsonParser extends JsonParser {
 	}
 	
 	public static Waypoint parse(JsonReader r) throws IOException {
-		double longitude = Double.NaN;
-		double latitude = Double.NaN;
+		Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
 		Date time = new Date(0);
 		String waypointCode = "";
 		String waypointName = "";
@@ -39,9 +38,9 @@ public class WaypointJsonParser extends JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("Longitude".equals(name)) {
-				longitude = r.nextDouble();
+				coordinates.withLongitude(r.nextDouble());
 			} else if ("Latitude".equals(name)) {
-				latitude = r.nextDouble();
+				coordinates.withLatitude(r.nextDouble());
 			} else if ("UTCEnteredDate".equals(name)) {
 				time = parseJsonUTCDate(r.nextString());
 			} else if ("Code".equals(name)) {
@@ -58,6 +57,6 @@ public class WaypointJsonParser extends JsonParser {
 		}
 		r.endObject();
 		
-		return new Waypoint(new Coordinates(latitude, longitude), time, waypointCode, waypointName, note, waypointType);
+		return new Waypoint(coordinates.build(), time, waypointCode, waypointName, note, waypointType);
 	}
 }
