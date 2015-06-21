@@ -10,7 +10,7 @@ public abstract class AbstractGeocachingTest {
   protected static GeocachingApi api = null;
 
   // generated via oAuth example, see: https://github.com/arcao/geocaching-api-examples
-  protected static final String TEST_AUTH_TOKEN = "XYy+i7Q/4GbIhEPfoj+sTNGmvrg=";
+  protected static final String TEST_AUTH_TOKEN = "b+W5i8glqpgQnfvCeZ1wrMG04Bk=";
 
   @BeforeClass
   public static void setUp() throws Exception {
