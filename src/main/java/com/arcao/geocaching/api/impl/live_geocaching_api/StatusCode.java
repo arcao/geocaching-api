@@ -5,7 +5,7 @@ public enum StatusCode {
   OK(0),
   Fail(1),
   NotAuthorized(2),
-  UserAccountProblem(3),
+  AccessTokenExpired(3),
   UserDidNotAuthorize(4),
   UserTokenNotValid(5),
   ApplicationTokenNotValid(6),
@@ -121,7 +121,7 @@ public enum StatusCode {
   Other(-1);
 	private final int code;
 	
-	private StatusCode(int code) {
+	StatusCode(int code) {
 		this.code = code;
 	}
 	
@@ -137,4 +137,6 @@ public enum StatusCode {
 		
 		return Fail;
 	}
+
+
 }
