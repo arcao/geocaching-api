@@ -1,6 +1,29 @@
 package com.arcao.geocaching.api.impl;
 
 
+import com.arcao.geocaching.api.AbstractGeocachingApi;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
+import com.arcao.geocaching.api.data.*;
+import com.arcao.geocaching.api.data.apilimits.ApiLimits;
+import com.arcao.geocaching.api.data.bookmarks.Bookmark;
+import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
+import com.arcao.geocaching.api.data.sort.SortBy;
+import com.arcao.geocaching.api.data.sort.SortOrder;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.arcao.geocaching.api.exception.*;
+import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
+import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
+import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
+import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.JsonDownloader;
+import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
+import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.*;
+import com.google.gson.stream.JsonWriter;
+import com.google.gson.stream.MalformedJsonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -10,41 +33,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.arcao.geocaching.api.data.*;
-import com.arcao.geocaching.api.data.sort.SortBy;
-import com.arcao.geocaching.api.data.sort.SortOrder;
-import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.arcao.geocaching.api.AbstractGeocachingApi;
-import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
-import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
-import com.arcao.geocaching.api.data.apilimits.ApiLimits;
-import com.arcao.geocaching.api.data.type.GeocacheLogType;
-import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.exception.InvalidCredentialsException;
-import com.arcao.geocaching.api.exception.InvalidResponseException;
-import com.arcao.geocaching.api.exception.InvalidSessionException;
-import com.arcao.geocaching.api.exception.NetworkException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
-import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
-import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.JsonDownloader;
-import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.ApiLimitsJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.CacheLimitsJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheLogJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.GeocacheJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.StatusJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableLogJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.TrackableTravelJsonParser;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.UserProfileParser;
-import com.google.gson.stream.JsonWriter;
-import com.google.gson.stream.MalformedJsonException;
 
 /**
  * Implementation of Life Geocaching Api provided by Groundspeak. To use this class you need consumer and license key, ask Groundspeak for them.<br>
@@ -506,6 +494,118 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         String name = r.nextName();
         if ("Trackables".equals(name)) {
           list = TrackableJsonParser.parseList(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+
+      return list;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      if (!isGsonException(e)) {
+        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+      }
+
+      throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+    } finally {
+      closeJsonReader(r);
+    }
+  }
+
+  @Override
+  public List<BookmarkList> getBookmarkListsForUser() throws GeocachingApiException {
+    List<BookmarkList> list = new ArrayList<BookmarkList>();
+
+    JsonReader r = null;
+    try {
+      r = callGet("GetBookmarkListsForUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&format=json"
+      );
+
+      r.beginObject();
+      checkError(r);
+      while(r.hasNext()) {
+        String name = r.nextName();
+        if ("BookmarkLists".equals(name)) {
+          list = BookmarkListJsonParser.parseList(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+
+      return list;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      if (!isGsonException(e)) {
+        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+      }
+
+      throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+    } finally {
+      closeJsonReader(r);
+    }
+  }
+
+  @Override
+  public List<BookmarkList> getBookmarkListsByUserId(int userId) throws GeocachingApiException {
+    List<BookmarkList> list = new ArrayList<BookmarkList>();
+
+    JsonReader r = null;
+    try {
+      r = callGet("GetBookmarkListsByUserID?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&userID=" + String.valueOf(userId) +
+                    "&format=json"
+      );
+
+      r.beginObject();
+      checkError(r);
+      while(r.hasNext()) {
+        String name = r.nextName();
+        if ("BookmarkLists".equals(name)) {
+          list = BookmarkListJsonParser.parseList(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+
+      return list;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      if (!isGsonException(e)) {
+        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+      }
+
+      throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+    } finally {
+      closeJsonReader(r);
+    }
+  }
+
+  @Override
+  public List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException {
+    List<Bookmark> list = new ArrayList<Bookmark>();
+
+    JsonReader r = null;
+    try {
+      StringWriter sw = new StringWriter();
+      JsonWriter w = new JsonWriter(sw);
+      w.beginObject();
+      w.name("AccessToken").value(session);
+      w.name("BookmarkListGuid").value(guid);
+      w.endObject();
+      w.close();
+
+      r = callPost("GetBookmarkListByGuid?format=json", sw.toString());
+
+      r.beginObject();
+      checkError(r);
+      while(r.hasNext()) {
+        String name = r.nextName();
+        if ("BookmarkList".equals(name)) {
+          list = BookmarkJsonParser.parseList(r);
         } else {
           r.skipValue();
         }
