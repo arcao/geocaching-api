@@ -1,16 +1,16 @@
 package com.arcao.geocaching.api.data;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.arcao.geocaching.api.data.type.AttributeType;
+import com.arcao.geocaching.api.data.type.ContainerType;
+import com.arcao.geocaching.api.data.type.GeocacheType;
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
-
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.AttributeType;
-import com.arcao.geocaching.api.data.type.GeocacheType;
-import com.arcao.geocaching.api.data.type.ContainerType;
-import com.arcao.geocaching.api.util.DebugUtils;
 
 public class Geocache implements Serializable {
 	private static final long serialVersionUID = 7938069911500506011L;
@@ -42,6 +42,8 @@ public class Geocache implements Serializable {
   private final float terrain;
   private final int trackableCount; // only LITE and FULL
   private final Date placeDate;
+  private final String url;
+  private final String guid;
 
   // ResultQuality.SUMMARY
   private final List<Waypoint> waypoints;
@@ -89,6 +91,8 @@ public class Geocache implements Serializable {
           float terrain,
           int trackableCount,
           Date placeDate,
+          String url,
+          String guid,
 
           // ResultQuality.SUMMARY
           List<Waypoint> waypoints,
@@ -133,6 +137,8 @@ public class Geocache implements Serializable {
     this.terrain = terrain;
     this.trackableCount = trackableCount;
     this.placeDate = placeDate;
+    this.url = url;
+    this.guid = guid;
     this.waypoints = waypoints != null ? waypoints : Collections.<Waypoint>emptyList();
     this.hint = hint;
     this.longDescription = longDescription;
@@ -253,6 +259,14 @@ public class Geocache implements Serializable {
     return placeDate;
   }
 
+  public String getUrl() {
+    return url;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
   public List<Waypoint> getWaypoints() {
     return waypoints;
   }
@@ -342,6 +356,8 @@ public class Geocache implements Serializable {
     private float terrain;
     private int trackableCount;
     private Date placeDate;
+    private String url;
+    private String guid;
     private List<Waypoint> waypoints;
     private String hint;
     private String longDescription;
@@ -494,6 +510,16 @@ public class Geocache implements Serializable {
       return this;
     }
 
+    public Builder withUrl(String url) {
+      this.url = url;
+      return this;
+    }
+
+    public Builder withGuid(String guid) {
+      this.guid = guid;
+      return this;
+    }
+
     public Builder withWaypoints(List<Waypoint> waypoints) {
       this.waypoints = waypoints;
       return this;
@@ -593,6 +619,8 @@ public class Geocache implements Serializable {
               terrain,
               trackableCount,
               placeDate,
+              url,
+              guid,
 
               // ResultQuality.SUMMARY
               waypoints,
