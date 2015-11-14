@@ -625,6 +625,51 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
   }
 
+  @Override
+  public List<GeocacheStatus> getGeocacheStatus(List<String> waypointList) throws GeocachingApiException {
+    List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
+
+    JsonReader r = null;
+    try {
+      StringWriter sw = new StringWriter();
+      JsonWriter w = new JsonWriter(sw);
+      w.beginObject();
+      w.name("AccessToken").value(session);
+      JsonWriter waypoints = w.name("CacheCodes").beginArray();
+      for (String waypoint : waypointList) {
+        waypoints.value(waypoint);
+      }
+      waypoints.endArray();
+      w.endObject();
+      w.close();
+
+      r = callPost("GetGeocacheStatus?format=json", sw.toString());
+
+      r.beginObject();
+      checkError(r);
+      while(r.hasNext()) {
+        String name = r.nextName();
+        if ("GeocacheStatuses".equals(name)) {
+          list = GeocacheStatusJsonParser.parseList(r);
+        } else {
+          r.skipValue();
+        }
+      }
+      r.endObject();
+
+      return list;
+    } catch (IOException e) {
+      logger.error(e.toString(), e);
+      if (!isGsonException(e)) {
+        throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+      }
+
+      throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+    } finally {
+      closeJsonReader(r);
+    }
+  }
+
   public void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
     if (note == null || note.length() == 0) {
       deleteCachePersonalNote(cacheCode);

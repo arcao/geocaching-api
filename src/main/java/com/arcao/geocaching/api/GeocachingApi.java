@@ -373,4 +373,14 @@ public interface GeocachingApi {
    * @since 1.6.2
    */
   List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException;
+
+  /**
+   * Retrieve a list of Geocache Status
+   * @param waypointList list of waypoints
+   * @return list of Geocache status
+   * @throws GeocachingApiException If error occurs during getting information
+   * @since 1.6.3
+   */
+  List<GeocacheStatus> getGeocacheStatus(List<String> waypointList) throws GeocachingApiException;
+
 }
