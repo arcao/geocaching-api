@@ -1,6 +1,6 @@
 Geocaching API for Java
 =======================
-[![Build Status](https://travis-ci.org/arcao/geocaching-api.png?branch=master)](https://travis-ci.org/arcao/geocaching-api)
+[![Build Status](https://travis-ci.org/arcao/geocaching-api.svg?branch=master)](https://travis-ci.org/arcao/geocaching-api) ![Latest version](https://img.shields.io/github/release/arcao/geocaching-api.svg) ![License](https://img.shields.io/github/license/arcao/geocaching-api.svg)
 
 Java implementation of Groundspeak's Geocaching Live API.
 
