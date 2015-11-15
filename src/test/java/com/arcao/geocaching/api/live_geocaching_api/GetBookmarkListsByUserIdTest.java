@@ -28,8 +28,8 @@ public class GetBookmarkListsByUserIdTest extends AbstractGeocachingTest {
     assertThat(item.getName(), not(isEmptyOrNullString()));
     assertThat(item.getDescription(), notNullValue());
     assertThat(item.getItemCount(), greaterThan(0));
-    assertTrue(item.isShared());
-    assertTrue(item.isPublic());
+    assertFalse(item.isShared());
+    assertFalse(item.isPublic());
     assertFalse(item.isArchived());
     assertFalse(item.isSpecial());
     assertThat(item.getType(), is(0));
