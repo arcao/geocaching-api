@@ -25,10 +25,25 @@ And add dependency to geocaching-api artifact:
 		<dependency>
 			<groupId>com.arcao</groupId>
 			<artifactId>geocaching-api</artifactId>
-			<version>1.5.18</version>
+			<version>1.6.3</version>
 		</dependency>
     ...
 </dependencies>
+```
+
+Or if you use Gradle build system, add bellow to your `build.gradle`:
+```
+repositories {
+    ...
+    maven { url 'http://maven.arcao.com' }
+}
+
+dependencies {
+    ...
+    // from maven.arcao.com repository
+    compile 'com.arcao:geocaching-api:1.6.3'
+    ...
+}
 ```
 
 Get the source
