@@ -1,5 +1,9 @@
 language: java
 jdk:
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
+- oraclejdk7
+- openjdk7
+- openjdk6
+env:
+  global:
+  - GEOCACHING_STAGING=false
+  - secure: WJ3uEUo/gtAWhyGQrHVjaMjl10pbvsrchgXuBNs5pTXap+oFiN8Y5YzAFnHkHCqzsDat5bI/LKDA5F/JyGUDyVrSc8X3EJGDKTZqAR8jYjqUH0HAbQvmvVytmSgeoenh5HSh+bMj//TeVFEYk7wXoxY4QMB+117trDPd/w7N6OI=
