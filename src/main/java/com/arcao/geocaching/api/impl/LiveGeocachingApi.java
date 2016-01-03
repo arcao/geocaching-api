@@ -13,6 +13,7 @@ import com.arcao.geocaching.api.data.sort.SortOrder;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.exception.*;
 import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
+import com.arcao.geocaching.api.impl.live_geocaching_api.StatusCode;
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonBuilder;
 import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
 import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.JsonDownloader;
@@ -901,21 +902,25 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     if ("Status".equals(r.nextName())) {
       Status status = StatusJsonParser.parse(r);
 
+      if (status.getStatusCode() == StatusCode.OK)
+        return;
+
+      GeocachingApiException cause = new LiveGeocachingApiException(status);
+
       switch (status.getStatusCode()) {
-        case OK:
-          return;
         case UserDidNotAuthorize:
         case UserTokenNotValid:
         case SessionExpired:
         case AccessTokenNotValid:
         case AccessTokenExpired:
+        case NotAuthorized:
           sessionValid = false;
-          throw new InvalidSessionException(status.getMessage());
+          throw new InvalidSessionException(status.getMessage(), cause);
         case AccountNotFound:
           sessionValid = false;
-          throw new InvalidCredentialsException(status.getMessage());
+          throw new InvalidCredentialsException(status.getMessage(), cause);
         default:
-          throw new LiveGeocachingApiException(status);
+          throw cause;
       }
     } else {
       throw new GeocachingApiException("Missing Status in a response.");

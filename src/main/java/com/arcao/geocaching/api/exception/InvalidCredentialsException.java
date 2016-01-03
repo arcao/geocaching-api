@@ -6,4 +6,8 @@ public class InvalidCredentialsException extends GeocachingApiException {
 	public InvalidCredentialsException(String message) {
 		super(message);
 	}
+
+	public InvalidCredentialsException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
