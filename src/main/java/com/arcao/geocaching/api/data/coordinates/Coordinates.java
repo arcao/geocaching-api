@@ -117,7 +117,7 @@ public class Coordinates implements Serializable {
 	 * @see Coordinates#Coordinates(String, String)
 	 * @see CoordinatesParser#parse(String, String)
 	 */
-	public Coordinates parseCoordinates(String latitude, String longitude) {
+	public static Coordinates parseCoordinates(String latitude, String longitude) {
 		try {
 			return new Coordinates(latitude, longitude);
 		} catch (ParseException e) {
@@ -142,7 +142,7 @@ public class Coordinates implements Serializable {
 	 * @see Coordinates#Coordinates(String, String, boolean)
 	 * @see CoordinatesParser#parse(String, String, boolean)
 	 */
-	public Coordinates parseCoordinates(String latitude, String longitude, boolean safe) {
+	public static Coordinates parseCoordinates(String latitude, String longitude, boolean safe) {
 		try {
 			return new Coordinates(latitude, longitude, safe);
 		} catch (ParseException e) {
@@ -160,7 +160,7 @@ public class Coordinates implements Serializable {
 	 * @see Coordinates#Coordinates(String)
 	 * @see CoordinatesParser#parse(String)
 	 */
-	public Coordinates parseCoordinates(String coordinates) {
+	public static Coordinates parseCoordinates(String coordinates) {
 		try {
 			return new Coordinates(coordinates);
 		} catch (ParseException e) {
