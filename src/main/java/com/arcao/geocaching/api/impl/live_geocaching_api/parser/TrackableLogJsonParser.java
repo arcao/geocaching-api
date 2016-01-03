@@ -36,7 +36,7 @@ public class TrackableLogJsonParser extends JsonParser {
     r.beginObject();
     while(r.hasNext()) {
       String name = r.nextName();
-      if ("CacheId".equals(name)) {
+      if ("CacheID".equals(name)) {
         trackableLog.withCacheID(r.nextInt());
       } else if ("Code".equals(name)) {
         trackableLog.withCode(r.nextString());

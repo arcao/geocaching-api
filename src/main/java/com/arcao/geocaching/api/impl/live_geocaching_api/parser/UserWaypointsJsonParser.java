@@ -41,7 +41,7 @@ public class UserWaypointsJsonParser extends JsonParser {
 				cacheCode = r.nextString();
 			} else if ("Description".equals(name)) {
 				description = r.nextString();
-			} else if ("Id".equals(name)) {
+			} else if ("ID".equals(name)) {
 				id = r.nextLong();
 			} else if ("Latitude".equals(name)) {
 				coordinates.withLatitude(r.nextDouble());
@@ -49,7 +49,7 @@ public class UserWaypointsJsonParser extends JsonParser {
 				coordinates.withLongitude(r.nextDouble());
 			} else if ("UTCDate".equals(name)) {
 				date = parseJsonUTCDate(r.nextString());
-			} else if ("UserId".equals(name)) {
+			} else if ("UserID".equals(name)) {
 				userId = r.nextInt();
 			} else if ("IsCorrectedCoordinate".equals(name)) {
 				correctedCoordinate = r.nextBoolean();
