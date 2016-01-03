@@ -88,6 +88,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertTrue(cache.isShortDescriptionHtml());
     assertNotNull(cache.getLongDescription());
     assertTrue(cache.isLongDescriptionHtml());
+    assertNotSame(0, cache.getUserWaypoints().size());
 
     GeocacheLimits limits = api.getLastGeocacheLimits();
     assertNotNull(limits);
