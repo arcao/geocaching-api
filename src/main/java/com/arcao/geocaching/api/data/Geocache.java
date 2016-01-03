@@ -5,6 +5,7 @@ import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -126,7 +127,7 @@ public class Geocache implements Serializable {
     this.favoritedByUser = favoritedByUser;
     this.foundByUser = foundByUser;
     this.id = id;
-    this.imageCount = imageCount;
+    this.imageCount = images != null && images.size() > 0 ? images.size() : imageCount;
     this.premium = premium;
     this.recommended = recommended;
     this.coordinates = coordinates;
@@ -135,7 +136,7 @@ public class Geocache implements Serializable {
     this.placedBy = placedBy;
     this.publishDate = publishDate;
     this.terrain = terrain;
-    this.trackableCount = trackableCount;
+    this.trackableCount = trackables != null && trackables.size() > 0 ? trackables.size() : trackableCount;
     this.placeDate = placeDate;
     this.url = url;
     this.guid = guid;
