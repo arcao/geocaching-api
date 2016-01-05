@@ -46,7 +46,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 			con.setReadTimeout(configuration.getReadTimeout());
 
 			con.setRequestMethod("GET");
-			//con.setRequestProperty("User-Agent", "Geocaching/4.0 CFNetwork/459 Darwin/10.0.0d3");
+			con.setRequestProperty("User-Agent", "Java Geocaching API");
 			con.setRequestProperty("Accept", "application/json");
 			con.setRequestProperty("Accept-Language", "en-US");
 			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
@@ -83,7 +83,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 				isr.close();
 
 				// read error response
-				throw new InvalidResponseException(sb.toString());
+				throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
 			}
 
 			isr = new InputStreamReader(is, "UTF-8");
@@ -92,7 +92,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 			throw e;
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
-			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+			throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + ")", e);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 			con.setRequestMethod("POST");
 			con.setRequestProperty("Content-Type", "application/json");
 			con.setRequestProperty("Content-Length", Integer.toString(postData.length));
-			//con.setRequestProperty("User-Agent", "Geocaching/4.0 CFNetwork/459 Darwin/10.0.0d3");
+			con.setRequestProperty("User-Agent", "Java Geocaching API");
 			con.setRequestProperty("Accept", "application/json");
 			con.setRequestProperty("Accept-Language", "en-US");
 			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
@@ -155,7 +155,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 				isr.close();
 
 				// read error response
-				throw new InvalidResponseException(sb.toString());
+				throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
 			}
 
 			isr = new InputStreamReader(is, "UTF-8");
@@ -165,7 +165,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 			throw e;
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
-			throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
+			throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
 		}
 	}
 
