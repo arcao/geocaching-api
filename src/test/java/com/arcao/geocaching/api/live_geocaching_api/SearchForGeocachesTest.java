@@ -184,4 +184,18 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertNotNull(limits);
     assertNotSame(0, api.getLastSearchResultsFound());
   }
+
+  @Test
+  public void getMoreGeocachesTest() throws Exception {
+    assertEquals(
+            3,
+            api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
+                    Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+    );
+
+    assertEquals(
+            3,
+            api.getMoreGeocaches(GeocachingApi.ResultQuality.LITE, 3, 3, 0, 0).size()
+    );
+  }
 }
