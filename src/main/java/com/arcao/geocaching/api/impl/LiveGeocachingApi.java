@@ -34,6 +34,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Implementation of Life Geocaching Api provided by Groundspeak. To use this class you need consumer and license key, ask Groundspeak for them.<br>
@@ -212,7 +213,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     JsonReader r = null;
     try {
 
-      if (trackableCode.toLowerCase().startsWith("tb")) {
+      if (trackableCode.toLowerCase(Locale.US).startsWith("tb")) {
         r = callGet("GetTrackablesByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
                        "&tbCode=" + trackableCode +
                        "&trackableLogCount=" + trackableLogCount +
@@ -627,7 +628,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
   }
 
   @Override
-  public List<GeocacheStatus> getGeocacheStatus(List<String> waypointList) throws GeocachingApiException {
+  public List<GeocacheStatus> getGeocacheStatus(List<String> cacheCodes) throws GeocachingApiException {
     List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
 
     JsonReader r = null;
@@ -636,11 +637,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       JsonWriter w = new JsonWriter(sw);
       w.beginObject();
       w.name("AccessToken").value(session);
-      JsonWriter waypoints = w.name("CacheCodes").beginArray();
-      for (String waypoint : waypointList) {
-        waypoints.value(waypoint);
+      JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
+      for (String cacheCode : cacheCodes) {
+        arrayWriter.value(cacheCode);
       }
-      waypoints.endArray();
+      arrayWriter.endArray();
       w.endObject();
       w.close();
 
@@ -741,7 +742,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     JsonReader r = null;
     try {
-      r = callGet("GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+      r = callGet("GetTrackableLogsByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
                      "&tbCode=" + trackableCode +
                      "&startIndex=" + startIndex +
                      "&maxPerPage=" + maxPerPage +

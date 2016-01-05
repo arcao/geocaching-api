@@ -376,11 +376,11 @@ public interface GeocachingApi {
 
   /**
    * Retrieve a list of Geocache Status
-   * @param waypointList list of waypoints
+   * @param cacheCodes list of Geocache codes
    * @return list of Geocache status
    * @throws GeocachingApiException If error occurs during getting information
    * @since 1.6.3
    */
-  List<GeocacheStatus> getGeocacheStatus(List<String> waypointList) throws GeocachingApiException;
+  List<GeocacheStatus> getGeocacheStatus(List<String> cacheCodes) throws GeocachingApiException;
 
 }
