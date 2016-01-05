@@ -14,11 +14,11 @@ public class GeocacheStatus implements Serializable {
     private final boolean available;
     private final String cacheCode;
     private final String cacheName;
-    private final int cacheType;
+    private final GeocacheType cacheType;
     private final boolean premium;
     private final int trackableCount;
 
-    private GeocacheStatus(boolean archived, boolean available, String cacheCode, String cacheName, int cacheType, boolean premium, int trackableCount) {
+    private GeocacheStatus(boolean archived, boolean available, String cacheCode, String cacheName, GeocacheType cacheType, boolean premium, int trackableCount) {
         this.archived = archived;
         this.available = available;
         this.cacheCode = cacheCode;
@@ -44,7 +44,7 @@ public class GeocacheStatus implements Serializable {
         return cacheName;
     }
 
-    public int getCacheType() {
+    public GeocacheType getCacheType() {
         return cacheType;
     }
 
@@ -67,7 +67,7 @@ public class GeocacheStatus implements Serializable {
         private boolean available;
         private String cacheCode;
         private String cacheName;
-        private int cacheType;
+        private GeocacheType cacheType;
         private boolean premium;
         private int trackableCount;
 
@@ -98,7 +98,7 @@ public class GeocacheStatus implements Serializable {
             return this;
         }
 
-        public Builder withCacheType(int cacheType) {
+        public Builder withCacheType(GeocacheType cacheType) {
             this.cacheType = cacheType;
             return this;
         }

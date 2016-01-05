@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 import com.arcao.geocaching.api.data.GeocacheStatus;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class GeocacheStatusJsonParser extends JsonParser {
             } else if ("CacheName".equals(name)) {
                 geocacheStatus.withCacheName(r.nextString());
             } else if ("CacheType".equals(name)) {
-                geocacheStatus.withCacheType(r.nextInt());
+                geocacheStatus.withCacheType(GeocacheType.getById(r.nextInt()));
             } else if ("Premium".equals(name)) {
                 geocacheStatus.withPremium(r.nextBoolean());
             } else if ("TrackableCount".equals(name)) {
