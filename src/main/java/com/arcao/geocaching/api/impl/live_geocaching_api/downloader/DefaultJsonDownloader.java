@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -69,7 +70,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 				logger.debug("get: WITHOUT COMPRESSION");
 			}
 
-			if (con.getResponseCode() >= 400) {
+			if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
 				isr = new InputStreamReader(is, "UTF-8");
 
 				StringBuilder sb = new StringBuilder();
@@ -141,7 +142,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 				logger.debug("callPost(): WITHOUT COMPRESSION");
 			}
 
-			if (con.getResponseCode() >= 400) {
+			if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
 				isr = new InputStreamReader(is, "UTF-8");
 
 				StringBuilder sb = new StringBuilder();
@@ -169,4 +170,9 @@ public class DefaultJsonDownloader implements JsonDownloader {
 		}
 	}
 
+	private static boolean notJsonResponse(HttpURLConnection con) {
+		String contentType = con.getHeaderField("Content-Type");
+
+		return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
+	}
 }
