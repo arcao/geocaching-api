@@ -14,7 +14,7 @@ public class GeocachingUtils {
                                                                      // 31 - 16
                                                                      // * 16 *
                                                                      // 16 * 16
-  private static final String CACHE_PREFIX = "GC";
+  public static final String CACHE_PREFIX = "GC";
   private static final long CACHE_CODE_BASE16_MAX = 0xFFFF;
 
   /**
@@ -77,14 +77,14 @@ public class GeocachingUtils {
    *          cache code including GC prefix
    * @return cache id
    * @throws IllegalArgumentException
-   *           If base 31 number contains illegal chars
+   *           Cache code does not contains GC prefix or contains invalid characters
    * @see #base31Decode(String)
    */
   public static long cacheCodeToCacheId(String cacheCode) {
     cacheCode = cacheCode.toUpperCase();
 
     if (cacheCode.length() < 3 || !cacheCode.startsWith(CACHE_PREFIX))
-      return 0;
+      throw new IllegalArgumentException("Cache code is too short or does not contains GC prefix.");
 
     String code = cacheCode.substring(2);
 
@@ -122,5 +122,21 @@ public class GeocachingUtils {
     }
 
     return sb.toString();
+  }
+
+  /**
+   * Returns true if the cache code is valid. The algorithm respects
+   * rules for cache code.
+   *
+   * @param cacheCode cache code
+   * @return true if cache code is valid, otherwise false
+   * @see #cacheCodeToCacheId(String)
+   */
+  public static boolean isCacheCodeValid(String cacheCode) {
+    try {
+      return cacheCodeToCacheId(cacheCode) >= 0;
+    } catch (IllegalArgumentException e) {
+      return false;
+    }
   }
 }

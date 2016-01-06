@@ -1,9 +1,8 @@
 package com.arcao.geocaching.api.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class GeocachingUtilsTest {
   @Test
@@ -51,4 +50,16 @@ public class GeocachingUtilsTest {
     assertEquals("GC1TG15", GeocachingUtils.cacheIdToCacheCode(1272588));
   }
 
+  @Test
+  public void testIsCacheCodeValid() {
+    assertTrue(GeocachingUtils.isCacheCodeValid("GC0"));
+    assertTrue(GeocachingUtils.isCacheCodeValid("GCFFFF"));
+    assertTrue(GeocachingUtils.isCacheCodeValid("GCG000"));
+    assertTrue(GeocachingUtils.isCacheCodeValid("GCH000"));
+    assertTrue(GeocachingUtils.isCacheCodeValid("GC1TG15"));
+    assertFalse(GeocachingUtils.isCacheCodeValid("GC*-/"));
+    assertFalse(GeocachingUtils.isCacheCodeValid("GCIL"));
+    assertFalse(GeocachingUtils.isCacheCodeValid("GC"));
+    assertFalse(GeocachingUtils.isCacheCodeValid("OC1234"));
+  }
 }
