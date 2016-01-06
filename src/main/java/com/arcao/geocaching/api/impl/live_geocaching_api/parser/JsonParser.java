@@ -65,7 +65,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("GeocacheTypeId".equals(name)) {
-				geocacheType = GeocacheType.getById(r.nextInt());
+				geocacheType = GeocacheType.fromId(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -84,7 +84,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("ContainerTypeId".equals(name)) {
-				containerType = ContainerType.getById(r.nextInt());
+				containerType = ContainerType.fromId(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -100,7 +100,7 @@ public class JsonParser {
 			return memberType;
 		
 		if (r.peek() == JsonToken.NUMBER) {
-		  memberType = MemberType.getById(r.nextInt() / 10);
+		  memberType = MemberType.fromId(r.nextInt() / 10);
 		  return memberType;
     }
 		
@@ -108,7 +108,7 @@ public class JsonParser {
 		while(r.hasNext()) {
 			String name = r.nextName();
 			if ("MemberTypeId".equals(name)) {
-				memberType = MemberType.getById(r.nextInt());
+				memberType = MemberType.fromId(r.nextInt());
 			} else {
 				r.skipValue();
 			}
@@ -191,7 +191,7 @@ public class JsonParser {
 		}
 		r.endObject();
 		
-		return AttributeType.getById(id, on);
+		return AttributeType.fromId(id, on);
 	}
 	
 	protected static EnumSet<AttributeType> parseAttributeList(JsonReader r) throws IOException {
@@ -221,7 +221,7 @@ public class JsonParser {
     while(r.hasNext()) {
       String name = r.nextName();
       if ("WptLogTypeId".equals(name)) {
-        trackableLogType = TrackableLogType.getById(r.nextInt());
+        trackableLogType = TrackableLogType.fromId(r.nextInt());
       } else {
         r.skipValue();
       }

@@ -35,7 +35,7 @@ public class GeocacheTypeFilter implements Filter {
 		w.beginArray();
 		for (GeocacheType geocacheType : geocacheTypes) {
 			if (geocacheType != null)
-				w.value(geocacheType.getId());
+				w.value(geocacheType.id);
 		}
 		w.endArray();
 		w.endObject();

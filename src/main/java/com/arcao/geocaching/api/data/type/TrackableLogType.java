@@ -12,12 +12,14 @@ public enum TrackableLogType {
   MoveToCollection("Move To Collection", 69, EnumSet.of(States.WITH_PERSON)),
   MoveToInventory("Move To Inventory", 70, EnumSet.of(States.WITH_PERSON)),
   Visited("Visited", 75, EnumSet.of(States.WITH_PERSON));
-      
-  private final String name;
-  private final int id;
+
+  /** Friendly name */
+  public final String name;
+  /** Groundspeak Id */
+  public final int id;
   private final EnumSet<States> allowedState;
 
-  private TrackableLogType(String name, int id, EnumSet<States> allowedState) {
+  TrackableLogType(String name, int id, EnumSet<States> allowedState) {
     this.name = name;
     this.id = id;
     this.allowedState = allowedState;
@@ -28,34 +30,38 @@ public enum TrackableLogType {
     return name;
   }
 
-  public String getName() {
-    return name;
-  }
-  
-  public int getId() {
-    return id;
-  }
-  
+  /** Is this TrackableLogType allowed in Geocache */
   public boolean isAllowedInCache() {
     return allowedState.contains(States.IN_CACHE);
   }
-  
+
+  /** Is this TrackableLogType allowed with Person */
   public boolean isAllowedWithPerson() {
     return allowedState.contains(States.WITH_PERSON);
   }
 
-  public static TrackableLogType getByName(String name) {
+  /**
+   * Get a TrackableLogType from Friendly name. If Friendly name is not valid, the null is returned.
+   * @param name Friendly name
+   * @return	Trackable Log Type or null
+   */
+  public static TrackableLogType fromName(String name) {
     for (TrackableLogType type : values()) {
-      if (type.getName().equals(name))
+      if (type.name.equals(name))
         return type;
     }
 
     return null;
   }
-  
-  public static TrackableLogType getById(int id) {
+
+  /**
+   * Get a TrackableLogType from Groundspeak Id. If Groundspeak Id is not valid, the null is returned.
+   * @param id Groundspeak Id
+   * @return	Trackable Log Type or null
+   */
+  public static TrackableLogType fromId(int id) {
     for (TrackableLogType type : values()) {
-      if (type.getId() == id)
+      if (type.id == id)
         return type;
     }
 

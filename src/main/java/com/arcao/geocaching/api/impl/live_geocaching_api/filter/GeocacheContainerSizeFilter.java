@@ -38,7 +38,7 @@ public class GeocacheContainerSizeFilter implements Filter {
 		w.beginArray();
 		for (ContainerType containerType : containerTypes) {
 			if (containerType != null)
-				w.value(containerType.getId());
+				w.value(containerType.id);
 		}
 		w.endArray();
 		w.endObject();

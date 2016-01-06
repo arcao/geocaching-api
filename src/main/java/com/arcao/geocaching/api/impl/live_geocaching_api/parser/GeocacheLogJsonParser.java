@@ -78,7 +78,7 @@ public class GeocacheLogJsonParser extends JsonParser {
 		while (r.hasNext()) {
 			String name = r.nextName();
 			if ("WptLogTypeName".equals(name)) {
-				geocacheLogType = GeocacheLogType.getByName(r.nextString());
+				geocacheLogType = GeocacheLogType.fromName(r.nextString());
 			} else {
 				r.skipValue();
 			}

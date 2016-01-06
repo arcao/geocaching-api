@@ -26,7 +26,7 @@ public class Waypoint implements Serializable {
 		this.name = name;
 		this.note = note;
 		this.waypointType = waypointType;
-		this.iconName = waypointType.getIconName();
+		this.iconName = waypointType.iconName;
 	}
 	
 	public Coordinates getCoordinates() {

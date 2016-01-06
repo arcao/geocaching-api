@@ -114,8 +114,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       if (sortByList != null && sortByList.size() > 0) {
         w.name("SortBys").beginArray();
         for (SortBy sortBy : sortByList) {
-          w.name("SortFilterId").value(sortBy.getKey().getId());
-          w.name("AscendingOrder").value(sortBy.getOrder() == SortOrder.ASCENDING);
+          w.name("SortFilterId").value(sortBy.key.id);
+          w.name("AscendingOrder").value(sortBy.order == SortOrder.ASCENDING);
         }
         w.endArray();
       }
@@ -381,7 +381,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       w.beginObject();
       w.name("AccessToken").value(session);
       w.name("CacheCode").value(cacheCode);
-      w.name("WptLogTypeId").value(geocacheLogType.getName());
+      w.name("WptLogTypeId").value(geocacheLogType.name);
       w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
       w.name("PromoteToLog").value(publish);
       if (imageData != null) {
@@ -852,7 +852,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       JsonWriter logs = w.name("LogTypes").beginArray();
 
       for (GeocacheLogType geocacheLogType : logTypes) {
-        logs.value(geocacheLogType.getId());
+        logs.value(geocacheLogType.id);
       }
 
       logs.endArray();

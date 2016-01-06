@@ -21,8 +21,10 @@ public enum GeocacheLogType {
 	Archive("Archive", 5),
 	Unarchive("Unarchive", 1);
 
-	private final String name;
-	private final int id;
+	/** Friendly name */
+	public final String name;
+	/** Groundspeak Id */
+	public final int id;
 
 	GeocacheLogType(String name, int id) {
 		this.name = name;
@@ -34,17 +36,14 @@ public enum GeocacheLogType {
 		return name;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public static GeocacheLogType getByName(String name) {
+	/**
+	 * Get a GeocacheLogType from Friendly name. If Friendly name is not valid, the null is returned.
+	 * @param name Friendly name
+	 * @return Geocache Log Type or null
+	 */
+	public static GeocacheLogType fromName(String name) {
 		for (final GeocacheLogType type : values()) {
-			if (type.getName().equals(name))
+			if (type.name.equals(name))
 				return type;
 		}
 

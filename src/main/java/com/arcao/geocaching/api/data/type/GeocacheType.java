@@ -44,11 +44,13 @@ public enum GeocacheType {
 	GroundspeakBlockParty("Groundspeak Block Party", 4738),
 	/** A Giga-Event cache is similar to an Event Cache but it is much larger.  In order to qualify as a Giga Event, the event cache must be attended by 5000+ people.  Typically, Giga Events are usually annual events and can attract geocachers from all over the world. */
 	GigaEvent("Giga-Event Cache", 7005);
-	
-	private final String name;
-	private final int id;
 
-	private GeocacheType(String name, int id) {
+	/** Friendly name	 */
+	public final String name;
+	/** Groundspeak Id */
+	public final int id;
+
+	GeocacheType(String name, int id) {
 		this.name = name;
 		this.id = id;
 	}
@@ -59,27 +61,11 @@ public enum GeocacheType {
 	}
 
 	/**
-	 * Get a friendly name of cache type
-	 * @return friendly name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Get a Groundspeak cache type id
-	 * @return	Gropunspeak Id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * Get a cache type from friendly name. CacheTypeName is case sensitive. If name doesn't correspond with any GeocacheType enum item the null is returned.
+	 * Get a cache type from friendly name. Name is case sensitive. If name doesn't correspond with any GeocacheType enum item, the null is returned.
 	 * @param name friendly name
-	 * @return cache type
+	 * @return cache type or null
 	 */
-	public static GeocacheType getByName(String name) {
+	public static GeocacheType fromName(String name) {
 		for (GeocacheType type : values()) {
 			if (type.name.equals(name))
 				return type;
@@ -89,11 +75,11 @@ public enum GeocacheType {
 	}
 	
 	/**
-	 * Get a cache type from Groundspeak Id. If Groundspeak Id doesn't correspond with any GeocacheType enum item the null is returned.
+	 * Get a cache type from Groundspeak Id. If Groundspeak Id doesn't correspond with any GeocacheType enum item, the null is returned.
 	 * @param id Groundspeak Id
-	 * @return cache type
+	 * @return cache type or null
 	 */
-	public static GeocacheType getById(int id) {
+	public static GeocacheType fromId(int id) {
 		for (GeocacheType type : values()) {
 			if (type.id == id)
 				return type;

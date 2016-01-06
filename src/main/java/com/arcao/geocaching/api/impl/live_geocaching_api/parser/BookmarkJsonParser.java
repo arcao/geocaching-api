@@ -38,7 +38,7 @@ public class BookmarkJsonParser extends JsonParser {
       } else if ("CacheTitle".equals(fieldName)) {
         cacheTitle = r.nextString();
       } else if ("CacheTypeID".equals(fieldName)) {
-        geocacheType = GeocacheType.getById(r.nextInt());
+        geocacheType = GeocacheType.fromId(r.nextInt());
       } else {
         r.skipValue();
       }

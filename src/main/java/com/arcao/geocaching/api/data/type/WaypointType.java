@@ -8,34 +8,29 @@ public enum WaypointType {
 	Trailhead("Trailhead", "trailhead.jpg"),
 	ReferencePoint("Reference Point", "waypoint.jpg");
 
-	private final String friendlyName;
-	private final String iconName;
+	/** Friendly name */
+	public final String name;
+	/** Icon image file name */
+	public final String iconName;
 
-	private WaypointType(String friendlyName, String iconName) {
-		this.friendlyName = friendlyName;
+	WaypointType(String name, String iconName) {
+		this.name = name;
 		this.iconName = iconName;
 	}
 
 	@Override
 	public String toString() {
-		return friendlyName;
+		return name;
 	}
 
-	public String getFriendlyName() {
-		return friendlyName;
-	}
-
-	public String getId() {
-		return friendlyName;
-	}
-
-	public String getIconName() {
-		return iconName;
-	}
-
-	public static WaypointType parseWayPointType(String waypointName) {
+	/**
+	 * Get a WaypointType from Friendly name. If Friendly name is not valid, the ReferencePoint value is returned.
+	 * @param name Friendly name
+	 * @return	Waypoint Type
+	 */
+	public static WaypointType fromName(String name) {
 		for (WaypointType type : values()) {
-			if (type.toString().equals(waypointName))
+			if (type.name.equals(name))
 				return type;
 		}
 

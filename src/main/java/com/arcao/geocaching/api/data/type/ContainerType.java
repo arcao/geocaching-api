@@ -9,10 +9,12 @@ public enum ContainerType {
 	Huge("Huge", 5),
 	Other("Other", 6);
 
-	private final String name;
-	private final int id;
+	/** Friendly name */
+	public final String name;
+	/** Groundspeak Id */
+	public final int id;
 
-	private ContainerType(String name, int id) {
+	ContainerType(String name, int id) {
 		this.name = name;
 		this.id = id;
 	}
@@ -22,15 +24,12 @@ public enum ContainerType {
 		return name;
 	}
 
-	public String getName() {
-		return name;
-	}
-	
-	public int getId() {
-		return id;
-	}
-
-	public static ContainerType getByName(String name) {
+	/**
+	 * Get an ContainerType from Friendly name. If Friendly name is not valid, the Other value is returned.
+	 * @param name Friendly name
+	 * @return Container Type
+	 */
+	public static ContainerType fromName(String name) {
 		for (ContainerType type : values()) {
 			if (type.name.equals(name))
 				return type;
@@ -38,8 +37,13 @@ public enum ContainerType {
 
 		return Other;
 	}
-	
-	public static ContainerType getById(int id) {
+
+	/**
+	 * Get an ContainerType from Groundspeak Id. If Groundspeak Id is not valid, the Other value is returned.
+	 * @param id Groundspeak Id
+	 * @return	Container Type
+   */
+	public static ContainerType fromId(int id) {
 		for (ContainerType type : values()) {
 			if (type.id == id)
 				return type;

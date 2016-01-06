@@ -133,38 +133,37 @@ public enum AttributeType {
 	FrontYardNo(65, "Front Yard (Private Residence)", false, "http://www.geocaching.com/images/attributes/frontyard-no.gif"),
 	TeamworkYes(66, "Teamwork Required", true, "http://www.geocaching.com/images/attributes/teamwork-yes.gif"),
 	TeamworkNo(66, "Teamwork Required", false, "http://www.geocaching.com/images/attributes/teamwork-no.gif");
+
+	/** Groundspeak Id */
+	public final int id;
+	/** Friendly name */
+	public final String name;
+	/** Is attribute on? */
+	public final boolean on;
+	/** Attribute image URL */
+	public final String imageUrl;
 	
-	private final int id;
-	private final String name;
-	private final boolean on;
-	private final String imageUrl;
-	
-	private AttributeType(int id, String name, boolean on, String imageUrl) {
+	AttributeType(int id, String name, boolean on, String imageUrl) {
 		this.id = id;
 		this.name = name;
 		this.on = on;
 		this.imageUrl = imageUrl;
 	}
-	
-	public int getId() {
-		return id;
+
+	@Override
+	public String toString() {
+		return name + (on ? " (ON)" : " (OFF)");
 	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public boolean isOn() {
-		return on;
-	}
-	
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	
-	public static AttributeType getById(int id, boolean on) {
+
+	/**
+	 * Get an AttributeType from Groundspeak Id. If Groundspeak Id is not valid, the null is returned.
+	 * @param id Groundspeak Id
+	 * @param on is attribute On?
+	 * @return Attribute type or null
+   */
+	public static AttributeType fromId(int id, boolean on) {
 		for (AttributeType type : values()) {
-			if (type.id == id && type.isOn() == on)
+			if (type.id == id && type.on == on)
 				return type;
 		}
 		

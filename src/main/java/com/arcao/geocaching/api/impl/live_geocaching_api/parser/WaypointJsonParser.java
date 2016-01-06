@@ -46,7 +46,7 @@ public class WaypointJsonParser extends JsonParser {
 			} else if ("Code".equals(name)) {
 				waypointCode = r.nextString();
 			} else if ("Name".equals(name)) {
-				waypointType = WaypointType.parseWayPointType(r.nextString());
+				waypointType = WaypointType.fromName(r.nextString());
 			} else if ("Description".equals(name)) {
 				waypointName = r.nextString();
 			} else if ("Comment".equals(name)) {

@@ -43,7 +43,7 @@ public class GeocacheStatusJsonParser extends JsonParser {
             } else if ("CacheName".equals(name)) {
                 geocacheStatus.withCacheName(r.nextString());
             } else if ("CacheType".equals(name)) {
-                geocacheStatus.withCacheType(GeocacheType.getById(r.nextInt()));
+                geocacheStatus.withCacheType(GeocacheType.fromId(r.nextInt()));
             } else if ("Premium".equals(name)) {
                 geocacheStatus.withPremium(r.nextBoolean());
             } else if ("TrackableCount".equals(name)) {
