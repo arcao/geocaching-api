@@ -12,13 +12,22 @@ public class DebugUtils {
     final StringBuilder sb = new StringBuilder();
 
     for (final Method m : o.getClass().getMethods()) {
-      if ((!m.getName().startsWith("get") && !m.getName().startsWith("is")) ||
-              m.getParameterTypes().length != 0 ||
-              void.class.equals(m.getReturnType()))
+      String methodName = m.getName();
+
+      if (m.getParameterTypes().length != 0)
         continue;
 
-      sb.append(m.getName());
-      sb.append(':');
+      if ((!methodName.startsWith("get") && !methodName.startsWith("is")))
+        continue;
+
+      if (methodName.startsWith("getClass"))
+        continue;
+
+      if (void.class.equals(m.getReturnType()))
+        continue;
+
+      sb.append(methodName).append(": ");
+
       try {
         sb.append(m.invoke(o, new Object[0]));
       } catch (Exception e) {
@@ -26,6 +35,7 @@ public class DebugUtils {
       }
       sb.append(", ");
     }
+
     return sb.toString();
   }
 }
