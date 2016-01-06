@@ -314,9 +314,9 @@ public interface GeocachingApi {
    * @param userName
    *            user name
    * @param startDate
-   *            start date or null
+   *            start date of created geocache log or null
    * @param endDate
-   *            end date or null
+   *            end date of created geocache log or null
    * @param logTypes
    *            array of geocache log types to filter (must contains at least one Geocache log type)
    * @param excludeArchived
