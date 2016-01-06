@@ -77,7 +77,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertTrue(cache.isAvailable());
     assertFalse(cache.isFoundByUser());
     assertFalse(cache.isPremium());
-    assertSame(0, cache.getImageCount()); // NOTE: It's not returned for SUMMARY
+    assertNotSame(0, cache.getImageCount());
     assertNotNull(cache.getUrl());
     assertNotNull(cache.getGuid());
 
@@ -89,6 +89,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertNotNull(cache.getLongDescription());
     assertTrue(cache.isLongDescriptionHtml());
     assertNotSame(0, cache.getUserWaypoints().size());
+    assertNotNull(cache.getImages());
+    assertFalse(cache.getImages().isEmpty());
 
     GeocacheLimits limits = api.getLastGeocacheLimits();
     assertNotNull(limits);
@@ -131,6 +133,8 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertTrue(cache.isShortDescriptionHtml());
     assertNotNull(cache.getLongDescription());
     assertTrue(cache.isLongDescriptionHtml());
+    assertNotNull(cache.getImages());
+    assertFalse(cache.getImages().isEmpty());
 
     // ResultQuality.FULL
     assertNotNull(cache.getCountryName());
@@ -149,8 +153,6 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     assertFalse(cache.getAttributes().isEmpty());
     assertNotNull(cache.getCountryName());
     assertNotNull(cache.getStateName());
-    assertNotNull(cache.getImages());
-    assertFalse(cache.getImages().isEmpty());
 
     GeocacheLimits limits = api.getLastGeocacheLimits();
     assertNotNull(limits);
