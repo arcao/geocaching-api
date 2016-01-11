@@ -10,6 +10,7 @@ public class DebugUtils {
 
   public static String toString(final Object o) {
     final StringBuilder sb = new StringBuilder();
+    sb.append('{');
 
     for (final Method m : o.getClass().getMethods()) {
       String methodName = m.getName();
@@ -26,6 +27,9 @@ public class DebugUtils {
       if (void.class.equals(m.getReturnType()))
         continue;
 
+      if (sb.length() > 1)
+        sb.append(", ");
+
       sb.append(methodName).append(": ");
 
       try {
@@ -33,9 +37,9 @@ public class DebugUtils {
       } catch (Exception e) {
         logger.error(e.getMessage(), e);
       }
-      sb.append(", ");
     }
 
+    sb.append('}');
     return sb.toString();
   }
 }
