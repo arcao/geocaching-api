@@ -16,7 +16,7 @@ public class JsonBuilder {
    */
 	public static String dateToJsonString(Date date) {
     if (date == null)
-    	throw new NullPointerException("Date cannot be null.");
+    	return null;
     
     return String.format(Locale.US, "/Date(%d)/", date.getTime());
   }

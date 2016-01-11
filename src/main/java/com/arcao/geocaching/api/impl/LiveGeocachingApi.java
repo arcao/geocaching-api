@@ -383,8 +383,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       w.beginObject();
       w.name("AccessToken").value(session);
       w.name("CacheCode").value(cacheCode);
-      w.name("WptLogTypeId").value(geocacheLogType.name);
+      w.name("WptLogTypeId").value(geocacheLogType.id);
       w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
+      w.name("Note").value(note);
       w.name("PromoteToLog").value(publish);
       if (imageData != null) {
         w.name("ImageData");
