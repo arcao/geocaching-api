@@ -1,7 +1,7 @@
 package com.arcao.geocaching.api;
 
 import com.arcao.geocaching.api.data.*;
-import com.arcao.geocaching.api.data.apilimits.ApiLimits;
+import com.arcao.geocaching.api.data.apilimits.ApiLimitsResponse;
 import com.arcao.geocaching.api.data.bookmarks.Bookmark;
 import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
 import com.arcao.geocaching.api.data.sort.SortBy;
@@ -284,12 +284,12 @@ public interface GeocachingApi {
    * Returns the API limits applied on currently logged user or null if this
    * information isn't available.
    *
-   * @return API limits object
+   * @return API limits response object
    * @throws GeocachingApiException
    *             If error occurs during getting information
    * @since 1.5.10
    */
-  ApiLimits getApiLimits() throws GeocachingApiException;
+  ApiLimitsResponse getApiLimits() throws GeocachingApiException;
 
   /**
    * Return the cache limits received with a last Geocache request. If the

@@ -6,6 +6,8 @@ import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.*;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
+import com.arcao.geocaching.api.data.apilimits.ApiLimitsResponse;
+import com.arcao.geocaching.api.data.apilimits.MaxPerPage;
 import com.arcao.geocaching.api.data.bookmarks.Bookmark;
 import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
 import com.arcao.geocaching.api.data.sort.SortBy;
@@ -774,8 +776,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
   }
 
-  public ApiLimits getApiLimits() throws GeocachingApiException {
+  public ApiLimitsResponse getApiLimits() throws GeocachingApiException {
     ApiLimits apiLimits = null;
+    MaxPerPage maxPerPage = null;
 
     JsonReader r = null;
     try {
@@ -789,13 +792,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         String name = r.nextName();
         if ("Limits".equals(name)) {
           apiLimits = ApiLimitsJsonParser.parse(r);
+        } else if ("MaxPerPage".equals(name)) {
+          maxPerPage = MaxPerPageJsonParser.parse(r);
         } else {
           r.skipValue();
         }
       }
       r.endObject();
 
-      return apiLimits;
+      return new ApiLimitsResponse(apiLimits, maxPerPage);
     } catch (IOException e) {
       logger.error(e.toString(), e);
       if (!isGsonException(e)) {
