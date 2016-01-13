@@ -114,6 +114,7 @@ public enum StatusCode {
   
   MaximumRequestsPerPageExceeded(113),
   CacheLimitExceeded(118),
+  NoNoteOnThisCacheToDelete(125),
   CacheLimitExceededInRequest(132),
   UserNotFound(139),
   NumberOfCallsExceeded(140),

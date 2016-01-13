@@ -22,6 +22,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.JsonDownload
 import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.*;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
 import org.slf4j.Logger;
@@ -693,14 +694,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       w.close();
 
       r = callPost("UpdateCacheNote?format=json", sw.toString());
-      r.beginObject();
       checkError(r);
-
-      while(r.hasNext()) {
-        r.nextName();
-        r.skipValue();
-      }
-      r.endObject();
     } catch (IOException e) {
       logger.error(e.toString(), e);
       if (!isGsonException(e)) {
@@ -713,21 +707,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
   }
 
-  protected void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
+  public void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
     JsonReader r = null;
     try {
       r = callGet("DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
                      "&cacheCode=" + cacheCode +
                      "&format=json"
       );
-      r.beginObject();
       checkError(r);
-
-      while (r.hasNext()) {
-        r.nextName();
-        r.skipValue();
-      }
-      r.endObject();
     } catch (IOException e) {
       logger.error(e.toString(), e);
       if (!isGsonException(e)) {
@@ -906,8 +893,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
   }
 
   protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
-    if ("Status".equals(r.nextName())) {
+    if (r.peek() == JsonToken.BEGIN_OBJECT || "Status".equals(r.nextName())) {
       Status status = StatusJsonParser.parse(r);
+
+      if (status == null)
+        throw new GeocachingApiException("Missing Status in a response.");
 
       if (status.getStatusCode() == StatusCode.OK)
         return;

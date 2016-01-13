@@ -265,6 +265,14 @@ public interface GeocachingApi {
   void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException;
 
   /**
+   * Remove existing personal note from a specified geocache
+   * @param cacheCode geocache where the personal note has to be deleted
+   * @throws GeocachingApiException If error occurs during personal note storing
+   * @since 1.6.4
+   */
+  void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException;
+
+  /**
    * Get a list of trackable logs for given public trackable code.
    *
    * @param trackableCode
