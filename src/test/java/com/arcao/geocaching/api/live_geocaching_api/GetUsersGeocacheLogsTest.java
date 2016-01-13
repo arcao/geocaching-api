@@ -1,15 +1,14 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
-import java.util.Date;
-import java.util.List;
-
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.arcao.geocaching.api.exception.GeocachingApiException;
+import java.util.Date;
+import java.util.List;
 
 public class GetUsersGeocacheLogsTest extends AbstractGeocachingTest {
 	private static final String USER_NAME = "Arcao";
@@ -22,7 +21,7 @@ public class GetUsersGeocacheLogsTest extends AbstractGeocachingTest {
 	}
 	
 	@Test
-	@Ignore // Date filter does not work
+	@Ignore("Ignored: Date filter does not work")
 	public void dateFilteredGetUsersGeocacheLogsTest() throws GeocachingApiException {
 		Date startDate = new Date(1345161600000L); // 08/17/2012
 		Date endDate = new Date(1351468799000L);   // 10/28/2012
