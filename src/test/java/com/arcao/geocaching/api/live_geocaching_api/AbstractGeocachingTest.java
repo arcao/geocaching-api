@@ -1,11 +1,13 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.GeocachingApi;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
 import com.arcao.geocaching.api.impl.LiveGeocachingApi;
+import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
-
-import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
 
 public abstract class AbstractGeocachingTest {
   protected static GeocachingApi api = null;
@@ -17,10 +19,17 @@ public abstract class AbstractGeocachingTest {
   public static void setUp() throws Exception {
     LiveGeocachingApi.Builder builder = LiveGeocachingApi.Builder.liveGeocachingApi();
 
-    if (Boolean.parseBoolean(StringUtils.defaultIfEmpty(System.getenv("GEOCACHING_STAGING"), "true"))) {
-      builder.withConfiguration(new DefaultStagingGeocachingApiConfiguration());
+    GeocachingApiConfiguration configuration = new DefaultStagingGeocachingApiConfiguration();
+
+    if (!Boolean.parseBoolean(StringUtils.defaultIfEmpty(System.getenv("GEOCACHING_STAGING"), "true"))) {
+      configuration = new DefaultProductionGeocachingApiConfiguration();
     }
 
+    DefaultJsonDownloader downloader = new DefaultJsonDownloader(configuration);
+    downloader.setDebug(true);
+
+    builder.withConfiguration(configuration);
+    builder.withDownloader(downloader);
 
     api = builder.build();
 

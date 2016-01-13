@@ -1,22 +1,19 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.downloader;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
+import com.arcao.geocaching.api.exception.InvalidResponseException;
+import com.arcao.geocaching.api.exception.NetworkException;
+import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
-import com.arcao.geocaching.api.exception.InvalidResponseException;
-import com.arcao.geocaching.api.exception.NetworkException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
 
 /**
  * Default implementation of {@link JsonDownloader} using {@link HttpURLConnection}
@@ -26,6 +23,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
 	
 	private final GeocachingApiConfiguration configuration;
+	private boolean debug = false;
 
 	/**
 	 * Create a new {@link DefaultJsonDownloader} using specified configuration
@@ -33,6 +31,10 @@ public class DefaultJsonDownloader implements JsonDownloader {
 	 */
 	public DefaultJsonDownloader(GeocachingApiConfiguration configuration) {
 		this.configuration = configuration;
+	}
+
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 
 	public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
@@ -88,6 +90,10 @@ public class DefaultJsonDownloader implements JsonDownloader {
 			}
 
 			isr = new InputStreamReader(is, "UTF-8");
+
+			if (debug)
+				return new DebugJsonReader(isr);
+
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
 			throw e;
@@ -161,6 +167,9 @@ public class DefaultJsonDownloader implements JsonDownloader {
 
 			isr = new InputStreamReader(is, "UTF-8");
 
+			if (debug)
+				return new DebugJsonReader(isr);
+
 			return new JsonReader(isr);
 		} catch (InvalidResponseException e) {
 			throw e;
@@ -174,5 +183,30 @@ public class DefaultJsonDownloader implements JsonDownloader {
 		String contentType = con.getHeaderField("Content-Type");
 
 		return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
+	}
+
+	private static class DebugJsonReader extends JsonReader {
+		public DebugJsonReader(Reader in) throws IOException {
+			super(writeOutput(in));
+		}
+
+		private static Reader writeOutput(Reader in) throws IOException {
+			try {
+				StringBuilder sb = new StringBuilder();
+
+				char[] buffer = new char[8192];
+				int len;
+
+				while ((len = in.read(buffer)) > 0) {
+					sb.append(buffer, 0, len);
+				}
+				logger.debug(sb.toString());
+
+				return new StringReader(sb.toString());
+			} finally {
+				if (in != null)
+					in.close();
+			}
+		}
 	}
 }
