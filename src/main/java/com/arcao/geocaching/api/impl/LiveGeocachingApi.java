@@ -65,11 +65,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
   /**
    * Create a new instance of LiveGeocachingApi with configuration specified by configuration parameter
-   * @param configuration configuration object
+   * @param builder builder object
    */
-  protected LiveGeocachingApi(GeocachingApiConfiguration configuration, JsonDownloader downloader) {
-    this.configuration = configuration;
-    this.downloader = downloader;
+  protected LiveGeocachingApi(Builder builder) {
+    this.configuration = builder.configuration;
+    this.downloader = builder.downloader;
   }
 
   @Override
@@ -990,8 +990,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
    * @author arcao
    */
   public static class Builder {
-    protected GeocachingApiConfiguration configuration;
-    protected JsonDownloader downloader;
+    private GeocachingApiConfiguration configuration;
+    private JsonDownloader downloader;
 
     private Builder() {
     }
@@ -1035,7 +1035,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         downloader = new DefaultJsonDownloader(configuration);
       }
 
-      return new LiveGeocachingApi(configuration, downloader);
+      return new LiveGeocachingApi(this);
     }
   }
 }

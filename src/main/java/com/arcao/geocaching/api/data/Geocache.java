@@ -5,7 +5,6 @@ import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.util.DebugUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -55,105 +54,63 @@ public class Geocache implements Serializable {
   private final boolean shortDescriptionHtml;
   private final List<Trackable> trackables;
   private final List<UserWaypoint> userWaypoints;
+  private final List<ImageData> images;
 
   // ResultQuality.FULL
   private final EnumSet<AttributeType> attributes;
   private final String countryName;
   private final Date createDate;
   private final List<GeocacheLog> geocacheLogs;
-  private final List<ImageData> images;
   private final String stateName;
 
-  public Geocache(
-          // ResultQuality.LITE
-          boolean archived,
-          boolean available,
-          GeocacheType geocacheType,
-          boolean favoritable,
-          String code,
-          ContainerType containerType,
-          Date lastUpdateDate,
-          Date lastVisitDate,
-          float difficulty,
-          int favoritePoints,
-          Date foundDate,
-          String personalNote,
-          boolean favoritedByUser,
-          boolean foundByUser,
-          long id,
-          int imageCount,
-          boolean premium,
-          boolean recommended,
-          Coordinates coordinates,
-          String name,
-          User owner,
-          String placedBy,
-          Date publishDate,
-          float terrain,
-          int trackableCount,
-          Date placeDate,
-          String url,
-          String guid,
+  private Geocache(Builder builder) {
+    // ResultQuality.LITE
+    this.archived = builder.archived;
+    this.available = builder.available;
+    this.geocacheType = builder.geocacheType;
+    this.favoritable = builder.favoritable;
+    this.code = builder.code;
+    this.containerType = builder.containerType;
+    this.lastUpdateDate = builder.lastUpdateDate;
+    this.lastVisitDate = builder.lastVisitDate;
+    this.difficulty = builder.difficulty;
+    this.favoritePoints = builder.favoritePoints;
+    this.foundDate = builder.foundDate;
+    this.personalNote = builder.personalNote;
+    this.favoritedByUser = builder.favoritedByUser;
+    this.foundByUser = builder.foundByUser;
+    this.id = builder.id;
+    this.imageCount = builder.images != null && builder.images.size() > 0 ? builder.images.size() : builder.imageCount;
+    this.premium = builder.premium;
+    this.recommended = builder.recommended;
+    this.coordinates = builder.coordinates;
+    this.name = builder.name;
+    this.owner = builder.owner;
+    this.placedBy = builder.placedBy;
+    this.publishDate = builder.publishDate;
+    this.terrain = builder.terrain;
+    this.trackableCount = builder.trackables != null && builder.trackables.size() > 0 ? builder.trackables.size() : builder.trackableCount;
+    this.placeDate = builder.placeDate;
+    this.url = builder.url;
+    this.guid = builder.guid;
 
-          // ResultQuality.SUMMARY
-          List<Waypoint> waypoints,
-          String hint,
-          String longDescription,
-          boolean longDescriptionHtml,
-          String shortDescription,
-          boolean shortDescriptionHtml,
-          List<Trackable> trackables,
-          List<UserWaypoint> userWaypoints,
+    // ResultQuality.SUMMARY
+    this.waypoints = builder.waypoints != null ? builder.waypoints : Collections.<Waypoint>emptyList();
+    this.hint = builder.hint;
+    this.longDescription = builder.longDescription;
+    this.longDescriptionHtml = builder.longDescriptionHtml;
+    this.shortDescription = builder.shortDescription;
+    this.shortDescriptionHtml = builder.shortDescriptionHtml;
+    this.trackables = builder.trackables != null ? builder.trackables : Collections.<Trackable>emptyList();
+    this.userWaypoints = builder.userWaypoints != null ? builder.userWaypoints : Collections.<UserWaypoint>emptyList();
+    this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
 
-          // ResultQuality.FULL
-          EnumSet<AttributeType> attributes,
-          String countryName,
-          Date createDate,
-          List<GeocacheLog> geocacheLogs,
-          List<ImageData> images,
-          String stateName) {
-    this.archived = archived;
-    this.available = available;
-    this.geocacheType = geocacheType;
-    this.favoritable = favoritable;
-    this.code = code;
-    this.containerType = containerType;
-    this.lastUpdateDate = lastUpdateDate;
-    this.lastVisitDate = lastVisitDate;
-    this.difficulty = difficulty;
-    this.favoritePoints = favoritePoints;
-    this.foundDate = foundDate;
-    this.personalNote = personalNote;
-    this.favoritedByUser = favoritedByUser;
-    this.foundByUser = foundByUser;
-    this.id = id;
-    this.imageCount = images != null && images.size() > 0 ? images.size() : imageCount;
-    this.premium = premium;
-    this.recommended = recommended;
-    this.coordinates = coordinates;
-    this.name = name;
-    this.owner = owner;
-    this.placedBy = placedBy;
-    this.publishDate = publishDate;
-    this.terrain = terrain;
-    this.trackableCount = trackables != null && trackables.size() > 0 ? trackables.size() : trackableCount;
-    this.placeDate = placeDate;
-    this.url = url;
-    this.guid = guid;
-    this.waypoints = waypoints != null ? waypoints : Collections.<Waypoint>emptyList();
-    this.hint = hint;
-    this.longDescription = longDescription;
-    this.longDescriptionHtml = longDescriptionHtml;
-    this.shortDescription = shortDescription;
-    this.shortDescriptionHtml = shortDescriptionHtml;
-    this.trackables = trackables != null ? trackables : Collections.<Trackable>emptyList();
-    this.userWaypoints = userWaypoints != null ? userWaypoints : Collections.<UserWaypoint>emptyList();
-    this.attributes = attributes != null ? attributes : EnumSet.noneOf(AttributeType.class);
-    this.countryName = countryName;
-    this.createDate = createDate;
-    this.geocacheLogs = geocacheLogs != null ? geocacheLogs : Collections.<GeocacheLog>emptyList();
-    this.images = images != null ? images : Collections.<ImageData>emptyList();
-    this.stateName = stateName;
+    // ResultQuality.FULL
+    this.attributes = builder.attributes != null ? builder.attributes : EnumSet.noneOf(AttributeType.class);
+    this.countryName = builder.countryName;
+    this.createDate = builder.createDate;
+    this.geocacheLogs = builder.geocacheLogs != null ? builder.geocacheLogs : Collections.<GeocacheLog>emptyList();
+    this.stateName = builder.stateName;
   }
 
   public boolean isArchived() {
@@ -592,55 +549,7 @@ public class Geocache implements Serializable {
     }
 
     public Geocache build() {
-      return new Geocache(
-              // ResultQuality.LITE
-              archived,
-              available,
-              geocacheType,
-              favoritable,
-              code,
-              containerType,
-              lastUpdateDate,
-              lastVisitDate,
-              difficulty,
-              favoritePoints,
-              foundDate,
-              personalNote,
-              favoritedByUser,
-              foundByUser,
-              id,
-              imageCount,
-              premium,
-              recommended,
-              coordinates,
-              name,
-              owner,
-              placedBy,
-              publishDate,
-              terrain,
-              trackableCount,
-              placeDate,
-              url,
-              guid,
-
-              // ResultQuality.SUMMARY
-              waypoints,
-              hint,
-              longDescription,
-              longDescriptionHtml,
-              shortDescription,
-              shortDescriptionHtml,
-              trackables,
-              userWaypoints,
-
-              // ResultQuality.FULL
-              attributes,
-              countryName,
-              createDate,
-              geocacheLogs,
-              images,
-              stateName
-      );
+      return new Geocache(this);
     }
   }
 }

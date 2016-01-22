@@ -9,7 +9,6 @@ import java.io.Serializable;
  * Created by Krzysztof.Nowacki on 2015.11.13.
  */
 public class GeocacheStatus implements Serializable {
-
     private final boolean archived;
     private final boolean available;
     private final String cacheCode;
@@ -18,14 +17,14 @@ public class GeocacheStatus implements Serializable {
     private final boolean premium;
     private final int trackableCount;
 
-    private GeocacheStatus(boolean archived, boolean available, String cacheCode, String cacheName, GeocacheType cacheType, boolean premium, int trackableCount) {
-        this.archived = archived;
-        this.available = available;
-        this.cacheCode = cacheCode;
-        this.cacheName = cacheName;
-        this.cacheType = cacheType;
-        this.premium = premium;
-        this.trackableCount = trackableCount;
+    private GeocacheStatus(Builder builder) {
+        this.archived = builder.archived;
+        this.available = builder.available;
+        this.cacheCode = builder.cacheCode;
+        this.cacheName = builder.cacheName;
+        this.cacheType = builder.cacheType;
+        this.premium = builder.premium;
+        this.trackableCount = builder.trackableCount;
     }
 
     public boolean isArchived() {
@@ -62,7 +61,6 @@ public class GeocacheStatus implements Serializable {
     }
 
     public static class Builder {
-
         private boolean archived;
         private boolean available;
         private String cacheCode;
@@ -114,14 +112,7 @@ public class GeocacheStatus implements Serializable {
         }
 
         public GeocacheStatus build() {
-            return new GeocacheStatus(
-                    archived,
-                    available,
-                    cacheCode,
-                    cacheName,
-                    cacheType,
-                    premium,
-                    trackableCount);
+            return new GeocacheStatus(this);
         }
 
     }

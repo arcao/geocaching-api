@@ -1,13 +1,13 @@
 package com.arcao.geocaching.api.data;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.arcao.geocaching.api.data.type.TrackableLogType;
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.TrackableLogType;
-import com.arcao.geocaching.api.util.DebugUtils;
 
 public class TrackableLog implements Serializable {
 	private static final long serialVersionUID = -8616502691991228922L;
@@ -26,22 +26,20 @@ public class TrackableLog implements Serializable {
   private final String url;
   private final Date visited;
 
-  public TrackableLog(int cacheID, String code, int id, List<ImageData> images, boolean archived, String guid, String text, TrackableLogType type,
-      User loggedBy,
-      Date created, Coordinates updatedCoordinates, String url, Date visited) {
-    this.cacheID = cacheID;
-    this.code = code;
-    this.id = id;
-    this.images = images != null ? images : Collections.<ImageData>emptyList();
-    this.archived = archived;
-    this.guid = guid;
-    this.text = text;
-    this.type = type;
-    this.loggedBy = loggedBy;
-    this.created = created;
-    this.updatedCoordinates = updatedCoordinates;
-    this.url = url;
-    this.visited = visited;
+  public TrackableLog(Builder builder) {
+    this.cacheID = builder.cacheID;
+    this.code = builder.code;
+    this.id = builder.id;
+    this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
+    this.archived = builder.archived;
+    this.guid = builder.guid;
+    this.text = builder.text;
+    this.type = builder.type;
+    this.loggedBy = builder.loggedBy;
+    this.created = builder.created;
+    this.updatedCoordinates = builder.updatedCoordinates;
+    this.url = builder.url;
+    this.visited = builder.visited;
   }
 
   public int getCacheID() {
@@ -189,20 +187,7 @@ public class TrackableLog implements Serializable {
     }
 
     public TrackableLog build() {
-      return new TrackableLog(
-              cacheID,
-              code,
-              id,
-              images,
-              archived,
-              guid,
-              text,
-              type,
-              loggedBy,
-              created,
-              updatedCoordinates,
-              url,
-              visited);
+      return new TrackableLog(this);
     }
   }
 }

@@ -10,11 +10,11 @@ public class Status implements Serializable {
   private final String message;
   private final String exceptionDetails;
 
-  public Status(int code, String message, String exceptionDetails) {
-    this.code = code;
-    this.statusCode = StatusCode.getByCode(code);
-    this.message = message;
-    this.exceptionDetails = exceptionDetails;
+  private Status(Builder builder) {
+    this.code = builder.code;
+    this.statusCode = StatusCode.getByCode(builder.code);
+    this.message = builder.message;
+    this.exceptionDetails = builder.exceptionDetails;
   }
 
   public StatusCode getStatusCode() {
@@ -62,7 +62,7 @@ return code;
     }
 
     public Status build() {
-      return new Status(code, message, exceptionDetails);
+      return new Status(this);
     }
   }
 }

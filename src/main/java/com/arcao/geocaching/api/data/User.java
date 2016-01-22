@@ -1,11 +1,11 @@
 package com.arcao.geocaching.api.data;
 
 
-import java.io.Serializable;
-
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.util.DebugUtils;
+
+import java.io.Serializable;
 
 public class User implements Serializable {
 	private static final long serialVersionUID = 1808891631464643511L;
@@ -21,27 +21,17 @@ public class User implements Serializable {
 	private final int hideCount;
   private final int galleryImageCount;
 
-  private User(
-          long id,
-          String publicGuid,
-          String userName,
-          String avatarUrl,
-          Coordinates homeCoordinates,
-          boolean admin,
-          MemberType memberType,
-          int findCount,
-          int hideCount,
-          int galleryImageCount) {
-    this.id = id;
-    this.publicGuid = publicGuid;
-    this.userName = userName;
-    this.avatarUrl = avatarUrl;
-    this.homeCoordinates = homeCoordinates;
-    this.admin = admin;
-    this.memberType = memberType;
-    this.findCount = findCount;
-    this.hideCount = hideCount;
-    this.galleryImageCount = galleryImageCount;
+  private User(Builder builder) {
+    this.id = builder.id;
+    this.publicGuid = builder.publicGuid;
+    this.userName = builder.userName;
+    this.avatarUrl = builder.avatarUrl;
+    this.homeCoordinates = builder.homeCoordinates;
+    this.admin = builder.admin;
+    this.memberType = builder.memberType;
+    this.findCount = builder.findCount;
+    this.hideCount = builder.hideCount;
+    this.galleryImageCount = builder.galleryImageCount;
   }
 
   public long getId() {
@@ -160,18 +150,7 @@ public class User implements Serializable {
     }
 
     public User build() {
-      return new User(
-              id,
-              publicGuid,
-              userName,
-              avatarUrl,
-              homeCoordinates,
-              admin,
-              memberType,
-              findCount,
-              hideCount,
-              galleryImageCount
-      );
+      return new User(this);
     }
   }
 }

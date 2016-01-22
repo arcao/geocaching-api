@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.util.DebugUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -21,7 +20,7 @@ public class Trackable implements Serializable {
 	private final String currentCacheCode;
 	private final User currentOwner;
 	private final String trackingNumber;
-	private String lookupCode;
+	private final String lookupCode;
 	private final Date created;
 	private final boolean allowedToBeCollected;
 	private final boolean inCollection;
@@ -32,30 +31,26 @@ public class Trackable implements Serializable {
 
 	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
-	public Trackable(long id, String name, String goal, String description,
-			String trackableTypeName, String trackableTypeImage,
-			User owner, String currentCacheCode,
-			User currentOwner, String trackingNumber, Date created,
-			boolean allowedToBeCollected, boolean inCollection, boolean archived, List<TrackableLog> trackableLogs, List<ImageData> images) {
-		this.id = id;
-		this.name = name;
-		this.goal = goal;
-		this.description = description;
-		this.trackableTypeName = trackableTypeName;
-		this.trackableTypeImage = trackableTypeImage;
-		this.owner = owner;
-		this.currentCacheCode = currentCacheCode;
-		this.currentOwner = currentOwner;
-		this.trackingNumber = trackingNumber;
-		this.created = created;
-		this.allowedToBeCollected = allowedToBeCollected;
-		this.inCollection = inCollection;
-		this.archived = archived;
+	private Trackable(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.goal = builder.goal;
+		this.description = builder.description;
+		this.trackableTypeName = builder.trackableTypeName;
+		this.trackableTypeImage = builder.trackableTypeImage;
+		this.owner = builder.owner;
+		this.currentCacheCode = builder.currentCacheCode;
+		this.currentOwner = builder.currentOwner;
+		this.trackingNumber = builder.trackingNumber;
+		this.created = builder.created;
+		this.allowedToBeCollected = builder.allowedToBeCollected;
+		this.inCollection = builder.inCollection;
+		this.archived = builder.archived;
 
-		this.trackableLogs = trackableLogs != null ? trackableLogs : Collections.<TrackableLog>emptyList();
-		this.images = images != null ? images : Collections.<ImageData>emptyList();
+		this.trackableLogs = builder.trackableLogs != null ? builder.trackableLogs : Collections.<TrackableLog>emptyList();
+		this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
 
-		lookupCode = "";
+		this.lookupCode = builder.lookupCode;
 	}
 
 	public long getId() {
@@ -101,10 +96,6 @@ public class Trackable implements Serializable {
 	public String getLookupCode() {
 		return lookupCode;
 	}
-
-	public void setLookupCode(String lookupCode) {
-    this.lookupCode = lookupCode;
-  }
 
 	public String getTrackablePage() {
 	  return String.format(TRACKABLE_URL, trackingNumber);
@@ -252,29 +243,7 @@ public class Trackable implements Serializable {
 		}
 
 		public Trackable build() {
-			Trackable t = new Trackable (
-							id,
-							name,
-							goal,
-							description,
-							trackableTypeName,
-							trackableTypeImage,
-							owner,
-							currentCacheCode,
-							currentOwner,
-							trackingNumber,
-							created,
-							allowedToBeCollected,
-							inCollection,
-							archived,
-							trackableLogs,
-							images);
-
-			if (!StringUtils.isEmpty(lookupCode)) {
-				t.setLookupCode(lookupCode);
-			}
-
-			return t;
+			return new Trackable(this);
 		}
 	}
 }

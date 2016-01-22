@@ -1,13 +1,13 @@
 package com.arcao.geocaching.api.data;
 
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.arcao.geocaching.api.util.DebugUtils;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.GeocacheLogType;
-import com.arcao.geocaching.api.util.DebugUtils;
 
 /**
  * GeocacheLog class keep all information cache log.
@@ -33,32 +33,21 @@ public class GeocacheLog implements Serializable {
 
 	/**
 	 * Create a new instance of cache log and fill it with data
-	 * @param id unique identificator
-	 * @param cacheCode the gccode of the cache
-	 * @param created date when the cache log was created (logged) on Geocaching site
-	 * @param visited date when the cache was visited (found)
-	 * @param geocacheLogType type of log
-	 * @param author author of log
-	 * @param text text of log
-	 * @param updatedCoordinates updated coordinates
-	 * @param approved true if log is approved
-	 * @param archived true if log is archived
-	 * @param undeletable true if log can not be deleted
+	 * @param builder the builder instance
 	 */
-	public GeocacheLog(long id, String cacheCode, Date created, Date visited, GeocacheLogType geocacheLogType, User author,
-										 String text, List<ImageData> images, Coordinates updatedCoordinates, boolean approved, boolean archived, boolean undeletable) {
-		this.id = id;
-		this.cacheCode=cacheCode;
-		this.created = created;
-		this.visited = visited;
-		this.geocacheLogType = geocacheLogType;
-		this.author = author;
-		this.text = text;
-		this.images = images != null ? images : Collections.<ImageData>emptyList();
-		this.updatedCoordinates = updatedCoordinates;
-		this.approved = approved;
-		this.archived = archived;
-		this.undeletable = undeletable;
+	private GeocacheLog(Builder builder) {
+		this.id = builder.id;
+		this.cacheCode = builder.cacheCode;
+		this.created = builder.created;
+		this.visited = builder.visited;
+		this.geocacheLogType = builder.geocacheLogType;
+		this.author = builder.author;
+		this.text = builder.text;
+		this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
+		this.updatedCoordinates = builder.updatedCoordinates;
+		this.approved = builder.approved;
+		this.archived = builder.archived;
+		this.undeletable = builder.undeletable;
 	}
 
 	/**
@@ -245,19 +234,7 @@ public class GeocacheLog implements Serializable {
 		}
 
 		public GeocacheLog build() {
-			return new GeocacheLog(
-							id,
-							cacheCode,
-							created,
-							visited,
-							geocacheLogType,
-							author,
-							text,
-							images,
-							updatedCoordinates,
-							approved,
-							archived,
-							undeletable);
+			return new GeocacheLog(this);
 		}
 	}
 }
