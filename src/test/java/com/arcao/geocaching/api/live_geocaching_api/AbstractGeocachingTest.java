@@ -2,8 +2,6 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
-import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
-import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
 import com.arcao.geocaching.api.impl.LiveGeocachingApi;
 import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
 import org.apache.commons.lang3.StringUtils;
@@ -19,10 +17,10 @@ public abstract class AbstractGeocachingTest {
   public static void setUp() throws Exception {
     LiveGeocachingApi.Builder builder = LiveGeocachingApi.Builder.liveGeocachingApi();
 
-    GeocachingApiConfiguration configuration = new DefaultStagingGeocachingApiConfiguration();
+    GeocachingApiConfiguration configuration = GeocachingApiConfiguration.STAGING;
 
     if (!Boolean.parseBoolean(StringUtils.defaultIfEmpty(System.getenv("GEOCACHING_STAGING"), "true"))) {
-      configuration = new DefaultProductionGeocachingApiConfiguration();
+      configuration = GeocachingApiConfiguration.PRODUCTION;
     }
 
     DefaultJsonDownloader downloader = new DefaultJsonDownloader(configuration);

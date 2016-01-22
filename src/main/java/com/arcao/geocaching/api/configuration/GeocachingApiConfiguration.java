@@ -1,11 +1,19 @@
 package com.arcao.geocaching.api.configuration;
 
+import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
+import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
+
 /**
  * Basic interface for configuration class
  * @author arcao
  *
  */
 public interface GeocachingApiConfiguration {
+	/** Production configuration */
+	GeocachingApiConfiguration PRODUCTION = new DefaultProductionGeocachingApiConfiguration();
+	/** Staging configuration */
+	GeocachingApiConfiguration STAGING = new DefaultStagingGeocachingApiConfiguration();
+
   /**
    * Returns a common part of Gecaching API service URL
    * @return url
