@@ -117,8 +117,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       if (sortByList != null && sortByList.size() > 0) {
         w.name("SortBys").beginArray();
         for (SortBy sortBy : sortByList) {
-          w.name("SortFilterId").value(sortBy.key.id);
-          w.name("AscendingOrder").value(sortBy.order == SortOrder.ASCENDING);
+          w.name("SortFilterId").value(sortBy.getKey().id);
+          w.name("AscendingOrder").value(sortBy.getOrder() == SortOrder.ASCENDING);
         }
         w.endArray();
       }
