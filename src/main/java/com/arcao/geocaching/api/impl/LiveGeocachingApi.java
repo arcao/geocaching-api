@@ -245,10 +245,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
       if (list == null || list.size() == 0)
         return null;
 
-      if (!trackableCode.toLowerCase().startsWith("tb")) {
-        list.get(0).setLookupCode(trackableCode);
-      }
-
       return list.get(0);
     } catch (IOException e) {
       logger.error(e.toString(), e);

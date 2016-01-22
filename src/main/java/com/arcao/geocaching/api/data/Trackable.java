@@ -20,7 +20,6 @@ public class Trackable implements Serializable {
 	private final String currentCacheCode;
 	private final User currentOwner;
 	private final String trackingNumber;
-	private final String lookupCode;
 	private final Date created;
 	private final boolean allowedToBeCollected;
 	private final boolean inCollection;
@@ -49,8 +48,6 @@ public class Trackable implements Serializable {
 
 		this.trackableLogs = builder.trackableLogs != null ? builder.trackableLogs : Collections.<TrackableLog>emptyList();
 		this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
-
-		this.lookupCode = builder.lookupCode;
 	}
 
 	public long getId() {
@@ -91,10 +88,6 @@ public class Trackable implements Serializable {
 
 	public String getTrackingNumber() {
 		return trackingNumber;
-	}
-
-	public String getLookupCode() {
-		return lookupCode;
 	}
 
 	public String getTrackablePage() {
@@ -142,7 +135,6 @@ public class Trackable implements Serializable {
 		private String currentCacheCode;
 		private User currentOwner;
 		private String trackingNumber;
-		private String lookupCode;
 		private Date created;
 		private boolean allowedToBeCollected;
 		private boolean inCollection;
@@ -204,11 +196,6 @@ public class Trackable implements Serializable {
 
 		public Builder withTrackingNumber(String trackingNumber) {
 			this.trackingNumber = trackingNumber;
-			return this;
-		}
-
-		public Builder withLookupCode(String lookupCode) {
-			this.lookupCode = lookupCode;
 			return this;
 		}
 
