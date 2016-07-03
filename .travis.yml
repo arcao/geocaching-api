@@ -6,5 +6,5 @@ jdk:
 env:
   global:
   - GEOCACHING_STAGING=false
-  - secure: DixRMwI3J/OQngkEa+UBf5hve9+sB0KC5hjOmB9ICaZXoDx8VnaCR2Bnniw25tzlgEIkhMxdFcxLFatbxc63GMM4RmaaKMlHeqMbMMbnsjSq8jgeq/kh49hDixsiltH2YlCGh9bh1E1uIckG4tsHEmrCaqnEKW0qkMxBWDNXIcg=
+  - secure: mLYxDjI9JKqgttpeq/XwDHVaqRG2Uvgt2R5rwBtjxWwOSXsarM47LOu+a0nKEpd/ND2QckAS+GOnl7FPtx5RIk3jr2FfRXBzyB+Fn7Xh3VM4zHMRGCfknOGaInNoXB2WFBRrNW0TUHdTOizm0rCP0J5z416EV+QRQmZjOpXyXFA=
 sudo: false
