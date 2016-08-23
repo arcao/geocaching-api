@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data.bookmarks;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -28,11 +27,6 @@ public abstract class BookmarkList implements Serializable {
     public abstract boolean special();
 
     public abstract int type();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_BookmarkList.Builder();

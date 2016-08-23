@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data.userprofile;
 
 import com.arcao.geocaching.api.data.Trackable;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -15,11 +14,6 @@ public abstract class TrackableStats implements Serializable {
     public abstract List<Trackable> trackableFindTypes();
     public abstract int trackableOwnedCount();
     public abstract List<Trackable> trackableOwnedTypes();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_TrackableStats.Builder();

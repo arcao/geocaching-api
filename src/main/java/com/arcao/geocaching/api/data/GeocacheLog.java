@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -101,11 +100,6 @@ public abstract class GeocacheLog implements Serializable {
      * @return can not be deleted?
      */
     public abstract boolean undeletable();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_GeocacheLog.Builder();

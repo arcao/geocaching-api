@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data.apilimits;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -27,11 +26,6 @@ public abstract class CacheLimit implements Serializable {
      * @return period in minutes
      */
     public abstract long period();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_CacheLimit.Builder();

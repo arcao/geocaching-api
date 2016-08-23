@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data.apilimits;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -27,11 +26,6 @@ public abstract class ApiLimitsResponse implements Serializable {
      * @return max per page values
      */
     public abstract MaxPerPage maxPerPage();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static ApiLimitsResponse create(ApiLimits apiLimits, MaxPerPage maxPerPage) {
         return new AutoValue_ApiLimitsResponse(apiLimits, maxPerPage);

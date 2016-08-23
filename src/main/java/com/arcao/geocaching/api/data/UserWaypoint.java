@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +31,6 @@ public abstract class UserWaypoint implements Serializable {
         String value = Integer.toString(base + index, 36);
 
         return value.substring(value.length() - 2, value.length()) + cacheCode().substring(2);
-    }
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
     }
 
     public static Builder builder() {

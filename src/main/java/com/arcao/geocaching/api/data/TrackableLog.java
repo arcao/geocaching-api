@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.TrackableLogType;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.arcao.geocaching.api.util.GeocachingUtils;
 import com.google.auto.value.AutoValue;
 
@@ -47,11 +46,6 @@ public abstract class TrackableLog implements Serializable {
         if (cacheId() == 0)
             return null;
         return GeocachingUtils.cacheIdToCacheCode(cacheId());
-    }
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
     }
 
     public static Builder builder() {

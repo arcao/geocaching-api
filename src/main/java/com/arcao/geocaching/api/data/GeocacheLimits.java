@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -34,11 +33,6 @@ public abstract class GeocacheLimits implements Serializable {
      * @return count of caches in a limit
      */
     public abstract int maxGeocacheCount();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_GeocacheLimits.Builder().geocacheLeft(0).currentGeocacheCount(0);

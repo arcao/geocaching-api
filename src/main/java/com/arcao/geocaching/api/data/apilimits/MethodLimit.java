@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data.apilimits;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -41,11 +40,6 @@ public abstract class MethodLimit implements Serializable {
      * @return is partner method
      */
     public abstract boolean partnerMethod();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_MethodLimit.Builder();

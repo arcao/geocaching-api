@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 import com.google.gson.stream.JsonWriter;
 
@@ -54,11 +53,6 @@ public abstract class DeviceInfo implements JsonSerializable, Serializable {
             w.name("WebBrowserVersion").value(webBrowserVersion());
 
         w.endObject();
-    }
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
     }
 
     public static Builder builder() {

@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data.userprofile;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -16,11 +15,6 @@ public abstract class ProfilePhoto implements Serializable {
     public abstract String photoName();
 
     public abstract String photoUrl();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_ProfilePhoto.Builder();

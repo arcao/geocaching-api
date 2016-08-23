@@ -3,7 +3,6 @@ package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +32,6 @@ public abstract class User implements Serializable {
     public abstract int hideCount();
 
     public abstract int galleryImageCount();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_User.Builder().galleryImageCount(0);

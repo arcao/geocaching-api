@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -18,11 +17,6 @@ public abstract class Status implements Serializable {
     public abstract String message();
 
     public abstract String exceptionDetails();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_Status.Builder();

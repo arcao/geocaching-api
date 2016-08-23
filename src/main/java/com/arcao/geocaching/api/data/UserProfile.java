@@ -5,7 +5,6 @@ import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
 import com.arcao.geocaching.api.data.userprofile.GlobalStats;
 import com.arcao.geocaching.api.data.userprofile.PublicProfile;
 import com.arcao.geocaching.api.data.userprofile.TrackableStats;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -30,11 +29,6 @@ public abstract class UserProfile implements Serializable {
     @Nullable public abstract TrackableStats trackableStats();
 
     public abstract User user();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_UserProfile.Builder();

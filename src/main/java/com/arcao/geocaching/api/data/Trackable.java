@@ -1,6 +1,5 @@
 package com.arcao.geocaching.api.data;
 
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -48,11 +47,6 @@ public abstract class Trackable implements Serializable {
 
     public String trackableUrl() {
         return String.format(TRACKABLE_URL, trackingNumber());
-    }
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
     }
 
     public static Builder builder() {

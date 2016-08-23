@@ -1,7 +1,6 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
@@ -16,11 +15,6 @@ public abstract class TrackableTravel implements Serializable {
     public abstract Date dateLogged();
 
     public abstract Coordinates coordinates();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_TrackableTravel.Builder();

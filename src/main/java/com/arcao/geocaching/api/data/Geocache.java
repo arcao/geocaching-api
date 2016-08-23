@@ -4,7 +4,6 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
-import com.arcao.geocaching.api.util.DebugUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -105,11 +104,6 @@ public abstract class Geocache implements Serializable {
     @Nullable public abstract List<GeocacheLog> geocacheLogs();
 
     @Nullable public abstract String stateName();
-
-    @Override
-    public String toString() {
-        return DebugUtils.toString(this);
-    }
 
     public static Builder builder() {
         return new AutoValue_Geocache.Builder();
