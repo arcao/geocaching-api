@@ -4,153 +4,67 @@ package com.arcao.geocaching.api.data;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
-	private static final long serialVersionUID = 1808891631464643511L;
+@AutoValue
+public abstract class User implements Serializable {
+    private static final long serialVersionUID = 1808891631464643511L;
 
-	private final long id;
-	private final String publicGuid;
-	private final String userName;
-	private final String avatarUrl;
-	private final Coordinates homeCoordinates;
-	private final boolean admin;
-	private final MemberType memberType;
-	private final int findCount;
-	private final int hideCount;
-  private final int galleryImageCount;
+    public abstract long id();
 
-  private User(Builder builder) {
-    this.id = builder.id;
-    this.publicGuid = builder.publicGuid;
-    this.userName = builder.userName;
-    this.avatarUrl = builder.avatarUrl;
-    this.homeCoordinates = builder.homeCoordinates;
-    this.admin = builder.admin;
-    this.memberType = builder.memberType;
-    this.findCount = builder.findCount;
-    this.hideCount = builder.hideCount;
-    this.galleryImageCount = builder.galleryImageCount;
-  }
+    public abstract String publicGuid();
 
-  public long getId() {
-    return id;
-  }
+    public abstract String userName();
 
-  public String getPublicGuid() {
-    return publicGuid;
-  }
+    public abstract String avatarUrl();
 
-  public String getUserName() {
-    return userName;
-  }
+    @Nullable public abstract Coordinates homeCoordinates();
 
-  public String getAvatarUrl() {
-    return avatarUrl;
-  }
+    public abstract boolean admin();
 
-  public Coordinates getHomeCoordinates() {
-    return homeCoordinates;
-  }
+    @Nullable public abstract MemberType memberType();
 
-  public boolean isAdmin() {
-    return admin;
-  }
+    public abstract int findCount();
 
-  public MemberType getMemberType() {
-    return memberType;
-  }
+    public abstract int hideCount();
 
-  public int getFindCount() {
-    return findCount;
-  }
+    public abstract int galleryImageCount();
 
-  public int getHideCount() {
-    return hideCount;
-  }
-
-  public int getGalleryImageCount() {
-    return galleryImageCount;
-  }
-
-  @Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
-
-
-  public static class Builder {
-    private long id;
-    private String publicGuid;
-    private String userName;
-    private String avatarUrl;
-    private Coordinates homeCoordinates;
-    private boolean admin;
-    private MemberType memberType;
-    private int findCount;
-    private int hideCount;
-    private int galleryImageCount;
-
-    private Builder() {
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
     }
 
-    public static Builder user() {
-      return new Builder();
+    public static Builder builder() {
+        return new AutoValue_User.Builder().galleryImageCount(0);
     }
 
-    public Builder withId(long id) {
-      this.id = id;
-      return this;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder id(long id);
 
-    public Builder withPublicGuid(String publicGuid) {
-      this.publicGuid = publicGuid;
-      return this;
-    }
+        public abstract Builder publicGuid(String publicGuid);
 
-    public Builder withUserName(String userName) {
-      this.userName = userName;
-      return this;
-    }
+        public abstract Builder userName(String userName);
 
-    public Builder withAvatarUrl(String avatarUrl) {
-      this.avatarUrl = avatarUrl;
-      return this;
-    }
+        public abstract Builder avatarUrl(String avatarUrl);
 
-    public Builder withHomeCoordinates(Coordinates homeCoordinates) {
-      this.homeCoordinates = homeCoordinates;
-      return this;
-    }
+        public abstract Builder homeCoordinates(Coordinates homeCoordinates);
 
-    public Builder withAdmin(boolean admin) {
-      this.admin = admin;
-      return this;
-    }
+        public abstract Builder admin(boolean admin);
 
-    public Builder withMemberType(MemberType memberType) {
-      this.memberType = memberType;
-      return this;
-    }
+        public abstract Builder memberType(MemberType memberType);
 
-    public Builder withFindCount(int findCount) {
-      this.findCount = findCount;
-      return this;
-    }
+        public abstract Builder findCount(int findCount);
 
-    public Builder withHideCount(int hideCount) {
-      this.hideCount = hideCount;
-      return this;
-    }
+        public abstract Builder hideCount(int hideCount);
 
-    public Builder withGalleryImageCount(int galleryImageCount) {
-      this.galleryImageCount = galleryImageCount;
-      return this;
-    }
+        public abstract Builder galleryImageCount(int galleryImageCount);
 
-    public User build() {
-      return new User(this);
+        public abstract User build();
     }
-  }
 }

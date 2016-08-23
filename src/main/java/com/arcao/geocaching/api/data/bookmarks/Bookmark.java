@@ -2,36 +2,37 @@ package com.arcao.geocaching.api.data.bookmarks;
 
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
-public class Bookmark implements Serializable {
-  private static final long serialVersionUID = -2198982416375777824L;
+@AutoValue
+public abstract class Bookmark implements Serializable {
+    private static final long serialVersionUID = -2198982416375777824L;
 
-  private final String cacheCode;
-  private final String cacheTitle;
-  private final GeocacheType geocacheType;
+    public abstract String cacheCode();
 
-  public Bookmark(String cacheCode, String cacheTitle, GeocacheType geocacheType) {
-    this.cacheCode = cacheCode;
-    this.cacheTitle = cacheTitle;
-    this.geocacheType = geocacheType;
-  }
+    public abstract String cacheTitle();
 
-  public String getCacheCode() {
-    return cacheCode;
-  }
+    public abstract GeocacheType geocacheType();
 
-  public String getCacheTitle() {
-    return cacheTitle;
-  }
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-  public GeocacheType getGeocacheType() {
-    return geocacheType;
-  }
+    public static Builder builder() {
+        return new AutoValue_Bookmark.Builder();
+    }
 
-  @Override
-  public String toString() {
-    return DebugUtils.toString(this);
-  }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder cacheCode(String cacheCode);
+
+        public abstract Builder cacheTitle(String cacheTitle);
+
+        public abstract Builder geocacheType(GeocacheType geocacheType);
+
+        public abstract Bookmark build();
+    }
 }

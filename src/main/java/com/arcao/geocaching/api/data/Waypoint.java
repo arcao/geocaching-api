@@ -1,72 +1,57 @@
 package com.arcao.geocaching.api.data;
 
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.WaypointType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
-public class Waypoint implements Serializable {
-	private static final long serialVersionUID = -7183357014183017947L;
+import java.io.Serializable;
+import java.util.Date;
 
-	private final Coordinates coordinates;
-	private final Date time;
-	private final String waypointCode;
-	private final String name;
-	private final String note;
-	private final WaypointType waypointType;
-	private final String iconName;
+@AutoValue
+public abstract class Waypoint implements Serializable {
+    private static final long serialVersionUID = -7183357014183017947L;
 
-	public Waypoint(Coordinates coordinates, Date time, String waypointCode, String name, String note, WaypointType waypointType) {
-		this.coordinates = coordinates;
-		this.time = time;
-		this.waypointCode = waypointCode;
-		this.name = name;
-		this.note = note;
-		this.waypointType = waypointType;
-		this.iconName = waypointType.iconName;
-	}
-	
-	public Coordinates getCoordinates() {
-    return coordinates;
-  }
+    public abstract Coordinates coordinates();
 
-	public double getLatitude() {
-		return coordinates.getLatitude();
-	}
+    public abstract Date time();
 
-	public double getLongitude() {
-		return coordinates.getLongitude();
-	}
+    public abstract String waypointCode();
 
-	public Date getTime() {
-		return time;
-	}
+    public abstract String name();
 
-	public String getWaypointCode() {
-		return waypointCode;
-	}
+    public abstract String note();
 
-	public String getName() {
-		return name;
-	}
+    public abstract WaypointType waypointType();
 
-	public String getNote() {
-		return note;
-	}
+    public String iconName() {
+        return waypointType().iconName;
+    }
 
-	public WaypointType getWaypointType() {
-		return waypointType;
-	}
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-	public String getIconName() {
-		return iconName;
-	}
+    public static Builder builder() {
+        return new AutoValue_Waypoint.Builder();
+    }
 
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder coordinates(Coordinates coordinates);
+
+        public abstract Builder time(Date time);
+
+        public abstract Builder waypointCode(String waypointCode);
+
+        public abstract Builder name(String name);
+
+        public abstract Builder note(String note);
+
+        public abstract Builder waypointType(WaypointType waypointType);
+
+        public abstract Waypoint build();
+    }
 }

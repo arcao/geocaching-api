@@ -1,9 +1,9 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.filter;
 
-import java.io.IOException;
-
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 
 /**
  * 
@@ -33,10 +33,10 @@ public class ViewportFilter implements Filter {
    * @since 1.5
    */
   public ViewportFilter(Coordinates topLeftCoordinates, Coordinates bottomRightCoordinates) {
-    this.topLeftLatitude = topLeftCoordinates.getLatitude();
-    this.topLeftLongitude = topLeftCoordinates.getLongitude();
-    this.bottomRightLatitude = bottomRightCoordinates.getLatitude();
-    this.bottomRightLongitude = bottomRightCoordinates.getLongitude();
+    this.topLeftLatitude = topLeftCoordinates.latitude();
+    this.topLeftLongitude = topLeftCoordinates.longitude();
+    this.bottomRightLatitude = bottomRightCoordinates.latitude();
+    this.bottomRightLongitude = bottomRightCoordinates.longitude();
   }
   
   public double getTopLeftLatitude() {
@@ -60,7 +60,7 @@ public class ViewportFilter implements Filter {
    * @since 1.5
    */
   public Coordinates getTopLeftCoordinates() {
-    return new Coordinates(topLeftLatitude, topLeftLongitude);
+    return Coordinates.create(topLeftLatitude, topLeftLongitude);
   }
   
   /**
@@ -68,7 +68,7 @@ public class ViewportFilter implements Filter {
    * @since 1.5
    */
   public Coordinates getBottomRightCoordinates() {
-    return new Coordinates(bottomRightLatitude, bottomRightLongitude);
+    return Coordinates.create(bottomRightLatitude, bottomRightLongitude);
   }
 
   public String getName() {

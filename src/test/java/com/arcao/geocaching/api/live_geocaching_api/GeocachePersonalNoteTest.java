@@ -32,12 +32,12 @@ public class GeocachePersonalNoteTest extends AbstractGeocachingTest {
 
     Geocache geocache =  api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 0, 0);
     Assert.assertNotNull(geocache);
-    Assert.assertThat(geocache.getPersonalNote(), isEmptyOrNullString());
+    Assert.assertThat(geocache.personalNote(), isEmptyOrNullString());
 
     api.setGeocachePersonalNote(CACHE_CODE, expected);
 
     geocache = api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 0, 0);
     Assert.assertNotNull(geocache);
-    Assert.assertEquals(expected, geocache.getPersonalNote());
+    Assert.assertEquals(expected, geocache.personalNote());
   }
 }

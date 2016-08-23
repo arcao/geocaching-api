@@ -3,191 +3,89 @@ package com.arcao.geocaching.api.data;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.TrackableLogType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.arcao.geocaching.api.util.GeocachingUtils;
+import com.google.auto.value.AutoValue;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class TrackableLog implements Serializable {
-	private static final long serialVersionUID = -8616502691991228922L;
+@AutoValue
+public abstract class TrackableLog implements Serializable {
+    private static final long serialVersionUID = -8616502691991228922L;
 
-	private final int cacheID;
-  private final String code;
-  private final int id;
-  private final List<ImageData> images;
-  private final boolean archived;
-  private final String guid;
-  private final String text;
-  private final TrackableLogType type;
-  private final User loggedBy;
-  private final Date created;
-  private final Coordinates updatedCoordinates;
-  private final String url;
-  private final Date visited;
+    public abstract int cacheId();
 
-  public TrackableLog(Builder builder) {
-    this.cacheID = builder.cacheID;
-    this.code = builder.code;
-    this.id = builder.id;
-    this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
-    this.archived = builder.archived;
-    this.guid = builder.guid;
-    this.text = builder.text;
-    this.type = builder.type;
-    this.loggedBy = builder.loggedBy;
-    this.created = builder.created;
-    this.updatedCoordinates = builder.updatedCoordinates;
-    this.url = builder.url;
-    this.visited = builder.visited;
-  }
+    public abstract String code();
 
-  public int getCacheID() {
-    return cacheID;
-  }
+    public abstract int id();
 
-  public String getCode() {
-    return code;
-  }
+    public abstract List<ImageData> images();
 
-  public int getId() {
-    return id;
-  }
+    public abstract boolean archived();
 
-  public List<ImageData> getImages() {
-    return images;
-  }
+    public abstract String guid();
 
-  public boolean isArchived() {
-    return archived;
-  }
+    public abstract String text();
 
-  public String getGuid() {
-    return guid;
-  }
+    public abstract TrackableLogType type();
 
-  public String getText() {
-    return text;
-  }
+    public abstract User loggedBy();
 
-  public TrackableLogType getType() {
-    return type;
-  }
+    public abstract Date created();
 
-  public User getLoggedBy() {
-    return loggedBy;
-  }
+    public abstract Coordinates updatedCoordinates();
 
-  public Date getCreated() {
-    return created;
-  }
+    public abstract String url();
 
-  public Coordinates getUpdatedCoordinates() {
-    return updatedCoordinates;
-  }
+    public abstract Date visited();
 
-  public String getUrl() {
-    return url;
-  }
-
-  public Date getVisited() {
-    return visited;
-  }
-  
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
-
-  public static class Builder {
-    private int cacheID;
-    private String code;
-    private int id;
-    private List<ImageData> images;
-    private boolean archived;
-    private String guid;
-    private String text;
-    private TrackableLogType type;
-    private User loggedBy;
-    private Date created;
-    private Coordinates updatedCoordinates;
-    private String url;
-    private Date visited;
-
-    private Builder() {
+    @Nullable
+    public String cacheCode() {
+        if (cacheId() == 0)
+            return null;
+        return GeocachingUtils.cacheIdToCacheCode(cacheId());
     }
 
-    public static Builder trackableLog() {
-      return new Builder();
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
     }
 
-    public Builder withCacheID(int cacheID) {
-      this.cacheID = cacheID;
-      return this;
+    public static Builder builder() {
+        return new AutoValue_TrackableLog.Builder();
     }
 
-    public Builder withCode(String code) {
-      this.code = code;
-      return this;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder cacheId(int cacheId);
 
-    public Builder withId(int id) {
-      this.id = id;
-      return this;
-    }
+        public abstract Builder code(String code);
 
-    public Builder withImages(List<ImageData> images) {
-      this.images = images;
-      return this;
-    }
+        public abstract Builder id(int id);
 
-    public Builder withArchived(boolean archived) {
-      this.archived = archived;
-      return this;
-    }
+        public abstract Builder images(List<ImageData> images);
 
-    public Builder withGuid(String guid) {
-      this.guid = guid;
-      return this;
-    }
+        public abstract Builder archived(boolean archived);
 
-    public Builder withText(String text) {
-      this.text = text;
-      return this;
-    }
+        public abstract Builder guid(String guid);
 
-    public Builder withType(TrackableLogType type) {
-      this.type = type;
-      return this;
-    }
+        public abstract Builder text(String text);
 
-    public Builder withLoggedBy(User loggedBy) {
-      this.loggedBy = loggedBy;
-      return this;
-    }
+        public abstract Builder type(TrackableLogType type);
 
-    public Builder withCreated(Date created) {
-      this.created = created;
-      return this;
-    }
+        public abstract Builder loggedBy(User loggedBy);
 
-    public Builder withUpdatedCoordinates(Coordinates updatedCoordinates) {
-      this.updatedCoordinates = updatedCoordinates;
-      return this;
-    }
+        public abstract Builder created(Date created);
 
-    public Builder withUrl(String url) {
-      this.url = url;
-      return this;
-    }
+        public abstract Builder updatedCoordinates(Coordinates updatedCoordinates);
 
-    public Builder withVisited(Date visited) {
-      this.visited = visited;
-      return this;
-    }
+        public abstract Builder url(String url);
 
-    public TrackableLog build() {
-      return new TrackableLog(this);
+        public abstract Builder visited(Date visited);
+
+        public abstract TrackableLog build();
     }
-  }
 }

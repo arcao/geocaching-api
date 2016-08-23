@@ -1,77 +1,72 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.arcao.geocaching.api.data.ImageData;
-import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
-import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
-import com.arcao.geocaching.api.data.type.TrackableLogType;
 import com.google.gson.stream.JsonToken;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class TrackableLogJsonParser extends JsonParser {
-  public static List<TrackableLog> parseList(JsonReader r) throws IOException {
-    if (r.peek() != JsonToken.BEGIN_ARRAY) {
-      r.skipValue();
-    }
-    
-    List<TrackableLog> list = new ArrayList<TrackableLog>();
-    r.beginArray();
-    while(r.hasNext()) {
-      list.add(parse(r));
-    }
-    r.endArray();
-    
-    return list;
-  }
-  
-  public static TrackableLog parse(JsonReader r) throws IOException {
-    TrackableLog.Builder trackableLog = TrackableLog.Builder.trackableLog();
-    Coordinates.Builder updatedCoordinates = Coordinates.Builder.coordinates();
+    public static List<TrackableLog> parseList(JsonReader r) throws IOException {
+        if (r.peek() != JsonToken.BEGIN_ARRAY) {
+            r.skipValue();
+        }
 
-    r.beginObject();
-    while(r.hasNext()) {
-      String name = r.nextName();
-      if ("CacheID".equals(name)) {
-        trackableLog.withCacheID(r.nextInt());
-      } else if ("Code".equals(name)) {
-        trackableLog.withCode(r.nextString());
-      } else if ("ID".equals(name)) {
-        trackableLog.withId(r.nextInt());
-      } else if ("Images".equals(name)) {
-        trackableLog.withImages(ImageDataJsonParser.parseList(r));
-      } else if ("IsArchived".equals(name)) {
-        trackableLog.withArchived(r.nextBoolean());
-      } else if ("LogGuid".equals(name)) {
-        trackableLog.withGuid(r.nextString());
-      } else if ("LogText".equals(name)) {
-        trackableLog.withText(r.nextString());
-      } else if ("LogType".equals(name)) {
-        trackableLog.withType( parseTrackableLogType(r));
-      } else if ("LoggedBy".equals(name)) {
-        trackableLog.withLoggedBy(parseUser(r));
-      } else if ("UTCCreateDate".equals(name)) {
-        trackableLog.withCreated(parseJsonUTCDate(r.nextString()));
-      } else if ("UpdatedLatitude".equals(name)) {
-        updatedCoordinates.withLatitude(r.nextDouble());
-      } else if ("UpdatedLongitude".equals(name)) {
-        updatedCoordinates.withLongitude(r.nextDouble());
-      } else if ("Url".equals(name)) {
-        trackableLog.withUrl(r.nextString());
-      } else if ("VisitDate".equals(name)) {
-        trackableLog.withVisited(parseJsonDate(r.nextString()));
-      } else {
-        r.skipValue();
-      }
+        List<TrackableLog> list = new ArrayList<TrackableLog>();
+        r.beginArray();
+        while (r.hasNext()) {
+            list.add(parse(r));
+        }
+        r.endArray();
+
+        return list;
     }
-    r.endObject();
 
-    trackableLog.withUpdatedCoordinates(updatedCoordinates.build());
+    public static TrackableLog parse(JsonReader r) throws IOException {
+        TrackableLog.Builder builder = TrackableLog.builder();
+        Coordinates.Builder updatedCoordinatesBuilder = Coordinates.builder();
 
-    return trackableLog.build();
-  }
+        r.beginObject();
+        while (r.hasNext()) {
+            String name = r.nextName();
+            if ("CacheID".equals(name)) {
+                builder.cacheId(r.nextInt());
+            } else if ("Code".equals(name)) {
+                builder.code(r.nextString());
+            } else if ("ID".equals(name)) {
+                builder.id(r.nextInt());
+            } else if ("Images".equals(name)) {
+                builder.images(ImageDataJsonParser.parseList(r));
+            } else if ("IsArchived".equals(name)) {
+                builder.archived(r.nextBoolean());
+            } else if ("LogGuid".equals(name)) {
+                builder.guid(r.nextString());
+            } else if ("LogText".equals(name)) {
+                builder.text(r.nextString());
+            } else if ("LogType".equals(name)) {
+                builder.type(parseTrackableLogType(r));
+            } else if ("LoggedBy".equals(name)) {
+                builder.loggedBy(parseUser(r));
+            } else if ("UTCCreateDate".equals(name)) {
+                builder.created(parseJsonUTCDate(r.nextString()));
+            } else if ("UpdatedLatitude".equals(name)) {
+                updatedCoordinatesBuilder.latitude(r.nextDouble());
+            } else if ("UpdatedLongitude".equals(name)) {
+                updatedCoordinatesBuilder.longitude(r.nextDouble());
+            } else if ("Url".equals(name)) {
+                builder.url(r.nextString());
+            } else if ("VisitDate".equals(name)) {
+                builder.visited(parseJsonDate(r.nextString()));
+            } else {
+                r.skipValue();
+            }
+        }
+        r.endObject();
+
+        builder.updatedCoordinates(updatedCoordinatesBuilder.build());
+
+        return builder.build();
+    }
 }

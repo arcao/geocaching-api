@@ -1,17 +1,17 @@
 package com.arcao.geocaching.api.data.coordinates;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 
 public class CoordinatesFormatterTest {
   private static final double refLatitude = 49.0 + 56.031 / 60.0;
   private static final double refLongitude = 8.0 + 38.564 / 60.0;
-  private static final Coordinates refCoordinates = new Coordinates(refLatitude, refLongitude);
+  private static final Coordinates refCoordinates = Coordinates.create(refLatitude, refLongitude);
   private static final char decSymbol = new DecimalFormatSymbols().getDecimalSeparator(); // some tests are Locale specific!!!
   
   @Test

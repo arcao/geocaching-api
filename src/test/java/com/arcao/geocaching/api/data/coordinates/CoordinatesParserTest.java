@@ -1,16 +1,17 @@
 package com.arcao.geocaching.api.data.coordinates;
 
+import org.junit.Test;
+
+import java.text.ParseException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.text.ParseException;
-
-import org.junit.Test;
-
 public class CoordinatesParserTest {
   private static final double refLongitude = 8.0 + 38.564 / 60.0;
   private static final double refLatitude = 49.0 + 56.031 / 60.0;
+  private static final Coordinates refCoordinates = Coordinates.create(refLatitude, refLongitude);
 
   @Test
   public void testParseLatitude() throws ParseException {
@@ -24,8 +25,7 @@ public class CoordinatesParserTest {
 
   @Test
   public void testFullCoordinates() throws ParseException {
-    final Coordinates point = new Coordinates(refLatitude, refLongitude);
-    assertTrue(point.equals(CoordinatesParser.parse("N 49° 56.031 | E 8° 38.564")));
+    assertTrue(refCoordinates.equals(Coordinates.parseCoordinates("N 49° 56.031 | E 8° 38.564")));
   }
 
   @Test
@@ -123,7 +123,6 @@ public class CoordinatesParserTest {
 
   @Test
   public void testParseCoordinatesNumberAndNormalize() throws ParseException {
-    final Coordinates point = new Coordinates(refLatitude, refLongitude);
-    assertTrue(point.equals(CoordinatesParser.parse("N 229° 56.031 | E 368° 38.564")));
+    assertTrue(refCoordinates.equals(CoordinatesParser.parse("N 229° 56.031 | E 368° 38.564")));
   }
 }

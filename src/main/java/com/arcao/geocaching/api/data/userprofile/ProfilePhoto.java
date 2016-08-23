@@ -1,42 +1,41 @@
 package com.arcao.geocaching.api.data.userprofile;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
-public class ProfilePhoto implements Serializable {
-	private static final long serialVersionUID = 5557754921065357998L;
+@AutoValue
+public abstract class ProfilePhoto implements Serializable {
+    private static final long serialVersionUID = 5557754921065357998L;
 
-	private final String photoDescription;
-	private final String photoFilename;
-	private final String photoName;
-	private final String photoUrl;
-	
-	public ProfilePhoto(String photoDescription, String photoFilename, String photoName, String photoUrl) {
-    this.photoDescription = photoDescription;
-    this.photoFilename = photoFilename;
-    this.photoName = photoName;
-    this.photoUrl = photoUrl;
-  }
+    public abstract String photoDescription();
 
-	public String getPhotoDescription() {
-  	return photoDescription;
-  }
+    public abstract String photoFilename();
 
-	public String getPhotoFilename() {
-  	return photoFilename;
-  }
+    public abstract String photoName();
 
-	public String getPhotoName() {
-  	return photoName;
-  }
+    public abstract String photoUrl();
 
-	public String getPhotoUrl() {
-  	return photoUrl;
-  }
-	
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
+
+    public static Builder builder() {
+        return new AutoValue_ProfilePhoto.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder photoDescription(String photoDescription);
+
+        public abstract Builder photoFilename(String photoFilename);
+
+        public abstract Builder photoName(String photoName);
+
+        public abstract Builder photoUrl(String photoUrl);
+
+        public abstract ProfilePhoto build();
+    }
 }

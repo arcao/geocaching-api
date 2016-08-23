@@ -1,42 +1,41 @@
 package com.arcao.geocaching.api.data.userprofile;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
-public class GlobalStats implements Serializable {
-	private static final long serialVersionUID = 7066712324435905861L;
+@AutoValue
+public abstract class GlobalStats implements Serializable {
+    private static final long serialVersionUID = 7066712324435905861L;
 
-	private final long accountsLogged;
-	private final long activeCaches;
-	private final long activeCountries;
-	private final long newLog;
-	
-	public GlobalStats(long accountsLogged, long activeCaches, long activeCountries, long newLog) {
-	  this.accountsLogged = accountsLogged;
-	  this.activeCaches = activeCaches;
-	  this.activeCountries = activeCountries;
-	  this.newLog = newLog;
-  }
+    public abstract long accountsLogged();
 
-	public long getAccountsLogged() {
-  	return accountsLogged;
-  }
+    public abstract long activeCaches();
 
-	public long getActiveCaches() {
-  	return activeCaches;
-  }
+    public abstract long activeCountries();
 
-	public long getActiveCountries() {
-  	return activeCountries;
-  }
+    public abstract long newLogs();
 
-	public long getNewLog() {
-  	return newLog;
-  }
-	
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
+
+    public static Builder builder() {
+        return new AutoValue_GlobalStats.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder accountsLogged(long accountsLogged);
+
+        public abstract Builder activeCaches(long activeCaches);
+
+        public abstract Builder activeCountries(long activeCountries);
+
+        public abstract Builder newLogs(long newLogs);
+
+        public abstract GlobalStats build();
+    }
 }

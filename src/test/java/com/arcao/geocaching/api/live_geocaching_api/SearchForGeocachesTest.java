@@ -11,193 +11,194 @@ import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.BookmarksExcludeFilter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
 import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilter;
+
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 public class SearchForGeocachesTest extends AbstractGeocachingTest {
-  protected final static String CACHE_CODE = "GCY81P";
+    protected final static String CACHE_CODE = "GCY81P";
 
-  @Test
-  public void getLiteGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
+    @Test
+    public void getLiteGeocacheByCacheCodeTest() throws Exception {
+        Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
 
-    // ResultQuality.LITE
-    assertNotNull(cache);
-    assertNotNull(cache.getOwner());
-    assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
-    assertEquals(CACHE_CODE, cache.getCode());
-    assertEquals(GeocacheType.Multi, cache.getGeocacheType());
-    assertNotNull(cache.getPlacedBy());
-    assertEquals(ContainerType.Micro, cache.getContainerType());
-    assertNotNull(cache.getCreateDate());
-    assertNotNull(cache.getPlaceDate());
-    assertNotNull(cache.getLastUpdateDate());
-    assertEquals(1.5F, cache.getDifficulty(), 0);
-    assertEquals(1.5F, cache.getTerrain(), 0);
-    assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
-    assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
-    assertNotNull(cache.getName());
-    assertFalse(cache.isArchived());
-    assertTrue(cache.isAvailable());
-    assertFalse(cache.isFoundByUser());
-    assertFalse(cache.isPremium());
-    assertNotSame(0, cache.getImageCount());
-    assertNotNull(cache.getUrl());
-    assertNotNull(cache.getGuid());
+        // ResultQuality.LITE
+        assertNotNull(cache);
+        assertNotNull(cache.owner());
+        assertNotSame(MemberType.Guest, cache.owner().memberType());
+        assertEquals(CACHE_CODE, cache.code());
+        assertEquals(GeocacheType.Multi, cache.geocacheType());
+        assertNotNull(cache.placedBy());
+        assertEquals(ContainerType.Micro, cache.containerType());
+        assertNotNull(cache.createDate());
+        assertNotNull(cache.placeDate());
+        assertNotNull(cache.lastUpdateDate());
+        assertEquals(1.5F, cache.difficulty(), 0);
+        assertEquals(1.5F, cache.terrain(), 0);
+        assertFalse(Double.isNaN(cache.coordinates().latitude()));
+        assertFalse(Double.isNaN(cache.coordinates().longitude()));
+        assertNotNull(cache.name());
+        assertFalse(cache.archived());
+        assertTrue(cache.available());
+        assertFalse(cache.foundByUser());
+        assertFalse(cache.premium());
+        assertNotSame(0, cache.imageCount());
+        assertNotNull(cache.url());
+        assertNotNull(cache.guid());
 
-    GeocacheLimits limits = api.getLastGeocacheLimits();
-    assertNotNull(limits);
-    assertEquals(1, api.getLastSearchResultsFound());
-  }
-
-  @Test
-  public void getSummaryGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.SUMMARY, CACHE_CODE, 0, 0);
-
-    // ResultQuality.LITE
-    assertNotNull(cache);
-    assertNotNull(cache.getOwner());
-    assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
-    assertEquals(CACHE_CODE, cache.getCode());
-    assertEquals(GeocacheType.Multi, cache.getGeocacheType());
-    assertNotNull(cache.getPlacedBy());
-    assertEquals(ContainerType.Micro, cache.getContainerType());
-    assertNotNull(cache.getCreateDate());
-    assertNotNull(cache.getPlaceDate());
-    assertNotNull(cache.getLastUpdateDate());
-    assertEquals(1.5F, cache.getDifficulty(), 0);
-    assertEquals(1.5F, cache.getTerrain(), 0);
-    assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
-    assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
-    assertNotNull(cache.getName());
-    assertFalse(cache.isArchived());
-    assertTrue(cache.isAvailable());
-    assertFalse(cache.isFoundByUser());
-    assertFalse(cache.isPremium());
-    assertNotSame(0, cache.getImageCount());
-    assertNotNull(cache.getUrl());
-    assertNotNull(cache.getGuid());
-
-    // ResultQuality.SUMMARY
-    assertEquals(8, cache.getWaypoints().size());
-    assertNotNull(cache.getHint());
-    assertNotNull(cache.getShortDescription());
-    assertTrue(cache.isShortDescriptionHtml());
-    assertNotNull(cache.getLongDescription());
-    assertTrue(cache.isLongDescriptionHtml());
-    assertNotSame(0, cache.getUserWaypoints().size());
-    assertNotNull(cache.getImages());
-    assertFalse(cache.getImages().isEmpty());
-
-    GeocacheLimits limits = api.getLastGeocacheLimits();
-    assertNotNull(limits);
-    assertEquals(1, api.getLastSearchResultsFound());
-  }
-
-  @Test
-  public void getFullGeocacheByCacheCodeTest() throws Exception {
-    Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 5, 0);
-
-    // ResultQuality.LITE
-    assertNotNull(cache);
-    assertNotNull(cache.getOwner());
-    assertNotSame(MemberType.Guest, cache.getOwner().getMemberType());
-    assertEquals(CACHE_CODE, cache.getCode());
-    assertEquals(GeocacheType.Multi, cache.getGeocacheType());
-    assertNotNull(cache.getPlacedBy());
-    assertEquals(ContainerType.Micro, cache.getContainerType());
-    assertNotNull(cache.getCreateDate());
-    assertNotNull(cache.getPlaceDate());
-    assertNotNull(cache.getLastUpdateDate());
-    assertEquals(1.5F, cache.getDifficulty(), 0);
-    assertEquals(1.5F, cache.getTerrain(), 0);
-    assertFalse(Double.isNaN(cache.getCoordinates().getLatitude()));
-    assertFalse(Double.isNaN(cache.getCoordinates().getLongitude()));
-    assertNotNull(cache.getName());
-    assertFalse(cache.isArchived());
-    assertTrue(cache.isAvailable());
-    assertFalse(cache.isFoundByUser());
-    assertFalse(cache.isPremium());
-    assertNotSame(0, cache.getImageCount());
-    assertNotNull(cache.getUrl());
-    assertNotNull(cache.getGuid());
-
-
-    // ResultQuality.SUMMARY
-    assertEquals(8, cache.getWaypoints().size());
-    assertNotNull(cache.getHint());
-    assertNotNull(cache.getShortDescription());
-    assertTrue(cache.isShortDescriptionHtml());
-    assertNotNull(cache.getLongDescription());
-    assertTrue(cache.isLongDescriptionHtml());
-    assertNotNull(cache.getImages());
-    assertFalse(cache.getImages().isEmpty());
-
-    // ResultQuality.FULL
-    assertNotNull(cache.getCountryName());
-    assertNotNull(cache.getStateName());
-
-    assertEquals(5, cache.getGeocacheLogs().size());
-    for (GeocacheLog geocacheLog : cache.getGeocacheLogs()) {
-      assertNotNull(geocacheLog.getAuthor());
-      assertNotNull(geocacheLog.getCreated());
-      assertNotNull(geocacheLog.getVisited());
-      assertNotSame(GeocacheLogType.Unknown, geocacheLog.getLogType());
-      assertNotNull(geocacheLog.getText());
+        GeocacheLimits limits = api.getLastGeocacheLimits();
+        assertNotNull(limits);
+        assertEquals(1, api.getLastSearchResultsFound());
     }
 
-    assertNotNull(cache.getAttributes());
-    assertFalse(cache.getAttributes().isEmpty());
-    assertNotNull(cache.getCountryName());
-    assertNotNull(cache.getStateName());
+    @Test
+    public void getSummaryGeocacheByCacheCodeTest() throws Exception {
+        Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.SUMMARY, CACHE_CODE, 0, 0);
 
-    GeocacheLimits limits = api.getLastGeocacheLimits();
-    assertNotNull(limits);
-    assertEquals(1, api.getLastSearchResultsFound());
-  }
+        // ResultQuality.LITE
+        assertNotNull(cache);
+        assertNotNull(cache.owner());
+        assertNotSame(MemberType.Guest, cache.owner().memberType());
+        assertEquals(CACHE_CODE, cache.code());
+        assertEquals(GeocacheType.Multi, cache.geocacheType());
+        assertNotNull(cache.placedBy());
+        assertEquals(ContainerType.Micro, cache.containerType());
+        assertNotNull(cache.createDate());
+        assertNotNull(cache.placeDate());
+        assertNotNull(cache.lastUpdateDate());
+        assertEquals(1.5F, cache.difficulty(), 0);
+        assertEquals(1.5F, cache.terrain(), 0);
+        assertFalse(Double.isNaN(cache.coordinates().latitude()));
+        assertFalse(Double.isNaN(cache.coordinates().longitude()));
+        assertNotNull(cache.name());
+        assertFalse(cache.archived());
+        assertTrue(cache.available());
+        assertFalse(cache.foundByUser());
+        assertFalse(cache.premium());
+        assertNotSame(0, cache.imageCount());
+        assertNotNull(cache.url());
+        assertNotNull(cache.guid());
 
-  @Test
-  public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws Exception {
-    assertEquals(
-                  3,
-                  api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                                          Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
-    );
+        // ResultQuality.SUMMARY
+        assertEquals(8, cache.waypoints().size());
+        assertNotNull(cache.hint());
+        assertNotNull(cache.shortDescription());
+        assertTrue(cache.shortDescriptionHtml());
+        assertNotNull(cache.longDescription());
+        assertTrue(cache.longDescriptionHtml());
+        assertNotSame(0, cache.userWaypoints().size());
+        assertNotNull(cache.images());
+        assertFalse(cache.images().isEmpty());
 
-    GeocacheLimits limits = api.getLastGeocacheLimits();
-    assertNotNull(limits);
-    assertNotSame(0, api.getLastSearchResultsFound());
-  }
-  
-  @Test
-  public void searchForGeocachesBookmarksExcludeFilterSimpleGeocacheTest() throws Exception {
-    assertEquals(
-                  3,
-                  api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0, Arrays.asList(
-                                                                                                   new PointRadiusFilter(50, 14, 60000),
-                                                                                                   new BookmarksExcludeFilter(true, null)
-                  ), null).size()
-    );
+        GeocacheLimits limits = api.getLastGeocacheLimits();
+        assertNotNull(limits);
+        assertEquals(1, api.getLastSearchResultsFound());
+    }
 
-    GeocacheLimits limits = api.getLastGeocacheLimits();
-    assertNotNull(limits);
-    assertNotSame(0, api.getLastSearchResultsFound());
-  }
+    @Test
+    public void getFullGeocacheByCacheCodeTest() throws Exception {
+        Geocache cache = api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 5, 0);
 
-  @Test
-  public void getMoreGeocachesTest() throws Exception {
-    assertEquals(
-            3,
-            api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                    Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
-    );
+        // ResultQuality.LITE
+        assertNotNull(cache);
+        assertNotNull(cache.owner());
+        assertNotSame(MemberType.Guest, cache.owner().memberType());
+        assertEquals(CACHE_CODE, cache.code());
+        assertEquals(GeocacheType.Multi, cache.geocacheType());
+        assertNotNull(cache.placedBy());
+        assertEquals(ContainerType.Micro, cache.containerType());
+        assertNotNull(cache.createDate());
+        assertNotNull(cache.placeDate());
+        assertNotNull(cache.lastUpdateDate());
+        assertEquals(1.5F, cache.difficulty(), 0);
+        assertEquals(1.5F, cache.terrain(), 0);
+        assertFalse(Double.isNaN(cache.coordinates().latitude()));
+        assertFalse(Double.isNaN(cache.coordinates().longitude()));
+        assertNotNull(cache.name());
+        assertFalse(cache.archived());
+        assertTrue(cache.available());
+        assertFalse(cache.foundByUser());
+        assertFalse(cache.premium());
+        assertNotSame(0, cache.imageCount());
+        assertNotNull(cache.url());
+        assertNotNull(cache.guid());
 
-    assertEquals(
-            3,
-            api.getMoreGeocaches(GeocachingApi.ResultQuality.LITE, 3, 3, 0, 0).size()
-    );
-  }
+
+        // ResultQuality.SUMMARY
+        assertEquals(8, cache.waypoints().size());
+        assertNotNull(cache.hint());
+        assertNotNull(cache.shortDescription());
+        assertTrue(cache.shortDescriptionHtml());
+        assertNotNull(cache.longDescription());
+        assertTrue(cache.longDescriptionHtml());
+        assertNotNull(cache.images());
+        assertFalse(cache.images().isEmpty());
+
+        // ResultQuality.FULL
+        assertNotNull(cache.countryName());
+        assertNotNull(cache.stateName());
+
+        assertEquals(5, cache.geocacheLogs().size());
+        for (GeocacheLog geocacheLog : cache.geocacheLogs()) {
+            assertNotNull(geocacheLog.author());
+            assertNotNull(geocacheLog.created());
+            assertNotNull(geocacheLog.visited());
+            assertNotSame(GeocacheLogType.Unknown, geocacheLog.logType());
+            assertNotNull(geocacheLog.text());
+        }
+
+        assertNotNull(cache.attributes());
+        assertFalse(cache.attributes().isEmpty());
+        assertNotNull(cache.countryName());
+        assertNotNull(cache.stateName());
+
+        GeocacheLimits limits = api.getLastGeocacheLimits();
+        assertNotNull(limits);
+        assertEquals(1, api.getLastSearchResultsFound());
+    }
+
+    @Test
+    public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws Exception {
+        assertEquals(3,
+                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
+                        Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+        );
+
+        GeocacheLimits limits = api.getLastGeocacheLimits();
+        assertNotNull(limits);
+        assertNotSame(0, api.getLastSearchResultsFound());
+    }
+
+    @Test
+    public void searchForGeocachesBookmarksExcludeFilterSimpleGeocacheTest() throws Exception {
+        assertEquals(3,
+                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0, Arrays.asList(
+                        new PointRadiusFilter(50, 14, 60000),
+                        new BookmarksExcludeFilter(true, null)
+                ), null).size()
+        );
+
+        GeocacheLimits limits = api.getLastGeocacheLimits();
+        assertNotNull(limits);
+        assertNotSame(0, api.getLastSearchResultsFound());
+    }
+
+    @Test
+    public void getMoreGeocachesTest() throws Exception {
+        assertEquals(3,
+                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
+                        Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+        );
+
+        assertEquals(3,
+                api.getMoreGeocaches(GeocachingApi.ResultQuality.LITE, 3, 3, 0, 0).size()
+        );
+    }
 }

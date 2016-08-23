@@ -1,236 +1,98 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class Trackable implements Serializable {
-	private static final long serialVersionUID = 5984147222015866863L;
+@AutoValue
+public abstract class Trackable implements Serializable {
+    private static final long serialVersionUID = 5984147222015866863L;
+    private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
 
-	private final long id;
-	private final String name;
-	private final String goal;
-	private final String description;
-	private final String trackableTypeName;
-	private final String trackableTypeImage;
-	private final User owner;
-	private final String currentCacheCode;
-	private final User currentOwner;
-	private final String trackingNumber;
-	private final Date created;
-	private final boolean allowedToBeCollected;
-	private final boolean inCollection;
-	private final boolean archived;
+    public abstract long id();
 
-	private final List<TrackableLog> trackableLogs;
-	private final List<ImageData> images;
+    @Nullable public abstract String name();
 
-	private static final String TRACKABLE_URL = "http://www.geocaching.com/track/details.aspx?tracker=%s";
+    @Nullable public abstract String goal();
 
-	private Trackable(Builder builder) {
-		this.id = builder.id;
-		this.name = builder.name;
-		this.goal = builder.goal;
-		this.description = builder.description;
-		this.trackableTypeName = builder.trackableTypeName;
-		this.trackableTypeImage = builder.trackableTypeImage;
-		this.owner = builder.owner;
-		this.currentCacheCode = builder.currentCacheCode;
-		this.currentOwner = builder.currentOwner;
-		this.trackingNumber = builder.trackingNumber;
-		this.created = builder.created;
-		this.allowedToBeCollected = builder.allowedToBeCollected;
-		this.inCollection = builder.inCollection;
-		this.archived = builder.archived;
+    @Nullable public abstract String description();
 
-		this.trackableLogs = builder.trackableLogs != null ? builder.trackableLogs : Collections.<TrackableLog>emptyList();
-		this.images = builder.images != null ? builder.images : Collections.<ImageData>emptyList();
-	}
+    public abstract String trackableTypeName();
 
-	public long getId() {
-	  return id;
-  }
+    public abstract String trackableTypeImage();
 
-	public String getName() {
-		return name;
-	}
+    @Nullable public abstract User owner();
 
-	public String getGoal() {
-		return goal;
-	}
+    @Nullable public abstract String currentCacheCode();
 
-	public String getDescription() {
-		return description;
-	}
+    @Nullable public abstract User currentOwner();
 
-	public String getTrackableTypeName() {
-		return trackableTypeName;
-	}
+    @Nullable public abstract String trackingNumber();
 
-	public String getTrackableTypeImage() {
-		return trackableTypeImage;
-	}
+    public abstract Date created();
 
-	public User getOwner() {
-		return owner;
-	}
+    public abstract boolean allowedToBeCollected();
 
-	public String getCurrentCacheCode() {
-		return currentCacheCode;
-	}
+    public abstract boolean inCollection();
 
-	public User getCurrentOwner() {
-		return currentOwner;
-	}
+    public abstract boolean archived();
 
-	public String getTrackingNumber() {
-		return trackingNumber;
-	}
+    @Nullable public abstract List<TrackableLog> trackableLogs();
 
-	public String getTrackablePage() {
-	  return String.format(TRACKABLE_URL, trackingNumber);
-	}
+    @Nullable public abstract List<ImageData> images();
 
-	public Date getCreated() {
-	  return created;
-  }
+    public String trackableUrl() {
+        return String.format(TRACKABLE_URL, trackingNumber());
+    }
 
-	public boolean isAllowedToBeCollected() {
-	  return allowedToBeCollected;
-  }
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-	public boolean isInCollection() {
-	  return inCollection;
-  }
+    public static Builder builder() {
+        return new AutoValue_Trackable.Builder();
+    }
 
-	public boolean isArchived() {
-	  return archived;
-  }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder id(long id);
 
-	public List<TrackableLog> getTrackableLogs() {
-		return trackableLogs;
-	}
+        public abstract Builder name(String name);
 
-	public List<ImageData> getImages() {
-		return images;
-	}
+        public abstract Builder goal(String goal);
 
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+        public abstract Builder description(String description);
 
+        public abstract Builder trackableTypeName(String trackableTypeName);
 
-	public static class Builder {
-		private long id;
-		private String name;
-		private String goal;
-		private String description;
-		private String trackableTypeName;
-		private String trackableTypeImage;
-		private User owner;
-		private String currentCacheCode;
-		private User currentOwner;
-		private String trackingNumber;
-		private Date created;
-		private boolean allowedToBeCollected;
-		private boolean inCollection;
-		private boolean archived;
-		private List<TrackableLog> trackableLogs;
-		private List<ImageData> images;
+        public abstract Builder trackableTypeImage(String trackableTypeImage);
 
-		private Builder() {
-		}
+        public abstract Builder owner(User owner);
 
-		public static Builder trackable() {
-			return new Builder();
-		}
+        public abstract Builder currentCacheCode(String currentCacheCode);
 
-		public Builder withId(long id) {
-			this.id = id;
-			return this;
-		}
+        public abstract Builder currentOwner(User currentOwner);
 
-		public Builder withName(String name) {
-			this.name = name;
-			return this;
-		}
+        public abstract Builder trackingNumber(String trackingNumber);
 
-		public Builder withGoal(String goal) {
-			this.goal = goal;
-			return this;
-		}
+        public abstract Builder created(Date created);
 
-		public Builder withDescription(String description) {
-			this.description = description;
-			return this;
-		}
+        public abstract Builder allowedToBeCollected(boolean allowedToBeCollected);
 
-		public Builder withTrackableTypeName(String trackableTypeName) {
-			this.trackableTypeName = trackableTypeName;
-			return this;
-		}
+        public abstract Builder inCollection(boolean inCollection);
 
-		public Builder withTrackableTypeImage(String trackableTypeImage) {
-			this.trackableTypeImage = trackableTypeImage;
-			return this;
-		}
+        public abstract Builder archived(boolean archived);
 
-		public Builder withOwner(User owner) {
-			this.owner = owner;
-			return this;
-		}
+        public abstract Builder trackableLogs(List<TrackableLog> trackableLogs);
 
-		public Builder withCurrentCacheCode(String currentCacheCode) {
-			this.currentCacheCode = currentCacheCode;
-			return this;
-		}
+        public abstract Builder images(List<ImageData> images);
 
-		public Builder withCurrentOwner(User currentOwner) {
-			this.currentOwner = currentOwner;
-			return this;
-		}
-
-		public Builder withTrackingNumber(String trackingNumber) {
-			this.trackingNumber = trackingNumber;
-			return this;
-		}
-
-		public Builder withCreated(Date created) {
-			this.created = created;
-			return this;
-		}
-
-		public Builder withAllowedToBeCollected(boolean allowedToBeCollected) {
-			this.allowedToBeCollected = allowedToBeCollected;
-			return this;
-		}
-
-		public Builder withInCollection(boolean inCollection) {
-			this.inCollection = inCollection;
-			return this;
-		}
-
-		public Builder withArchived(boolean archived) {
-			this.archived = archived;
-			return this;
-		}
-
-		public Builder withTrackableLogs(List<TrackableLog> trackableLogs) {
-			this.trackableLogs = trackableLogs;
-			return this;
-		}
-
-		public Builder withImages(List<ImageData> images) {
-			this.images = images;
-			return this;
-		}
-
-		public Trackable build() {
-			return new Trackable(this);
-		}
-	}
+        public abstract Trackable build();
+    }
 }

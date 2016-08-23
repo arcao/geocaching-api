@@ -1,52 +1,52 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.arcao.geocaching.api.data.TrackableTravel;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonToken;
 
-public class TrackableTravelJsonParser  extends JsonParser {
-  public static List<TrackableTravel> parseList(JsonReader r) throws IOException {
-    if (r.peek() != JsonToken.BEGIN_ARRAY) {
-      r.skipValue();
-    }
-    
-    List<TrackableTravel> list = new ArrayList<TrackableTravel>();
-    r.beginArray();
-    while(r.hasNext()) {
-      list.add(parse(r));
-    }
-    r.endArray();
-    
-    return list;
-  }
-  
-  public static TrackableTravel parse(JsonReader r) throws IOException {
-    int cacheID = 0;
-    Date dateLogged = null;
-    Coordinates.Builder coordinates = Coordinates.Builder.coordinates();
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-    r.beginObject();
-    while(r.hasNext()) {
-      String name = r.nextName();
-      if ("CacheID".equals(name)) {
-        cacheID = r.nextInt();
-      } else if ("DateLogged".equals(name)) {
-      	dateLogged = parseJsonDate(r.nextString());
-      } else if ("Latitude".equals(name)) {
-        coordinates.withLatitude(r.nextDouble());
-      } else if ("Longitude".equals(name)) {
-        coordinates.withLongitude(r.nextDouble());
-      } else {
-        r.skipValue();
-      }
-    }
-    r.endObject();
+public class TrackableTravelJsonParser extends JsonParser {
+    public static List<TrackableTravel> parseList(JsonReader r) throws IOException {
+        if (r.peek() != JsonToken.BEGIN_ARRAY) {
+            r.skipValue();
+        }
 
-    return new TrackableTravel(cacheID, dateLogged, coordinates.build());
-  }
+        List<TrackableTravel> list = new ArrayList<TrackableTravel>();
+        r.beginArray();
+        while (r.hasNext()) {
+            list.add(parse(r));
+        }
+        r.endArray();
+
+        return list;
+    }
+
+    public static TrackableTravel parse(JsonReader r) throws IOException {
+        TrackableTravel.Builder builder = TrackableTravel.builder();
+        Coordinates.Builder coordinatesBuilder = Coordinates.builder();
+
+        r.beginObject();
+        while (r.hasNext()) {
+            String name = r.nextName();
+            if ("CacheID".equals(name)) {
+                builder.cacheId(r.nextInt());
+            } else if ("DateLogged".equals(name)) {
+                builder.dateLogged(parseJsonDate(r.nextString()));
+            } else if ("Latitude".equals(name)) {
+                coordinatesBuilder.latitude(r.nextDouble());
+            } else if ("Longitude".equals(name)) {
+                coordinatesBuilder.longitude(r.nextDouble());
+            } else {
+                r.skipValue();
+            }
+        }
+        r.endObject();
+
+        builder.coordinates(coordinatesBuilder.build());
+
+        return builder.build();
+    }
 }

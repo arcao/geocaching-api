@@ -12,8 +12,8 @@ public class RecommendedFilter implements Filter {
   protected final double longitude;
 
   public RecommendedFilter(Coordinates origin) {
-    latitude = origin.getLatitude();
-    longitude = origin.getLongitude();
+    latitude = origin.latitude();
+    longitude = origin.longitude();
   }
 
   public RecommendedFilter(double latitude, double longitude) {

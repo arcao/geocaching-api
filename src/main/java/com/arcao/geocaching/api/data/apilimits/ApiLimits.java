@@ -1,140 +1,120 @@
 package com.arcao.geocaching.api.data.apilimits;
 
+import com.arcao.geocaching.api.data.type.MemberType;
+import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+
 import java.io.Serializable;
 import java.util.List;
 
-import com.arcao.geocaching.api.data.type.MemberType;
-import com.arcao.geocaching.api.util.DebugUtils;
-
 /**
  * Container class for API limits related to currently logged user
- * @author arcao
  *
+ * @author arcao
  */
-public class ApiLimits implements Serializable {
-	private static final long serialVersionUID = -3608995080972521881L;
+@AutoValue
+public abstract class ApiLimits implements Serializable {
+    private static final long serialVersionUID = -3608995080972521881L;
 
-	private final List<CacheLimit> cacheLimits;
-  private final boolean enforceCacheLimits;
-  private final boolean enforceLiteCacheLimits;
-  private final boolean enforceMethodLimits;
-  private final MemberType forMembershipType;
-  private final String licenseKey;
-  private final List<CacheLimit> liteCacheLimits;
-  private final long maxCallsbyIPIn1Minute;
-  private final List<MethodLimit> methodLimits;
-  private final boolean restrictbyIP;
-  private final boolean validateIPCounts;
-  
-  public ApiLimits(List<CacheLimit> cacheLimits, boolean enforceCacheLimits,
-      boolean enforceLiteCacheLimits, boolean enforceMethodLimits,
-      MemberType forMembershipType, String licenseKey,
-      List<CacheLimit> liteCacheLimits, long maxCallsbyIPIn1Minute,
-      List<MethodLimit> methodLimits, boolean restrictbyIP,
-      boolean validateIPCounts) {
-    this.cacheLimits = cacheLimits;
-    this.enforceCacheLimits = enforceCacheLimits;
-    this.enforceLiteCacheLimits = enforceLiteCacheLimits;
-    this.enforceMethodLimits = enforceMethodLimits;
-    this.forMembershipType = forMembershipType;
-    this.licenseKey = licenseKey;
-    this.liteCacheLimits = liteCacheLimits;
-    this.maxCallsbyIPIn1Minute = maxCallsbyIPIn1Minute;
-    this.methodLimits = methodLimits;
-    this.restrictbyIP = restrictbyIP;
-    this.validateIPCounts = validateIPCounts;
-  }
+    /**
+     * Returns limits for downloading caches
+     *
+     * @return cache limit object
+     */
+    public abstract List<CacheLimit> cacheLimits();
 
-  /**
-   * Returns limits for downloading caches
-   * @return cache limit object
-   */
-  public List<CacheLimit> getCacheLimits() {
-    return cacheLimits;
-  }
+    /**
+     * Returns if the cache limits are enforced
+     *
+     * @return are enforced
+     */
+    public abstract boolean enforceCacheLimits();
 
-  /**
-   * Returns if the cache limits are enforced
-   * @return are enforced
-   */
-  public boolean isEnforceCacheLimits() {
-    return enforceCacheLimits;
-  }
+    /**
+     * Returns if the cache limits are enforced for a lite caches
+     *
+     * @return are enforced
+     */
+    public abstract boolean enforceLiteCacheLimits();
 
-  /**
-   * Returns if the cache limits are enforced for a lite caches
-   * @return are enforced
-   */
-  public boolean isEnforceLiteCacheLimits() {
-    return enforceLiteCacheLimits;
-  }
+    /**
+     * Returns if the method limits are enforced
+     *
+     * @return are enforced
+     */
+    public abstract boolean enforceMethodLimits();
 
-  /**
-   * Returns if the method limits are enforced
-   * @return are enforced
-   */
-  public boolean isEnforceMethodLimits() {
-    return enforceMethodLimits;
-  }
+    /**
+     * Returns a membership type for which are limits applied
+     *
+     * @return member type
+     */
+    public abstract MemberType forMembershipType();
 
-  /**
-   * Returns a membership type for which are limits applied
-   * @return member type
-   */
-  public MemberType getForMembershipType() {
-    return forMembershipType;
-  }
+    /**
+     * Returns a license key
+     *
+     * @return license key
+     */
+    public abstract String licenseKey();
 
-  /**
-   * Returns a license key
-   * @return license key
-   */
-  public String getLicenseKey() {
-    return licenseKey;
-  }
+    /**
+     * Returns a cache limits for lite caches
+     *
+     * @return cache limits
+     */
+    public abstract List<CacheLimit> liteCacheLimits();
 
-  /**
-   * Returns a cache limits for lite caches
-   * @return cache limits
-   */
-  public List<CacheLimit> getLiteCacheLimits() {
-    return liteCacheLimits;
-  }
+    /**
+     * Returns the number of max calls to be performed with same IP per minute
+     *
+     * @return number of max calls
+     */
+    public abstract long maxCallsbyIPIn1Minute();
 
-  /**
-   * Returns the number of max calls to be performed with same IP per minute
-   * @return number of max calls
-   */
-  public long getMaxCallsbyIPIn1Minute() {
-    return maxCallsbyIPIn1Minute;
-  }
+    /**
+     * Returns the method limits
+     *
+     * @return method limits
+     */
+    public abstract List<MethodLimit> methodLimits();
 
-  /**
-   * Returns the method limits
-   * @return method limits
-   */
-  public List<MethodLimit> getMethodLimits() {
-    return methodLimits;
-  }
+    /**
+     * Returns whereas limits are restricted by IP
+     *
+     * @return are restricted by IP
+     */
+    public abstract boolean restrictByIp();
 
-  /**
-   * Returns whereas limits are restricted by IP
-   * @return are restricted by IP
-   */
-  public boolean isRestrictbyIP() {
-    return restrictbyIP;
-  }
+    /**
+     * Returns if counts of IP are validated
+     *
+     * @return count of IP validated
+     */
+    public abstract boolean validateIpCounts();
 
-  /**
-   * Returns if counts of IP are validated 
-   * @return count of IP validated
-   */
-  public boolean isValidateIPCounts() {
-    return validateIPCounts;
-  }
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-  @Override
-  public String toString() {
-    return DebugUtils.toString(this);
-  }
+    public static Builder builder() {
+        return new AutoValue_ApiLimits.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder cacheLimits(List<CacheLimit> cacheLimits);
+        public abstract Builder enforceCacheLimits(boolean enforceCacheLimits);
+        public abstract Builder enforceLiteCacheLimits(boolean enforceLiteCacheLimits);
+        public abstract Builder enforceMethodLimits(boolean enforceMethodLimits);
+        public abstract Builder forMembershipType(MemberType forMembershipType);
+        public abstract Builder licenseKey(String licenseKey);
+        public abstract Builder liteCacheLimits(List<CacheLimit> liteCacheLimits);
+        public abstract Builder maxCallsbyIPIn1Minute(long maxCallsbyIPIn1Minute);
+        public abstract Builder methodLimits(List<MethodLimit> methodLimits);
+        public abstract Builder restrictByIp(boolean restrictByIp);
+        public abstract Builder validateIpCounts(boolean validateIpCounts);
+        public abstract ApiLimits build();
+    }
 }

@@ -18,10 +18,7 @@ public class DebugUtils {
       if (m.getParameterTypes().length != 0)
         continue;
 
-      if ((!methodName.startsWith("get") && !methodName.startsWith("is")))
-        continue;
-
-      if (methodName.startsWith("getClass"))
+      if (methodName.equals("getClass") || methodName.equals("toString"))
         continue;
 
       if (void.class.equals(m.getReturnType()))

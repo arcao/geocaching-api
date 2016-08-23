@@ -21,15 +21,15 @@ public class GetBookmarkListsForUserTest extends AbstractGeocachingTest {
     BookmarkList item = bookmarkList.get(0);
     System.out.println(item.toString());
 
-    assertThat(item.getId(), not(0));
-    assertThat(item.getGuid(), not(isEmptyOrNullString()));
-    assertThat(item.getName(), not(isEmptyOrNullString()));
-    assertThat(item.getDescription(), notNullValue());
-    assertThat(item.getItemCount(), greaterThan(0));
-    assertFalse(item.isShared());
-    assertFalse(item.isPublic());
-    assertFalse(item.isArchived());
-    assertFalse(item.isSpecial());
-    assertThat(item.getType(), is(0));
+    assertThat(item.id(), not(0));
+    assertThat(item.guid(), not(isEmptyOrNullString()));
+    assertThat(item.name(), not(isEmptyOrNullString()));
+    assertThat(item.description(), notNullValue());
+    assertThat(item.itemCount(), greaterThan(0));
+    assertFalse(item.shared());
+    assertFalse(item.publicList());
+    assertFalse(item.archived());
+    assertFalse(item.special());
+    assertThat(item.type(), is(0));
   }
 }

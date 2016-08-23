@@ -12,7 +12,6 @@ import java.util.List;
  * Created by Krzysztof.Nowacki on 2015.11.13.
  */
 public class GeocacheStatusJsonParser extends JsonParser {
-
     public static List<GeocacheStatus> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
@@ -28,33 +27,31 @@ public class GeocacheStatusJsonParser extends JsonParser {
     }
 
     public static GeocacheStatus parse(JsonReader r) throws IOException {
-
-        GeocacheStatus.Builder geocacheStatus = GeocacheStatus.Builder.geocacheStatus();
+        GeocacheStatus.Builder builder = GeocacheStatus.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
             if ("Archived".equals(name)) {
-                geocacheStatus.withArchived(r.nextBoolean());
+                builder.archived(r.nextBoolean());
             } else if ("Available".equals(name)) {
-                geocacheStatus.withAvailable(r.nextBoolean());
+                builder.available(r.nextBoolean());
             } else if ("CacheCode".equals(name)) {
-                geocacheStatus.withCacheCode(r.nextString());
+                builder.cacheCode(r.nextString());
             } else if ("CacheName".equals(name)) {
-                geocacheStatus.withCacheName(r.nextString());
+                builder.cacheName(r.nextString());
             } else if ("CacheType".equals(name)) {
-                geocacheStatus.withCacheType(GeocacheType.fromId(r.nextInt()));
+                builder.cacheType(GeocacheType.fromId(r.nextInt()));
             } else if ("Premium".equals(name)) {
-                geocacheStatus.withPremium(r.nextBoolean());
+                builder.premium(r.nextBoolean());
             } else if ("TrackableCount".equals(name)) {
-                geocacheStatus.withTrackableCount(r.nextInt());
+                builder.trackableCount(r.nextInt());
             } else {
                 r.skipValue();
             }
         }
         r.endObject();
 
-        return geocacheStatus.build();
+        return builder.build();
     }
-
 }

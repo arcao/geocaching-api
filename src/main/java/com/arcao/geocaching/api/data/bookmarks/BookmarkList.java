@@ -1,78 +1,65 @@
 package com.arcao.geocaching.api.data.bookmarks;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
-public class BookmarkList implements Serializable {
-  private static final long serialVersionUID = 2322622811124797813L;
+@AutoValue
+public abstract class BookmarkList implements Serializable {
+    private static final long serialVersionUID = 2322622811124797813L;
 
-  private final int id;
-  private final String guid;
-  private final String name;
-  private final String description;
-  private final int itemCount;
-  private final boolean shared;
-  private final boolean isPublic;
-  private final boolean archived;
-  private final boolean special;
-  private final int type;
+    public abstract int id();
 
-  public BookmarkList(int id, String guid, String name, String description, int itemCount, boolean shared, boolean isPublic, boolean archived, boolean special, int type) {
-    this.id = id;
-    this.guid = guid;
-    this.name = name;
-    this.description = description;
-    this.itemCount = itemCount;
-    this.shared = shared;
-    this.isPublic = isPublic;
-    this.archived = archived;
-    this.special = special;
-    this.type = type;
-  }
+    public abstract String guid();
 
-  public int getId() {
-    return id;
-  }
+    public abstract String name();
 
-  public String getGuid() {
-    return guid;
-  }
+    public abstract String description();
 
-  public String getName() {
-    return name;
-  }
+    public abstract int itemCount();
 
-  public String getDescription() {
-    return description;
-  }
+    public abstract boolean shared();
 
-  public int getItemCount() {
-    return itemCount;
-  }
+    public abstract boolean publicList();
 
-  public boolean isShared() {
-    return shared;
-  }
+    public abstract boolean archived();
 
-  public boolean isPublic() {
-    return isPublic;
-  }
+    public abstract boolean special();
 
-  public boolean isArchived() {
-    return archived;
-  }
+    public abstract int type();
 
-  public boolean isSpecial() {
-    return special;
-  }
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-  public int getType() {
-    return type;
-  }
+    public static Builder builder() {
+        return new AutoValue_BookmarkList.Builder();
+    }
 
-  @Override
-  public String toString() {
-    return DebugUtils.toString(this);
-  }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder id(int id);
+
+        public abstract Builder guid(String guid);
+
+        public abstract Builder name(String name);
+
+        public abstract Builder description(String description);
+
+        public abstract Builder itemCount(int itemCount);
+
+        public abstract Builder shared(boolean shared);
+
+        public abstract Builder archived(boolean archived);
+
+        public abstract Builder special(boolean special);
+
+        public abstract Builder type(int type);
+
+        public abstract Builder publicList(boolean publicList);
+
+        public abstract BookmarkList build();
+    }
 }

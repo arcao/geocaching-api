@@ -24,46 +24,37 @@ public class BookmarkListJsonParser extends JsonParser {
   }
 
   public static BookmarkList parse(JsonReader r) throws IOException {
-    int id = 0;
-    String guid = "";
-    String name = "";
-    String description = "";
-    int itemCount = 0;
-    boolean shared = false;
-    boolean isPublic = false;
-    boolean archived = false;
-    boolean special = false;
-    int type = 0;
+    BookmarkList.Builder builder = BookmarkList.builder();
 
     r.beginObject();
     while(r.hasNext()) {
       String fieldName = r.nextName();
       if ("ListID".equals(fieldName)) {
-        id = r.nextInt();
+        builder.id(r.nextInt());
       } else if ("ListGUID".equals(fieldName)) {
-        guid = r.nextString();
+        builder.guid(r.nextString());
       } else if ("ListName".equals(fieldName)) {
-        name = r.nextString();
+        builder.name(r.nextString());
       } else if ("ListDescription".equals(fieldName)) {
-        description = r.nextString();
+        builder.description(r.nextString());
       } else if ("NumberOfItems".equals(fieldName)) {
-        itemCount = r.nextInt();
+        builder.itemCount(r.nextInt());
       } else if ("ListIsShared".equals(fieldName)) {
-        shared = r.nextBoolean();
+        builder.shared(r.nextBoolean());
       } else if ("ListIsPublic".equals(fieldName)) {
-        isPublic = r.nextBoolean();
+        builder.publicList(r.nextBoolean());
       } else if ("ListIsArchived".equals(fieldName)) {
-        archived = r.nextBoolean();
+        builder.archived(r.nextBoolean());
       } else if ("ListIsSpecial".equals(fieldName)) {
-        special = r.nextBoolean();
+        builder.special(r.nextBoolean());
       } else if ("ListTypeID".equals(fieldName)) {
-        type = r.nextInt();
+        builder.type(r.nextInt());
       } else {
         r.skipValue();
       }
     }
     r.endObject();
 
-    return new BookmarkList(id, guid, name, description, itemCount, shared, isPublic, archived, special, type);
+    return builder.build();
   }
 }

@@ -1,42 +1,39 @@
 package com.arcao.geocaching.api.data.apilimits;
 
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
 /**
  * Container class for an ApiLimits method response
+ *
  * @author arcao
  */
-public class ApiLimitsResponse implements Serializable {
-  private static final long serialVersionUID = 2753514511831397947L;
+@AutoValue
+public abstract class ApiLimitsResponse implements Serializable {
+    private static final long serialVersionUID = 2753514511831397947L;
 
-  private final ApiLimits apiLimits;
-  private final MaxPerPage maxPerPage;
+    /**
+     * Returns an api limits
+     *
+     * @return api limits
+     */
+    public abstract ApiLimits apiLimits();
 
-  public ApiLimitsResponse(ApiLimits apiLimits, MaxPerPage maxPerPage) {
-    this.apiLimits = apiLimits;
-    this.maxPerPage = maxPerPage;
-  }
+    /**
+     * Returns an information about max per page values
+     *
+     * @return max per page values
+     */
+    public abstract MaxPerPage maxPerPage();
 
-  /**
-   * Returns an api limits
-   * @return api limits
-   */
-  public ApiLimits getApiLimits() {
-    return apiLimits;
-  }
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-  /**
-   * Returns an information about max per page values
-   * @return max per page values
-   */
-  public MaxPerPage getMaxPerPage() {
-    return maxPerPage;
-  }
-
-  @Override
-  public String toString() {
-    return DebugUtils.toString(this);
-  }
+    public static ApiLimitsResponse create(ApiLimits apiLimits, MaxPerPage maxPerPage) {
+        return new AutoValue_ApiLimitsResponse(apiLimits, maxPerPage);
+    }
 }

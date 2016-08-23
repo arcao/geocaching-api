@@ -2,119 +2,56 @@ package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
 
 import java.io.Serializable;
 
 /**
  * Created by Krzysztof.Nowacki on 2015.11.13.
  */
-public class GeocacheStatus implements Serializable {
-    private final boolean archived;
-    private final boolean available;
-    private final String cacheCode;
-    private final String cacheName;
-    private final GeocacheType cacheType;
-    private final boolean premium;
-    private final int trackableCount;
+@AutoValue
+public abstract class GeocacheStatus implements Serializable {
+    private static final long serialVersionUID = -7261546635689151998L;
 
-    private GeocacheStatus(Builder builder) {
-        this.archived = builder.archived;
-        this.available = builder.available;
-        this.cacheCode = builder.cacheCode;
-        this.cacheName = builder.cacheName;
-        this.cacheType = builder.cacheType;
-        this.premium = builder.premium;
-        this.trackableCount = builder.trackableCount;
-    }
+    public abstract boolean archived();
 
-    public boolean isArchived() {
-        return archived;
-    }
+    public abstract boolean available();
 
-    public boolean isAvailable() {
-        return available;
-    }
+    public abstract String cacheCode();
 
-    public String getCacheCode() {
-        return cacheCode;
-    }
+    public abstract String cacheName();
 
-    public String getCacheName() {
-        return cacheName;
-    }
+    public abstract GeocacheType cacheType();
 
-    public GeocacheType getCacheType() {
-        return cacheType;
-    }
+    public abstract boolean premium();
 
-    public boolean isPremium() {
-        return premium;
-    }
-
-    public int getTrackableCount() {
-        return trackableCount;
-    }
+    public abstract int trackableCount();
 
     @Override
     public String toString() {
         return DebugUtils.toString(this);
     }
 
-    public static class Builder {
-        private boolean archived;
-        private boolean available;
-        private String cacheCode;
-        private String cacheName;
-        private GeocacheType cacheType;
-        private boolean premium;
-        private int trackableCount;
-
-        private Builder() {
-        }
-
-        public static Builder geocacheStatus() {
-            return new Builder();
-        }
-
-        public Builder withArchived(boolean archived) {
-            this.archived = archived;
-            return this;
-        }
-
-        public Builder withAvailable(boolean available) {
-            this.available = available;
-            return this;
-        }
-
-        public Builder withCacheCode(String cacheCode) {
-            this.cacheCode = cacheCode;
-            return this;
-        }
-
-        public Builder withCacheName(String cacheName) {
-            this.cacheName = cacheName;
-            return this;
-        }
-
-        public Builder withCacheType(GeocacheType cacheType) {
-            this.cacheType = cacheType;
-            return this;
-        }
-
-        public Builder withPremium(boolean premium) {
-            this.premium = premium;
-            return this;
-        }
-
-        public Builder withTrackableCount(int trackableCount) {
-            this.trackableCount = trackableCount;
-            return this;
-        }
-
-        public GeocacheStatus build() {
-            return new GeocacheStatus(this);
-        }
-
+    public static Builder builder() {
+        return new AutoValue_GeocacheStatus.Builder();
     }
 
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder archived(boolean archived);
+
+        public abstract Builder available(boolean available);
+
+        public abstract Builder cacheCode(String cacheCode);
+
+        public abstract Builder cacheName(String cacheName);
+
+        public abstract Builder cacheType(GeocacheType cacheType);
+
+        public abstract Builder premium(boolean premium);
+
+        public abstract Builder trackableCount(int trackableCount);
+
+        public abstract GeocacheStatus build();
+    }
 }

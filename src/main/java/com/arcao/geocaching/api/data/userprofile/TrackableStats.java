@@ -1,44 +1,40 @@
 package com.arcao.geocaching.api.data.userprofile;
 
+import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+
 import java.io.Serializable;
 import java.util.List;
 
-import com.arcao.geocaching.api.data.Trackable;
-import com.arcao.geocaching.api.util.DebugUtils;
+@AutoValue
+public abstract class TrackableStats implements Serializable {
+    private static final long serialVersionUID = 8539963736459413400L;
 
-public class TrackableStats implements Serializable {
-	private static final long serialVersionUID = 8539963736459413400L;
+    public abstract int trackableFindCount();
+    public abstract List<Trackable> trackableFindTypes();
+    public abstract int trackableOwnedCount();
+    public abstract List<Trackable> trackableOwnedTypes();
 
-	private final int trackableFindCount;
-	private final List<Trackable> trackableFindTypes;
-	private final int trackableOwnedCount;
-	private final List<Trackable> trackableOwnedTypes;
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
 
-	public TrackableStats(int trackableFindCount, List<Trackable> trackableFindTypes, int trackableOwnedCount, List<Trackable> trackableOwnedTypes) {
-	  this.trackableFindCount = trackableFindCount;
-	  this.trackableFindTypes = trackableFindTypes;
-	  this.trackableOwnedCount = trackableOwnedCount;
-	  this.trackableOwnedTypes = trackableOwnedTypes;
-  }
+    public static Builder builder() {
+        return new AutoValue_TrackableStats.Builder();
+    }
 
-	public int getTrackableFindCount() {
-  	return trackableFindCount;
-  }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder trackableFindCount(int trackableFindCount);
 
-	public List<Trackable> getTrackableFindTypes() {
-  	return trackableFindTypes;
-  }
+        public abstract Builder trackableFindTypes(List<Trackable> trackableFindTypes);
 
-	public int getTrackableOwnedCount() {
-  	return trackableOwnedCount;
-  }
+        public abstract Builder trackableOwnedCount(int trackableOwnedCount);
 
-	public List<Trackable> getTrackableOwnedTypes() {
-  	return trackableOwnedTypes;
-  }
-	
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+        public abstract Builder trackableOwnedTypes(List<Trackable> trackableOwnedTypes);
+
+        public abstract TrackableStats build();
+    }
 }

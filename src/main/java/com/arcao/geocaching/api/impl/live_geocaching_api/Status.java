@@ -1,68 +1,41 @@
 package com.arcao.geocaching.api.impl.live_geocaching_api;
 
+import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+
 import java.io.Serializable;
 
-public class Status implements Serializable {
-  private static final long serialVersionUID = -6603595166996374235L;
+@AutoValue
+public abstract class Status implements Serializable {
+    private static final long serialVersionUID = -6603595166996374235L;
 
-  private final int code;
-  private final StatusCode statusCode;
-  private final String message;
-  private final String exceptionDetails;
+    public abstract int code();
 
-  private Status(Builder builder) {
-    this.code = builder.code;
-    this.statusCode = StatusCode.getByCode(builder.code);
-    this.message = builder.message;
-    this.exceptionDetails = builder.exceptionDetails;
-  }
-
-  public StatusCode getStatusCode() {
-    return statusCode;
-  }
-
-  public int getCode() {
-return code;
-}
-
-  public String getMessage() {
-    return message;
-  }
-
-  public String getExceptionDetails() {
-    return exceptionDetails;
-  }
-
-
-  public static class Builder {
-    private int code;
-    private String message;
-    private String exceptionDetails;
-
-    private Builder() {
+    public StatusCode statusCode() {
+        return StatusCode.getByCode(code());
     }
 
-    public static Builder status() {
-      return new Builder();
+    public abstract String message();
+
+    public abstract String exceptionDetails();
+
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
     }
 
-    public Builder withCode(int code) {
-      this.code = code;
-      return this;
+    public static Builder builder() {
+        return new AutoValue_Status.Builder();
     }
 
-    public Builder withMessage(String message) {
-      this.message = message;
-      return this;
-    }
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder code(int code);
 
-    public Builder withExceptionDetails(String exceptionDetails) {
-      this.exceptionDetails = exceptionDetails;
-      return this;
-    }
+        public abstract Builder message(String message);
 
-    public Status build() {
-      return new Status(this);
+        public abstract Builder exceptionDetails(String exceptionDetails);
+
+        public abstract Status build();
     }
-  }
 }

@@ -4,10 +4,16 @@ import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.NetworkException;
 import com.arcao.geocaching.api.impl.live_geocaching_api.parser.JsonReader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
@@ -17,196 +23,198 @@ import java.util.zip.InflaterInputStream;
 
 /**
  * Default implementation of {@link JsonDownloader} using {@link HttpURLConnection}
+ *
  * @author arcao
  */
 public class DefaultJsonDownloader implements JsonDownloader {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
-	
-	private final GeocachingApiConfiguration configuration;
-	private boolean debug = false;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
 
-	/**
-	 * Create a new {@link DefaultJsonDownloader} using specified configuration
-	 * @param configuration configuration
-	 */
-	public DefaultJsonDownloader(GeocachingApiConfiguration configuration) {
-		this.configuration = configuration;
-	}
+    private final GeocachingApiConfiguration configuration;
+    private boolean debug = false;
 
-	public void setDebug(boolean debug) {
-		this.debug = debug;
-	}
+    /**
+     * Create a new {@link DefaultJsonDownloader} using specified configuration
+     *
+     * @param configuration configuration
+     */
+    public DefaultJsonDownloader(GeocachingApiConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
-	public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
-		InputStream is;
-		InputStreamReader isr;
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
 
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
+        InputStream is;
+        InputStreamReader isr;
 
-			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(configuration.getConnectTimeout());
-			con.setReadTimeout(configuration.getReadTimeout());
+        try {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-			con.setRequestMethod("GET");
-			con.setRequestProperty("User-Agent", "Java Geocaching API");
-			con.setRequestProperty("Accept", "application/json");
-			con.setRequestProperty("Accept-Language", "en-US");
-			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            // important! sometimes GC API takes too long to return response
+            con.setConnectTimeout(configuration.getConnectTimeout());
+            con.setReadTimeout(configuration.getReadTimeout());
 
-			if (con.getResponseCode() >= 400) {
-				is = con.getErrorStream();
-			} else {
-				is = con.getInputStream();
-			}
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Java Geocaching API");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Accept-Language", "en-US");
+            con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
-			final String encoding = con.getContentEncoding();
+            if (con.getResponseCode() >= 400) {
+                is = con.getErrorStream();
+            } else {
+                is = con.getInputStream();
+            }
 
-			if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-				logger.debug("get: GZIP OK");
-				is = new GZIPInputStream(is);
-			} else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-				logger.debug("get: DEFLATE OK");
-				is = new InflaterInputStream(is, new Inflater(true));
-			} else {
-				logger.debug("get: WITHOUT COMPRESSION");
-			}
+            final String encoding = con.getContentEncoding();
 
-			if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
-				isr = new InputStreamReader(is, "UTF-8");
+            if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+                logger.debug("get: GZIP OK");
+                is = new GZIPInputStream(is);
+            } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+                logger.debug("get: DEFLATE OK");
+                is = new InflaterInputStream(is, new Inflater(true));
+            } else {
+                logger.debug("get: WITHOUT COMPRESSION");
+            }
 
-				StringBuilder sb = new StringBuilder();
-				char buffer[] = new char[1024];
-				int len;
+            if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
+                isr = new InputStreamReader(is, "UTF-8");
 
-				while ((len = isr.read(buffer)) != -1) {
-					sb.append(buffer, 0, len);
-				}
+                StringBuilder sb = new StringBuilder();
+                char buffer[] = new char[1024];
+                int len;
 
-				isr.close();
+                while ((len = isr.read(buffer)) != -1) {
+                    sb.append(buffer, 0, len);
+                }
 
-				// read error response
-				throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
-			}
+                isr.close();
 
-			isr = new InputStreamReader(is, "UTF-8");
+                // read error response
+                throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
+            }
 
-			if (debug)
-				return new DebugJsonReader(isr);
+            isr = new InputStreamReader(is, "UTF-8");
 
-			return new JsonReader(isr);
-		} catch (InvalidResponseException e) {
-			throw e;
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-			throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + ")", e);
-		}
-	}
+            if (debug)
+                return new DebugJsonReader(isr);
 
-	public JsonReader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
-		InputStream is;
-		InputStreamReader isr;
+            return new JsonReader(isr);
+        } catch (InvalidResponseException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+            throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + ")", e);
+        }
+    }
 
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    public JsonReader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
+        InputStream is;
+        InputStreamReader isr;
 
-			con.setDoOutput(true);
+        try {
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-			// important! sometimes GC API takes too long to return response
-			con.setConnectTimeout(configuration.getConnectTimeout());
-			con.setReadTimeout(configuration.getReadTimeout());
+            con.setDoOutput(true);
 
-			con.setRequestMethod("POST");
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Content-Length", Integer.toString(postData.length));
-			con.setRequestProperty("User-Agent", "Java Geocaching API");
-			con.setRequestProperty("Accept", "application/json");
-			con.setRequestProperty("Accept-Language", "en-US");
-			con.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            // important! sometimes GC API takes too long to return response
+            con.setConnectTimeout(configuration.getConnectTimeout());
+            con.setReadTimeout(configuration.getReadTimeout());
 
-			OutputStream os = con.getOutputStream();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Content-Length", Integer.toString(postData.length));
+            con.setRequestProperty("User-Agent", "Java Geocaching API");
+            con.setRequestProperty("Accept", "application/json");
+            con.setRequestProperty("Accept-Language", "en-US");
+            con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
-			os.write(postData);
-			os.flush();
-			os.close();
-			
-			if (con.getResponseCode() >= 400) {
-				is = con.getErrorStream();
-			} else {
-				is = con.getInputStream();
-			}
-			
-			final String encoding = con.getContentEncoding();
+            OutputStream os = con.getOutputStream();
 
-			if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
-				logger.debug("callPost(): GZIP OK");
-				is = new GZIPInputStream(is);
-			} else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
-				logger.debug("callPost(): DEFLATE OK");
-				is = new InflaterInputStream(is, new Inflater(true));
-			} else {
-				logger.debug("callPost(): WITHOUT COMPRESSION");
-			}
+            os.write(postData);
+            os.flush();
+            os.close();
 
-			if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
-				isr = new InputStreamReader(is, "UTF-8");
+            if (con.getResponseCode() >= 400) {
+                is = con.getErrorStream();
+            } else {
+                is = con.getInputStream();
+            }
 
-				StringBuilder sb = new StringBuilder();
-				char buffer[] = new char[1024];
-				int len;
+            final String encoding = con.getContentEncoding();
 
-				while ((len = isr.read(buffer)) != -1) {
-					sb.append(buffer, 0, len);
-				}
+            if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+                logger.debug("callPost(): GZIP OK");
+                is = new GZIPInputStream(is);
+            } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+                logger.debug("callPost(): DEFLATE OK");
+                is = new InflaterInputStream(is, new Inflater(true));
+            } else {
+                logger.debug("callPost(): WITHOUT COMPRESSION");
+            }
 
-				isr.close();
+            if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
+                isr = new InputStreamReader(is, "UTF-8");
 
-				// read error response
-				throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
-			}
+                StringBuilder sb = new StringBuilder();
+                char buffer[] = new char[1024];
+                int len;
 
-			isr = new InputStreamReader(is, "UTF-8");
+                while ((len = isr.read(buffer)) != -1) {
+                    sb.append(buffer, 0, len);
+                }
 
-			if (debug)
-				return new DebugJsonReader(isr);
+                isr.close();
 
-			return new JsonReader(isr);
-		} catch (InvalidResponseException e) {
-			throw e;
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-			throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
-		}
-	}
+                // read error response
+                throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
+            }
 
-	private static boolean notJsonResponse(HttpURLConnection con) {
-		String contentType = con.getHeaderField("Content-Type");
+            isr = new InputStreamReader(is, "UTF-8");
 
-		return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
-	}
+            if (debug)
+                return new DebugJsonReader(isr);
 
-	private static class DebugJsonReader extends JsonReader {
-		public DebugJsonReader(Reader in) throws IOException {
-			super(writeOutput(in));
-		}
+            return new JsonReader(isr);
+        } catch (InvalidResponseException e) {
+            throw e;
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+            throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
+        }
+    }
 
-		private static Reader writeOutput(Reader in) throws IOException {
-			try {
-				StringBuilder sb = new StringBuilder();
+    private static boolean notJsonResponse(HttpURLConnection con) {
+        String contentType = con.getHeaderField("Content-Type");
 
-				char[] buffer = new char[8192];
-				int len;
+        return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
+    }
 
-				while ((len = in.read(buffer)) > 0) {
-					sb.append(buffer, 0, len);
-				}
-				logger.debug(sb.toString());
+    private static class DebugJsonReader extends JsonReader {
+        public DebugJsonReader(Reader in) throws IOException {
+            super(writeOutput(in));
+        }
 
-				return new StringReader(sb.toString());
-			} finally {
-				if (in != null)
-					in.close();
-			}
-		}
-	}
+        private static Reader writeOutput(Reader in) throws IOException {
+            try {
+                StringBuilder sb = new StringBuilder();
+
+                char[] buffer = new char[8192];
+                int len;
+
+                while ((len = in.read(buffer)) > 0) {
+                    sb.append(buffer, 0, len);
+                }
+                logger.debug(sb.toString());
+
+                return new StringReader(sb.toString());
+            } finally {
+                if (in != null)
+                    in.close();
+            }
+        }
+    }
 }

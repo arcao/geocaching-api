@@ -1,12 +1,12 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
-import java.util.List;
+import com.arcao.geocaching.api.data.TrackableTravel;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.arcao.geocaching.api.data.TrackableTravel;
-import com.arcao.geocaching.api.exception.GeocachingApiException;
+import java.util.List;
 
 
 public class GetTrackableTravelListTest extends AbstractGeocachingTest {
@@ -22,7 +22,7 @@ public class GetTrackableTravelListTest extends AbstractGeocachingTest {
 		
 		for(TrackableTravel point : travel) {
 			if (previousPoint != null) {
-				history += previousPoint.getCoordinates().distanceTo(point.getCoordinates());
+				history += previousPoint.coordinates().distanceTo(point.coordinates());
 			}
 			
 			previousPoint = point;

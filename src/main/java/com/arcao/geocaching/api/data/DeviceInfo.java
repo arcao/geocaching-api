@@ -1,108 +1,92 @@
 package com.arcao.geocaching.api.data;
 
+import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
+import com.arcao.geocaching.api.util.DebugUtils;
+import com.google.auto.value.AutoValue;
+import com.google.gson.stream.JsonWriter;
+
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.Serializable;
 
-import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
-import com.arcao.geocaching.api.util.DebugUtils;
-import com.google.gson.stream.JsonWriter;
 
-public class DeviceInfo implements JsonSerializable, Serializable {
-	private static final long serialVersionUID = 7352443462642812711L;
+@AutoValue
+public abstract class DeviceInfo implements JsonSerializable, Serializable {
+    private static final long serialVersionUID = 7352443462642812711L;
 
-	private final int applicationCurrentMemoryUsage;
-	private final int applicationPeakMemoryUsage;
-	private final String applicationSoftwareVersion;
-	private final String deviceManufacturer;
-	private final String deviceName;
-	private final String deviceOperatingSystem;
-	private final float deviceTotalMemoryInMB;
-	private final String deviceUniqueId;
-	private final String mobileHardwareVersion;
-	private final String webBrowserVersion;
-	
-	public DeviceInfo(int applicationCurrentMemoryUsage, int applicationPeakMemoryUsage, String applicationSoftwareVersion, String deviceManufacturer, String deviceName, String deviceOperatingSystem, float deviceTotalMemoryInMB, String deviceUniqueId, String mobileHardwareVersion, String webBrowserVersion) {
-	  this.applicationCurrentMemoryUsage = applicationCurrentMemoryUsage;
-	  this.applicationPeakMemoryUsage = applicationPeakMemoryUsage;
-	  this.applicationSoftwareVersion = applicationSoftwareVersion;
-	  this.deviceManufacturer = deviceManufacturer;
-	  this.deviceName = deviceName;
-	  this.deviceOperatingSystem = deviceOperatingSystem;
-	  this.deviceTotalMemoryInMB = deviceTotalMemoryInMB;
-	  this.deviceUniqueId = deviceUniqueId;
-	  this.mobileHardwareVersion = mobileHardwareVersion;
-	  this.webBrowserVersion = webBrowserVersion;
-  }
+    public abstract int applicationCurrentMemoryUsage();
 
-	public int getApplicationCurrentMemoryUsage() {
-  	return applicationCurrentMemoryUsage;
-  }
+    public abstract int applicationPeakMemoryUsage();
 
-	public int getApplicationPeakMemoryUsage() {
-  	return applicationPeakMemoryUsage;
-  }
+    public abstract String applicationSoftwareVersion();
 
-	public String getApplicationSoftwareVersion() {
-  	return applicationSoftwareVersion;
-  }
+    public abstract String deviceManufacturer();
 
-	public String getDeviceManufacturer() {
-  	return deviceManufacturer;
-  }
+    public abstract String deviceName();
 
-	public String getDeviceName() {
-  	return deviceName;
-  }
+    public abstract String deviceOperatingSystem();
 
-	public String getDeviceOperatingSystem() {
-  	return deviceOperatingSystem;
-  }
+    public abstract float deviceTotalMemoryInMb();
 
-	public float getDeviceTotalMemoryInMB() {
-  	return deviceTotalMemoryInMB;
-  }
+    public abstract String deviceUniqueId();
 
-	public String getDeviceUniqueId() {
-  	return deviceUniqueId;
-  }
+    @Nullable
+    public abstract String mobileHardwareVersion();
 
-	public String getMobileHardwareVersion() {
-  	return mobileHardwareVersion;
-  }
+    @Nullable
+    public abstract String webBrowserVersion();
 
-	public String getWebBrowserVersion() {
-  	return webBrowserVersion;
-  }
+    public void writeJson(JsonWriter w) throws IOException {
+        w.beginObject();
 
-	public void writeJson(JsonWriter w) throws IOException {
-	  w.beginObject();
-	  
-	  if (applicationCurrentMemoryUsage > 0)
-	  	w.name("ApplicationCurrentMemoryUsage").value(applicationCurrentMemoryUsage);	
-	  if (applicationPeakMemoryUsage > 0)
-	  	w.name("ApplicationPeakMemoryUsage").value(applicationPeakMemoryUsage);
-	  if (applicationSoftwareVersion != null)
-	  	w.name("ApplicationSoftwareVersion").value(applicationSoftwareVersion);
-	  if (deviceManufacturer != null)
-	  	w.name("DeviceManufacturer").value(deviceManufacturer);
-	  if (deviceName != null)
-	  	w.name("DeviceName").value(deviceName);
-	  if (deviceOperatingSystem != null)
-	  	w.name("DeviceOperatingSystem").value(deviceOperatingSystem);
-	  if (deviceTotalMemoryInMB > 0)
-	  	w.name("DeviceTotalMemoryInMB").value(deviceTotalMemoryInMB);
-	  if (deviceUniqueId != null)
-	  	w.name("DeviceUniqueId").value(deviceUniqueId);
-	  if (mobileHardwareVersion != null)
-	  	w.name("MobileHardwareVersion").value(mobileHardwareVersion);
-	  if (webBrowserVersion != null)
-	  	w.name("WebBrowserVersion").value(webBrowserVersion);
-	  
-	  w.endObject();
-  }
-	
-	@Override
-	public String toString() {
-    return DebugUtils.toString(this);
-	}
+        w.name("ApplicationCurrentMemoryUsage").value(applicationCurrentMemoryUsage());
+        w.name("ApplicationPeakMemoryUsage").value(applicationPeakMemoryUsage());
+        w.name("ApplicationSoftwareVersion").value(applicationSoftwareVersion());
+        w.name("DeviceManufacturer").value(deviceManufacturer());
+        w.name("DeviceName").value(deviceName());
+        w.name("DeviceOperatingSystem").value(deviceOperatingSystem());
+        w.name("DeviceTotalMemoryInMB").value(deviceTotalMemoryInMb());
+        w.name("DeviceUniqueId").value(deviceUniqueId());
+        if (mobileHardwareVersion() != null)
+            w.name("MobileHardwareVersion").value(mobileHardwareVersion());
+        if (webBrowserVersion() != null)
+            w.name("WebBrowserVersion").value(webBrowserVersion());
+
+        w.endObject();
+    }
+
+    @Override
+    public String toString() {
+        return DebugUtils.toString(this);
+    }
+
+    public static Builder builder() {
+        return new AutoValue_DeviceInfo.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder applicationCurrentMemoryUsage(int applicationCurrentMemoryUsage);
+
+        public abstract Builder applicationPeakMemoryUsage(int applicationPeakMemoryUsage);
+
+        public abstract Builder applicationSoftwareVersion(String applicationSoftwareVersion);
+
+        public abstract Builder deviceManufacturer(String deviceManufacturer);
+
+        public abstract Builder deviceName(String deviceName);
+
+        public abstract Builder deviceOperatingSystem(String deviceOperatingSystem);
+
+        public abstract Builder deviceTotalMemoryInMb(float deviceTotalMemoryInMb);
+
+        public abstract Builder deviceUniqueId(String deviceUniqueId);
+
+        public abstract Builder mobileHardwareVersion(@Nullable String mobileHardwareVersion);
+
+        public abstract Builder webBrowserVersion(@Nullable String webBrowserVersion);
+
+        public abstract DeviceInfo build();
+    }
 }
