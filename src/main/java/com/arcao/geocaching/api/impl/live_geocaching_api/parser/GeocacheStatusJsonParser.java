@@ -26,7 +26,7 @@ public class GeocacheStatusJsonParser extends JsonParser {
         return list;
     }
 
-    public static GeocacheStatus parse(JsonReader r) throws IOException {
+    private static GeocacheStatus parse(JsonReader r) throws IOException {
         GeocacheStatus.Builder builder = GeocacheStatus.builder();
 
         r.beginObject();

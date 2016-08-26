@@ -7,7 +7,7 @@ import java.io.IOException;
 public class HiddenByUsersFilter implements Filter {
     private static final String NAME = "HiddenByUsers";
 
-    protected final String[] userNames;
+    private final String[] userNames;
 
     public HiddenByUsersFilter(String... userNames) {
         this.userNames = userNames;

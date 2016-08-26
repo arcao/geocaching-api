@@ -78,8 +78,8 @@ public class CoordinatesFormatter {
      */
     public static final int LON_DECMINUTE_RAW = 10;
 
-    protected final int format;
-    protected final Locale locale;
+    private final int format;
+    private final Locale locale;
 
     /**
      * Create a new instance of formatter with predefined format and system

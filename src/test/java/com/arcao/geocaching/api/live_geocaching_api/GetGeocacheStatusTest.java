@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GetGeocacheStatusTest extends AbstractGeocachingTest {
     private static final List<String> ZERO_CACHE_CODES = Collections.emptyList();
-    private static final List<String> ONE_CACHE_CODE = Arrays.asList("GCXZE8");
+    private static final List<String> ONE_CACHE_CODE = Collections.singletonList("GCXZE8");
     private static final List<String> TWO_CACHE_CODES = Arrays.asList("GCXZE8", "GCY81P");
 
     @Test(expected = LiveGeocachingApiException.class)

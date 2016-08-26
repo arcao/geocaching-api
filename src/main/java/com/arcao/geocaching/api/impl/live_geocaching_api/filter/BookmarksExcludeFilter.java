@@ -7,8 +7,8 @@ import java.io.IOException;
 public class BookmarksExcludeFilter implements Filter {
     private static final String NAME = "BookmarksExclude";
 
-    protected final int[] bookmarkListIds;
-    protected final Boolean excludeIgnoreList;
+    private final int[] bookmarkListIds;
+    private final Boolean excludeIgnoreList;
 
     public BookmarksExcludeFilter(Boolean excludeIgnoreList, int... bookmarkListIds) {
         this.excludeIgnoreList = excludeIgnoreList;

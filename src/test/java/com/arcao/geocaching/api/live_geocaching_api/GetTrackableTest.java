@@ -21,6 +21,7 @@ public class GetTrackableTest extends AbstractGeocachingTest {
         assertNotNull(trackable.created());
         assertNotNull(trackable.owner());
         assertNotNull(trackable.images());
+        assertNotNull(trackable.trackableLogs());
         assertEquals(TRACKABLE_LOGS_COUNT, trackable.trackableLogs().size());
     }
 
@@ -31,6 +32,7 @@ public class GetTrackableTest extends AbstractGeocachingTest {
         assertNotNull(trackable.created());
         assertNotNull(trackable.owner());
         assertNotNull(trackable.images());
+        assertNotNull(trackable.trackableLogs());
         assertEquals(TRACKABLE_LOGS_COUNT, trackable.trackableLogs().size());
     }
 

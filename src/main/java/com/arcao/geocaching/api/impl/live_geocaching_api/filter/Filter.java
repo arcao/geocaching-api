@@ -16,12 +16,12 @@ public interface Filter extends JsonSerializable {
      *
      * @return name of filter
      */
-    public abstract String getName();
+    String getName();
 
     /**
      * Is filter valid, mean can be used?
      *
      * @return true if the filter is valid otherwise false
      */
-    public abstract boolean isValid();
+    boolean isValid();
 }

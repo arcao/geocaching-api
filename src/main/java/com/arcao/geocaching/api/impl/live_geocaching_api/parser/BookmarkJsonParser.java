@@ -25,7 +25,7 @@ public class BookmarkJsonParser extends JsonParser {
         return list;
     }
 
-    public static Bookmark parse(JsonReader r) throws IOException {
+    private static Bookmark parse(JsonReader r) throws IOException {
         Bookmark.Builder builder = Bookmark.builder();
 
         r.beginObject();

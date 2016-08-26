@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class JsonParser {
     private static final Logger logger = LoggerFactory.getLogger(JsonParser.class);
 
-    protected static Date parseJsonDate(String date) {
+    static Date parseJsonDate(String date) {
         Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
 
         if (date == null)
@@ -41,7 +41,7 @@ public class JsonParser {
         return null;
     }
 
-    protected static Date parseJsonUTCDate(String date) {
+    static Date parseJsonUTCDate(String date) {
         Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
 
         if (date == null)
@@ -59,7 +59,7 @@ public class JsonParser {
         return null;
     }
 
-    protected static GeocacheType parseGeocacheType(JsonReader r) throws IOException {
+    static GeocacheType parseGeocacheType(JsonReader r) throws IOException {
         GeocacheType geocacheType = null;
 
         if (isNextNull(r))
@@ -78,7 +78,7 @@ public class JsonParser {
         return geocacheType;
     }
 
-    protected static ContainerType parseContainerType(JsonReader r) throws IOException {
+    static ContainerType parseContainerType(JsonReader r) throws IOException {
         ContainerType containerType = ContainerType.NotChosen;
 
         if (isNextNull(r))
@@ -97,7 +97,7 @@ public class JsonParser {
         return containerType;
     }
 
-    protected static MemberType parseMemberType(JsonReader r) throws IOException {
+    static MemberType parseMemberType(JsonReader r) throws IOException {
         MemberType memberType = null;
 
         if (isNextNull(r))
@@ -121,7 +121,7 @@ public class JsonParser {
         return memberType;
     }
 
-    protected static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
+    private static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -142,7 +142,7 @@ public class JsonParser {
         return coordinates.build();
     }
 
-    protected static User parseUser(JsonReader r) throws IOException {
+    static User parseUser(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -183,7 +183,7 @@ public class JsonParser {
         return user.build();
     }
 
-    protected static AttributeType parseAttribute(JsonReader r) throws IOException {
+    private static AttributeType parseAttribute(JsonReader r) throws IOException {
         int id = 1;
         boolean on = false;
 
@@ -203,7 +203,7 @@ public class JsonParser {
         return AttributeType.fromId(id, on);
     }
 
-    protected static EnumSet<AttributeType> parseAttributeList(JsonReader r) throws IOException {
+    static EnumSet<AttributeType> parseAttributeList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
         }
@@ -220,7 +220,7 @@ public class JsonParser {
         return attributeSet;
     }
 
-    protected static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
+    static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
         TrackableLogType trackableLogType = null;
 
         if (isNextNull(r))
@@ -239,7 +239,7 @@ public class JsonParser {
         return trackableLogType;
     }
 
-    protected static boolean isNextNull(JsonReader r) throws IOException {
+    static boolean isNextNull(JsonReader r) throws IOException {
         if (r.peek() == JsonToken.NULL) {
             r.nextNull();
             return true;

@@ -14,7 +14,7 @@ public class GeocachingUtils {
                                                                      // 31 - 16
                                                                      // * 16 *
                                                                      // 16 * 16
-  public static final String CACHE_PREFIX = "GC";
+  private static final String CACHE_PREFIX = "GC";
   private static final long CACHE_CODE_BASE16_MAX = 0xFFFF;
 
   /**

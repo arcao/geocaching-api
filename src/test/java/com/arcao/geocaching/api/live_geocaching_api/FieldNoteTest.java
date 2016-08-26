@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 public class FieldNoteTest extends AbstractGeocachingTest {
-    protected final static String CACHE_CODE = "GCY81P";
+    private static final String CACHE_CODE = "GCY81P";
 
     @Ignore("Ignored: No way to delete created GeocacheLog")
     @Test

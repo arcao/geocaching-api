@@ -68,7 +68,7 @@ public class GeocacheLogJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static GeocacheLogType parseLogType(JsonReader r) throws IOException {
+    private static GeocacheLogType parseLogType(JsonReader r) throws IOException {
         GeocacheLogType geocacheLogType = null;
 
         if (isNextNull(r))

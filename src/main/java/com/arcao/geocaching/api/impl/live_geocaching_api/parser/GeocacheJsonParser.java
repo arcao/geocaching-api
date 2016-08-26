@@ -24,7 +24,7 @@ public class GeocacheJsonParser extends JsonParser {
         return list;
     }
 
-    public static Geocache parse(JsonReader r) throws IOException {
+    private static Geocache parse(JsonReader r) throws IOException {
         Geocache.Builder builder = Geocache.builder();
         Coordinates.Builder coordinatesBuilder = Coordinates.builder();
 

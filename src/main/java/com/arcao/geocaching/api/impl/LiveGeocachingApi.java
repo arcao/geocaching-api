@@ -82,11 +82,11 @@ import java.util.Locale;
 public class LiveGeocachingApi extends AbstractGeocachingApi {
     private static final Logger logger = LoggerFactory.getLogger(LiveGeocachingApi.class);
 
-    protected final GeocachingApiConfiguration configuration;
-    protected final JsonDownloader downloader;
+    private final GeocachingApiConfiguration configuration;
+    private final JsonDownloader downloader;
 
-    protected GeocacheLimits lastGeocacheLimits = null;
-    protected int lastSearchResultsFound = 0;
+    private GeocacheLimits lastGeocacheLimits = null;
+    private int lastSearchResultsFound = 0;
 
     private boolean sessionValid = false;
 
@@ -95,7 +95,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
      *
      * @param builder builder object
      */
-    protected LiveGeocachingApi(Builder builder) {
+    private LiveGeocachingApi(Builder builder) {
         this.configuration = builder.configuration;
         this.downloader = builder.downloader;
     }

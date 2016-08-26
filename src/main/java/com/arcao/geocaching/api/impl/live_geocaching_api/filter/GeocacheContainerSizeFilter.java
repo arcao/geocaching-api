@@ -8,7 +8,7 @@ import java.io.IOException;
 public class GeocacheContainerSizeFilter implements Filter {
     private static final String NAME = "GeocacheContainerSize";
 
-    protected final ContainerType[] containerTypes;
+    private final ContainerType[] containerTypes;
 
     public GeocacheContainerSizeFilter(ContainerType... containerTypes) {
         this.containerTypes = containerTypes;

@@ -2,7 +2,6 @@ package com.arcao.geocaching.api.impl.live_geocaching_api.parser;
 
 
 import com.arcao.geocaching.api.impl.live_geocaching_api.Status;
-import com.arcao.geocaching.api.impl.live_geocaching_api.StatusCode;
 
 import java.io.IOException;
 

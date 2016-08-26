@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.List;
 
 public class GetGeocacheLogsByCacheCodeTest extends AbstractGeocachingTest {
-    protected final static String CACHE_CODE = "GCY81P";
+    private final static String CACHE_CODE = "GCY81P";
 
     @Test
     public void simpleGetGeocacheLogsByCacheCodeTest() throws Exception {

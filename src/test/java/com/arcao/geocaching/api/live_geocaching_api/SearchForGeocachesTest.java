@@ -15,6 +15,7 @@ import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilte
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -87,6 +88,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
         assertNotNull(cache.guid());
 
         // ResultQuality.SUMMARY
+        assertNotNull(cache.waypoints());
         assertEquals(8, cache.waypoints().size());
         assertNotNull(cache.hint());
         assertNotNull(cache.shortDescription());
@@ -132,6 +134,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
 
 
         // ResultQuality.SUMMARY
+        assertNotNull(cache.waypoints());
         assertEquals(8, cache.waypoints().size());
         assertNotNull(cache.hint());
         assertNotNull(cache.shortDescription());
@@ -145,6 +148,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
         assertNotNull(cache.countryName());
         assertNotNull(cache.stateName());
 
+        assertNotNull(cache.geocacheLogs());
         assertEquals(5, cache.geocacheLogs().size());
         for (GeocacheLog geocacheLog : cache.geocacheLogs()) {
             assertNotNull(geocacheLog.author());
@@ -168,7 +172,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws Exception {
         assertEquals(3,
                 api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                        Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+                        Collections.singletonList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
         );
 
         GeocacheLimits limits = api.getLastGeocacheLimits();
@@ -194,7 +198,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     public void getMoreGeocachesTest() throws Exception {
         assertEquals(3,
                 api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                        Arrays.asList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+                        Collections.singletonList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
         );
 
         assertEquals(3,

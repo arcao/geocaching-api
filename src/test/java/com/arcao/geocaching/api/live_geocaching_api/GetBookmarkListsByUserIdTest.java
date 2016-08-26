@@ -17,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class GetBookmarkListsByUserIdTest extends AbstractGeocachingTest {
-    public static final int USER_ID = 1672113; // user: Arcao
+    private static final int USER_ID = 1672113; // user: Arcao
 
     @Test
     public void simpleGetBookmarkListsByUserIdTest() throws GeocachingApiException {

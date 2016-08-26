@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ExceptionTest extends AbstractGeocachingTest {
-    protected final static String CACHE_CODE = "GCY81P";
+    private static final String CACHE_CODE = "GCY81P";
 
     @Test(expected = InvalidSessionException.class)
     public void invalidSessionExceptionTest() throws GeocachingApiException {

@@ -7,7 +7,7 @@ import java.io.IOException;
 public class GeocacheNameFilter implements Filter {
     private static final String NAME = "GeocacheName";
 
-    protected final String name;
+    private final String name;
 
     public GeocacheNameFilter(String name) {
         this.name = name;

@@ -27,7 +27,7 @@ public class CoordinatesParser {
     private static final Pattern LATITUDE_PATTERN_UNSAFE = Pattern.compile("(?:(?=[\\-\\w])(?<![\\-\\w])|(?<![^\\-\\w]))([NS]|)\\s*(-?\\d+)°?(?:\\s*(\\d+)(?:[.,](\\d+)|'?\\s*(\\d+(?:[.,]\\d+)?)(?:''|\")?)?)?", Pattern.CASE_INSENSITIVE);
     private static final Pattern LONGITUDE_PATTERN_UNSAFE = Pattern.compile("(?:(?=[\\-\\w])(?<![\\-\\w])|(?<![^\\-\\w]))([WE]|)\\s*(-?\\d+)°?(?:\\s*(\\d+)(?:[.,](\\d+)|'?\\s*(\\d+(?:[.,]\\d+)?)(?:''|\")?)?)?", Pattern.CASE_INSENSITIVE);
 
-    protected enum CoordinateType {
+    private enum CoordinateType {
         LAT,
         LON,
         LAT_UNSAFE,
@@ -159,19 +159,19 @@ public class CoordinatesParser {
      * @param end   range end
      * @return normalized number
      */
-    protected static double normalize(double value, double start, double end) {
+    private static double normalize(double value, double start, double end) {
         final double width = end - start;
         final double offsetValue = value - start; // value relative to 0
 
         return (offsetValue - (Math.floor(offsetValue / width) * width)) + start; // + start to reset back to start of original range
     }
 
-    protected static class ParseResult {
+    private static class ParseResult {
         final double result;
         final int matcherPos;
         final int matcherLen;
 
-        public ParseResult(double result, int matcherPos, int matcherLen) {
+        ParseResult(double result, int matcherPos, int matcherLen) {
             this.result = result;
             this.matcherPos = matcherPos;
             this.matcherLen = matcherLen;

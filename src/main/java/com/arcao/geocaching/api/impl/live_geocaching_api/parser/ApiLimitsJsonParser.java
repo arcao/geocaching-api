@@ -46,7 +46,7 @@ public class ApiLimitsJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static List<CacheLimit> parseCacheLimits(JsonReader r) throws IOException {
+    private static List<CacheLimit> parseCacheLimits(JsonReader r) throws IOException {
         List<CacheLimit> list = new ArrayList<CacheLimit>();
 
         if (isNextNull(r))
@@ -60,7 +60,7 @@ public class ApiLimitsJsonParser extends JsonParser {
         return list;
     }
 
-    protected static CacheLimit parseCacheLimit(JsonReader r) throws IOException {
+    private static CacheLimit parseCacheLimit(JsonReader r) throws IOException {
         CacheLimit.Builder builder = CacheLimit.builder();
 
         r.beginObject();
@@ -79,7 +79,7 @@ public class ApiLimitsJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static List<MethodLimit> parseMethodLimits(JsonReader r) throws IOException {
+    private static List<MethodLimit> parseMethodLimits(JsonReader r) throws IOException {
         List<MethodLimit> list = new ArrayList<MethodLimit>();
 
         if (isNextNull(r))

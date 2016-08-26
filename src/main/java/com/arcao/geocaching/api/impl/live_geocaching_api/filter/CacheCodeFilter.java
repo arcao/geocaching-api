@@ -7,7 +7,7 @@ import java.io.IOException;
 public class CacheCodeFilter implements Filter {
     private static final String NAME = "CacheCode";
 
-    protected final String[] caches;
+    private final String[] caches;
 
     public CacheCodeFilter(String... caches) {
         this.caches = caches;

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class GeocacheTypeFilter implements Filter {
     private static final String NAME = "GeocacheType";
 
-    protected final GeocacheType[] geocacheTypes;
+    private final GeocacheType[] geocacheTypes;
 
     public GeocacheTypeFilter(GeocacheType... geocacheTypes) {
         this.geocacheTypes = geocacheTypes;

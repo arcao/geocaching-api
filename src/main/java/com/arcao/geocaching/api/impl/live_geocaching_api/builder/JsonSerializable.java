@@ -16,5 +16,5 @@ public interface JsonSerializable {
      * @param w JsonWriter object for writing output
      * @throws IOException If I/O error occurs
      */
-    public abstract void writeJson(JsonWriter w) throws IOException;
+    void writeJson(JsonWriter w) throws IOException;
 }

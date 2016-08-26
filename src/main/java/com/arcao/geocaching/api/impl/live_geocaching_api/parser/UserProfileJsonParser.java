@@ -43,7 +43,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static FavoritePointStats parseFavoritePointStats(JsonReader r) throws IOException {
+    private static FavoritePointStats parseFavoritePointStats(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -59,7 +59,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static GeocacheFindStats parseGeocacheFindStats(JsonReader r) throws IOException {
+    private static GeocacheFindStats parseGeocacheFindStats(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -75,7 +75,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static PublicProfile parsePublicProfile(JsonReader r) throws IOException {
+    private static PublicProfile parsePublicProfile(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -107,7 +107,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static ProfilePhoto parseProfilePhoto(JsonReader r) throws IOException {
+    private static ProfilePhoto parseProfilePhoto(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -133,7 +133,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static GlobalStats parseGlobalStats(JsonReader r) throws IOException {
+    private static GlobalStats parseGlobalStats(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
@@ -159,7 +159,7 @@ public class UserProfileJsonParser extends JsonParser {
         return builder.build();
     }
 
-    protected static TrackableStats parseTrackableStats(JsonReader r) throws IOException {
+    private static TrackableStats parseTrackableStats(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 

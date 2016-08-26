@@ -106,7 +106,7 @@ public abstract class Geocache implements Serializable {
     @Nullable public abstract String stateName();
 
     public static Builder builder() {
-        return new AutoValue_Geocache.Builder();
+        return new AutoValue_Geocache.Builder().longDescriptionHtml(false).shortDescriptionHtml(false);
     }
 
     @AutoValue.Builder

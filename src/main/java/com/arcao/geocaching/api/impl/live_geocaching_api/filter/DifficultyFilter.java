@@ -7,8 +7,8 @@ import java.io.IOException;
 public class DifficultyFilter implements Filter {
     private static final String NAME = "Difficulty";
 
-    protected final float min;
-    protected final float max;
+    private final float min;
+    private final float max;
 
     public DifficultyFilter(float min, float max) {
         this.min = min;
