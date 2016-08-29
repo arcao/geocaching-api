@@ -2,8 +2,8 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
-import com.arcao.geocaching.api.impl.LiveGeocachingApi;
-import com.arcao.geocaching.api.impl.live_geocaching_api.downloader.DefaultJsonDownloader;
+import com.arcao.geocaching.api.LiveGeocachingApi;
+import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;

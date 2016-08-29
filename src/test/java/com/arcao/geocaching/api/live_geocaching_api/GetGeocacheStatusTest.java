@@ -2,7 +2,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.data.GeocacheStatus;
 import com.arcao.geocaching.api.data.type.GeocacheType;
-import com.arcao.geocaching.api.impl.live_geocaching_api.exception.LiveGeocachingApiException;
+import com.arcao.geocaching.api.exception.LiveGeocachingApiException;
 
 import org.junit.Assert;
 import org.junit.Test;

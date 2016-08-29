@@ -5,8 +5,8 @@ import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.CacheCodeFilter;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
+import com.arcao.geocaching.api.filter.CacheCodeFilter;
+import com.arcao.geocaching.api.filter.Filter;
 
 import java.util.Collections;
 import java.util.List;

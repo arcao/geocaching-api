@@ -17,7 +17,7 @@ import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
 import com.arcao.geocaching.api.data.sort.SortBy;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
+import com.arcao.geocaching.api.filter.Filter;
 
 import java.util.Date;
 import java.util.List;

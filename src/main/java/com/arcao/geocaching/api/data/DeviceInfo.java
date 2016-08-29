@@ -1,6 +1,6 @@
 package com.arcao.geocaching.api.data;
 
-import com.arcao.geocaching.api.impl.live_geocaching_api.builder.JsonSerializable;
+import com.arcao.geocaching.api.builder.JsonSerializable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.stream.JsonWriter;
 

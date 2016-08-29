@@ -8,9 +8,9 @@ import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.MemberType;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.BookmarksExcludeFilter;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.Filter;
-import com.arcao.geocaching.api.impl.live_geocaching_api.filter.PointRadiusFilter;
+import com.arcao.geocaching.api.filter.BookmarksExcludeFilter;
+import com.arcao.geocaching.api.filter.Filter;
+import com.arcao.geocaching.api.filter.PointRadiusFilter;
 
 import org.junit.Test;
 
