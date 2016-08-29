@@ -8,7 +8,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeocacheJsonParser extends JsonParser {
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseAttributeList;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseContainerType;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseGeocacheType;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
+
+public final class GeocacheJsonParser {
+    private GeocacheJsonParser() {
+    }
+
     public static List<Geocache> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
@@ -60,15 +68,15 @@ public class GeocacheJsonParser extends JsonParser {
             } else if ("State".equals(name)) {
                 builder.stateName(r.nextString());
             } else if ("DateCreated".equals(name)) {
-                builder.createDate(JsonParser.parseJsonDate(r.nextString()));
+                builder.createDate(JsonParserUtil.parseJsonDate(r.nextString()));
             } else if ("PublishDateUtc".equals(name)) {
-                builder.publishDate(JsonParser.parseJsonUTCDate(r.nextString()));
+                builder.publishDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
             } else if ("UTCPlaceDate".equals(name)) {
-                builder.placeDate(JsonParser.parseJsonUTCDate(r.nextString()));
+                builder.placeDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
             } else if ("DateLastUpdate".equals(name)) {
-                builder.lastUpdateDate(JsonParser.parseJsonDate(r.nextString()));
+                builder.lastUpdateDate(JsonParserUtil.parseJsonDate(r.nextString()));
             } else if ("DateLastVisited".equals(name)) {
-                builder.lastVisitDate(JsonParser.parseJsonDate(r.nextString()));
+                builder.lastVisitDate(JsonParserUtil.parseJsonDate(r.nextString()));
             } else if ("PlacedBy".equals(name)) {
                 builder.placedBy(r.nextString());
             } else if ("ContainerType".equals(name)) {
@@ -106,7 +114,7 @@ public class GeocacheJsonParser extends JsonParser {
             } else if ("CanCacheBeFavorited".equals(name)) {
                 builder.favoritable(r.nextBoolean());
             } else if ("FoundDate".equals(name)) {
-                builder.foundDate(JsonParser.parseJsonDate(r.nextString()));
+                builder.foundDate(JsonParserUtil.parseJsonDate(r.nextString()));
             } else if ("HasbeenFavoritedbyUser".equals(name)) {
                 builder.favoritedByUser(r.nextBoolean());
             } else if ("ImageCount".equals(name)) {

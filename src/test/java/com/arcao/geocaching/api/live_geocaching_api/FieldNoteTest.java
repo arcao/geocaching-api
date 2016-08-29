@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -16,7 +17,7 @@ public class FieldNoteTest extends AbstractGeocachingTest {
 
     @Ignore("Ignored: No way to delete created GeocacheLog")
     @Test
-    public void simpleCreateFieldNoteAndPublishTest() throws Exception {
+    public void simpleCreateFieldNoteAndPublishTest() throws GeocachingApiException {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
         Calendar c = Calendar.getInstance();

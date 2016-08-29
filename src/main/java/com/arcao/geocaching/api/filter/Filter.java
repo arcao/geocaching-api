@@ -3,9 +3,13 @@ package com.arcao.geocaching.api.filter;
 import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.builder.JsonSerializable;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 /**
  * Interface for all filters used in
- * {@link GeocachingApi#searchForGeocaches(boolean, int, int, int, Filter[])}
+ * {@link GeocachingApi#searchForGeocaches(GeocachingApi.ResultQuality, int, int, int, List, List)}
  * method.
  *
  * @author arcao
@@ -16,12 +20,13 @@ public interface Filter extends JsonSerializable {
      *
      * @return name of filter
      */
-    String getName();
+    @NotNull
+    String name();
 
     /**
      * Is filter valid, mean can be used?
      *
      * @return true if the filter is valid otherwise false
      */
-    boolean isValid();
+    boolean valid();
 }

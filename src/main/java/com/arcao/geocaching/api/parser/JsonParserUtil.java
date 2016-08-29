@@ -19,8 +19,12 @@ import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JsonParser {
-    private static final Logger logger = LoggerFactory.getLogger(JsonParser.class);
+public final class JsonParserUtil {
+    private static final Logger logger = LoggerFactory.getLogger(JsonParserUtil.class);
+    private static final long HOUR_IN_MS = 1000 * 60 * 60;
+
+    private JsonParserUtil() {
+    }
 
     static Date parseJsonDate(String date) {
         Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
@@ -32,8 +36,8 @@ public class JsonParser {
         if (m.matches()) {
             long time = Long.parseLong(m.group(1));
             long zone = 0;
-            if (m.group(2) != null && m.group(2).length() > 0)
-                zone = Integer.parseInt(m.group(2)) / 100 * 1000 * 60 * 60;
+            if (m.group(2) != null && !m.group(2).isEmpty())
+                zone = Integer.parseInt(m.group(2)) / 100 * HOUR_IN_MS;
             return new Date(time + zone);
         }
 

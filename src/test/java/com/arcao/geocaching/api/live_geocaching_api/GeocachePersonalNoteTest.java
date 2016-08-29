@@ -17,7 +17,7 @@ public class GeocachePersonalNoteTest extends AbstractGeocachingTest {
 
   @Before
   @After
-  public void cleanUp() throws Exception {
+  public void cleanUp() throws GeocachingApiException {
     try {
       api.deleteCachePersonalNote(CACHE_CODE);
     } catch (LiveGeocachingApiException e) {

@@ -23,7 +23,7 @@ public abstract class FieldNote implements Serializable {
 		String[] items = line.split(",", 4);
 
 		String note = items[3];
-		if (note.length() >= 2 && note.startsWith("\"") && note.endsWith("\""))
+		if (note.length() >= 2 && note.charAt(0) == '\"' && note.charAt(note.length() - 1) == '\"')
 			note = note.substring(1, note.length() - 1);
 
 		try {

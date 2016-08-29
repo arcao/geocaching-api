@@ -16,8 +16,10 @@ import java.util.regex.Pattern;
  * @author arcao
  * @since 1.5
  */
-public class CoordinatesParser {
-    private static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
+public final class CoordinatesParser {
+    private static final Logger logger = LoggerFactory.getLogger(CoordinatesParser.class);
+    private static final double MINUTES_PER_DEGREE = 60.0;
+    private static final double SECONDS_PER_DEGREE = 3600.0;
 
     //                                                                   ( 1 )     ( 2 )          ( 3 )        ( 4 )        ( 5 )
     private static final Pattern LATITUDE_PATTERN = Pattern.compile("\\b([NS])\\s*(\\d+)°?(?:\\s*(\\d+)(?:[.,](\\d+)|'?\\s*(\\d+(?:[.,]\\d+)?)(?:''|\")?)?)?", Pattern.CASE_INSENSITIVE);
@@ -26,6 +28,9 @@ public class CoordinatesParser {
     //                                                                                                                   ( 1 )      ( 2 )            ( 3 )        ( 4 )        ( 5 )
     private static final Pattern LATITUDE_PATTERN_UNSAFE = Pattern.compile("(?:(?=[\\-\\w])(?<![\\-\\w])|(?<![^\\-\\w]))([NS]|)\\s*(-?\\d+)°?(?:\\s*(\\d+)(?:[.,](\\d+)|'?\\s*(\\d+(?:[.,]\\d+)?)(?:''|\")?)?)?", Pattern.CASE_INSENSITIVE);
     private static final Pattern LONGITUDE_PATTERN_UNSAFE = Pattern.compile("(?:(?=[\\-\\w])(?<![\\-\\w])|(?<![^\\-\\w]))([WE]|)\\s*(-?\\d+)°?(?:\\s*(\\d+)(?:[.,](\\d+)|'?\\s*(\\d+(?:[.,]\\d+)?)(?:''|\")?)?)?", Pattern.CASE_INSENSITIVE);
+
+    private CoordinatesParser() {
+    }
 
     private enum CoordinateType {
         LAT,
@@ -97,7 +102,7 @@ public class CoordinatesParser {
         final Matcher matcher = pattern.matcher(coordinate);
 
         if (matcher.find()) {
-            double sign = matcher.group(1).equalsIgnoreCase("S") || matcher.group(1).equalsIgnoreCase("W") ? -1.0 : 1.0;
+            double sign = "S".equalsIgnoreCase(matcher.group(1)) || "W".equalsIgnoreCase(matcher.group(1)) ? -1.0 : 1.0;
             double degree = Double.parseDouble(matcher.group(2));
 
             if (degree < 0) {
@@ -112,13 +117,13 @@ public class CoordinatesParser {
                 minutes = Double.parseDouble(matcher.group(3));
 
                 if (matcher.group(4) != null) {
-                    seconds = Double.parseDouble("0." + matcher.group(4)) * 60.0;
+                    seconds = Double.parseDouble("0." + matcher.group(4)) * MINUTES_PER_DEGREE;
                 } else if (matcher.group(5) != null) {
                     seconds = Double.parseDouble(matcher.group(5).replace(",", "."));
                 }
             }
 
-            double result = sign * (degree + minutes / 60.0 + seconds / 3600.0);
+            double result = sign * (degree + minutes / MINUTES_PER_DEGREE + seconds / SECONDS_PER_DEGREE);
 
             // normalize result
             switch (coordinateType) {

@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookmarkListJsonParser extends JsonParser {
+public final class BookmarkListJsonParser {
+  private BookmarkListJsonParser() {
+  }
+
   public static List<BookmarkList> parseList(JsonReader r) throws IOException {
     if (r.peek() != JsonToken.BEGIN_ARRAY) {
       r.skipValue();

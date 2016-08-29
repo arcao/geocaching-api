@@ -8,7 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackableJsonParser extends JsonParser {
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
+
+public final class TrackableJsonParser {
+    private TrackableJsonParser() {
+    }
+
     public static List<Trackable> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();

@@ -3,6 +3,8 @@ package com.arcao.geocaching.api.filter;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 /**
@@ -13,10 +15,10 @@ import java.io.IOException;
 public class ViewportFilter implements Filter {
   private static final String NAME = "Viewport";
   
-  protected final double topLeftLatitude;
-  protected final double topLeftLongitude;
-  protected final double bottomRightLatitude;
-  protected final double bottomRightLongitude;
+  private final double topLeftLatitude;
+  private final double topLeftLongitude;
+  private final double bottomRightLatitude;
+  private final double bottomRightLongitude;
   
     
   public ViewportFilter(double topLeftLatitude, double topLeftLongitude, double bottomRightLatitude, double bottomRightLongitude) {
@@ -71,15 +73,19 @@ public class ViewportFilter implements Filter {
     return Coordinates.create(bottomRightLatitude, bottomRightLongitude);
   }
 
-  public String getName() {
+  @NotNull
+  @Override
+  public String name() {
     return NAME;
   }
   
-  public boolean isValid() {
+  @Override
+  public boolean valid() {
     return true;
   }
     
-  public void writeJson(JsonWriter w) throws IOException {
+  @Override
+  public void writeJson(@NotNull JsonWriter w) throws IOException {
     w.name(NAME);
     w.beginObject();
     

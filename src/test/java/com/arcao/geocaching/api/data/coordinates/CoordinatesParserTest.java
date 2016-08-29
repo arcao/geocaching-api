@@ -12,15 +12,16 @@ public class CoordinatesParserTest {
   private static final double refLongitude = 8.0 + 38.564 / 60.0;
   private static final double refLatitude = 49.0 + 56.031 / 60.0;
   private static final Coordinates refCoordinates = Coordinates.create(refLatitude, refLongitude);
+  private static final double PRECISION = 1e-8;
 
   @Test
   public void testParseLatitude() throws ParseException {
-    assertEquals(refLatitude, CoordinatesParser.parseLatitude("N 49° 56.031"), 1e-8);
+    assertEquals(refLatitude, CoordinatesParser.parseLatitude("N 49° 56.031"), PRECISION);
   }
 
   @Test
   public void testParseLongitude() throws ParseException {
-    assertEquals(refLongitude, CoordinatesParser.parseLongitude("E 8° 38.564"), 1e-8);
+    assertEquals(refLongitude, CoordinatesParser.parseLongitude("E 8° 38.564"), PRECISION);
   }
 
   @Test
@@ -43,17 +44,17 @@ public class CoordinatesParserTest {
 
   @Test
   public void testSouth() throws ParseException {
-    assertEquals(-refLatitude, CoordinatesParser.parseLatitude("S 49° 56.031"), 1e-8);
+    assertEquals(-refLatitude, CoordinatesParser.parseLatitude("S 49° 56.031"), PRECISION);
   }
 
   @Test
   public void testWest() throws ParseException {
-    assertEquals(-refLongitude, CoordinatesParser.parseLongitude("W 8° 38.564"), 1e-8);
+    assertEquals(-refLongitude, CoordinatesParser.parseLongitude("W 8° 38.564"), PRECISION);
   }
 
   @Test
   public void testLowerCase() throws ParseException {
-    assertEquals(refLongitude, CoordinatesParser.parseLongitude("e 8° 38.564"), 1e-8);
+    assertEquals(refLongitude, CoordinatesParser.parseLongitude("e 8° 38.564"), PRECISION);
   }
 
   @Test
@@ -96,11 +97,11 @@ public class CoordinatesParserTest {
   
   @Test
   public void testWithoutCardinalPoint() throws ParseException {
-    assertEquals(refLatitude, CoordinatesParser.parseLatitude("49° 56.031", false), 1e-8);
-    assertEquals(refLongitude, CoordinatesParser.parseLongitude("8° 38.564", false), 1e-8);
+    assertEquals(refLatitude, CoordinatesParser.parseLatitude("49° 56.031", false), PRECISION);
+    assertEquals(refLongitude, CoordinatesParser.parseLongitude("8° 38.564", false), PRECISION);
     
-    assertEquals(-refLatitude, CoordinatesParser.parseLatitude("-49° 56.031", false), 1e-8);
-    assertEquals(-refLongitude, CoordinatesParser.parseLongitude("-8° 38.564", false), 1e-8);
+    assertEquals(-refLatitude, CoordinatesParser.parseLatitude("-49° 56.031", false), PRECISION);
+    assertEquals(-refLongitude, CoordinatesParser.parseLongitude("-8° 38.564", false), PRECISION);
   }
 
   @Test

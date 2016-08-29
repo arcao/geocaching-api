@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.arcao.geocaching.api.util.GeocachingUtils;
 import com.google.auto.value.AutoValue;
 
 import org.jetbrains.annotations.Nullable;
@@ -26,11 +27,15 @@ public abstract class UserWaypoint implements Serializable {
 
     public abstract boolean correctedCoordinate();
 
-    public String getUserWaypointCode(int index) {
-        int base = Integer.parseInt("U1", 36);
-        String value = Integer.toString(base + index, 36);
+    public String userWaypointCode(int index) {
+        String cacheCode = cacheCode();
+        if (cacheCode == null)
+            return null;
 
-        return value.substring(value.length() - 2, value.length()) + cacheCode().substring(2);
+        long base = GeocachingUtils.base31Decode("U1");
+        String value = GeocachingUtils.base31Encode(base + index);
+
+        return value.substring(value.length() - 2, value.length()) + cacheCode.substring(2);
     }
 
     public static Builder builder() {

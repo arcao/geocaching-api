@@ -4,6 +4,7 @@ import com.arcao.geocaching.api.builder.JsonSerializable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
@@ -36,7 +37,8 @@ public abstract class DeviceInfo implements JsonSerializable, Serializable {
     @Nullable
     public abstract String webBrowserVersion();
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.beginObject();
 
         w.name("ApplicationCurrentMemoryUsage").value(applicationCurrentMemoryUsage());

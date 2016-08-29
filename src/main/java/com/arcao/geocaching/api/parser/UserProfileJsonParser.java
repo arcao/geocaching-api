@@ -10,9 +10,15 @@ import com.arcao.geocaching.api.data.userprofile.TrackableStats;
 
 import java.io.IOException;
 
+import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
 import static com.arcao.geocaching.api.parser.TrackableJsonParser.parseList;
 
-public class UserProfileJsonParser extends JsonParser {
+public final class UserProfileJsonParser {
+    private UserProfileJsonParser() {
+    }
+
     public static UserProfile parse(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
@@ -51,7 +57,7 @@ public class UserProfileJsonParser extends JsonParser {
 
         r.beginObject();
         while (r.hasNext()) {
-            String name = r.nextName();
+            r.nextName();
             r.skipValue();
         }
         r.endObject();
@@ -67,7 +73,7 @@ public class UserProfileJsonParser extends JsonParser {
 
         r.beginObject();
         while (r.hasNext()) {
-            String name = r.nextName();
+            r.nextName();
             r.skipValue();
         }
         r.endObject();

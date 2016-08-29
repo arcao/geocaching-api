@@ -2,23 +2,22 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 public class GeocacheExclusionsFilter implements Filter {
     private static final String NAME = "GeocacheExclusions";
 
-    private final Boolean archived;
-    private final Boolean available;
-    private final Boolean hasCorrectedCoordinates;
-    private final Boolean hasPersonalCacheNote;
-    private final Boolean premium;
-    private final Boolean published;
+    @Nullable private final Boolean archived;
+    @Nullable private final Boolean available;
+    @Nullable private final Boolean hasCorrectedCoordinates;
+    @Nullable private final Boolean hasPersonalCacheNote;
+    @Nullable private final Boolean premium;
+    @Nullable private final Boolean published;
 
-    public GeocacheExclusionsFilter(Boolean archived, Boolean available, Boolean premium) {
-        this(archived, available, null, null, premium, null);
-    }
-
-    public GeocacheExclusionsFilter(Boolean archived, Boolean available, Boolean hasCorrectedCoordinates, Boolean hasPersonalCacheNote, Boolean premium, Boolean published) {
+    public GeocacheExclusionsFilter(@Nullable Boolean archived, @Nullable Boolean available, @Nullable Boolean hasCorrectedCoordinates, @Nullable Boolean hasPersonalCacheNote, @Nullable Boolean premium, @Nullable Boolean published) {
         this.archived = archived;
         this.available = available;
         this.hasCorrectedCoordinates = hasCorrectedCoordinates;
@@ -27,12 +26,19 @@ public class GeocacheExclusionsFilter implements Filter {
         this.published = published;
     }
 
+    @NotNull
+    @Override
+    public String name() {
+        return NAME;
+    }
 
-    public boolean isValid() {
+    @Override
+    public boolean valid() {
         return archived != null || available != null || hasCorrectedCoordinates != null || hasPersonalCacheNote != null || premium != null || published != null;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         if (archived != null)
@@ -49,9 +55,4 @@ public class GeocacheExclusionsFilter implements Filter {
             w.name("Published").value(published);
         w.endObject();
     }
-
-    public String getName() {
-        return NAME;
-    }
-
 }

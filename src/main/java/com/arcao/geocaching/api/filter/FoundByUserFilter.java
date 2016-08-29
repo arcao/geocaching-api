@@ -2,26 +2,32 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class FoundByUserFilter implements Filter {
     private static final String NAME = "FoundByUser";
 
-    private final String userName;
+    @NotNull private final String userName;
 
-    public FoundByUserFilter(String userName) {
+    public FoundByUserFilter(@NotNull String userName) {
         this.userName = userName;
     }
 
-    public String getName() {
+    @NotNull
+    @Override
+    public String name() {
         return NAME;
     }
 
-    public boolean isValid() {
-        return userName != null;
+    @Override
+    public boolean valid() {
+        return !userName.isEmpty();
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("UserName").value(userName);

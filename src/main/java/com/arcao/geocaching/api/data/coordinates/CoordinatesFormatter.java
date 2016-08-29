@@ -21,7 +21,7 @@ import java.util.Locale;
  * @since 1.5
  */
 public class CoordinatesFormatter {
-    private static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
+    static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
 
     /**
      * Example: "10,123456 -0,123456"
@@ -162,9 +162,9 @@ public class CoordinatesFormatter {
     private static final double D60 = 60.0d;
     private static final double D1000 = 1000.0d;
     private static final double D3600 = 3600.0d;
-    private static final BigDecimal BD_SIXTY = BigDecimal.valueOf(D60);
-    private static final BigDecimal BD_THOUSAND = BigDecimal.valueOf(D1000);
-    private static final BigDecimal BD_ONEHOUNDREDTHOUSAND = BigDecimal.valueOf(100000.0d);
+    static final BigDecimal BD_SIXTY = BigDecimal.valueOf(D60);
+    static final BigDecimal BD_THOUSAND = BigDecimal.valueOf(D1000);
+    static final BigDecimal BD_ONEHOUNDREDTHOUSAND = BigDecimal.valueOf(100000.0d);
 
     /**
      * Value type for the direction.

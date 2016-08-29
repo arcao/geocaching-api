@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class StatesFilter implements Filter {
@@ -13,15 +15,19 @@ public class StatesFilter implements Filter {
         this.states = states;
     }
 
-    public String getName() {
+    @NotNull
+    @Override
+    public String name() {
         return NAME;
     }
 
-    public boolean isValid() {
+    @Override
+    public boolean valid() {
         return states != null && states.length > 0;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("StateIds");

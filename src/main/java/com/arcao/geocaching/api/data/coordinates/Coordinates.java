@@ -14,9 +14,11 @@ import java.text.ParseException;
  * @author arcao
  * @since 1.5
  */
+@SuppressWarnings("EqualsAndHashcode")
 @AutoValue
 public abstract class Coordinates implements Serializable {
     private static final long serialVersionUID = 1044000671539652241L;
+    private static final double PRECISION = 1e-8;
 
     private static final double AVERAGE_RADIUS_OF_EARTH = 6372797.560856;
     private static final CoordinatesFormatter LAT_LON_DECMINUTE_FORMAT = new CoordinatesFormatter(CoordinatesFormatter.LAT_LON_DECMINUTE);
@@ -205,11 +207,7 @@ public abstract class Coordinates implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Coordinates) {
-            return Math.abs(((Coordinates) obj).latitude() - latitude()) < 1e-8 && Math.abs(((Coordinates) obj).longitude() - longitude()) < 1e-8;
-        }
-
-        return false;
+        return obj instanceof Coordinates && Math.abs(((Coordinates) obj).latitude() - latitude()) < PRECISION && Math.abs(((Coordinates) obj).longitude() - longitude()) < PRECISION;
     }
 
     public static Builder builder() {

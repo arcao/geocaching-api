@@ -5,6 +5,8 @@ import com.arcao.geocaching.api.util.Base64;
 import com.arcao.geocaching.api.util.Base64OutputStream;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 
 public class ImageData implements JsonSerializable, Serializable {
     private static final long serialVersionUID = 1116404414881607691L;
+    private static final int BUFFER_SIZE = 8192;
 
     private final String description;
     private final String mobileUrl;
@@ -64,7 +67,7 @@ public class ImageData implements JsonSerializable, Serializable {
         Base64OutputStream b64os = new Base64OutputStream(bos, Base64.NO_CLOSE | Base64.NO_WRAP);
 
         int bytesReaded;
-        byte[] buffer = new byte[8192];
+        byte[] buffer = new byte[BUFFER_SIZE];
         while ((bytesReaded = is.read(buffer)) != -1) {
             b64os.write(buffer, 0, bytesReaded);
         }
@@ -78,7 +81,8 @@ public class ImageData implements JsonSerializable, Serializable {
         return imageData;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         if (imageData == null)
             return;
 

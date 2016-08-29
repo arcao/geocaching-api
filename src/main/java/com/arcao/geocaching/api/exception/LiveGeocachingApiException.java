@@ -3,13 +3,15 @@ package com.arcao.geocaching.api.exception;
 import com.arcao.geocaching.api.Status;
 import com.arcao.geocaching.api.StatusCode;
 
+import org.jetbrains.annotations.Nullable;
+
 public class LiveGeocachingApiException extends GeocachingApiException {
     private static final long serialVersionUID = 4459503722935685091L;
 
-    protected final String originalMessage;
-    protected final StatusCode statusCode;
-    protected final int code;
-    protected final String exceptionDetails;
+    private final String originalMessage;
+    private final StatusCode statusCode;
+    private final int code;
+    @Nullable private final String exceptionDetails;
 
     public LiveGeocachingApiException(Status status) {
         super(status.message());
@@ -23,7 +25,7 @@ public class LiveGeocachingApiException extends GeocachingApiException {
 
     @Override
     public String getMessage() {
-        if (exceptionDetails == null || exceptionDetails.length() == 0) {
+        if (exceptionDetails == null || exceptionDetails.isEmpty()) {
             return super.getMessage() + " (" + code + ")";
         } else {
             return super.getMessage() + " (" + code + "); nested exception is: \n\t" +
@@ -63,6 +65,7 @@ public class LiveGeocachingApiException extends GeocachingApiException {
      *
      * @return exception details
      */
+    @Nullable
     public String getExceptionDetails() {
         return exceptionDetails;
     }

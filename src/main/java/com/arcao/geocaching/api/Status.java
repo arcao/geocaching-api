@@ -2,6 +2,8 @@ package com.arcao.geocaching.api;
 
 import com.google.auto.value.AutoValue;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 
 @AutoValue
@@ -16,6 +18,7 @@ public abstract class Status implements Serializable {
 
     public abstract String message();
 
+    @Nullable
     public abstract String exceptionDetails();
 
     public static Builder builder() {

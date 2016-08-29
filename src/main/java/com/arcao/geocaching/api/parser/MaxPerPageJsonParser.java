@@ -4,7 +4,10 @@ import com.arcao.geocaching.api.data.apilimits.MaxPerPage;
 
 import java.io.IOException;
 
-public class MaxPerPageJsonParser extends JsonParser {
+public final class MaxPerPageJsonParser {
+    private MaxPerPageJsonParser() {
+    }
+
     public static MaxPerPage parse(JsonReader r) throws IOException {
         MaxPerPage.Builder builder = MaxPerPage.builder();
 

@@ -8,6 +8,8 @@ import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.filter.Filter;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -17,28 +19,32 @@ import java.util.List;
  * @author arcao
  * @since 1.4.3
  */
-public abstract class AbstractGeocachingApi implements GeocachingApi {
-    protected String session;
+abstract class AbstractGeocachingApi implements GeocachingApi {
+    @Nullable String session;
 
+    @Nullable
+    @Override
     public String getSession() {
         return session;
     }
 
+    @Override
     public void openSession(String session) throws GeocachingApiException {
         this.session = session;
     }
 
     @Override
     public Geocache getGeocache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
-        List<Geocache> list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableLogCount,
+        final List<Geocache> list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableLogCount,
                 Collections.singletonList((Filter) new CacheCodeFilter(cacheCode)), null);
 
-        if (list.size() == 0)
+        if (list.isEmpty())
             return null;
 
         return list.get(0);
     }
 
+    @Override
     public GeocacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
         return createFieldNoteAndPublish(fieldNote.cacheCode(), fieldNote.logType(), fieldNote.dateLogged(), fieldNote.note(), publish, imageData,
                 favoriteThisCache);

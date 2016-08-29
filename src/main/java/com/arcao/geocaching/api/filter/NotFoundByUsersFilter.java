@@ -2,49 +2,49 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class NotFoundByUsersFilter implements Filter {
     private static final String NAME = "NotFoundByUsers";
 
-    protected final String[] userNames;
+    @NotNull private final String[] userNames;
 
-    public NotFoundByUsersFilter(String... userNames) {
+    public NotFoundByUsersFilter(@NotNull String... userNames) {
         this.userNames = userNames;
     }
 
-    public String[] getUserNames() {
-        return userNames;
+    @NotNull
+    @Override
+    public String name() {
+        return NAME;
     }
 
-    public boolean isValid() {
-        if (userNames == null || userNames.length == 0)
+    @Override
+    public boolean valid() {
+        if (userNames.length == 0)
             return false;
 
-        boolean valid = false;
         for (String userName : userNames) {
-            if (userName != null && userName.length() > 0)
-                valid = true;
+            if (userName != null && !userName.isEmpty())
+                return true;
         }
 
-        return valid;
+        return false;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("UserNames");
         w.beginArray();
         for (String userName : userNames) {
-            if (userName != null && userName.length() > 0)
+            if (userName != null && !userName.isEmpty())
                 w.value(userName);
         }
         w.endArray();
         w.endObject();
     }
-
-    public String getName() {
-        return NAME;
-    }
-
 }

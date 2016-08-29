@@ -2,49 +2,49 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class CacheCodeFilter implements Filter {
     private static final String NAME = "CacheCode";
 
-    private final String[] caches;
+    @NotNull private final String[] caches;
 
-    public CacheCodeFilter(String... caches) {
+    public CacheCodeFilter(@NotNull String... caches) {
         this.caches = caches;
     }
 
-    public String[] getCaches() {
-        return caches;
+    @NotNull
+    @Override
+    public String name() {
+        return NAME;
     }
 
-    public boolean isValid() {
-        if (caches == null || caches.length == 0)
+    @Override
+    public boolean valid() {
+        if (caches.length == 0)
             return false;
 
-        boolean valid = false;
         for (String cache : caches) {
-            if (cache != null && cache.length() > 0)
-                valid = true;
+            if (cache != null && !cache.isEmpty())
+                return true;
         }
 
-        return valid;
+        return false;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("CacheCodes");
         w.beginArray();
         for (String cache : caches) {
-            if (cache != null && cache.length() > 0)
+            if (cache != null && !cache.isEmpty())
                 w.value(cache);
         }
         w.endArray();
         w.endObject();
     }
-
-    public String getName() {
-        return NAME;
-    }
-
 }

@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api;
 
 
+import com.arcao.geocaching.api.builder.JsonBuilder;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.DeviceInfo;
@@ -21,15 +22,14 @@ import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
 import com.arcao.geocaching.api.data.sort.SortBy;
 import com.arcao.geocaching.api.data.sort.SortOrder;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
+import com.arcao.geocaching.api.downloader.JsonDownloader;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.InvalidSessionException;
-import com.arcao.geocaching.api.exception.NetworkException;
-import com.arcao.geocaching.api.builder.JsonBuilder;
-import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
-import com.arcao.geocaching.api.downloader.JsonDownloader;
 import com.arcao.geocaching.api.exception.LiveGeocachingApiException;
+import com.arcao.geocaching.api.exception.NetworkException;
 import com.arcao.geocaching.api.filter.Filter;
 import com.arcao.geocaching.api.parser.ApiLimitsJsonParser;
 import com.arcao.geocaching.api.parser.BookmarkJsonParser;
@@ -49,6 +49,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +83,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     private final GeocachingApiConfiguration configuration;
     private final JsonDownloader downloader;
 
-    private GeocacheLimits lastGeocacheLimits = null;
+    @Nullable private GeocacheLimits lastGeocacheLimits = null;
     private int lastSearchResultsFound = 0;
 
     private boolean sessionValid = false;
@@ -92,7 +93,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
      *
      * @param builder builder object
      */
-    private LiveGeocachingApi(Builder builder) {
+    LiveGeocachingApi(Builder builder) {
         this.configuration = builder.configuration;
         this.downloader = builder.downloader;
     }
@@ -103,19 +104,24 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         sessionValid = true;
     }
 
+    @Override
     public void closeSession() {
         session = null;
         sessionValid = false;
     }
 
+    @Override
     public boolean isSessionValid() {
         return sessionValid;
     }
 
+    @Override
     public List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
-        lastSearchResultsFound = 0;
 
+        assert session != null;
+
+        lastSearchResultsFound = 0;
         JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
@@ -134,12 +140,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             if (filters != null) {
                 for (Filter filter : filters) {
-                    if (filter.isValid())
+                    if (filter.valid())
                         filter.writeJson(w);
                 }
             }
 
-            if (sortByList != null && sortByList.size() > 0) {
+            if (sortByList != null && !sortByList.isEmpty()) {
                 w.name("SortBys").beginArray();
                 for (SortBy sortBy : sortByList) {
                     w.name("SortFilterId").value(sortBy.key().id);
@@ -181,10 +187,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
-        lastSearchResultsFound = 0;
 
+        assert session != null;
+
+        lastSearchResultsFound = 0;
         JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
@@ -235,8 +244,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
         List<Trackable> list = null;
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -267,7 +279,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             }
             r.endObject();
 
-            if (list == null || list.size() == 0)
+            if (list == null || list.isEmpty())
                 return null;
 
             return list.get(0);
@@ -283,8 +295,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
         List<Trackable> list = new ArrayList<Trackable>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -321,8 +336,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public List<TrackableTravel> getTrackableTravelList(String trackableCode) throws GeocachingApiException {
         List<TrackableTravel> list = new ArrayList<TrackableTravel>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -357,8 +375,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     }
 
+    @Override
     public List<GeocacheLog> getGeocacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<GeocacheLog> list = new ArrayList<GeocacheLog>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -394,9 +415,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public GeocacheLog createFieldNoteAndPublish(String cacheCode, GeocacheLogType geocacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
                                                  boolean favoriteThisCache) throws GeocachingApiException {
         GeocacheLog geocacheLog = null;
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -444,9 +468,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
                                           boolean trackableData, DeviceInfo deviceInfo) throws GeocachingApiException {
         UserProfile userProfile = null;
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -497,8 +524,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount, boolean collectionOnly) throws GeocachingApiException {
         List<Trackable> list = new ArrayList<Trackable>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -544,6 +574,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     public List<BookmarkList> getBookmarkListsForUser() throws GeocachingApiException {
         List<BookmarkList> list = new ArrayList<BookmarkList>();
 
+        assert session != null;
+
         JsonReader r = null;
         try {
             r = callGet("GetBookmarkListsForUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
@@ -578,6 +610,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     @Override
     public List<BookmarkList> getBookmarkListsByUserId(int userId) throws GeocachingApiException {
         List<BookmarkList> list = new ArrayList<BookmarkList>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -614,6 +648,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     @Override
     public List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException {
         List<Bookmark> list = new ArrayList<Bookmark>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -656,6 +692,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     public List<GeocacheStatus> getGeocacheStatus(List<String> cacheCodes) throws GeocachingApiException {
         List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
 
+        assert session != null;
+
         JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
@@ -697,8 +735,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
-        if (note == null || note.length() == 0) {
+        assert session != null;
+
+        if (note == null || note.isEmpty()) {
             deleteCachePersonalNote(cacheCode);
             return;
         }
@@ -728,7 +769,10 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
+        assert session != null;
+
         JsonReader r = null;
         try {
             r = callGet("DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
@@ -748,8 +792,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<TrackableLog> list = new ArrayList<TrackableLog>();
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -785,9 +832,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
     public ApiLimitsResponse getApiLimits() throws GeocachingApiException {
         ApiLimits apiLimits = null;
         MaxPerPage maxPerPage = null;
+
+        assert session != null;
 
         JsonReader r = null;
         try {
@@ -822,18 +872,24 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @Override
+    @Nullable
     public GeocacheLimits getLastGeocacheLimits() {
         return lastGeocacheLimits;
     }
 
+    @Override
     public int getLastSearchResultsFound() {
         return lastSearchResultsFound;
     }
 
+    @Override
     public List<GeocacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 
-        if (userName == null || userName.length() == 0)
+        assert session != null;
+
+        if (userName == null || userName.isEmpty())
             throw new IllegalArgumentException("You must specify user name.");
 
         if (logTypes == null || logTypes.length == 0)
@@ -908,12 +964,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     // -------------------- Helper methods ----------------------------------------
-    protected void prepareRequest() {
+    private void prepareRequest() {
         lastGeocacheLimits = null;
         lastSearchResultsFound = 0;
     }
 
-    protected void checkError(JsonReader r) throws GeocachingApiException, IOException {
+    private void checkError(JsonReader r) throws GeocachingApiException, IOException {
         if (r.peek() == JsonToken.BEGIN_OBJECT || "Status".equals(r.nextName())) {
             Status status = StatusJsonParser.parse(r);
 
@@ -945,7 +1001,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
-    protected JsonReader callGet(String function) throws NetworkException, InvalidResponseException {
+    private JsonReader callGet(String function) throws NetworkException, InvalidResponseException {
         prepareRequest();
 
         logger.debug("Getting " + maskParameterValues(function));
@@ -959,7 +1015,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
-    protected JsonReader callPost(String function, String postBody) throws NetworkException, InvalidResponseException {
+    private JsonReader callPost(String function, String postBody) throws NetworkException, InvalidResponseException {
         prepareRequest();
 
         logger.debug("Posting " + maskParameterValues(function));
@@ -980,22 +1036,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
-    protected String maskParameterValues(String function) {
-        function = function.replaceAll("([Aa]ccess[Tt]oken=)([^&]+)", "$1******");
-        return function;
+    private static String maskParameterValues(String function) {
+        return function.replaceAll("([Aa]ccess[Tt]oken=)([^&]+)", "$1******");
     }
 
-    protected String maskJsonParameterValues(String postBody) {
-        postBody = postBody.replaceAll("(\"[Aa]ccess[Tt]oken\"\\s*:\\s*\")([^\"]+)(\")", "$1******$3");
-        return postBody;
+    private static String maskJsonParameterValues(String postBody) {
+        return postBody.replaceAll("(\"[Aa]ccess[Tt]oken\"\\s*:\\s*\")([^\"]+)(\")", "$1******$3");
     }
 
-    protected boolean isGsonException(Throwable t) {
+    private static boolean isGsonException(Throwable t) {
         // This IOException mess will be fixed in a next GSON release
         return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
     }
 
-    protected void closeJsonReader(JsonReader r) {
+    private static void closeJsonReader(JsonReader r) {
         if (r == null)
             return;
 
@@ -1006,20 +1060,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     /**
      * Builder for {@link LiveGeocachingApi}
      *
      * @author arcao
      */
     public static class Builder {
-        private GeocachingApiConfiguration configuration;
-        private JsonDownloader downloader;
+        GeocachingApiConfiguration configuration;
+        JsonDownloader downloader;
 
-        private Builder() {
-        }
-
-        public static Builder liveGeocachingApi() {
-            return new Builder();
+        Builder() {
         }
 
         /**
@@ -1028,7 +1082,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
          * @param configuration instance of {@link GeocachingApiConfiguration} implementation
          * @return this Builder
          */
-        public Builder withConfiguration(GeocachingApiConfiguration configuration) {
+        public Builder configuration(GeocachingApiConfiguration configuration) {
             this.configuration = configuration;
             return this;
         }
@@ -1039,7 +1093,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
          * @param downloader instance of {@link JsonDownloader} implementation
          * @return this Builder
          */
-        public Builder withDownloader(JsonDownloader downloader) {
+        public Builder downloader(JsonDownloader downloader) {
             this.downloader = downloader;
             return this;
         }
@@ -1051,7 +1105,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
          *
          * @return new instance of LiveGeocachingApi
          */
-        public LiveGeocachingApi build() {
+        public GeocachingApi build() {
             if (configuration == null) {
                 configuration = new DefaultProductionGeocachingApiConfiguration();
             }

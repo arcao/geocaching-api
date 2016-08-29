@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.builder;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 /**
@@ -16,5 +18,5 @@ public interface JsonSerializable {
      * @param w JsonWriter object for writing output
      * @throws IOException If I/O error occurs
      */
-    void writeJson(JsonWriter w) throws IOException;
+    void writeJson(@NotNull JsonWriter w) throws IOException;
 }

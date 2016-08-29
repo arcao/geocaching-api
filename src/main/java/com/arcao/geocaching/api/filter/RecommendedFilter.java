@@ -3,13 +3,15 @@ package com.arcao.geocaching.api.filter;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class RecommendedFilter implements Filter {
   private static final String NAME = "Recommended";
 
-  protected final double latitude;
-  protected final double longitude;
+  private final double latitude;
+  private final double longitude;
 
   public RecommendedFilter(Coordinates origin) {
     latitude = origin.latitude();
@@ -21,15 +23,19 @@ public class RecommendedFilter implements Filter {
     this.longitude = longitude;
   }
 
-  public String getName() {
+  @NotNull
+  @Override
+  public String name() {
     return NAME;
   }
 
-  public boolean isValid() {
+  @Override
+  public boolean valid() {
     return !Double.isNaN(latitude) && !Double.isNaN(longitude);
   }
 
-  public void writeJson(JsonWriter w) throws IOException {
+  @Override
+  public void writeJson(@NotNull JsonWriter w) throws IOException {
     w.name(NAME);
     w.beginObject();
     w.name("Origin");

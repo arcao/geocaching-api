@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.data.GeocacheStatus;
 import com.arcao.geocaching.api.data.type.GeocacheType;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.LiveGeocachingApiException;
 
 import org.junit.Assert;
@@ -17,14 +18,14 @@ public class GetGeocacheStatusTest extends AbstractGeocachingTest {
     private static final List<String> TWO_CACHE_CODES = Arrays.asList("GCXZE8", "GCY81P");
 
     @Test(expected = LiveGeocachingApiException.class)
-    public void zeroGetGeocacheStatusTest() throws Exception {
+    public void zeroGetGeocacheStatusTest() throws GeocachingApiException {
         api.getGeocacheStatus(ZERO_CACHE_CODES);
 
         Assert.fail();
     }
 
     @Test
-    public void oneGetGeocacheStatusTest() throws Exception {
+    public void oneGetGeocacheStatusTest() throws GeocachingApiException {
         List<GeocacheStatus> geocacheStatusList = api.getGeocacheStatus(ONE_CACHE_CODE);
 
         Assert.assertNotNull(geocacheStatusList);
@@ -43,7 +44,7 @@ public class GetGeocacheStatusTest extends AbstractGeocachingTest {
     }
 
     @Test
-    public void twoGetGeocacheStatusTest() throws Exception {
+    public void twoGetGeocacheStatusTest() throws GeocachingApiException {
         List<GeocacheStatus> geocacheStatusList = api.getGeocacheStatus(TWO_CACHE_CODES);
 
         Assert.assertNotNull(geocacheStatusList);

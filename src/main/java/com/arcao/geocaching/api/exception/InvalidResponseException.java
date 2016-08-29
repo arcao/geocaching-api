@@ -1,17 +1,15 @@
 package com.arcao.geocaching.api.exception;
 
+import org.jetbrains.annotations.Nullable;
+
 public class InvalidResponseException extends GeocachingApiException {
     private static final long serialVersionUID = 3015569084055361721L;
 
     private final int statusCode;
-    private final String statusMessage;
-    private final String data;
+    @Nullable private final String statusMessage;
+    @Nullable private final String data;
 
-    public InvalidResponseException(String message) {
-        this(message, null);
-    }
-
-    public InvalidResponseException(int statusCode, String statusMessage, String data) {
+    public InvalidResponseException(int statusCode, @Nullable String statusMessage, @Nullable String data) {
         super(String.valueOf(statusCode) + " " + statusMessage + "\n\n" + data);
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
@@ -29,10 +27,12 @@ public class InvalidResponseException extends GeocachingApiException {
         return statusCode;
     }
 
+    @Nullable
     public String getStatusMessage() {
         return statusMessage;
     }
 
+    @Nullable
     public String getData() {
         return data;
     }

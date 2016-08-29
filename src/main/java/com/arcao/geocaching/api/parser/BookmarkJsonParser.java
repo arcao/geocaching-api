@@ -9,7 +9,10 @@ import java.util.List;
 
 import static com.arcao.geocaching.api.data.type.GeocacheType.fromId;
 
-public class BookmarkJsonParser extends JsonParser {
+public final class BookmarkJsonParser {
+    private BookmarkJsonParser() {
+    }
+
     public static List<Bookmark> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();

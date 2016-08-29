@@ -10,8 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.arcao.geocaching.api.data.type.WaypointType.fromName;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonUTCDate;
 
-public class WaypointJsonParser extends JsonParser {
+public final class WaypointJsonParser {
+    private WaypointJsonParser() {
+    }
+
     public static List<Waypoint> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
@@ -26,7 +30,7 @@ public class WaypointJsonParser extends JsonParser {
         return list;
     }
 
-    public static Waypoint parse(JsonReader r) throws IOException {
+    private static Waypoint parse(JsonReader r) throws IOException {
         Waypoint.Builder builder = Waypoint.builder();
         Coordinates.Builder coordinatesBuilder = Coordinates.builder();
 

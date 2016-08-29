@@ -2,26 +2,32 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class GeocacheNameFilter implements Filter {
     private static final String NAME = "GeocacheName";
 
-    private final String name;
+    @NotNull private final String name;
 
-    public GeocacheNameFilter(String name) {
+    public GeocacheNameFilter(@NotNull String name) {
         this.name = name;
     }
 
-    public String getName() {
+    @NotNull
+    @Override
+    public String name() {
         return NAME;
     }
 
-    public boolean isValid() {
-        return name != null && name.length() > 0;
+    @Override
+    public boolean valid() {
+        return !name.isEmpty();
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("GeocacheName").value(name);

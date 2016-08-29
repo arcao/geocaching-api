@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.data.DeviceInfo;
 import com.arcao.geocaching.api.data.UserProfile;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
             .build();
 
     @Test
-    public void getYourUserProfileSimpleTest() throws Exception {
+    public void getYourUserProfileSimpleTest() throws GeocachingApiException {
         UserProfile userProfile = api.getYourUserProfile(false, false, false, false, false, false, DEVICE_INFO);
 
         Assert.assertNull(userProfile.favoritePointsStats());
@@ -33,7 +34,7 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
     }
 
     @Test
-    public void getYourUserProfileCompleteTest() throws Exception {
+    public void getYourUserProfileCompleteTest() throws GeocachingApiException {
         UserProfile userProfile = api.getYourUserProfile(true, true, true, true, false, true, DEVICE_INFO);
 
         //Assert.assertNotNull(userProfile.getFavoritePointsStats());

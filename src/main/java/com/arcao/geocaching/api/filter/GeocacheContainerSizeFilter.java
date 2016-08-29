@@ -3,35 +3,40 @@ package com.arcao.geocaching.api.filter;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class GeocacheContainerSizeFilter implements Filter {
     private static final String NAME = "GeocacheContainerSize";
 
-    private final ContainerType[] containerTypes;
+    @NotNull private final ContainerType[] containerTypes;
 
-    public GeocacheContainerSizeFilter(ContainerType... containerTypes) {
+    public GeocacheContainerSizeFilter(@NotNull ContainerType... containerTypes) {
         this.containerTypes = containerTypes;
     }
 
-    public String getName() {
+    @NotNull
+    @Override
+    public String name() {
         return NAME;
     }
 
-    public boolean isValid() {
-        if (containerTypes == null || containerTypes.length == 0)
+    @Override
+    public boolean valid() {
+        if (containerTypes.length == 0)
             return false;
 
-        boolean valid = false;
         for (ContainerType containerType : containerTypes) {
             if (containerType != null)
-                valid = true;
+                return true;
         }
 
-        return valid;
+        return false;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("GeocacheContainerSizeIds");

@@ -9,7 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeocacheLogJsonParser extends JsonParser {
+import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonUTCDate;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
+
+public final class GeocacheLogJsonParser {
+    private GeocacheLogJsonParser() {
+    }
+
     public static List<GeocacheLog> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();

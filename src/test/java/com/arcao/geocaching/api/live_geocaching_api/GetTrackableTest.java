@@ -1,9 +1,12 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.data.Trackable;
+import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,8 +24,9 @@ public class GetTrackableTest extends AbstractGeocachingTest {
         assertNotNull(trackable.created());
         assertNotNull(trackable.owner());
         assertNotNull(trackable.images());
-        assertNotNull(trackable.trackableLogs());
-        assertEquals(TRACKABLE_LOGS_COUNT, trackable.trackableLogs().size());
+        List<TrackableLog> trackableLogs = trackable.trackableLogs();
+        assertNotNull(trackableLogs);
+        assertEquals(TRACKABLE_LOGS_COUNT, trackableLogs.size());
     }
 
     @Test
@@ -32,8 +36,9 @@ public class GetTrackableTest extends AbstractGeocachingTest {
         assertNotNull(trackable.created());
         assertNotNull(trackable.owner());
         assertNotNull(trackable.images());
-        assertNotNull(trackable.trackableLogs());
-        assertEquals(TRACKABLE_LOGS_COUNT, trackable.trackableLogs().size());
+        List<TrackableLog> trackableLogs = trackable.trackableLogs();
+        assertNotNull(trackableLogs);
+        assertEquals(TRACKABLE_LOGS_COUNT, trackableLogs.size());
     }
 
 }

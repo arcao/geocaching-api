@@ -2,36 +2,34 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class TerrainFilter implements Filter {
     private static final String NAME = "Terrain";
 
-    protected final float min;
-    protected final float max;
+    private final float min;
+    private final float max;
 
     public TerrainFilter(float min, float max) {
         this.min = min;
         this.max = max;
     }
 
-    public String getName() {
+    @NotNull
+    @Override
+    public String name() {
         return NAME;
     }
 
-    public float getMin() {
-        return min;
+    @Override
+    public boolean valid() {
+        return min >= 1 && max <= 5 && min < max && min != 1 && max != 5;
     }
 
-    public float getMax() {
-        return max;
-    }
-
-    public boolean isValid() {
-        return min != 1 || max != 5;
-    }
-
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
 

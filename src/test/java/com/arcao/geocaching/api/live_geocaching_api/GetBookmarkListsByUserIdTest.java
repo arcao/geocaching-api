@@ -27,7 +27,7 @@ public class GetBookmarkListsByUserIdTest extends AbstractGeocachingTest {
         assertFalse(bookmarkList.isEmpty());
 
         BookmarkList item = bookmarkList.get(0);
-        System.out.println(item.toString());
+        System.out.println(item);
 
         assertThat(item.id(), not(0));
         assertThat(item.guid(), not(isEmptyOrNullString()));

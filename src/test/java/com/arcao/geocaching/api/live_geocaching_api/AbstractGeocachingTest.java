@@ -1,9 +1,11 @@
 package com.arcao.geocaching.api.live_geocaching_api;
 
 import com.arcao.geocaching.api.GeocachingApi;
-import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.LiveGeocachingApi;
+import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
+import com.arcao.geocaching.api.downloader.JsonDownloader;
+import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
@@ -15,8 +17,8 @@ public abstract class AbstractGeocachingTest {
     private static final String STAGING_AUTH_TOKEN = "JvJcmhBJ88iDoWR107RIKpQgLLU=";
 
     @BeforeClass
-    public static void setUp() throws Exception {
-        LiveGeocachingApi.Builder builder = LiveGeocachingApi.Builder.liveGeocachingApi();
+    public static void setUp() throws GeocachingApiException {
+        LiveGeocachingApi.Builder builder = LiveGeocachingApi.builder();
 
         GeocachingApiConfiguration configuration = GeocachingApiConfiguration.STAGING;
 
@@ -24,11 +26,10 @@ public abstract class AbstractGeocachingTest {
             configuration = GeocachingApiConfiguration.PRODUCTION;
         }
 
-        DefaultJsonDownloader downloader = new DefaultJsonDownloader(configuration);
-        downloader.setDebug(true);
+        JsonDownloader downloader = new DefaultJsonDownloader(configuration).debug(true);
 
-        builder.withConfiguration(configuration);
-        builder.withDownloader(downloader);
+        builder.configuration(configuration);
+        builder.downloader(downloader);
 
         api = builder.build();
 

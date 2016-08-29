@@ -3,30 +3,36 @@ package com.arcao.geocaching.api.filter;
 import com.arcao.geocaching.api.builder.JsonBuilder;
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.Date;
 
 public class EventsDateRangeFilter implements Filter {
     private static final String NAME = "EventsDateRangeUtc";
 
-    private final Date startDate;
-    private final Date endDate;
+    @Nullable private final Date startDate;
+    @Nullable private final Date endDate;
 
-    public EventsDateRangeFilter(Date startDate, Date endDate) {
+    public EventsDateRangeFilter(@Nullable Date startDate, @Nullable Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
+    @NotNull
     @Override
-    public String getName() {
+    public String name() {
         return NAME;
     }
 
-    public boolean isValid() {
+    @Override
+    public boolean valid() {
         return startDate != null || endDate != null;
     }
 
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
         w.name("Range");

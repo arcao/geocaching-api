@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.filter;
 
 import com.google.gson.stream.JsonWriter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 public class DifficultyFilter implements Filter {
@@ -15,23 +17,19 @@ public class DifficultyFilter implements Filter {
         this.max = max;
     }
 
-    public String getName() {
+    @Override
+    @NotNull
+    public String name() {
         return NAME;
     }
 
-    public float getMin() {
-        return min;
+    @Override
+    public boolean valid() {
+        return min >= 1 && max <= 5 && min < max && min != 1 && max != 5;
     }
 
-    public float getMax() {
-        return max;
-    }
-
-    public boolean isValid() {
-        return min != 1 || max != 5;
-    }
-
-    public void writeJson(JsonWriter w) throws IOException {
+    @Override
+    public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
 

@@ -23,7 +23,7 @@ public class GetBookmarkListByGuidTest extends AbstractGeocachingTest {
 
         Bookmark item = items.get(0);
 
-        System.out.println(item.toString());
+        System.out.println(item);
 
         assertThat(item.cacheCode(), not(isEmptyOrNullString()));
         assertThat(item.cacheTitle(), not(isEmptyOrNullString()));

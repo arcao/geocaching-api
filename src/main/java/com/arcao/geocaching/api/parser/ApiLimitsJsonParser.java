@@ -8,7 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiLimitsJsonParser extends JsonParser {
+import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseMemberType;
+
+public final class ApiLimitsJsonParser {
+    private ApiLimitsJsonParser() {
+    }
+
     public static ApiLimits parse(JsonReader r) throws IOException {
         ApiLimits.Builder builder = ApiLimits.builder();
 

@@ -8,7 +8,10 @@ import java.util.Locale;
  *
  * @author arcao
  */
-public class JsonBuilder {
+public final class JsonBuilder {
+    private JsonBuilder() {
+    }
+
     /**
      * Convert Date object to JSON date notation
      *

@@ -11,7 +11,10 @@ import java.util.List;
 /**
  * Created by Krzysztof.Nowacki on 2015.11.13.
  */
-public class GeocacheStatusJsonParser extends JsonParser {
+public final class GeocacheStatusJsonParser {
+    private GeocacheStatusJsonParser() {
+    }
+
     public static List<GeocacheStatus> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();

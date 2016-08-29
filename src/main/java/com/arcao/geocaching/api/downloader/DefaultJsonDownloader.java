@@ -28,6 +28,8 @@ import java.util.zip.InflaterInputStream;
  */
 public class DefaultJsonDownloader implements JsonDownloader {
     private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
+    private static final int HTTP_ERROR_400 = 400;
+    private static final int BUFFER_SIZE = 8192;
 
     private final GeocachingApiConfiguration configuration;
     private boolean debug = false;
@@ -41,10 +43,12 @@ public class DefaultJsonDownloader implements JsonDownloader {
         this.configuration = configuration;
     }
 
-    public void setDebug(boolean debug) {
+    public DefaultJsonDownloader debug(boolean debug) {
         this.debug = debug;
+        return this;
     }
 
+    @Override
     public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
         InputStream is;
         InputStreamReader isr;
@@ -62,29 +66,25 @@ public class DefaultJsonDownloader implements JsonDownloader {
             con.setRequestProperty("Accept-Language", "en-US");
             con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
-            if (con.getResponseCode() >= 400) {
-                is = con.getErrorStream();
-            } else {
-                is = con.getInputStream();
-            }
+            is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
 
             final String encoding = con.getContentEncoding();
 
-            if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+            if (encoding != null && "gzip".equalsIgnoreCase(encoding)) {
                 logger.debug("get: GZIP OK");
                 is = new GZIPInputStream(is);
-            } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+            } else if (encoding != null && "deflate".equalsIgnoreCase(encoding)) {
                 logger.debug("get: DEFLATE OK");
                 is = new InflaterInputStream(is, new Inflater(true));
             } else {
                 logger.debug("get: WITHOUT COMPRESSION");
             }
 
-            if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
+            if (con.getResponseCode() >= HTTP_ERROR_400 || notJsonResponse(con)) {
                 isr = new InputStreamReader(is, "UTF-8");
 
                 StringBuilder sb = new StringBuilder();
-                char buffer[] = new char[1024];
+                char[] buffer = new char[BUFFER_SIZE];
                 int len;
 
                 while ((len = isr.read(buffer)) != -1) {
@@ -111,6 +111,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
         }
     }
 
+    @Override
     public JsonReader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
         InputStream is;
         InputStreamReader isr;
@@ -138,29 +139,25 @@ public class DefaultJsonDownloader implements JsonDownloader {
             os.flush();
             os.close();
 
-            if (con.getResponseCode() >= 400) {
-                is = con.getErrorStream();
-            } else {
-                is = con.getInputStream();
-            }
+            is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
 
             final String encoding = con.getContentEncoding();
 
-            if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+            if (encoding != null && "gzip".equalsIgnoreCase(encoding)) {
                 logger.debug("callPost(): GZIP OK");
                 is = new GZIPInputStream(is);
-            } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+            } else if (encoding != null && "deflate".equalsIgnoreCase(encoding)) {
                 logger.debug("callPost(): DEFLATE OK");
                 is = new InflaterInputStream(is, new Inflater(true));
             } else {
                 logger.debug("callPost(): WITHOUT COMPRESSION");
             }
 
-            if (con.getResponseCode() >= 400 || notJsonResponse(con)) {
+            if (con.getResponseCode() >= HTTP_ERROR_400 || notJsonResponse(con)) {
                 isr = new InputStreamReader(is, "UTF-8");
 
                 StringBuilder sb = new StringBuilder();
-                char buffer[] = new char[1024];
+                char[] buffer = new char[BUFFER_SIZE];
                 int len;
 
                 while ((len = isr.read(buffer)) != -1) {
@@ -194,7 +191,9 @@ public class DefaultJsonDownloader implements JsonDownloader {
     }
 
     private static class DebugJsonReader extends JsonReader {
-        public DebugJsonReader(Reader in) throws IOException {
+        private static final Logger logger = LoggerFactory.getLogger(DebugJsonReader.class);
+
+        DebugJsonReader(Reader in) throws IOException {
             super(writeOutput(in));
         }
 
@@ -202,7 +201,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
             try {
                 StringBuilder sb = new StringBuilder();
 
-                char[] buffer = new char[8192];
+                char[] buffer = new char[BUFFER_SIZE];
                 int len;
 
                 while ((len = in.read(buffer)) > 0) {

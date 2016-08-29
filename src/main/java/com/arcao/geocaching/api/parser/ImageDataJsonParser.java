@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageDataJsonParser extends JsonParser {
+public final class ImageDataJsonParser {
+    private ImageDataJsonParser() {
+    }
+
     public static List<ImageData> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();

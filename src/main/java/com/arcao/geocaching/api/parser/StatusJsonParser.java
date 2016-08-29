@@ -5,7 +5,10 @@ import com.arcao.geocaching.api.Status;
 
 import java.io.IOException;
 
-public class StatusJsonParser {
+public final class StatusJsonParser {
+    private StatusJsonParser() {
+    }
+
     public static Status parse(JsonReader r) throws IOException {
         Status.Builder status = Status.builder();
 

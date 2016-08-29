@@ -4,7 +4,10 @@ import com.arcao.geocaching.api.data.GeocacheLimits;
 
 import java.io.IOException;
 
-public class CacheLimitsJsonParser extends JsonParser {
+public final class CacheLimitsJsonParser {
+    private CacheLimitsJsonParser() {
+    }
+
     public static GeocacheLimits parse(JsonReader r) throws IOException {
         GeocacheLimits.Builder builder = GeocacheLimits.builder();
 

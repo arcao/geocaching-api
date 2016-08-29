@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserWaypointsJsonParser extends JsonParser {
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonUTCDate;
+
+public final class UserWaypointsJsonParser {
+    private UserWaypointsJsonParser() {
+    }
+
     public static List<UserWaypoint> parseList(JsonReader r) throws IOException {
         if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
@@ -24,7 +29,7 @@ public class UserWaypointsJsonParser extends JsonParser {
         return list;
     }
 
-    public static UserWaypoint parse(JsonReader r) throws IOException {
+    private static UserWaypoint parse(JsonReader r) throws IOException {
         UserWaypoint.Builder builder = UserWaypoint.builder();
         Coordinates.Builder coordinatesBuilder = Coordinates.builder();
 
