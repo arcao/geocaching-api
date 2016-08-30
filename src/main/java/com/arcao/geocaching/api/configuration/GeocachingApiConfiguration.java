@@ -3,6 +3,8 @@ package com.arcao.geocaching.api.configuration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiConfiguration;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Basic interface for configuration class
  *
@@ -23,6 +25,7 @@ public interface GeocachingApiConfiguration {
      *
      * @return url
      */
+    @NotNull
     String getApiServiceEntryPointUrl();
 
     /**

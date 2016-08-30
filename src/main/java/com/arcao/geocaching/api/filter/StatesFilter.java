@@ -11,7 +11,7 @@ public class StatesFilter implements Filter {
 
     private final int[] states;
 
-    public StatesFilter(int... states) {
+    public StatesFilter(@NotNull int... states) {
         this.states = states;
     }
 
@@ -23,7 +23,7 @@ public class StatesFilter implements Filter {
 
     @Override
     public boolean valid() {
-        return states != null && states.length > 0;
+        return states.length > 0;
     }
 
     @Override

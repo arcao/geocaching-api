@@ -8,6 +8,7 @@ import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.filter.CacheCodeFilter;
 import com.arcao.geocaching.api.filter.Filter;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -29,12 +30,12 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
     }
 
     @Override
-    public void openSession(String session) throws GeocachingApiException {
+    public void openSession(@NotNull String session) throws GeocachingApiException {
         this.session = session;
     }
 
     @Override
-    public Geocache getGeocache(ResultQuality resultQuality, String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
+    public Geocache getGeocache(@NotNull ResultQuality resultQuality, @NotNull String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
         final List<Geocache> list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableLogCount,
                 Collections.singletonList((Filter) new CacheCodeFilter(cacheCode)), null);
 
@@ -45,7 +46,7 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
     }
 
     @Override
-    public GeocacheLog createFieldNoteAndPublish(FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
+    public GeocacheLog createFieldNoteAndPublish(@NotNull FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
         return createFieldNoteAndPublish(fieldNote.cacheCode(), fieldNote.logType(), fieldNote.dateLogged(), fieldNote.note(), publish, imageData,
                 favoriteThisCache);
     }

@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Enumeration for all existing Cache types.
  *
@@ -86,13 +89,13 @@ public enum GeocacheType {
     /**
      * Friendly name
      */
-    public final String name;
+    @NotNull public final String name;
     /**
      * Groundspeak Id
      */
     public final int id;
 
-    GeocacheType(String name, int id) {
+    GeocacheType(@NotNull String name, int id) {
         this.name = name;
         this.id = id;
     }
@@ -108,7 +111,8 @@ public enum GeocacheType {
      * @param name friendly name
      * @return cache type or null
      */
-    public static GeocacheType fromName(String name) {
+    @Nullable
+    public static GeocacheType fromName(@Nullable String name) {
         for (GeocacheType type : values()) {
             if (type.name.equals(name))
                 return type;
@@ -123,6 +127,7 @@ public enum GeocacheType {
      * @param id Groundspeak Id
      * @return cache type or null
      */
+    @Nullable
     public static GeocacheType fromId(int id) {
         for (GeocacheType type : values()) {
             if (type.id == id)

@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum WaypointType {
     FinalLocation("Final Location", "flag.jpg"),
     ParkingArea("Parking Area", "pkg.jpg"),
@@ -11,13 +14,13 @@ public enum WaypointType {
     /**
      * Friendly name
      */
-    public final String name;
+    @NotNull public final String name;
     /**
      * Icon image file name
      */
-    public final String iconName;
+    @NotNull public final String iconName;
 
-    WaypointType(String name, String iconName) {
+    WaypointType(@NotNull String name, @NotNull String iconName) {
         this.name = name;
         this.iconName = iconName;
     }
@@ -33,7 +36,8 @@ public enum WaypointType {
      * @param name Friendly name
      * @return Waypoint Type
      */
-    public static WaypointType fromName(String name) {
+    @NotNull
+    public static WaypointType fromName(@Nullable String name) {
         for (WaypointType type : values()) {
             if (type.name.equals(name))
                 return type;

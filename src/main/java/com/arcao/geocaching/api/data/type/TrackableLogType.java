@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.EnumSet;
 
 public enum TrackableLogType {
@@ -16,14 +19,14 @@ public enum TrackableLogType {
     /**
      * Friendly name
      */
-    public final String name;
+    @NotNull public final String name;
     /**
      * Groundspeak Id
      */
     public final int id;
-    private final EnumSet<States> allowedState;
+    @NotNull private final EnumSet<States> allowedState;
 
-    TrackableLogType(String name, int id, EnumSet<States> allowedState) {
+    TrackableLogType(@NotNull String name, int id, @NotNull EnumSet<States> allowedState) {
         this.name = name;
         this.id = id;
         this.allowedState = allowedState;
@@ -54,7 +57,8 @@ public enum TrackableLogType {
      * @param name Friendly name
      * @return Trackable Log Type or null
      */
-    public static TrackableLogType fromName(String name) {
+    @Nullable
+    public static TrackableLogType fromName(@Nullable String name) {
         for (TrackableLogType type : values()) {
             if (type.name.equals(name))
                 return type;
@@ -69,6 +73,7 @@ public enum TrackableLogType {
      * @param id Groundspeak Id
      * @return Trackable Log Type or null
      */
+    @Nullable
     public static TrackableLogType fromId(int id) {
         for (TrackableLogType type : values()) {
             if (type.id == id)

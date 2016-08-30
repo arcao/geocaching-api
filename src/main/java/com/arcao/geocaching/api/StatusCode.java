@@ -1,5 +1,7 @@
 package com.arcao.geocaching.api;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum StatusCode {
     // TODO
     OK(0),
@@ -130,6 +132,7 @@ public enum StatusCode {
         return code;
     }
 
+    @NotNull
     public static StatusCode getByCode(int code) {
         for (StatusCode statusCode : values()) {
             if (statusCode.getCode() == code)

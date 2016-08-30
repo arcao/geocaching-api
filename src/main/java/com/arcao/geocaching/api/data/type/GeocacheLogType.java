@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum GeocacheLogType {
     Unknown("Unknown", 0),
     FoundIt("Found it", 2),
@@ -24,13 +27,13 @@ public enum GeocacheLogType {
     /**
      * Friendly name
      */
-    public final String name;
+    @NotNull public final String name;
     /**
      * Groundspeak Id
      */
     public final int id;
 
-    GeocacheLogType(String name, int id) {
+    GeocacheLogType(@NotNull String name, int id) {
         this.name = name;
         this.id = id;
     }
@@ -46,7 +49,8 @@ public enum GeocacheLogType {
      * @param name Friendly name
      * @return Geocache Log Type or null
      */
-    public static GeocacheLogType fromName(String name) {
+    @Nullable
+    public static GeocacheLogType fromName(@Nullable String name) {
         for (final GeocacheLogType type : values()) {
             if (type.name.equals(name))
                 return type;

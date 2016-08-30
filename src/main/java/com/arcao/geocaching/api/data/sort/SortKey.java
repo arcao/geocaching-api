@@ -1,5 +1,7 @@
 package com.arcao.geocaching.api.data.sort;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum SortKey {
     Distance("Distance"),
     FavoritePoint("FavoritePoint"),
@@ -15,9 +17,9 @@ public enum SortKey {
     /**
      * Key id
      */
-    public final String id;
+    @NotNull public final String id;
 
-    SortKey(String id) {
+    SortKey(@NotNull String id) {
         this.id = id;
     }
 }

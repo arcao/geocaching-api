@@ -49,6 +49,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +100,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     @Override
-    public void openSession(String session) throws GeocachingApiException {
+    public void openSession(@NotNull String session) throws GeocachingApiException {
         super.openSession(session);
         sessionValid = true;
     }
@@ -115,11 +116,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         return sessionValid;
     }
 
+    @NotNull
     @Override
-    public List<Geocache> searchForGeocaches(ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
+    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         lastSearchResultsFound = 0;
         JsonReader r = null;
@@ -138,11 +141,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             if (trackableLogCount >= 0)
                 w.name("TrackableLogCount").value(trackableLogCount);
 
-            if (filters != null) {
-                for (Filter filter : filters) {
-                    if (filter.valid())
-                        filter.writeJson(w);
-                }
+            for (Filter filter : filters) {
+                if (filter.valid())
+                    filter.writeJson(w);
             }
 
             if (sortByList != null && !sortByList.isEmpty()) {
@@ -187,11 +188,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
-    public List<Geocache> getMoreGeocaches(ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
+    public List<Geocache> getMoreGeocaches(@NotNull ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         lastSearchResultsFound = 0;
         JsonReader r = null;
@@ -245,14 +248,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     @Override
-    public Trackable getTrackable(String trackableCode, int trackableLogCount) throws GeocachingApiException {
+    public Trackable getTrackable(@NotNull String trackableCode, int trackableLogCount) throws GeocachingApiException {
         List<Trackable> list = null;
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
-
+            //noinspection IfMayBeConditional
             if (trackableCode.toLowerCase(Locale.US).startsWith("tb")) {
                 r = callGet("GetTrackablesByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
                         "&tbCode=" + trackableCode +
@@ -295,11 +299,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
-    public List<Trackable> getTrackablesByCacheCode(String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
+    public List<Trackable> getTrackablesByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
         List<Trackable> list = new ArrayList<Trackable>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -336,11 +342,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
-    public List<TrackableTravel> getTrackableTravelList(String trackableCode) throws GeocachingApiException {
+    public List<TrackableTravel> getTrackableTravelList(@NotNull String trackableCode) throws GeocachingApiException {
         List<TrackableTravel> list = new ArrayList<TrackableTravel>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -375,11 +383,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     }
 
+    @NotNull
     @Override
-    public List<GeocacheLog> getGeocacheLogsByCacheCode(String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
+    public List<GeocacheLog> getGeocacheLogsByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -416,11 +426,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     @Override
-    public GeocacheLog createFieldNoteAndPublish(String cacheCode, GeocacheLogType geocacheLogType, Date dateLogged, String note, boolean publish, ImageData imageData,
+    public GeocacheLog createFieldNoteAndPublish(@NotNull String cacheCode, @NotNull GeocacheLogType geocacheLogType, @NotNull Date dateLogged, @NotNull String note, boolean publish, ImageData imageData,
                                                  boolean favoriteThisCache) throws GeocachingApiException {
         GeocacheLog geocacheLog = null;
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -470,10 +481,11 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @Override
     public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
-                                          boolean trackableData, DeviceInfo deviceInfo) throws GeocachingApiException {
+                                          boolean trackableData, @NotNull DeviceInfo deviceInfo) throws GeocachingApiException {
         UserProfile userProfile = null;
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -490,10 +502,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
                     .name("TrackableData").value(trackableData);
             w.endObject();
 
-            if (deviceInfo != null) {
-                w.name("DeviceInfo");
-                deviceInfo.writeJson(w);
-            }
+            w.name("DeviceInfo");
+            deviceInfo.writeJson(w);
 
             w.endObject();
             w.close();
@@ -524,11 +534,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
     public List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount, boolean collectionOnly) throws GeocachingApiException {
         List<Trackable> list = new ArrayList<Trackable>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -570,11 +582,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
     public List<BookmarkList> getBookmarkListsForUser() throws GeocachingApiException {
         List<BookmarkList> list = new ArrayList<BookmarkList>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -607,11 +621,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
     public List<BookmarkList> getBookmarkListsByUserId(int userId) throws GeocachingApiException {
         List<BookmarkList> list = new ArrayList<BookmarkList>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -645,11 +661,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
     public List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException {
         List<Bookmark> list = new ArrayList<Bookmark>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -688,11 +706,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
-    public List<GeocacheStatus> getGeocacheStatus(List<String> cacheCodes) throws GeocachingApiException {
+    public List<GeocacheStatus> getGeocacheStatus(@NotNull List<String> cacheCodes) throws GeocachingApiException {
         List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -736,8 +756,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     @Override
-    public void setGeocachePersonalNote(String cacheCode, String note) throws GeocachingApiException {
-        assert session != null;
+    public void setGeocachePersonalNote(@NotNull String cacheCode, String note) throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         if (note == null || note.isEmpty()) {
             deleteCachePersonalNote(cacheCode);
@@ -770,8 +791,9 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     @Override
-    public void deleteCachePersonalNote(String cacheCode) throws GeocachingApiException {
-        assert session != null;
+    public void deleteCachePersonalNote(@NotNull String cacheCode) throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -792,11 +814,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
-    public List<TrackableLog> getTrackableLogs(String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
+    public List<TrackableLog> getTrackableLogs(@NotNull String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<TrackableLog> list = new ArrayList<TrackableLog>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -832,12 +856,14 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
     }
 
+    @NotNull
     @Override
     public ApiLimitsResponse getApiLimits() throws GeocachingApiException {
         ApiLimits apiLimits = null;
         MaxPerPage maxPerPage = null;
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
         JsonReader r = null;
         try {
@@ -883,16 +909,18 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         return lastSearchResultsFound;
     }
 
+    @NotNull
     @Override
-    public List<GeocacheLog> getUsersGeocacheLogs(String userName, Date startDate, Date endDate, GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
+    public List<GeocacheLog> getUsersGeocacheLogs(@NotNull String userName, Date startDate, Date endDate, @NotNull GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
         List<GeocacheLog> list = new ArrayList<GeocacheLog>();
 
-        assert session != null;
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
 
-        if (userName == null || userName.isEmpty())
+        if (userName.isEmpty())
             throw new IllegalArgumentException("You must specify user name.");
 
-        if (logTypes == null || logTypes.length == 0)
+        if (logTypes.length == 0)
             throw new IllegalArgumentException("You must specify at least one GeocacheLogType.");
 
         JsonReader r = null;
@@ -957,7 +985,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
                 throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
             }
 
-            throw new GeocachingApiException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
         } finally {
             closeJsonReader(r);
         }
@@ -997,7 +1025,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
                     throw cause;
             }
         } else {
-            throw new GeocachingApiException("Missing Status in a response.");
+            throw new InvalidResponseException("Missing Status in a response.");
         }
     }
 

@@ -13,7 +13,7 @@ public class RecommendedFilter implements Filter {
   private final double latitude;
   private final double longitude;
 
-  public RecommendedFilter(Coordinates origin) {
+  public RecommendedFilter(@NotNull Coordinates origin) {
     latitude = origin.latitude();
     longitude = origin.longitude();
   }

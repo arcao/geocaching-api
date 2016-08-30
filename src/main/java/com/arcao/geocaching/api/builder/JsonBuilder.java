@@ -1,5 +1,7 @@
 package com.arcao.geocaching.api.builder;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -18,7 +20,7 @@ public final class JsonBuilder {
      * @param date date convert
      * @return JSON notation for date
      */
-    public static String dateToJsonString(Date date) {
+    public static String dateToJsonString(@Nullable Date date) {
         if (date == null)
             return null;
 

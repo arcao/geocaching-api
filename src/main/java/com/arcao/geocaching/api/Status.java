@@ -31,7 +31,7 @@ public abstract class Status implements Serializable {
 
         public abstract Builder message(String message);
 
-        public abstract Builder exceptionDetails(String exceptionDetails);
+        public abstract Builder exceptionDetails(@Nullable String exceptionDetails);
 
         public abstract Status build();
     }

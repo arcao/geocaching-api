@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum AttributeType {
     DogsYes(1, "Dogs", true, "http://www.geocaching.com/images/attributes/dogs-yes.gif"),
     DogsNo(1, "Dogs", false, "http://www.geocaching.com/images/attributes/dogs-no.gif"),
@@ -141,6 +144,7 @@ public enum AttributeType {
     /**
      * Friendly name
      */
+    @NotNull
     public final String name;
     /**
      * Is attribute on?
@@ -149,9 +153,10 @@ public enum AttributeType {
     /**
      * Attribute image URL
      */
+    @NotNull
     public final String imageUrl;
 
-    AttributeType(int id, String name, boolean on, String imageUrl) {
+    AttributeType(int id, @NotNull String name, boolean on, @NotNull String imageUrl) {
         this.id = id;
         this.name = name;
         this.on = on;
@@ -170,6 +175,7 @@ public enum AttributeType {
      * @param on is attribute On?
      * @return Attribute type or null
      */
+    @Nullable
     public static AttributeType fromId(int id, boolean on) {
         for (AttributeType type : values()) {
             if (type.id == id && type.on == on)

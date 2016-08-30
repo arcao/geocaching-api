@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.data.sort;
 
 import com.google.auto.value.AutoValue;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 @AutoValue
@@ -22,7 +24,7 @@ public abstract class SortBy implements Serializable {
      */
     public abstract SortOrder order();
 
-    public static SortBy create(SortKey key, SortOrder order) {
+    public static SortBy create(@NotNull SortKey key, @NotNull SortOrder order) {
         return new AutoValue_SortBy(key, order);
     }
 }

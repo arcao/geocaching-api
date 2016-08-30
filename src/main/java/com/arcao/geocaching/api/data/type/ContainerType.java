@@ -1,5 +1,8 @@
 package com.arcao.geocaching.api.data.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum ContainerType {
     NotChosen("Not chosen", 1),
     Micro("Micro", 2),
@@ -12,13 +15,13 @@ public enum ContainerType {
     /**
      * Friendly name
      */
-    public final String name;
+    @NotNull public final String name;
     /**
      * Groundspeak Id
      */
     public final int id;
 
-    ContainerType(String name, int id) {
+    ContainerType(@NotNull String name, int id) {
         this.name = name;
         this.id = id;
     }
@@ -34,7 +37,8 @@ public enum ContainerType {
      * @param name Friendly name
      * @return Container Type
      */
-    public static ContainerType fromName(String name) {
+    @NotNull
+    public static ContainerType fromName(@Nullable String name) {
         for (ContainerType type : values()) {
             if (type.name.equals(name))
                 return type;
@@ -49,6 +53,7 @@ public enum ContainerType {
      * @param id Groundspeak Id
      * @return Container Type
      */
+    @NotNull
     public static ContainerType fromId(int id) {
         for (ContainerType type : values()) {
             if (type.id == id)

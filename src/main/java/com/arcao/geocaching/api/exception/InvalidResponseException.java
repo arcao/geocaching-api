@@ -23,6 +23,13 @@ public class InvalidResponseException extends GeocachingApiException {
         data = null;
     }
 
+    public InvalidResponseException(String message) {
+        super(message);
+        statusCode = 0;
+        statusMessage = null;
+        data = null;
+    }
+
     public int getStatusCode() {
         return statusCode;
     }
