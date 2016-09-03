@@ -3,65 +3,45 @@ package com.arcao.geocaching.api.data;
 import com.arcao.geocaching.api.builder.JsonSerializable;
 import com.arcao.geocaching.api.util.Base64;
 import com.arcao.geocaching.api.util.Base64OutputStream;
+import com.google.auto.value.AutoValue;
 import com.google.gson.stream.JsonWriter;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
-public class ImageData implements JsonSerializable, Serializable {
+@AutoValue
+public abstract class ImageData implements JsonSerializable, Serializable {
     private static final long serialVersionUID = 1116404414881607691L;
     private static final int BUFFER_SIZE = 8192;
 
-    private final String description;
-    private final String mobileUrl;
-    private final String name;
-    private final String thumbUrl;
-    private final String url;
-    private byte[] imageData = null;
-    private String fileName;
+    @NotNull
+    public abstract String name();
 
-    public ImageData(String description, String mobileUrl, String name, String thumbUrl, String url) {
-        this.description = description;
-        this.mobileUrl = mobileUrl;
-        this.name = name;
-        this.thumbUrl = thumbUrl;
-        this.url = url;
-    }
+    @Nullable
+    public abstract String description();
 
-    public String getDescription() {
-        return description;
-    }
+    @Nullable
+    public abstract String mobileUrl();
 
-    public String getMobileUrl() {
-        return mobileUrl;
-    }
+    @Nullable
+    public abstract String thumbUrl();
 
-    public String getName() {
-        return name;
-    }
+    @Nullable
+    public abstract String url();
 
-    public String getThumbUrl() {
-        return thumbUrl;
-    }
+    @Nullable
+    public abstract String fileName();
 
-    public String getUrl() {
-        return url;
-    }
+    @Nullable
+    @SuppressWarnings("mutable")
+    public abstract byte[] imageData();
 
-    /**
-     * Return Base64 encoded data of local read image otherwise null if the image data belongs to image saved on internet.
-     *
-     * @return Base 64 encoded image data
-     */
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public static ImageData fromInputStream(String description, String name, String fileName, InputStream is) throws IOException {
+    public static ImageData createFromInputStream(@NotNull String name, @Nullable String description, String fileName, InputStream is) throws IOException {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Base64OutputStream b64os = new Base64OutputStream(bos, Base64.NO_CLOSE | Base64.NO_WRAP);
@@ -74,23 +54,49 @@ public class ImageData implements JsonSerializable, Serializable {
         b64os.flush();
         b64os.close();
 
-        ImageData imageData = new ImageData(description, "", name, "", "");
-        imageData.fileName = fileName;
-        imageData.imageData = bos.toByteArray();
-
-        return imageData;
+        return builder()
+                .name(name)
+                .description(description)
+                .fileName(fileName)
+                .imageData(bos.toByteArray())
+                .build();
     }
 
     @Override
     public void writeJson(@NotNull JsonWriter w) throws IOException {
+        byte[] imageData = imageData();
+
         if (imageData == null)
             return;
 
         w.beginObject()
-                .name("FileCaption").value(name)
-                .name("FileDescription").value(description)
-                .name("FileName").value(fileName)
+                .name("FileCaption").value(name())
+                .name("FileDescription").value(description())
+                .name("FileName").value(fileName())
                 .name("base64ImageData").value(new String(imageData));
         w.endObject();
+    }
+
+    public static Builder builder() {
+        return new AutoValue_ImageData.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder {
+        public abstract Builder name(String name);
+
+        public abstract Builder description(String description);
+
+        public abstract Builder mobileUrl(String mobileUrl);
+
+        public abstract Builder thumbUrl(String thumbUrl);
+
+        public abstract Builder url(String url);
+
+        public abstract Builder fileName(String fileName);
+
+        public abstract Builder imageData(byte[] imageData);
+
+        public abstract ImageData build();
     }
 }
