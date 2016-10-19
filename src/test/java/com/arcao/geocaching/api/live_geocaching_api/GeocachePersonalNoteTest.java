@@ -27,14 +27,20 @@ public class GeocachePersonalNoteTest extends AbstractGeocachingTest {
   }
 
   @Test
-  public void simpleSetGeocachePersonalNoteTest() throws GeocachingApiException {
+  public void simpleSetGeocachePersonalNoteTest() throws GeocachingApiException, InterruptedException {
     final String expected = "Test1234";
+
+    // race condition on api.geocaching.com server: wait for deletion
+    Thread.sleep(5000);
 
     Geocache geocache =  api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 0, 0);
     Assert.assertNotNull(geocache);
     Assert.assertThat(geocache.personalNote(), isEmptyOrNullString());
 
     api.setGeocachePersonalNote(CACHE_CODE, expected);
+
+    // race condition on api.geocaching.com server: wait for setting value
+    Thread.sleep(5000);
 
     geocache = api.getGeocache(GeocachingApi.ResultQuality.FULL, CACHE_CODE, 0, 0);
     Assert.assertNotNull(geocache);
