@@ -1,10 +1,17 @@
 language: java
+
 jdk:
 - oraclejdk7
 - openjdk7
 - openjdk6
+
 env:
   global:
   - GEOCACHING_STAGING=false
   - secure: qR4ZDGDmH9vdYuKpV+9UV+aS17DYt/KI4lVNXpxQbjfvHiYMrD2SO9Q70F130QBc4ZjfTTdv25cc3/rne9cDk9W8adx/ebxyVOm4zVPvEv8781OtGMlo58P75Bi3GQ2DyccErMQyt0KWzp671oBP/WPbGtGXsnKXHqvvKUlHTKo=
+
 sudo: false
+
+cache:
+  directories:
+  - $HOME/.m2
