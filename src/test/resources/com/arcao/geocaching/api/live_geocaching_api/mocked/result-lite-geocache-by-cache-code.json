@@ -1,0 +1,149 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": []
+  },
+  "Geocaches": [
+    {
+      "AccountID": 4915410,
+      "AdditionalWaypoints": [],
+      "Archived": false,
+      "Attributes": [],
+      "Available": true,
+      "CacheType": {
+        "Description": "",
+        "GeocacheTypeId": 3,
+        "GeocacheTypeName": "Multi-cache",
+        "ImageURL": "http:\/\/www.geocaching.com\/images\/wpttypes\/3.gif",
+        "IsContainer": false,
+        "IsGrandfathered": null,
+        "ParentTypeId": 0,
+        "UserCount": null
+      },
+      "CanCacheBeFavorited": false,
+      "Code": "GCY81P",
+      "ContainerType": {
+        "ContainerTypeId": 2,
+        "ContainerTypeName": "Micro",
+        "Order": 20
+      },
+      "Country": null,
+      "CountryID": 56,
+      "CurrentDetailsCount": 131,
+      "DateCreated": "\/Date(-62135568000000-0800)\/",
+      "DateLastUpdate": "\/Date(1482537617287-0800)\/",
+      "DateLastVisited": "\/Date(1475607600000-0700)\/",
+      "Difficulty": 1.5,
+      "EncodedHints": null,
+      "FavoritePoints": 26,
+      "FoundDate": null,
+      "FoundDateOfFoundByUser": null,
+      "GUID": "22769fb7-df15-4f84-8cee-6519377f99c8",
+      "GeocacheLogs": [],
+      "GeocacheNote": "",
+      "HasbeenFavoritedbyUser": false,
+      "HasbeenFoundbyUser": false,
+      "ID": 460560,
+      "ImageCount": 5,
+      "Images": [],
+      "IsLocked": false,
+      "IsPremium": false,
+      "IsPublished": true,
+      "IsRecommended": false,
+      "Latitude": 49.7454,
+      "LongDescription": null,
+      "LongDescriptionIsHtml": false,
+      "Longitude": 13.3741,
+      "MaxDetailCount": 10000,
+      "Name": "Plzenske sady \/ Pilsener parks",
+      "Owner": {
+        "AvatarUrl": "http:\/\/img.geocaching.com\/user\/avatar\/6433736f-860f-4eb6-ade2-cef0c29ca24f.jpg",
+        "FindCount": 2012,
+        "GalleryImageCount": null,
+        "HideCount": 4,
+        "HomeCoordinates": null,
+        "Id": 4915410,
+        "IsAdmin": false,
+        "MemberType": {
+          "MemberTypeId": 3,
+          "MemberTypeName": "Premium"
+        },
+        "PublicGuid": "5612ba0f-3e72-4462-afd8-df287a20273a",
+        "UserName": "ALLiK team"
+      },
+      "PlacedBy": "Georgecz, adopted by ALLiK team",
+      "PublishDateUtc": null,
+      "ShortDescription": null,
+      "ShortDescriptionIsHtml": false,
+      "StagesCount": 0,
+      "State": null,
+      "StateID": 281,
+      "Terrain": 1.5,
+      "TrackableCount": 0,
+      "Trackables": [],
+      "UTCPlaceDate": "\/Date(1157958000000-0700)\/",
+      "UpgradeMessage": null,
+      "Url": "http:\/\/coord.info\/GCY81P",
+      "UserWaypoints": [
+        {
+          "AssociatedAdditionalWaypoint": null,
+          "CacheCode": null,
+          "Description": "Coordinate Override",
+          "ID": 842018,
+          "IsCorrectedCoordinate": false,
+          "IsUserCompleted": false,
+          "Latitude": 49.7454,
+          "Longitude": 13.374017,
+          "UTCDate": "\/Date(1339070458183-0700)\/",
+          "UserID": 1672113
+        },
+        {
+          "AssociatedAdditionalWaypoint": null,
+          "CacheCode": null,
+          "Description": "Coordinate Override",
+          "ID": 842019,
+          "IsCorrectedCoordinate": false,
+          "IsUserCompleted": false,
+          "Latitude": 49.7454,
+          "Longitude": 13.374033,
+          "UTCDate": "\/Date(1339070470123-0700)\/",
+          "UserID": 1672113
+        },
+        {
+          "AssociatedAdditionalWaypoint": null,
+          "CacheCode": null,
+          "Description": "Coordinate Override",
+          "ID": 842021,
+          "IsCorrectedCoordinate": true,
+          "IsUserCompleted": false,
+          "Latitude": 49.7454,
+          "Longitude": 14.3741,
+          "UTCDate": "\/Date(1339070564280-0700)\/",
+          "UserID": 1672113
+        },
+        {
+          "AssociatedAdditionalWaypoint": null,
+          "CacheCode": null,
+          "Description": "Coordinate Override",
+          "ID": 842022,
+          "IsCorrectedCoordinate": false,
+          "IsUserCompleted": false,
+          "Latitude": 49.7454,
+          "Longitude": 13.3741,
+          "UTCDate": "\/Date(1339070578527-0700)\/",
+          "UserID": 1672113
+        }
+      ]
+    }
+  ],
+  "PQCount": 0,
+  "CacheCodes": [],
+  "CacheLimits": {
+    "CachesLeft": 9869,
+    "CurrentCacheCount": 131,
+    "MaxCacheCount": 10000
+  },
+  "TotalMatchingCaches": 1
+}

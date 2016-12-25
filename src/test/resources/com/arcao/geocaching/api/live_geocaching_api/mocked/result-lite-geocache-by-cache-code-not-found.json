@@ -1,0 +1,24 @@
+{
+  "Status": {
+    "StatusCode": 0,
+    "StatusMessage": "OK",
+    "ExceptionDetails": "",
+    "Warnings": [
+      {
+        "StatusCode": 131,
+        "StatusMessage": "Some caches request may not have been returned because either they were not found or they are Premium only caches.",
+        "ExceptionDetails": "",
+        "Warnings": []
+      }
+    ]
+  },
+  "Geocaches": [],
+  "PQCount": 0,
+  "CacheCodes": [],
+  "CacheLimits": {
+    "CachesLeft": 9870,
+    "CurrentCacheCount": 130,
+    "MaxCacheCount": 10000
+  },
+  "TotalMatchingCaches": 0
+}
