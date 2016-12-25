@@ -1,17 +1,16 @@
 language: java
-
 jdk:
-- oraclejdk7
-- openjdk7
+- oraclejdk8
 - openjdk6
-
+- openjdk7
 env:
   global:
   - GEOCACHING_STAGING=false
   - secure: qR4ZDGDmH9vdYuKpV+9UV+aS17DYt/KI4lVNXpxQbjfvHiYMrD2SO9Q70F130QBc4ZjfTTdv25cc3/rne9cDk9W8adx/ebxyVOm4zVPvEv8781OtGMlo58P75Bi3GQ2DyccErMQyt0KWzp671oBP/WPbGtGXsnKXHqvvKUlHTKo=
-
+  - secure: OPho7nWDYZ4hpMRyrZ+UBVBfMy18C+8H2qLk5/2zVgm63UurNg1RUXJyn58uEi6lBAdeaHuAKyJ6pCu7VkY32fCXJTx5NIOzK02rNqdNSZGdIvmcXqMaJkCFTN31vJXSsrUNBXEzVWK3d/4l5fjEw84Fc9x0UrWoWo8A+VipZmY=
 sudo: false
-
+after_success:
+- .buildscript/push-javadoc-to-gh-pages.sh
 cache:
   directories:
-  - $HOME/.m2
+  - "$HOME/.m2"
