@@ -14,7 +14,7 @@ public final class CacheLimitsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheLeft".equals(name)) {
+            if ("CachesLeft".equals(name)) {
                 builder.geocacheLeft(r.nextInt());
             } else if ("CurrentCacheCount".equals(name)) {
                 builder.currentGeocacheCount(r.nextInt());
