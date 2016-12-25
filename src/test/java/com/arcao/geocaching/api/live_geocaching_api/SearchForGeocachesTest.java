@@ -54,7 +54,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
         assertFalse(Double.isNaN(cache.coordinates().longitude()));
         assertNotNull(cache.name());
         assertFalse(cache.archived());
-        assertFalse(cache.available());
+        assertTrue(cache.available());
         assertFalse(cache.foundByUser());
         assertFalse(cache.premium());
         assertNotSame(0, cache.imageCount());
@@ -87,7 +87,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
         assertFalse(Double.isNaN(cache.coordinates().longitude()));
         assertNotNull(cache.name());
         assertFalse(cache.archived());
-        assertFalse(cache.available());
+        assertTrue(cache.available());
         assertFalse(cache.foundByUser());
         assertFalse(cache.premium());
         assertNotSame(0, cache.imageCount());
@@ -136,7 +136,7 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
         assertFalse(Double.isNaN(cache.coordinates().longitude()));
         assertNotNull(cache.name());
         assertFalse(cache.archived());
-        assertFalse(cache.available());
+        assertTrue(cache.available());
         assertFalse(cache.foundByUser());
         assertFalse(cache.premium());
         assertNotSame(0, cache.imageCount());
