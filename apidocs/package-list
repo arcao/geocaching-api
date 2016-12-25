@@ -1,0 +1,16 @@
+com.arcao.geocaching.api
+com.arcao.geocaching.api.builder
+com.arcao.geocaching.api.configuration
+com.arcao.geocaching.api.configuration.impl
+com.arcao.geocaching.api.data
+com.arcao.geocaching.api.data.apilimits
+com.arcao.geocaching.api.data.bookmarks
+com.arcao.geocaching.api.data.coordinates
+com.arcao.geocaching.api.data.sort
+com.arcao.geocaching.api.data.type
+com.arcao.geocaching.api.data.userprofile
+com.arcao.geocaching.api.downloader
+com.arcao.geocaching.api.exception
+com.arcao.geocaching.api.filter
+com.arcao.geocaching.api.parser
+com.arcao.geocaching.api.util
