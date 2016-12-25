@@ -22,11 +22,11 @@ public enum GeocacheType {
      */
     Mystery("Mystery Cache", 8),
     /**
-     * A virtual cache is a cache that exists in a form of a location. Depending on the cache "hider," a virtual cache could be to answer a question about a location, an interesting spot, a task, etc. The reward for these caches is the location itself and sharing information about your visit.  <br /><br />  Because of the nature of these geocaches, you must actually visit the location and acquire the coordinates there before you can post. In addition, although many locations are interesting, a virtual cache should be out of the ordinary enough to warrant logging a visit.  <br /><br />  Virtuals are now considered <a href="http://www.waymarking.com">waymarks on Waymarking.com</a>.
+     * A virtual cache is a cache that exists in a form of a location. Depending on the cache "hider," a virtual cache could be to answer a question about a location, an interesting spot, a task, etc. The reward for these caches is the location itself and sharing information about your visit.  <br><br>  Because of the nature of these geocaches, you must actually visit the location and acquire the coordinates there before you can post. In addition, although many locations are interesting, a virtual cache should be out of the ordinary enough to warrant logging a visit.  <br><br>  Virtuals are now considered <a href="http://www.waymarking.com">waymarks on Waymarking.com</a>.
      */
     Virtual("Virtual Cache", 4),
     /**
-     * An Earthcache is an educational form of a <i>virtual cache</i>.  The reward for these caches is learning more about the planet on which we live - its landscapes, its geology or the minerals and fossils that are found there.  Many Earthcaches are in National Parks.  Some are multi-cache in form, and some have a physical log book located in or close to a Visitor Center. Earthcaches are developed in association with the Geological Society of America.  For more information go to <a href="http://www.geosociety.org/earthcache/ ">http://www.geosociety.org/earthcache/</a>
+     * An Earthcache is an educational form of a <i>virtual cache</i>.  The reward for these caches is learning more about the planet on which we live - its landscapes, its geology or the minerals and fossils that are found there.  Many Earthcaches are in National Parks.  Some are multi-cache in form, and some have a physical log book located in or close to a Visitor Center. Earthcaches are developed in association with the Geological Society of America.  For more information go to <a href="http://www.geosociety.org/earthcache/">http://www.geosociety.org/earthcache/</a>
      */
     Earth("Earthcache", 137),
     /**
@@ -50,7 +50,7 @@ public enum GeocacheType {
      */
     MegaEvent("Mega-Event Cache", 453),
     /**
-     * Cache In Trash Out Events are organized clean-up events that involve and benefit the larger community. <a href="http://www.cacheintrashout.org " target="_blank">Cache In Trash Out</a> is an activity intimately tied to geocaching. While out there on a cache hunt, geocachers collect litter along the trails and properly dispose of it.
+     * Cache In Trash Out Events are organized clean-up events that involve and benefit the larger community. <a href="http://www.cacheintrashout.org" target="_blank">Cache In Trash Out</a> is an activity intimately tied to geocaching. While out there on a cache hunt, geocachers collect litter along the trails and properly dispose of it.
      */
     CacheInTrashOutEvent("Cache In Trash Out Event", 13),
     /**
@@ -58,11 +58,11 @@ public enum GeocacheType {
      */
     GpsAdventuresExhibit("GPS Adventures Exhibit", 1304),
     /**
-     * A Webcam "cache" are caches that use existing web cameras placed by individuals or agencies that monitor various areas like parks or road conditions. The idea is to get yourself in front of the camera to log your visit. The challenging part, however, it that you need to call a friend to look up the web site that displays the camera shot. You will need to have them to save the picture to log the cache. You could also use your wireless modem or cell phoneand save the image yourself on your laptop. Webcam caches are now <a href="http://www.waymarking.com/waymarks/default.aspx?f=-1&amp;DCTGUID=d23f8e0b-2e43-4530-8f46-2e4fdae93ddd ">in the Web Camera category on Waymarking.com</a>
+     * A Webcam "cache" are caches that use existing web cameras placed by individuals or agencies that monitor various areas like parks or road conditions. The idea is to get yourself in front of the camera to log your visit. The challenging part, however, it that you need to call a friend to look up the web site that displays the camera shot. You will need to have them to save the picture to log the cache. You could also use your wireless modem or cell phone and save the image yourself on your laptop. Webcam caches are now <a href="http://www.waymarking.com/waymarks/default.aspx?f=-1&amp;DCTGUID=d23f8e0b-2e43-4530-8f46-2e4fdae93ddd">in the Web Camera category on Waymarking.com</a>
      */
     Webcam("Webcam Cache", 11),
     /**
-     * Locationless Caches could be considered the opposite of a Traditional Cache. Instead of finding a hidden container, you are given a task to locate a specific object and log its coordinates. A scavenger hunt of sorts, it involves collecting waypoints of various objects around the world.  <br /><br />  Locationless caches have evolved into <a href="http://www.waymarking.com ">Waymarking</a>. Waymark categories are similar to how locationless caches were listed on geocaching.com, but you can now search for the locations in each category.
+     * Locationless Caches could be considered the opposite of a Traditional Cache. Instead of finding a hidden container, you are given a task to locate a specific object and log its coordinates. A scavenger hunt of sorts, it involves collecting waypoints of various objects around the world.  <br><br>  Locationless caches have evolved into <a href="http://www.waymarking.com">Waymarking</a>. Waymark categories are similar to how location-less caches were listed on geocaching.com, but you can now search for the locations in each category.
      */
     Locationless("Locationless (Reverse) Cache", 12),
     /**

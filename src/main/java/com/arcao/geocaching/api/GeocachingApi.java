@@ -145,6 +145,7 @@ public interface GeocachingApi {
      * @param geocacheLogCount  count of logs to get
      * @param trackableLogCount count of trackables to get
      * @param filters           used filters while searching
+     * @param sortByList        sorting result list configuration
      * @return list of found caches
      * @throws GeocachingApiException If error occurs during searching caches
      * @since 1.6

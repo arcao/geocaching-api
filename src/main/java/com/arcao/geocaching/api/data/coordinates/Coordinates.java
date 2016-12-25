@@ -29,6 +29,7 @@ public abstract class Coordinates implements Serializable {
      *
      * @param latitude  latitude
      * @param longitude longitude
+     * @return Coordinates object
      */
     public static Coordinates create(double latitude, double longitude) {
         return new AutoValue_Coordinates(latitude, longitude);
@@ -146,18 +147,19 @@ public abstract class Coordinates implements Serializable {
     }
 
     /**
-     * Computes the approximate distance in meters between two coordinates, and
+     * <p>Computes the approximate distance in meters between two coordinates, and
      * optionally the initial and final bearings bearings of the shortest path between
      * them.
-     * <p>
+     * </p>
      * <p>
      * The computed distance is stored in <code>results[0]</code>. If results has length 2,
      * the initial bearing is stored in <code>results[1]</code>. If results has
      * length 3, the final bearing is stored in <code>results[2]</code>.
-     * <p>
+     * </p>
      * <p>
      * Compute is based on <a href="http://en.wikipedia.org/wiki/Haversine_formula">Haversine formula</a>.
      * Precision is around 99.9%.
+     * </p>
      *
      * @param source      source coordinates
      * @param destination destination coordinates

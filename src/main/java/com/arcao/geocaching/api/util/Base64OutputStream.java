@@ -27,6 +27,8 @@ import java.io.OutputStream;
  * it, writing the resulting data to another OutputStream.
  */
 public class Base64OutputStream extends FilterOutputStream {
+    private static final int BUFFER_SIZE = 1024;
+
     private final Base64.Coder coder;
     private final int flags;
 
@@ -56,17 +58,11 @@ public class Base64OutputStream extends FilterOutputStream {
      * @param flags bit flags for controlling the encoder; see the
      *        constants in {@link Base64}
      * @param encode true to encode, false to decode
-     *
-     * @hide
      */
-    public Base64OutputStream(OutputStream out, int flags, boolean encode) {
+    private Base64OutputStream(OutputStream out, int flags, boolean encode) {
         super(out);
         this.flags = flags;
-        if (encode) {
-            coder = new Base64.Encoder(flags, null);
-        } else {
-            coder = new Base64.Decoder(flags, null);
-        }
+        coder = encode ? new Base64.Encoder(flags, null) : new Base64.Decoder(flags, null);
     }
 
     @Override
@@ -77,7 +73,7 @@ public class Base64OutputStream extends FilterOutputStream {
         // arrays.
 
         if (buffer == null) {
-            buffer = new byte[1024];
+            buffer = new byte[BUFFER_SIZE];
         }
         if (bpos >= buffer.length) {
             // internal buffer full; write it out.
@@ -151,10 +147,6 @@ public class Base64OutputStream extends FilterOutputStream {
      * byte array of length len.
      */
     private static byte[] embiggen(byte[] b, int len) {
-        if (b == null || b.length < len) {
-            return new byte[len];
-        } else {
-            return b;
-        }
+        return b == null || b.length < len ? new byte[len] : b;
     }
 }

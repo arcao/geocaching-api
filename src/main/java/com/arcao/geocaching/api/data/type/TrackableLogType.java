@@ -39,6 +39,7 @@ public enum TrackableLogType {
 
     /**
      * Is this TrackableLogType allowed in Geocache
+     * @return true if allowed, otherwise false
      */
     public boolean isAllowedInCache() {
         return allowedState.contains(States.IN_CACHE);
@@ -46,6 +47,7 @@ public enum TrackableLogType {
 
     /**
      * Is this TrackableLogType allowed with Person
+     * @return true if allowed, otherwise false
      */
     public boolean isAllowedWithPerson() {
         return allowedState.contains(States.WITH_PERSON);

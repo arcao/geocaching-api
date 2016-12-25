@@ -1,8 +1,8 @@
-package com.arcao.geocaching.api.data.coordinates;
-/**
- * Some parts of this file contains work from c:geo licensed under
- * Apache License 2.0.
+/*
+  Some parts of this file contains work from c:geo licensed under
+  Apache License 2.0.
  */
+package com.arcao.geocaching.api.data.coordinates;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

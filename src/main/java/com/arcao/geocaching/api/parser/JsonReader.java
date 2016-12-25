@@ -13,11 +13,12 @@ public class JsonReader {
     }
 
     /**
-     * Configure this parser to be  be liberal in what it accepts. By default,
+     * <p>
+     * Configure this parser to be liberal in what it accepts. By default,
      * this parser is strict and only accepts JSON as specified by <a
      * href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>. Setting the
      * parser to lenient causes it to ignore the following syntax errors:
-     * <p>
+     * </p>
      * <ul>
      * <li>Streams that start with the <a href="#nonexecuteprefix">non-execute
      * prefix</a>, <code>")]}'\n"</code>.
@@ -55,6 +56,8 @@ public class JsonReader {
     /**
      * Consumes the next token from the JSON stream and asserts that it is the
      * beginning of a new array.
+     *
+     * @throws IOException When IO error occurs
      */
     public void beginArray() throws IOException {
         r.beginArray();
@@ -63,6 +66,8 @@ public class JsonReader {
     /**
      * Consumes the next token from the JSON stream and asserts that it is the
      * end of the current array.
+     *
+     * @throws IOException When IO error occurs
      */
     public void endArray() throws IOException {
         r.endArray();
@@ -71,6 +76,8 @@ public class JsonReader {
     /**
      * Consumes the next token from the JSON stream and asserts that it is the
      * beginning of a new object.
+     *
+     * @throws IOException When IO error occurs
      */
     public void beginObject() throws IOException {
         r.beginObject();
@@ -79,6 +86,8 @@ public class JsonReader {
     /**
      * Consumes the next token from the JSON stream and asserts that it is the
      * end of the current array.
+     *
+     * @throws IOException When IO error occurs
      */
     public void endObject() throws IOException {
         r.endObject();
@@ -86,6 +95,8 @@ public class JsonReader {
 
     /**
      * Returns true if the current array or object has another element.
+     *
+     * @throws IOException When IO error occurs
      */
     public boolean hasNext() throws IOException {
         return r.hasNext();
@@ -93,6 +104,8 @@ public class JsonReader {
 
     /**
      * Returns the type of the next token without consuming it.
+     *
+     * @throws IOException When IO error occurs
      */
     public JsonToken peek() throws IOException {
         return r.peek();
@@ -116,6 +129,7 @@ public class JsonReader {
      *
      * @throws IllegalStateException if the next token is not a string or if
      *                               this reader is closed.
+     * @throws IOException           when I/O error occurs
      */
     public String nextString() throws IOException {
         return nextString(null);
@@ -136,6 +150,7 @@ public class JsonReader {
      *
      * @throws IllegalStateException if the next token is not a boolean or if
      *                               this reader is closed.
+     * @throws IOException           when I/O error occurs
      */
     public boolean nextBoolean() throws IOException {
         return nextBoolean(false);
@@ -156,6 +171,7 @@ public class JsonReader {
      *
      * @throws IllegalStateException if the next token is not null or if this
      *                               reader is closed.
+     * @throws IOException           when I/O error occurs
      */
     public void nextNull() throws IOException {
         r.nextNull();
@@ -169,6 +185,7 @@ public class JsonReader {
      * @throws IllegalStateException if the next token is not a literal value.
      * @throws NumberFormatException if the next literal value cannot be parsed
      *                               as a double, or is non-finite.
+     * @throws IOException           when I/O error occurs
      */
     public double nextDouble() throws IOException {
         return nextDouble(0D);
@@ -192,6 +209,7 @@ public class JsonReader {
      * @throws IllegalStateException if the next token is not a literal value.
      * @throws NumberFormatException if the next literal value cannot be parsed
      *                               as a number, or exactly represented as a long.
+     * @throws IOException           when I/O error occurs
      */
     public long nextLong() throws IOException {
         return nextLong(0L);
@@ -215,6 +233,7 @@ public class JsonReader {
      * @throws IllegalStateException if the next token is not a literal value.
      * @throws NumberFormatException if the next literal value cannot be parsed
      *                               as a number, or exactly represented as an int.
+     * @throws IOException           when I/O error occurs
      */
     public int nextInt() throws IOException {
         return nextInt(0);
@@ -231,6 +250,8 @@ public class JsonReader {
 
     /**
      * Closes this JSON reader and the underlying {@link Reader}.
+     *
+     * @throws IOException when I/O error occurs
      */
     public void close() throws IOException {
         r.close();
@@ -240,6 +261,8 @@ public class JsonReader {
      * Skips the next value recursively. If it is an object or array, all nested
      * elements are skipped. This method is intended for use when the JSON token
      * stream contains unrecognized or unhandled values.
+     *
+     * @throws IOException when I/O error occurs
      */
     public void skipValue() throws IOException {
         r.skipValue();
