@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package com.arcao.geocaching.api.data.coordinates;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.google.auto.value.AutoValue;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import org.jetbrains.annotations.Nullable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.io.Serializable;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.text.ParseException;<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>/**<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * A class representing a geographic WGS-84 coordinates. Coordinates consist of<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * latitude and longitude.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * @author arcao<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * @since 1.5<a name="line.15"></a>
+<span class="sourceLineNo">016</span> */<a name="line.16"></a>
+<span class="sourceLineNo">017</span>@SuppressWarnings("EqualsAndHashcode")<a name="line.17"></a>
+<span class="sourceLineNo">018</span>@AutoValue<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public abstract class Coordinates implements Serializable {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private static final long serialVersionUID = 1044000671539652241L;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private static final double PRECISION = 1e-8;<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>    private static final double AVERAGE_RADIUS_OF_EARTH = 6372797.560856;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    private static final CoordinatesFormatter LAT_LON_DECMINUTE_FORMAT = new CoordinatesFormatter(CoordinatesFormatter.LAT_LON_DECMINUTE);<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>    /**<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * Create a new Coordinates object with specified WGS-84 latitude and<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * longitude.<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     *<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * @param latitude  latitude<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @param longitude longitude<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * @return Coordinates object<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    public static Coordinates create(double latitude, double longitude) {<a name="line.34"></a>
+<span class="sourceLineNo">035</span>        return new AutoValue_Coordinates(latitude, longitude);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    }<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>    /**<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * Get a latitude<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     *<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * @return latitude<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    public abstract double latitude();<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * Get a longitude<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     *<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * @return longitude<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     */<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    public abstract double longitude();<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    /**<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * Parse coordinates from text representation of latitude and longitude. If<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * error occurs during parsing coordinates (e.g. wrong format) return null.<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     *<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @param latitude  latitude<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * @param longitude longitude<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @return Coordinates object with parsed latitude and longitude<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * @see CoordinatesParser#parse(String, String)<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    public static Coordinates parseCoordinates(String latitude, String longitude) {<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        try {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            return CoordinatesParser.parse(latitude, longitude);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        } catch (ParseException e) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            return null;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        }<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    }<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    /**<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * Parse coordinates from text representation of latitude and longitude. If<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * error occurs during parsing coordinates (e.g. wrong format) return null.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * Safe flag can change behavior of parser to support coordinates without<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * cardinal point.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @param latitude  latitude<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * @param longitude longitude<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @param safe      use safe parsing (mean coordinates must start with cardinal point)<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     *                  or not (allow to use negative char behind degree)<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @return Coordinates object with parsed latitude and longitude<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @see CoordinatesParser#parse(String, String, boolean)<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public static Coordinates parseCoordinates(String latitude, String longitude, boolean safe) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        try {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            return CoordinatesParser.parse(latitude, longitude, safe);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        } catch (ParseException e) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            return null;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * Parse coordinates from text representation. If error occurs during parsing<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * coordinates (e.g. wrong format) return null.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     *<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @param coordinates coordinates in a text representation<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @return Coordinates object with parsed latitude and longitude<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @see CoordinatesParser#parse(String)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    public static Coordinates parseCoordinates(String coordinates) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        try {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            return CoordinatesParser.parse(coordinates);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        } catch (ParseException e) {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            return null;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    /**<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * Return String representation of coordinates using specified<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * CoordinatesFormatter instance.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     *<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * @param format instance of CoordinatesFormatter object used to formating<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     *               coordinates<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * @return formatted string<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     */<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    public String toString(CoordinatesFormatter format) {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        return format.format(this);<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>    /**<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * Return String representation of coordinates using specified<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * CoordinatesFormatter format constant.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     *<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * @param format format constant from CoordinatesFormatter<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * @return formatted string<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     */<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    public String toString(int format) {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        return new CoordinatesFormatter(format).format(this);<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    }<a name="line.127"></a>
+<span class="sourceLineNo">128</span><a name="line.128"></a>
+<span class="sourceLineNo">129</span>    @Override<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    public String toString() {<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        return toString(LAT_LON_DECMINUTE_FORMAT);<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
+<span class="sourceLineNo">133</span><a name="line.133"></a>
+<span class="sourceLineNo">134</span>    /**<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * Get a distance in meters between this coordinates and specified coordinates<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     *<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * @param to Coordinates object<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @return distance in meters<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * @since 1.20<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     */<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    public double distanceTo(Coordinates to) {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        double[] results = new double[1];<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>        computeDistanceAndBearing(this, to, results);<a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>        return results[0];<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>    /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * &lt;p&gt;Computes the approximate distance in meters between two coordinates, and<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * optionally the initial and final bearings bearings of the shortest path between<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * them.<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * &lt;/p&gt;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * &lt;p&gt;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * The computed distance is stored in &lt;code&gt;results[0]&lt;/code&gt;. If results has length 2,<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * the initial bearing is stored in &lt;code&gt;results[1]&lt;/code&gt;. If results has<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * length 3, the final bearing is stored in &lt;code&gt;results[2]&lt;/code&gt;.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * &lt;/p&gt;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * &lt;p&gt;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * Compute is based on &lt;a href="http://en.wikipedia.org/wiki/Haversine_formula"&gt;Haversine formula&lt;/a&gt;.<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * Precision is around 99.9%.<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * &lt;/p&gt;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     *<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * @param source      source coordinates<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * @param destination destination coordinates<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * @param results     array where first index is distance in meters, second index is initial bearing in degree<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     *                    and third index is final bearing in degree<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * @since 1.20<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     */<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    public static void computeDistanceAndBearing(Coordinates source, Coordinates destination, double[] results) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        if (results == null || results.length &lt; 1 || results.length &gt; 3)<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            throw new IllegalArgumentException("Results has to be initialized array of size 1, 2 or 3.");<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>        double lat1 = Math.toRadians(source.latitude());<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        double lon1 = Math.toRadians(source.longitude());<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        double lat2 = Math.toRadians(destination.latitude());<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        double lon2 = Math.toRadians(destination.longitude());<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>        // prepare variables<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        double cosLat1 = Math.cos(lat1);<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        double cosLat2 = Math.cos(lat2);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        double sinDLat2 = Math.sin((lat2 - lat1) / 2.0);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        double sinDLon2 = Math.sin((lon2 - lon1) / 2.0);<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>        // compute values<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        double a = sinDLat2 * sinDLat2 + cosLat1 * cosLat2 * sinDLon2 * sinDLon2;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        double d = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>        // convert to metres<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        results[0] = d * AVERAGE_RADIUS_OF_EARTH;<a name="line.190"></a>
+<span class="sourceLineNo">191</span><a name="line.191"></a>
+<span class="sourceLineNo">192</span>        // compute initial bearing<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        if (results.length &gt; 1) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            double sinLambda = Math.sin(lon2 - lon1);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            double cosLambda = Math.cos(lon2 - lon1);<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>            double y = sinLambda * cosLat2;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            double x = cosLat1 * Math.sin(lat2) - Math.sin(lat1) * cosLat2 * cosLambda;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            results[1] = Math.toDegrees(Math.atan2(y, x));<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>            // compute final bearing<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            if (results.length &gt; 2) {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                y = sinLambda * cosLat1;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                x = -Math.sin(lat1) * cosLat2 + cosLat1 * Math.sin(lat2) * cosLambda;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                results[2] = Math.toDegrees(Math.atan2(y, x));<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            }<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        }<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">210</span>    @Override<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    public boolean equals(Object obj) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        return obj instanceof Coordinates &amp;&amp; Math.abs(((Coordinates) obj).latitude() - latitude()) &lt; PRECISION &amp;&amp; Math.abs(((Coordinates) obj).longitude() - longitude()) &lt; PRECISION;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public static Builder builder() {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        return new Builder();<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    public static class Builder {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        private double latitude = Double.NaN;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        private double longitude = Double.NaN;<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>        Builder() {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        }<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
+<span class="sourceLineNo">226</span>        public Builder latitude(double latitude) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>            this.latitude = latitude;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>            return this;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        }<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>        public Builder longitude(double longitude) {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>            this.longitude = longitude;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            return this;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        }<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>        @Nullable<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        public Coordinates build() {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            if (Double.isNaN(latitude) || Double.isNaN(longitude))<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                return null;<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>            return Coordinates.create(latitude, longitude);<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        }<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
+<span class="sourceLineNo">244</span>}<a name="line.244"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

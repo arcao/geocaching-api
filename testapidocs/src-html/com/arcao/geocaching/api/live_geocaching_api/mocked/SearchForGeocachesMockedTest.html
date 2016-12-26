@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package com.arcao.geocaching.api.live_geocaching_api.mocked;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.arcao.geocaching.api.GeocachingApi;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.arcao.geocaching.api.data.Geocache;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import com.arcao.geocaching.api.data.GeocacheLimits;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import com.arcao.geocaching.api.data.type.ContainerType;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import com.arcao.geocaching.api.data.type.GeocacheType;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import com.arcao.geocaching.api.data.type.MemberType;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import com.arcao.geocaching.api.exception.GeocachingApiException;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import com.arcao.geocaching.api.parser.JsonReader;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>import org.junit.Test;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.io.IOException;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>import java.net.URL;<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>import static org.junit.Assert.assertEquals;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import static org.junit.Assert.assertFalse;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import static org.junit.Assert.assertNotNull;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import static org.junit.Assert.assertNotSame;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import static org.junit.Assert.assertNull;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import static org.junit.Assert.assertTrue;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import static org.mockito.ArgumentMatchers.any;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import static org.mockito.ArgumentMatchers.eq;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import static org.mockito.Mockito.verify;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import static org.mockito.Mockito.when;<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>public class SearchForGeocachesMockedTest extends AbstractMockedGeocachingTest {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private final static String CACHE_CODE = "GCY81P";<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>    @Test<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    public void getLiteGeocacheByCacheCodeNotFoundTest() throws GeocachingApiException {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        JsonReader resultBody = createJsonReaderFromResource("result-lite-geocache-by-cache-code-not-found.json");<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>        when(downloader.post(any(URL.class), any(byte[].class)))<a name="line.35"></a>
+<span class="sourceLineNo">036</span>                .thenReturn(resultBody);<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>        Geocache geocache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        assertNull(geocache);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>    @Test<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    public void getLiteGeocacheByCacheCodeRequestTest() throws GeocachingApiException, IOException {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        byte[] expectedRequestBody = createByteArrayFromResource("request-lite-geocache-by-cache-code.json");<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        JsonReader resultBody = createJsonReaderFromResource("result-lite-geocache-by-cache-code.json");<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>        when(downloader.post(any(URL.class), any(byte[].class)))<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                .thenReturn(resultBody);<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>        Geocache geocache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>        verify(downloader).post(any(URL.class), eq(expectedRequestBody));<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>        // ResultQuality.LITE<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        assertNotNull(geocache);<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        assertNotNull(geocache.owner());<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        assertNotSame(MemberType.Guest, geocache.owner().memberType());<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        assertEquals(CACHE_CODE, geocache.code());<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        assertEquals(GeocacheType.Multi, geocache.geocacheType());<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        assertNotNull(geocache.placedBy());<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        assertEquals(ContainerType.Micro, geocache.containerType());<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        assertNotNull(geocache.createDate());<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        assertNotNull(geocache.placeDate());<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        assertNotNull(geocache.lastUpdateDate());<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        assertEquals(1.5F, geocache.difficulty(), 0);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        assertEquals(1.5F, geocache.terrain(), 0);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        assertFalse(Double.isNaN(geocache.coordinates().latitude()));<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        assertFalse(Double.isNaN(geocache.coordinates().longitude()));<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        assertNotNull(geocache.name());<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        assertFalse(geocache.archived());<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        assertTrue(geocache.available());<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        assertFalse(geocache.foundByUser());<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        assertFalse(geocache.premium());<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        assertNotSame(0, geocache.imageCount());<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        assertNotNull(geocache.url());<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        assertNotNull(geocache.guid());<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>        GeocacheLimits limits = api.getLastGeocacheLimits();<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        assertNotNull(limits);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        assertEquals(1, api.getLastSearchResultsFound());<a name="line.80"></a>
+<span class="sourceLineNo">081</span><a name="line.81"></a>
+<span class="sourceLineNo">082</span>        GeocacheLimits geocacheLimits = api.getLastGeocacheLimits();<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        assertNotNull(geocacheLimits);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        assertEquals(131, geocacheLimits.currentGeocacheCount());<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        assertEquals(9869, geocacheLimits.geocacheLeft());<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        assertEquals(10000, geocacheLimits.maxGeocacheCount());<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>}<a name="line.88"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

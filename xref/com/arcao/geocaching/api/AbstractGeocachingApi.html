@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>AbstractGeocachingApi xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../apidocs/com/arcao/geocaching/api/AbstractGeocachingApi.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> com.arcao.geocaching.api;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.data.FieldNote;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.data.Geocache;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.data.GeocacheLog;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.data.ImageData;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.exception.GeocachingApiException;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.filter.CacheCodeFilter;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.arcao.geocaching.api.filter.Filter;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.NotNull;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.jetbrains.annotations.Nullable;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> java.util.Collections;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * Abstract class of Geocaching API</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * @author arcao</em>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> * @since 1.4.3</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/arcao/geocaching/api/AbstractGeocachingApi.html">AbstractGeocachingApi</a> <strong class="jxr_keyword">implements</strong> <a href="../../../../com/arcao/geocaching/api/GeocachingApi.html">GeocachingApi</a> {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>      @Nullable String session;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>      @Nullable
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>      @Override
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>      <strong class="jxr_keyword">public</strong> String getSession() {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>          <strong class="jxr_keyword">return</strong> session;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      }
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>      @Override
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> openSession(@NotNull String session) <strong class="jxr_keyword">throws</strong> GeocachingApiException {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          <strong class="jxr_keyword">this</strong>.session = session;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      }
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      @Override
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/arcao/geocaching/api/data/Geocache.html">Geocache</a> getGeocache(@NotNull <a href="../../../../com/arcao/geocaching/api/GeocachingApi.html">ResultQuality</a> resultQuality, @NotNull String cacheCode, <strong class="jxr_keyword">int</strong> cacheLogCount, <strong class="jxr_keyword">int</strong> trackableLogCount) <strong class="jxr_keyword">throws</strong> GeocachingApiException {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>          <strong class="jxr_keyword">final</strong> List&lt;Geocache&gt; list = searchForGeocaches(resultQuality, 1, cacheLogCount, trackableLogCount,
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>                  Collections.singletonList((Filter) <strong class="jxr_keyword">new</strong> CacheCodeFilter(cacheCode)), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          <strong class="jxr_keyword">if</strong> (list.isEmpty())
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>              <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          <strong class="jxr_keyword">return</strong> list.get(0);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>      }
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>      @Override
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>      <strong class="jxr_keyword">public</strong> <a href="../../../../com/arcao/geocaching/api/data/GeocacheLog.html">GeocacheLog</a> createFieldNoteAndPublish(@NotNull <a href="../../../../com/arcao/geocaching/api/data/FieldNote.html">FieldNote</a> fieldNote, <strong class="jxr_keyword">boolean</strong> publish, <a href="../../../../com/arcao/geocaching/api/data/ImageData.html">ImageData</a> imageData, <strong class="jxr_keyword">boolean</strong> favoriteThisCache) <strong class="jxr_keyword">throws</strong> GeocachingApiException {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          <strong class="jxr_keyword">return</strong> createFieldNoteAndPublish(fieldNote.cacheCode(), fieldNote.logType(), fieldNote.dateLogged(), fieldNote.note(), publish, imageData,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>                  favoriteThisCache);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      }
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2016. All rights reserved.</div>
+</body>
+</html>

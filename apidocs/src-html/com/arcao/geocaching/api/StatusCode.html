@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package com.arcao.geocaching.api;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import org.jetbrains.annotations.NotNull;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>public enum StatusCode {<a name="line.5"></a>
+<span class="sourceLineNo">006</span>    // TODO<a name="line.6"></a>
+<span class="sourceLineNo">007</span>    OK(0),<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    Fail(1),<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    NotAuthorized(2),<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    AccessTokenExpired(3),<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    UserDidNotAuthorize(4),<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    UserTokenNotValid(5),<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    ApplicationTokenNotValid(6),<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    ApplicationNotApproved(7),<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    CacheNotAvailable(8),<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    NotImplemented(9),<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    WptLogTypeIdInvalid(10),<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    CannotLogToLockedCache(11),<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    GeocacheCodeIsNotValid(12),<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    GeocacheNotFound(13),<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    AccountNotFound(14),<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    InvalidDateTime(15),<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    InvalidNote(16),<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    NoteTooLong(17),<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    SessionExpired(18),<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    PhotoCaptionTooLong(19),<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    PhotoDescriptionTooLong(20),<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    NoImageData(21),<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    ProfileLoadFailed(22),<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    LogLoadFailed(23),<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    LogNotOwned(24),<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    ImageUploadFailed(25),<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    CacheNoteUpdateFailed(26),<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    CacheNoteDeleteFailed(27),<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    TrackableLogFailed(28),<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    LogTypeNotProvided(29),<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    ValidateSearchDataFailed(30),<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    ValidateNotFoundByUserNoBasicMembershipFail(31),<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    ValidateNotFoundByUserBasicMembershipFail(32),<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    ValidateNotFoundByUserPremiumMembershipFail(33),<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    SouvenirNoPublicGuidFail(34),<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    TrackableLogTypeInvalid(35),<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    TravelBugCodeInvalid(36),<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    TrackingCodeRequired(37),<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    TrackingCodeInvalid(38),<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    TrackableIsArchived(39),<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    TrackableMustBeHeldByUser(40),<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    TrackableAlreadyHeld(41),<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    TrackableAlreadyMarkedAsMissing(42),<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    TrackableUnableToBeMarkedMissing(43),<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    TrackableMustBeInCache(44),<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    TrackableRequiredCacheCode(45),<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    NotEnoughFavoritePoints(46),<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    CacheAlreadyRated(47),<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    CacheNotLoggedYet(48),<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    FailedToFavoriteCache(49),<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    FailedToUnfavoriteCache(50),<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    CacheNotFavoritedYet(51),<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    UnableToRetrieveUsersAvailableFavoritePoints(52),<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    UnableToRetrieveUsersWhoFavoritedCache(53),<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    FailedToRetrieveFavoritedCache(54),<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    StoredSearchNotFound(55),<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    // NotHiddenByUser filter<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    WrongUserCountForNotHiddenByUserFilter(56),<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    AtLeastBasicMembershipRequiredForNotHiddenByUserFilter(57),<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    PremiumMembershipRequiredForNotHiddenByUserFilter(58),<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    // HiddenByUser filter<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    WrongUserCountForHiddenByUserFilter(59),<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    AtLeastBasicMembershipRequiredForHiddenByUserFilter(60),<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    PremiumMembershipRequiredForHiddenByUserFilter(61),<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    // BookmarksExclude filter<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    InvalidBookmarkListId(62),<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    AccountNotValidForRetrieveBookmarks(63),<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    PremiumMembershipRequiredForBookmarksExcludeFilter(64),<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>    // TrackableCount filter<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    InvalidValueForMinMaxTrackables(65),<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    PremiumMembershipRequiredForTrackableCountFilter(66),<a name="line.81"></a>
+<span class="sourceLineNo">082</span><a name="line.82"></a>
+<span class="sourceLineNo">083</span>    // Terrain filter<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    InvalidValueForMinMaxTerrain(76),<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    PremiumMembershipRequiredForTerrainFilter(77),<a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>    // Terrain filter<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    InvalidValueForMinMaxDifficulty(78),<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    PremiumMembershipRequiredForDifficultyFilter(79),<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    // FavoritePoints filter<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    MissingValueForMinMaxFavoritePoints(80),<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    MinFavoritePointsCannotBeGreaterThanMaxFavoritePoints(81),<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    NonNegativeValueRequiredForMinMaxFavoritePoints(82),<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    NonNegativeValueRequiredForMinFavoritePoints(83),<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    NonNegativeValueRequiredForMaxFavoritePoints(84),<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    PremiumMembershipRequiredForFavoritePointsFilter(85),<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>    // GeocacheName filter<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    MissingValueForGeocacheName(86),<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    PremiumMembershipRequiredForGeocacheNameFilter(87),<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>    FilterNotImplemented(88),<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    CacheCodeFilterOrPointRadiusFilterRequired(89),<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    MethodNotSupplied(90),<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>    // GeocacheType filter<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    InvalidValueForGeocacheTypeIds(91),<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    // GeocacheContainerSize filter<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    InvalidValueForGeocacheContainerSizeIds(92),<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    PremiumMembershipRequiredForGeocacheContainerSizeFilter(93),<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    UnableToRetrieveUserProfile(99),<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    PublicProfileNotFound(103),<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>    MaximumRequestsPerPageExceeded(113),<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    CacheLimitExceeded(118),<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    NoNoteOnThisCacheToDelete(125),<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    CacheLimitExceededInRequest(132),<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    UserNotFound(139),<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    NumberOfCallsExceeded(140),<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    AccessTokenNotValid(141),<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    Other(-1);<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    private final int code;<a name="line.125"></a>
+<span class="sourceLineNo">126</span><a name="line.126"></a>
+<span class="sourceLineNo">127</span>    StatusCode(int code) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        this.code = code;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>    public int getCode() {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        return code;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
+<span class="sourceLineNo">134</span><a name="line.134"></a>
+<span class="sourceLineNo">135</span>    @NotNull<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    public static StatusCode getByCode(int code) {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        for (StatusCode statusCode : values()) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            if (statusCode.getCode() == code)<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                return statusCode;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>        return Fail;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span><a name="line.145"></a>
+<span class="sourceLineNo">146</span>}<a name="line.146"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

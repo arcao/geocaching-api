@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package com.arcao.geocaching.api.data.type;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import org.jetbrains.annotations.NotNull;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import org.jetbrains.annotations.Nullable;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>public enum AttributeType {<a name="line.6"></a>
+<span class="sourceLineNo">007</span>    DogsYes(1, "Dogs", true, "http://www.geocaching.com/images/attributes/dogs-yes.gif"),<a name="line.7"></a>
+<span class="sourceLineNo">008</span>    DogsNo(1, "Dogs", false, "http://www.geocaching.com/images/attributes/dogs-no.gif"),<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    FeeYes(2, "Access or parking fee", true, "http://www.geocaching.com/images/attributes/fee-yes.gif"),<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    FeeNo(2, "Access or parking fee", false, "http://www.geocaching.com/images/attributes/fee-no.gif"),<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    RappellingYes(3, "Climbing gear", true, "http://www.geocaching.com/images/attributes/rappelling-yes.gif"),<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    RappellingNo(3, "Climbing gear", false, "http://www.geocaching.com/images/attributes/rappelling-no.gif"),<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    BoatYes(4, "Boat", true, "http://www.geocaching.com/images/attributes/boat-yes.gif"),<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    BoatNo(4, "Boat", false, "http://www.geocaching.com/images/attributes/boat-no.gif"),<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    ScubaYes(5, "Scuba gear", true, "http://www.geocaching.com/images/attributes/scuba-yes.gif"),<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    ScubaNo(5, "Scuba gear", false, "http://www.geocaching.com/images/attributes/scuba-no.gif"),<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    KidsYes(6, "Recommended for kids", true, "http://www.geocaching.com/images/attributes/kids-yes.gif"),<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    KidsNo(6, "Recommended for kids", false, "http://www.geocaching.com/images/attributes/kids-no.gif"),<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    OnehourYes(7, "Takes less than an hour", true, "http://www.geocaching.com/images/attributes/onehour-yes.gif"),<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    OnehourNo(7, "Takes less than an hour", false, "http://www.geocaching.com/images/attributes/onehour-no.gif"),<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    ScenicYes(8, "Scenic view", true, "http://www.geocaching.com/images/attributes/scenic-yes.gif"),<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    ScenicNo(8, "Scenic view", false, "http://www.geocaching.com/images/attributes/scenic-no.gif"),<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    HikingYes(9, "Significant Hike", true, "http://www.geocaching.com/images/attributes/hiking-yes.gif"),<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    HikingNo(9, "Significant Hike", false, "http://www.geocaching.com/images/attributes/hiking-no.gif"),<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    ClimbingYes(10, "Difficult climbing", true, "http://www.geocaching.com/images/attributes/climbing-yes.gif"),<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    ClimbingNo(10, "Difficult climbing", false, "http://www.geocaching.com/images/attributes/climbing-no.gif"),<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    WadingYes(11, "May require wading", true, "http://www.geocaching.com/images/attributes/wading-yes.gif"),<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    WadingNo(11, "May require wading", false, "http://www.geocaching.com/images/attributes/wading-no.gif"),<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    SwimmingYes(12, "May require swimming", true, "http://www.geocaching.com/images/attributes/swimming-yes.gif"),<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    SwimmingNo(12, "May require swimming", false, "http://www.geocaching.com/images/attributes/swimming-no.gif"),<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    AvailableYes(13, "Available at all times", true, "http://www.geocaching.com/images/attributes/available-yes.gif"),<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    AvailableNo(13, "Available at all times", false, "http://www.geocaching.com/images/attributes/available-no.gif"),<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    NightYes(14, "Recommended at night", true, "http://www.geocaching.com/images/attributes/night-yes.gif"),<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    NightNo(14, "Recommended at night", false, "http://www.geocaching.com/images/attributes/night-no.gif"),<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    WinterYes(15, "Available during winter", true, "http://www.geocaching.com/images/attributes/winter-yes.gif"),<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    WinterNo(15, "Available during winter", false, "http://www.geocaching.com/images/attributes/winter-no.gif"),<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    CactusYes(16, "Cactus", true, "http://www.geocaching.com/images/attributes/cactus-yes.gif"),<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    CactusNo(16, "Cactus", false, "http://www.geocaching.com/images/attributes/cactus-no.gif"),<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    PoisonoakYes(17, "Poison plants", true, "http://www.geocaching.com/images/attributes/poisonoak-yes.gif"),<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    PoisonoakNo(17, "Poison plants", false, "http://www.geocaching.com/images/attributes/poisonoak-no.gif"),<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    DangerousAnimalsYes(18, "Dangerous Animals", true, "http://www.geocaching.com/images/attributes/dangerousanimals-yes.gif"),<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    DangerousAnimalsNo(18, "Dangerous Animals", false, "http://www.geocaching.com/images/attributes/dangerousanimals-no.gif"),<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    TicksYes(19, "Ticks", true, "http://www.geocaching.com/images/attributes/ticks-yes.gif"),<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    TicksNo(19, "Ticks", false, "http://www.geocaching.com/images/attributes/ticks-no.gif"),<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    MineYes(20, "Abandoned mines", true, "http://www.geocaching.com/images/attributes/mine-yes.gif"),<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    MineNo(20, "Abandoned mines", false, "http://www.geocaching.com/images/attributes/mine-no.gif"),<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    CliffYes(21, "Cliff / falling rocks", true, "http://www.geocaching.com/images/attributes/cliff-yes.gif"),<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    CliffNo(21, "Cliff / falling rocks", false, "http://www.geocaching.com/images/attributes/cliff-no.gif"),<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    HuntingYes(22, "Hunting", true, "http://www.geocaching.com/images/attributes/hunting-yes.gif"),<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    HuntingNo(22, "Hunting", false, "http://www.geocaching.com/images/attributes/hunting-no.gif"),<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    DangerYes(23, "Dangerous area", true, "http://www.geocaching.com/images/attributes/danger-yes.gif"),<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    DangerNo(23, "Dangerous area", false, "http://www.geocaching.com/images/attributes/danger-no.gif"),<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    WheelchairYes(24, "Wheelchair accessible", true, "http://www.geocaching.com/images/attributes/wheelchair-yes.gif"),<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    WheelchairNo(24, "Wheelchair accessible", false, "http://www.geocaching.com/images/attributes/wheelchair-no.gif"),<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    ParkingYes(25, "Parking available", true, "http://www.geocaching.com/images/attributes/parking-yes.gif"),<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    ParkingNo(25, "Parking available", false, "http://www.geocaching.com/images/attributes/parking-no.gif"),<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    PublicYes(26, "Public transportation", true, "http://www.geocaching.com/images/attributes/public-yes.gif"),<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    PublicNo(26, "Public transportation", false, "http://www.geocaching.com/images/attributes/public-no.gif"),<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    WaterYes(27, "Drinking water nearby", true, "http://www.geocaching.com/images/attributes/water-yes.gif"),<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    WaterNo(27, "Drinking water nearby", false, "http://www.geocaching.com/images/attributes/water-no.gif"),<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    RestroomsYes(28, "Public restrooms nearby", true, "http://www.geocaching.com/images/attributes/restrooms-yes.gif"),<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    RestroomsNo(28, "Public restrooms nearby", false, "http://www.geocaching.com/images/attributes/restrooms-no.gif"),<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    PhoneYes(29, "Telephone nearby", true, "http://www.geocaching.com/images/attributes/phone-yes.gif"),<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    PhoneNo(29, "Telephone nearby", false, "http://www.geocaching.com/images/attributes/phone-no.gif"),<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    PicnicYes(30, "Picnic tables nearby", true, "http://www.geocaching.com/images/attributes/picnic-yes.gif"),<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    PicnicNo(30, "Picnic tables nearby", false, "http://www.geocaching.com/images/attributes/picnic-no.gif"),<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    CampingYes(31, "Camping available", true, "http://www.geocaching.com/images/attributes/camping-yes.gif"),<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    CampingNo(31, "Camping available", false, "http://www.geocaching.com/images/attributes/camping-no.gif"),<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    BicyclesYes(32, "Bicycles", true, "http://www.geocaching.com/images/attributes/bicycles-yes.gif"),<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    BicyclesNo(32, "Bicycles", false, "http://www.geocaching.com/images/attributes/bicycles-no.gif"),<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    MotorcyclesYes(33, "Motorcycles", true, "http://www.geocaching.com/images/attributes/motorcycles-yes.gif"),<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    MotorcyclesNo(33, "Motorcycles", false, "http://www.geocaching.com/images/attributes/motorcycles-no.gif"),<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    QuadsYes(34, "Quads", true, "http://www.geocaching.com/images/attributes/quads-yes.gif"),<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    QuadsNo(34, "Quads", false, "http://www.geocaching.com/images/attributes/quads-no.gif"),<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    JeepsYes(35, "Off-road vehicles", true, "http://www.geocaching.com/images/attributes/jeeps-yes.gif"),<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    JeepsNo(35, "Off-road vehicles", false, "http://www.geocaching.com/images/attributes/jeeps-no.gif"),<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    SnowmobilesYes(36, "Snowmobiles", true, "http://www.geocaching.com/images/attributes/snowmobiles-yes.gif"),<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    SnowmobilesNo(36, "Snowmobiles", false, "http://www.geocaching.com/images/attributes/snowmobiles-no.gif"),<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    HorsesYes(37, "Horses", true, "http://www.geocaching.com/images/attributes/horses-yes.gif"),<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    HorsesNo(37, "Horses", false, "http://www.geocaching.com/images/attributes/horses-no.gif"),<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    CampfiresYes(38, "Campfires", true, "http://www.geocaching.com/images/attributes/campfires-yes.gif"),<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    CampfiresNo(38, "Campfires", false, "http://www.geocaching.com/images/attributes/campfires-no.gif"),<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    ThornYes(39, "Thorns", true, "http://www.geocaching.com/images/attributes/thorn-yes.gif"),<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    ThornNo(39, "Thorns", false, "http://www.geocaching.com/images/attributes/thorn-no.gif"),<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    StealthYes(40, "Stealth required", true, "http://www.geocaching.com/images/attributes/stealth-yes.gif"),<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    StealthNo(40, "Stealth required", false, "http://www.geocaching.com/images/attributes/stealth-no.gif"),<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    StrollerYes(41, "Stroller accessible", true, "http://www.geocaching.com/images/attributes/stroller-yes.gif"),<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    StrollerNo(41, "Stroller accessible", false, "http://www.geocaching.com/images/attributes/stroller-no.gif"),<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    FirstaidYes(42, "Needs maintenance", true, "http://www.geocaching.com/images/attributes/firstaid-yes.gif"),<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    FirstaidNo(42, "Needs maintenance", false, "http://www.geocaching.com/images/attributes/firstaid-no.gif"),<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    CowYes(43, "Watch for livestock", true, "http://www.geocaching.com/images/attributes/cow-yes.gif"),<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    CowNo(43, "Watch for livestock", false, "http://www.geocaching.com/images/attributes/cow-no.gif"),<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    FlashlightYes(44, "Flashlight required", true, "http://www.geocaching.com/images/attributes/flashlight-yes.gif"),<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    FlashlightNo(44, "Flashlight required", false, "http://www.geocaching.com/images/attributes/flashlight-no.gif"),<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    LandfYes(45, "Lost And Found Tour", true, "http://www.geocaching.com/images/attributes/landf-yes.gif"),<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    LandfNo(45, "Lost And Found Tour", false, "http://www.geocaching.com/images/attributes/landf-no.gif"),<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    RvYes(46, "Truck Driver/RV", true, "http://www.geocaching.com/images/attributes/rv-yes.gif"),<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    RvNo(46, "Truck Driver/RV", false, "http://www.geocaching.com/images/attributes/rv-no.gif"),<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    FieldPuzzleYes(47, "Field Puzzle", true, "http://www.geocaching.com/images/attributes/field_puzzle-yes.gif"),<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    FieldPuzzleNo(47, "Field Puzzle", false, "http://www.geocaching.com/images/attributes/field_puzzle-no.gif"),<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    UVYes(48, "UV Light Required", true, "http://www.geocaching.com/images/attributes/UV-yes.gif"),<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    UVNo(48, "UV Light Required", false, "http://www.geocaching.com/images/attributes/UV-no.gif"),<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    SnowshoesYes(49, "Snowshoes", true, "http://www.geocaching.com/images/attributes/snowshoes-yes.gif"),<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    SnowshoesNo(49, "Snowshoes", false, "http://www.geocaching.com/images/attributes/snowshoes-no.gif"),<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    SkiisYes(50, "Cross Country Skis", true, "http://www.geocaching.com/images/attributes/skiis-yes.gif"),<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    SkiisNo(50, "Cross Country Skis", false, "http://www.geocaching.com/images/attributes/skiis-no.gif"),<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    SToolYes(51, "Special Tool Required", true, "http://www.geocaching.com/images/attributes/s-tool-yes.gif"),<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    SToolNo(51, "Special Tool Required", false, "http://www.geocaching.com/images/attributes/s-tool-no.gif"),<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    NightcacheYes(52, "Night Cache", true, "http://www.geocaching.com/images/attributes/nightcache-yes.gif"),<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    NightcacheNo(52, "Night Cache", false, "http://www.geocaching.com/images/attributes/nightcache-no.gif"),<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    ParkNGrabYes(53, "Park and Grab", true, "http://www.geocaching.com/images/attributes/parkngrab-yes.gif"),<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    ParkNGrabNo(53, "Park and Grab", false, "http://www.geocaching.com/images/attributes/parkngrab-no.gif"),<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    AbandonedBuildingYes(54, "Abandoned Structure", true, "http://www.geocaching.com/images/attributes/AbandonedBuilding-yes.gif"),<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    AbandonedBuildingNo(54, "Abandoned Structure", false, "http://www.geocaching.com/images/attributes/AbandonedBuilding-no.gif"),<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    HikeShortYes(55, "Short hike (less than 1km)", true, "http://www.geocaching.com/images/attributes/hike_short-yes.gif"),<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    HikeShortNo(55, "Short hike (less than 1km)", false, "http://www.geocaching.com/images/attributes/hike_short-no.gif"),<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    HikeMedYes(56, "Medium hike (1km-10km)", true, "http://www.geocaching.com/images/attributes/hike_med-yes.gif"),<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    HikeMedNo(56, "Medium hike (1km-10km)", false, "http://www.geocaching.com/images/attributes/hike_med-no.gif"),<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    HikeLongYes(57, "Long Hike (+10km)", true, "http://www.geocaching.com/images/attributes/hike_long-yes.gif"),<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    HikeLongNo(57, "Long Hike (+10km)", false, "http://www.geocaching.com/images/attributes/hike_long-no.gif"),<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    FuelYes(58, "Fuel Nearby", true, "http://www.geocaching.com/images/attributes/fuel-yes.gif"),<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    FuelNo(58, "Fuel Nearby", false, "http://www.geocaching.com/images/attributes/fuel-no.gif"),<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    FoodYes(59, "Food Nearby", true, "http://www.geocaching.com/images/attributes/food-yes.gif"),<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    FoodNo(59, "Food Nearby", false, "http://www.geocaching.com/images/attributes/food-no.gif"),<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    WirelessBeaconYes(60, "Wireless Beacon", true, "http://www.geocaching.com/images/attributes/wirelessbeacon-yes.gif"),<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    WirelessBeaconNo(60, "Wireless Beacon", false, "http://www.geocaching.com/images/attributes/wirelessbeacon-no.gif"),<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    PartnershipYes(61, "Partnership Cache", true, "http://www.geocaching.com/images/attributes/partnership-yes.gif"),<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    PartnershipNo(61, "Partnership Cache", false, "http://www.geocaching.com/images/attributes/partnership-no.gif"),<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    SeasonalYes(62, "Seasonal Access", true, "http://www.geocaching.com/images/attributes/seasonal-yes.gif"),<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    SeasonalNo(62, "Seasonal Access", false, "http://www.geocaching.com/images/attributes/seasonal-no.gif"),<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    TouristOkYes(63, "Tourist Friendly", true, "http://www.geocaching.com/images/attributes/touristOK-yes.gif"),<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    TouristOkNo(63, "Tourist Friendly", false, "http://www.geocaching.com/images/attributes/touristOK-no.gif"),<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    TreeClimbingYes(64, "Tree Climbing", true, "http://www.geocaching.com/images/attributes/treeclimbing-yes.gif"),<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    TreeClimbingNo(64, "Tree Climbing", false, "http://www.geocaching.com/images/attributes/treeclimbing-no.gif"),<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    FrontYardYes(65, "Front Yard (Private Residence)", true, "http://www.geocaching.com/images/attributes/frontyard-yes.gif"),<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    FrontYardNo(65, "Front Yard (Private Residence)", false, "http://www.geocaching.com/images/attributes/frontyard-no.gif"),<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    TeamworkYes(66, "Teamwork Required", true, "http://www.geocaching.com/images/attributes/teamwork-yes.gif"),<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    TeamworkNo(66, "Teamwork Required", false, "http://www.geocaching.com/images/attributes/teamwork-no.gif");<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    /**<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * Groundspeak Id<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    public final int id;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    /**<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * Friendly name<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     */<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    @NotNull<a name="line.147"></a>
+<span class="sourceLineNo">148</span>    public final String name;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    /**<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * Is attribute on?<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public final boolean on;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    /**<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * Attribute image URL<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     */<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    @NotNull<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    public final String imageUrl;<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>    AttributeType(int id, @NotNull String name, boolean on, @NotNull String imageUrl) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        this.id = id;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        this.name = name;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        this.on = on;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        this.imageUrl = imageUrl;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    }<a name="line.164"></a>
+<span class="sourceLineNo">165</span><a name="line.165"></a>
+<span class="sourceLineNo">166</span>    @Override<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public String toString() {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        return name + (on ? " (ON)" : " (OFF)");<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    }<a name="line.169"></a>
+<span class="sourceLineNo">170</span><a name="line.170"></a>
+<span class="sourceLineNo">171</span>    /**<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * Get an AttributeType from Groundspeak Id. If Groundspeak Id is not valid, the null is returned.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     *<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * @param id Groundspeak Id<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param on is attribute On?<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @return Attribute type or null<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     */<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    @Nullable<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public static AttributeType fromId(int id, boolean on) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        for (AttributeType type : values()) {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            if (type.id == id &amp;&amp; type.on == on)<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                return type;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>        return null;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>    }<a name="line.186"></a>
+<span class="sourceLineNo">187</span>}<a name="line.187"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
