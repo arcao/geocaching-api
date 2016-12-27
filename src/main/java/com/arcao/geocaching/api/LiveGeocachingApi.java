@@ -177,12 +177,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             r.endObject();
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -236,12 +231,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             r.endObject();
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -288,12 +278,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list.get(0);
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -331,12 +316,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -371,12 +351,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -414,12 +389,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -468,12 +438,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             r.endObject();
             return geocacheLog;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -523,12 +488,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             r.endObject();
             return userProfile;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -571,12 +531,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -610,12 +565,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -650,12 +600,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -695,12 +640,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -744,12 +684,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -779,12 +714,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             r = callPost("UpdateCacheNote?format=json", sw.toString());
             checkError(r);
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -803,12 +733,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             );
             checkError(r);
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -845,12 +770,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -887,12 +807,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return ApiLimitsResponse.create(apiLimits, maxPerPage);
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -980,12 +895,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
             return list;
         } catch (IOException e) {
-            logger.error(e.toString(), e);
-            if (!isGsonException(e)) {
-                throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
-            }
-
-            throw new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
+            throw handleIOException(e);
         } finally {
             closeJsonReader(r);
         }
@@ -1027,6 +937,15 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         } else {
             throw new InvalidResponseException("Missing Status in a response.");
         }
+    }
+
+    private static GeocachingApiException handleIOException(IOException e) {
+        logger.error(e.toString(), e);
+        if (!isGsonException(e)) {
+            return new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
+        }
+
+        return new InvalidResponseException("Response is not valid JSON string: " + e.getMessage(), e);
     }
 
     private JsonReader callGet(String function) throws NetworkException, InvalidResponseException {
