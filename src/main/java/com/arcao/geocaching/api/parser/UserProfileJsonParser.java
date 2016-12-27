@@ -1,19 +1,24 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.UserProfile;
+import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
-import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
+import com.arcao.geocaching.api.data.userprofile.GeocacheStats;
+import com.arcao.geocaching.api.data.userprofile.GeocacheTypeCount;
 import com.arcao.geocaching.api.data.userprofile.GlobalStats;
 import com.arcao.geocaching.api.data.userprofile.ProfilePhoto;
 import com.arcao.geocaching.api.data.userprofile.PublicProfile;
 import com.arcao.geocaching.api.data.userprofile.TrackableStats;
+import com.arcao.geocaching.api.data.userprofile.TrackableTypeCount;
+import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
-import static com.arcao.geocaching.api.parser.TrackableJsonParser.parseList;
 
 public final class UserProfileJsonParser {
     private UserProfileJsonParser() {
@@ -31,7 +36,7 @@ public final class UserProfileJsonParser {
             if ("FavoritePoints".equals(name)) {
                 builder.favoritePointsStats(parseFavoritePointStats(r));
             } else if ("Geocaches".equals(name)) {
-                builder.geocacheFindStats(parseGeocacheFindStats(r));
+                builder.geocacheStats(parseGeocacheStats(r));
             } else if ("PublicProfile".equals(name)) {
                 builder.publicProfile(parsePublicProfile(r));
             } else if ("Stats".equals(name)) {
@@ -65,16 +70,63 @@ public final class UserProfileJsonParser {
         return builder.build();
     }
 
-    private static GeocacheFindStats parseGeocacheFindStats(JsonReader r) throws IOException {
+    private static GeocacheStats parseGeocacheStats(JsonReader r) throws IOException {
         if (isNextNull(r))
             return null;
 
-        GeocacheFindStats.Builder builder = GeocacheFindStats.builder();
+        GeocacheStats.Builder builder = GeocacheStats.builder();
 
         r.beginObject();
         while (r.hasNext()) {
-            r.nextName();
+            String name = r.nextName();
+            if ("GeocacheFindCount".equals(name)) {
+                builder.findCount(r.nextInt());
+            } else if ("GeocacheFindTypes".equals(name)) {
+                builder.findTypes(parseGeocacheTypeCounts(r));
+            } else if ("GeocacheHideCount".equals(name)) {
+                builder.hideCount(r.nextInt());
+            } else if ("GeocacheHideTypes".equals(name)) {
+                builder.hideTypes(parseGeocacheTypeCounts(r));
+            } else {
+                r.skipValue();
+            }
+        }
+        r.endObject();
+
+        return builder.build();
+    }
+
+    private static List<GeocacheTypeCount> parseGeocacheTypeCounts(JsonReader r) throws IOException {
+        if (r.peek() != JsonToken.BEGIN_ARRAY) {
             r.skipValue();
+        }
+
+        List<GeocacheTypeCount> list = new ArrayList<GeocacheTypeCount>();
+        r.beginArray();
+
+        while (r.hasNext()) {
+            list.add(parseGeocacheTypeCount(r));
+        }
+        r.endArray();
+        return list;
+    }
+
+    private static GeocacheTypeCount parseGeocacheTypeCount(JsonReader r) throws IOException {
+        if (isNextNull(r))
+            return null;
+
+        GeocacheTypeCount.Builder builder = GeocacheTypeCount.builder();
+
+        r.beginObject();
+        while (r.hasNext()) {
+            String name = r.nextName();
+            if ("GeocacheTypeId".equals(name)) {
+                builder.type(GeocacheType.fromId(r.nextInt()));
+            } else if ("UserCount".equals(name)) {
+                builder.count(r.nextInt());
+            } else {
+                r.skipValue();
+            }
         }
         r.endObject();
 
@@ -175,13 +227,13 @@ public final class UserProfileJsonParser {
         while (r.hasNext()) {
             String name = r.nextName();
             if ("TrackableFindCount".equals(name)) {
-                builder.trackableFindCount(r.nextInt());
+                builder.findCount(r.nextInt());
             } else if ("TrackableFindTypes".equals(name)) {
-                builder.trackableFindTypes(parseList(r));
+                builder.findTypes(parseTrackableTypeCounts(r));
             } else if ("TrackableOwnedCount".equals(name)) {
-                builder.trackableOwnedCount(r.nextInt());
+                builder.ownedCount(r.nextInt());
             } else if ("TrackableOwnedTypes".equals(name)) {
-                builder.trackableOwnedTypes(parseList(r));
+                builder.ownedTypes(parseTrackableTypeCounts(r));
             } else {
                 r.skipValue();
             }
@@ -191,4 +243,45 @@ public final class UserProfileJsonParser {
         return builder.build();
     }
 
+    private static List<TrackableTypeCount> parseTrackableTypeCounts(JsonReader r) throws IOException {
+        if (r.peek() != JsonToken.BEGIN_ARRAY) {
+            r.skipValue();
+        }
+
+        List<TrackableTypeCount> list = new ArrayList<TrackableTypeCount>();
+        r.beginArray();
+
+        while (r.hasNext()) {
+            list.add(parseTrackableTypeCount(r));
+        }
+        r.endArray();
+        return list;
+
+    }
+
+    private static TrackableTypeCount parseTrackableTypeCount(JsonReader r) throws IOException {
+        if (isNextNull(r))
+            return null;
+
+        TrackableTypeCount.Builder builder = TrackableTypeCount.builder();
+
+        r.beginObject();
+        while (r.hasNext()) {
+            String name = r.nextName();
+            if ("BugTypeID".equals(name)) {
+                builder.id(r.nextInt());
+            } else if ("IconUrl".equals(name)) {
+                builder.iconUrl(r.nextString());
+            } else if ("TBTypeName".equals(name)) {
+                builder.name(r.nextString());
+            } else if ("UserCount".equals(name)) {
+                builder.count(r.nextInt());
+            } else {
+                r.skipValue();
+            }
+        }
+        r.endObject();
+
+        return builder.build();
+    }
 }

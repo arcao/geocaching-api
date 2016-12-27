@@ -24,7 +24,8 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
         UserProfile userProfile = api.getYourUserProfile(false, false, false, false, false, false, DEVICE_INFO);
 
         Assert.assertNull(userProfile.favoritePointsStats());
-        Assert.assertNull(userProfile.geocacheFindStats());
+        Assert.assertNull(userProfile.geocacheStats());
+        Assert.assertNull(userProfile.trackableStats());
         Assert.assertNull(userProfile.publicProfile());
         Assert.assertNull(userProfile.souvenirs());
 
@@ -38,7 +39,8 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
         UserProfile userProfile = api.getYourUserProfile(true, true, true, true, false, true, DEVICE_INFO);
 
         //Assert.assertNotNull(userProfile.getFavoritePointsStats());
-        Assert.assertNotNull(userProfile.geocacheFindStats());
+        Assert.assertNotNull(userProfile.geocacheStats());
+        Assert.assertNotNull(userProfile.trackableStats());
         Assert.assertNotNull(userProfile.globalStats());
         //Assert.assertNotNull(userProfile.souvenirs());
         //Assert.assertEquals(0, userProfile.souvenirs().size());

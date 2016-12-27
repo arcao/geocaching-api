@@ -1,7 +1,7 @@
 package com.arcao.geocaching.api.data;
 
 import com.arcao.geocaching.api.data.userprofile.FavoritePointStats;
-import com.arcao.geocaching.api.data.userprofile.GeocacheFindStats;
+import com.arcao.geocaching.api.data.userprofile.GeocacheStats;
 import com.arcao.geocaching.api.data.userprofile.GlobalStats;
 import com.arcao.geocaching.api.data.userprofile.PublicProfile;
 import com.arcao.geocaching.api.data.userprofile.TrackableStats;
@@ -18,7 +18,7 @@ public abstract class UserProfile implements Serializable {
 
     @Nullable public abstract FavoritePointStats favoritePointsStats();
 
-    @Nullable public abstract GeocacheFindStats geocacheFindStats();
+    @Nullable public abstract GeocacheStats geocacheStats();
 
     @Nullable public abstract PublicProfile publicProfile();
 
@@ -38,8 +38,6 @@ public abstract class UserProfile implements Serializable {
     public abstract static class Builder {
         public abstract Builder favoritePointsStats(FavoritePointStats favoritePointsStats);
 
-        public abstract Builder geocacheFindStats(GeocacheFindStats geocacheFindStats);
-
         public abstract Builder publicProfile(PublicProfile publicProfile);
 
         public abstract Builder souvenirs(List<Souvenir> souvenirs);
@@ -49,6 +47,8 @@ public abstract class UserProfile implements Serializable {
         public abstract Builder trackableStats(TrackableStats trackableStats);
 
         public abstract Builder user(User user);
+
+        public abstract Builder geocacheStats(GeocacheStats geocacheStats);
 
         public abstract UserProfile build();
     }
