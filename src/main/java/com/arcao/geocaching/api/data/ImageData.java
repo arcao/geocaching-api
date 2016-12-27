@@ -42,17 +42,25 @@ public abstract class ImageData implements JsonSerializable, Serializable {
     public abstract byte[] imageData();
 
     public static ImageData createFromInputStream(@NotNull String name, @Nullable String description, String fileName, InputStream is) throws IOException {
+        byte[] buffer = new byte[BUFFER_SIZE];
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         Base64OutputStream b64os = new Base64OutputStream(bos, Base64.NO_CLOSE | Base64.NO_WRAP);
 
-        int bytesReaded;
-        byte[] buffer = new byte[BUFFER_SIZE];
-        while ((bytesReaded = is.read(buffer)) != -1) {
-            b64os.write(buffer, 0, bytesReaded);
+        try {
+            while (true) {
+                int bytesRead = is.read(buffer);
+                if (bytesRead < 0)
+                    break;
+
+                b64os.write(buffer, 0, bytesRead);
+            }
+        } finally {
+            b64os.flush();
+            b64os.close();
+
+            is.close();
         }
-        b64os.flush();
-        b64os.close();
 
         return builder()
                 .name(name)
