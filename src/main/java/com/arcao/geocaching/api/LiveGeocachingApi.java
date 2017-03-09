@@ -61,6 +61,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -688,6 +689,36 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         } finally {
             closeJsonReader(r);
         }
+    }
+
+    @Override
+    public void addGeocachesToBookmarkList(@NotNull String guid, @NotNull Collection<String> cacheCodes) throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            StringWriter sw = new StringWriter();
+            JsonWriter w = new JsonWriter(sw);
+            w.beginObject();
+            w.name("AccessToken").value(session);
+            w.name("BookmarkListGuid").value(guid);
+            JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
+            for (String cacheCode : cacheCodes) {
+                arrayWriter.value(cacheCode);
+            }
+            arrayWriter.endArray();
+            w.endObject();
+            w.close();
+
+            r = callPost("AddGeocachesToBookmarkList?format=json", sw.toString());
+            checkError(r);
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+
     }
 
     @Override

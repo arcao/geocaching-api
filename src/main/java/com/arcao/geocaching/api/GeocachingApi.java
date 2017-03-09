@@ -22,6 +22,7 @@ import com.arcao.geocaching.api.filter.Filter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -358,4 +359,12 @@ public interface GeocachingApi {
     @NotNull
     List<GeocacheStatus> getGeocacheStatus(@NotNull List<String> cacheCodes) throws GeocachingApiException;
 
+    /**
+     * Add the geocaches to list of Bookmarked caches
+     * @param guid bookmark list guid
+     * @param cacheCodes list of geocaches
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    void addGeocachesToBookmarkList(@NotNull String guid, @NotNull Collection<String> cacheCodes) throws GeocachingApiException;
 }
