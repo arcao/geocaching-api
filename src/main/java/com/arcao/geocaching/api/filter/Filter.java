@@ -5,11 +5,9 @@ import com.arcao.geocaching.api.builder.JsonSerializable;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
  * Interface for all filters used in
- * {@link GeocachingApi#searchForGeocaches(GeocachingApi.ResultQuality, int, int, int, List, List)}
+ * {@link GeocachingApi#searchForGeocaches(GeocachingApi.ResultQuality, int, int, int, java.util.Collection, java.util.Collection)}
  * method.
  *
  * @author arcao

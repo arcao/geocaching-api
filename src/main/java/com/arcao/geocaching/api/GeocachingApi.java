@@ -152,7 +152,7 @@ public interface GeocachingApi {
      * @since 1.6
      */
     @NotNull
-    List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull List<Filter> filters, @Nullable List<SortBy> sortByList) throws GeocachingApiException;
+    List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, @Nullable Collection<SortBy> sortByList) throws GeocachingApiException;
 
     /**
      * Retrieve next geocaches searched by searchForGeocaches method.
@@ -357,7 +357,7 @@ public interface GeocachingApi {
      * @since 1.6.3
      */
     @NotNull
-    List<GeocacheStatus> getGeocacheStatus(@NotNull List<String> cacheCodes) throws GeocachingApiException;
+    List<GeocacheStatus> getGeocacheStatus(@NotNull Collection<String> cacheCodes) throws GeocachingApiException;
 
     /**
      * Add the geocaches to list of Bookmarked caches

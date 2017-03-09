@@ -119,7 +119,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull List<Filter> filters, List<SortBy> sortByList) throws GeocachingApiException {
+    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, Collection<SortBy> sortByList) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
 
         if (session == null)
@@ -649,7 +649,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<GeocacheStatus> getGeocacheStatus(@NotNull List<String> cacheCodes) throws GeocachingApiException {
+    public List<GeocacheStatus> getGeocacheStatus(@NotNull Collection<String> cacheCodes) throws GeocachingApiException {
         List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
 
         if (session == null)
