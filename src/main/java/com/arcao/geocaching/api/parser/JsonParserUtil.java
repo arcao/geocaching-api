@@ -1,8 +1,6 @@
 package com.arcao.geocaching.api.parser;
 
 
-import com.arcao.geocaching.api.data.User;
-import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.AttributeType;
 import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
@@ -123,68 +121,6 @@ public final class JsonParserUtil {
         }
         r.endObject();
         return memberType;
-    }
-
-    private static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
-        if (isNextNull(r))
-            return null;
-
-        Coordinates.Builder coordinates = Coordinates.builder();
-
-        r.beginObject();
-        while (r.hasNext()) {
-            String name = r.nextName();
-            if ("Latitude".equals(name)) {
-                coordinates.latitude((float) r.nextDouble());
-            } else if ("Longitude".equals(name)) {
-                coordinates.longitude((float) r.nextDouble());
-            } else {
-                r.skipValue();
-            }
-        }
-        r.endObject();
-        return coordinates.build();
-    }
-
-    static User parseUser(JsonReader r) throws IOException {
-        if (isNextNull(r))
-            return null;
-
-        User.Builder user = User.builder();
-        String userName = null;
-
-        r.beginObject();
-        while (r.hasNext()) {
-            String name = r.nextName();
-            if ("AvatarUrl".equals(name)) {
-                user.avatarUrl(r.nextString());
-            } else if ("FindCount".equals(name)) {
-                user.findCount(r.nextInt());
-            } else if ("HideCount".equals(name)) {
-                user.hideCount(r.nextInt());
-            } else if ("HomeCoordinates".equals(name)) {
-                user.homeCoordinates(parseHomeCoordinates(r));
-            } else if ("Id".equals(name)) {
-                user.id(r.nextLong());
-            } else if ("IsAdmin".equals(name)) {
-                user.admin(r.nextBoolean());
-            } else if ("MemberType".equals(name)) {
-                user.memberType(parseMemberType(r));
-            } else if ("PublicGuid".equals(name)) {
-                user.publicGuid(r.nextString());
-            } else if ("UserName".equals(name)) {
-                userName = r.nextString();
-                user.userName(userName);
-            } else {
-                r.skipValue();
-            }
-        }
-        r.endObject();
-
-        if (userName == null)
-            return null;
-
-        return user.build();
     }
 
     private static AttributeType parseAttribute(JsonReader r) throws IOException {

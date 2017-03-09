@@ -18,7 +18,6 @@ import java.util.List;
 
 import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
-import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
 
 public final class UserProfileJsonParser {
     private UserProfileJsonParser() {
@@ -44,7 +43,7 @@ public final class UserProfileJsonParser {
             } else if ("Trackables".equals(name)) {
                 builder.trackableStats(parseTrackableStats(r));
             } else if ("User".equals(name)) {
-                builder.user(parseUser(r));
+                builder.user(UserJsonParser.parse(r));
             } else {
                 r.skipValue();
             }

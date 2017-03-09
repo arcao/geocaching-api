@@ -11,7 +11,6 @@ import java.util.List;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseAttributeList;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseContainerType;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseGeocacheType;
-import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
 
 public final class GeocacheJsonParser {
     private GeocacheJsonParser() {
@@ -56,7 +55,7 @@ public final class GeocacheJsonParser {
             } else if ("Terrain".equals(name)) {
                 builder.terrain((float) r.nextDouble());
             } else if ("Owner".equals(name)) {
-                builder.owner(parseUser(r));
+                builder.owner(UserJsonParser.parse(r));
             } else if ("Available".equals(name)) {
                 builder.available(r.nextBoolean());
             } else if ("Archived".equals(name)) {

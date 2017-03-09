@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
-import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
 
 public final class TrackableJsonParser {
     private TrackableJsonParser() {
@@ -48,11 +47,11 @@ public final class TrackableJsonParser {
             } else if ("IconUrl".equals(name)) {
                 builder.trackableTypeImage(r.nextString());
             } else if ("OriginalOwner".equals(name)) {
-                builder.owner(parseUser(r));
+                builder.owner(UserJsonParser.parse(r));
             } else if ("CurrentGeocacheCode".equals(name)) {
                 builder.currentCacheCode(r.nextString());
             } else if ("CurrentOwner".equals(name)) {
-                builder.currentOwner(parseUser(r));
+                builder.currentOwner(UserJsonParser.parse(r));
             } else if ("Code".equals(name)) {
                 builder.trackingNumber(r.nextString());
             } else if ("DateCreated".equals(name)) {

@@ -5,6 +5,8 @@ import com.arcao.geocaching.api.builder.JsonBuilder;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.configuration.impl.DefaultProductionGeocachingApiConfiguration;
 import com.arcao.geocaching.api.data.DeviceInfo;
+import com.arcao.geocaching.api.data.FavoritePointResult;
+import com.arcao.geocaching.api.data.FavoritedGeocache;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.GeocacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
@@ -13,6 +15,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.TrackableTravel;
+import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.apilimits.ApiLimitsResponse;
@@ -35,6 +38,7 @@ import com.arcao.geocaching.api.parser.ApiLimitsJsonParser;
 import com.arcao.geocaching.api.parser.BookmarkJsonParser;
 import com.arcao.geocaching.api.parser.BookmarkListJsonParser;
 import com.arcao.geocaching.api.parser.CacheLimitsJsonParser;
+import com.arcao.geocaching.api.parser.FavoritedGeocacheJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheLogJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheStatusJsonParser;
@@ -44,6 +48,7 @@ import com.arcao.geocaching.api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.parser.TrackableJsonParser;
 import com.arcao.geocaching.api.parser.TrackableLogJsonParser;
 import com.arcao.geocaching.api.parser.TrackableTravelJsonParser;
+import com.arcao.geocaching.api.parser.UserJsonParser;
 import com.arcao.geocaching.api.parser.UserProfileJsonParser;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -609,7 +614,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException {
+    public List<Bookmark> getBookmarkListByGuid(@NotNull String guid) throws GeocachingApiException {
         List<Bookmark> list = new ArrayList<Bookmark>();
 
         if (session == null)
@@ -719,6 +724,223 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             closeJsonReader(r);
         }
 
+    }
+
+    @NotNull
+    @Override
+    public FavoritePointResult addFavoritePointToCache(@NotNull String cacheCode) throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("AddFavoritePointToCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&cacheCode=" + cacheCode +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            FavoritePointResult.Builder builder = FavoritePointResult.builder();
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("CacheFavoritePoints".equals(name)) {
+                    builder.cacheFavoritePoints(r.nextInt());
+                } else if ("UsersFavoritePoints".equals(name)) {
+                    builder.usersFavoritePoints(r.nextInt());
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return builder.build();
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @NotNull
+    @Override
+    public FavoritePointResult removeFavoritePointFromCache(@NotNull String cacheCode) throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("RemoveFavoritePointFromCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&cacheCode=" + cacheCode +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            FavoritePointResult.Builder builder = FavoritePointResult.builder();
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("CacheFavoritePoints".equals(name)) {
+                    builder.cacheFavoritePoints(r.nextInt());
+                } else if ("UsersFavoritePoints".equals(name)) {
+                    builder.usersFavoritePoints(r.nextInt());
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return builder.build();
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @Override
+    public int getUsersFavoritePoints() throws GeocachingApiException {
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("GetUsersFavoritePoints?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            int favoritePoints = 0;
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("FavoritePoints".equals(name)) {
+                    favoritePoints = r.nextInt();
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return favoritePoints;
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<User> getUsersWhoFavoritedCache(@NotNull String cacheCode) throws GeocachingApiException {
+        List<User> list = new ArrayList<User>();
+
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("GetUsersWhoFavoritedCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&cacheCode=" + cacheCode +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("UsersWhoFavoritedCache".equals(name)) {
+                    list = UserJsonParser.parseList(r);
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return list;
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<String> getCacheIdsFavoritedByUser() throws GeocachingApiException {
+        List<String> list = new ArrayList<String>();
+
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("GetCacheIdsFavoritedByUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("CacheCodes".equals(name)) {
+                    r.beginArray();
+                    while (r.hasNext()) {
+                        list.add(r.nextString());
+                    }
+                    r.endArray();
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return list;
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<FavoritedGeocache> getCachesFavoritedByUser() throws GeocachingApiException {
+        List<FavoritedGeocache> list = new ArrayList<FavoritedGeocache>();
+
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("GetCachesFavoritedByUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("Geocaches".equals(name)) {
+                    list = FavoritedGeocacheJsonParser.parseList(r);
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return list;
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
     }
 
     @Override

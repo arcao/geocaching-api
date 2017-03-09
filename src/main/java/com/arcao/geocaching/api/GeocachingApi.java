@@ -1,6 +1,8 @@
 package com.arcao.geocaching.api;
 
 import com.arcao.geocaching.api.data.DeviceInfo;
+import com.arcao.geocaching.api.data.FavoritePointResult;
+import com.arcao.geocaching.api.data.FavoritedGeocache;
 import com.arcao.geocaching.api.data.FieldNote;
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.GeocacheLimits;
@@ -10,6 +12,7 @@ import com.arcao.geocaching.api.data.ImageData;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.TrackableTravel;
+import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.UserProfile;
 import com.arcao.geocaching.api.data.apilimits.ApiLimitsResponse;
 import com.arcao.geocaching.api.data.bookmarks.Bookmark;
@@ -346,7 +349,7 @@ public interface GeocachingApi {
      * @since 1.6.2
      */
     @NotNull
-    List<Bookmark> getBookmarkListByGuid(String guid) throws GeocachingApiException;
+    List<Bookmark> getBookmarkListByGuid(@NotNull String guid) throws GeocachingApiException;
 
     /**
      * Retrieve a list of Geocache Status
@@ -361,10 +364,73 @@ public interface GeocachingApi {
 
     /**
      * Add the geocaches to list of Bookmarked caches
-     * @param guid bookmark list guid
+     *
+     * @param guid       bookmark list guid
      * @param cacheCodes list of geocaches
      * @throws GeocachingApiException If error occurs during getting information
      * @since 2.1
      */
     void addGeocachesToBookmarkList(@NotNull String guid, @NotNull Collection<String> cacheCodes) throws GeocachingApiException;
+
+    /**
+     * Add a favorite point to Geocache
+     *
+     * @param cacheCode Geocache code
+     * @return geocache favorite points info
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    FavoritePointResult addFavoritePointToCache(@NotNull String cacheCode) throws GeocachingApiException;
+
+    /**
+     * Remove a favorite point from Geocache
+     *
+     * @param cacheCode Geocache code
+     * @return geocache favorite points info
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    FavoritePointResult removeFavoritePointFromCache(@NotNull String cacheCode) throws GeocachingApiException;
+
+    /**
+     * Get a count of favorite points which user have
+     *
+     * @return count of favorite points
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    int getUsersFavoritePoints() throws GeocachingApiException;
+
+    /**
+     * Get a list of users who favorited the Geocache
+     *
+     * @param cacheCode Geocache code
+     * @return list of users
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    List<User> getUsersWhoFavoritedCache(@NotNull String cacheCode) throws GeocachingApiException;
+
+    /**
+     * Get a list of Geocache codes favorited by you
+     *
+     * @return list of Geocache codes
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    List<String> getCacheIdsFavoritedByUser() throws GeocachingApiException;
+
+    /**
+     * Get a list of Geocaches favorited by you
+     *
+     * @return list of Geocaches
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    List<FavoritedGeocache> getCachesFavoritedByUser() throws GeocachingApiException;
 }

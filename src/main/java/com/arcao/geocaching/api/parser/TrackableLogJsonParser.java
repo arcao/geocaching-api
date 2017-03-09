@@ -11,7 +11,6 @@ import java.util.List;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonUTCDate;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseTrackableLogType;
-import static com.arcao.geocaching.api.parser.JsonParserUtil.parseUser;
 
 public final class TrackableLogJsonParser {
     private TrackableLogJsonParser() {
@@ -56,7 +55,7 @@ public final class TrackableLogJsonParser {
             } else if ("LogType".equals(name)) {
                 builder.type(parseTrackableLogType(r));
             } else if ("LoggedBy".equals(name)) {
-                builder.loggedBy(parseUser(r));
+                builder.loggedBy(UserJsonParser.parse(r));
             } else if ("UTCCreateDate".equals(name)) {
                 builder.created(parseJsonUTCDate(r.nextString()));
             } else if ("UpdatedLatitude".equals(name)) {
