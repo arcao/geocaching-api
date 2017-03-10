@@ -25,7 +25,7 @@ public class FavoritePointsModificationTest extends AbstractGeocachingTest {
     @After
     public void cleanUp() throws GeocachingApiException {
         try {
-            api.removeFavoritePointFromCache(CACHE_CODE);
+            api.removeFavoritePointFromGeocache(CACHE_CODE);
         } catch (LiveGeocachingApiException e) {
             if (e.getStatusCode() != StatusCode.CacheNotFavoritedYet)
                 throw e;
@@ -40,17 +40,17 @@ public class FavoritePointsModificationTest extends AbstractGeocachingTest {
         assertNotEquals(0, favoritePoints);
 
         // test that cache is not favorited by user
-        List<String> cacheCodes = api.getCacheIdsFavoritedByUser();
+        List<String> cacheCodes = api.getGeocacheCodesFavoritedByUser();
         assertThat(cacheCodes, not(hasItem(CACHE_CODE)));
 
         // test that cache is not favorited by user
-        List<FavoritedGeocache> geocaches = api.getCachesFavoritedByUser();
+        List<FavoritedGeocache> geocaches = api.getGeocachesFavoritedByUser();
         assertThat(geocaches, not(hasItem(
                 cacheCode(is(CACHE_CODE))
         )));
 
         // add favorite point to geocache
-        FavoritePointResult result = api.addFavoritePointToCache(CACHE_CODE);
+        FavoritePointResult result = api.addFavoritePointToGeocache(CACHE_CODE);
         assertEquals(favoritePoints - 1, result.usersFavoritePoints());
 
         // test that user has remaining favorite points equals to result from previous call
@@ -58,17 +58,17 @@ public class FavoritePointsModificationTest extends AbstractGeocachingTest {
         assertEquals(favoritePoints, result.usersFavoritePoints());
 
         // test that cache is favorited by user
-        cacheCodes = api.getCacheIdsFavoritedByUser();
+        cacheCodes = api.getGeocacheCodesFavoritedByUser();
         assertThat(cacheCodes, hasItem(CACHE_CODE));
 
         // test that cache is favorited by user
-        geocaches = api.getCachesFavoritedByUser();
+        geocaches = api.getGeocachesFavoritedByUser();
         assertThat(geocaches, hasItem(
                 cacheCode(is(CACHE_CODE))
         ));
 
         // remove favorite point from geocache
-        result = api.removeFavoritePointFromCache(CACHE_CODE);
+        result = api.removeFavoritePointFromGeocache(CACHE_CODE);
         assertEquals(favoritePoints + 1, result.usersFavoritePoints());
 
         // test that user has remaining favorite points equals to result from previous call
@@ -76,11 +76,11 @@ public class FavoritePointsModificationTest extends AbstractGeocachingTest {
         assertEquals(favoritePoints, result.usersFavoritePoints());
 
         // test that cache is not favorited by user
-        cacheCodes = api.getCacheIdsFavoritedByUser();
+        cacheCodes = api.getGeocacheCodesFavoritedByUser();
         assertThat(cacheCodes, not(hasItem(CACHE_CODE)));
 
         // test that cache is not favorited by user
-        geocaches = api.getCachesFavoritedByUser();
+        geocaches = api.getGeocachesFavoritedByUser();
         assertThat(geocaches, not(hasItem(
                 cacheCode(is(CACHE_CODE))
         )));

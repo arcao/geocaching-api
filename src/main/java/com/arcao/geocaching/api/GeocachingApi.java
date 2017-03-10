@@ -395,7 +395,7 @@ public interface GeocachingApi {
      * @since 2.1
      */
     @NotNull
-    FavoritePointResult addFavoritePointToCache(@NotNull String cacheCode) throws GeocachingApiException;
+    FavoritePointResult addFavoritePointToGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
      * Remove a favorite point from Geocache
@@ -406,7 +406,7 @@ public interface GeocachingApi {
      * @since 2.1
      */
     @NotNull
-    FavoritePointResult removeFavoritePointFromCache(@NotNull String cacheCode) throws GeocachingApiException;
+    FavoritePointResult removeFavoritePointFromGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
      * Get a count of favorite points which user have
@@ -426,7 +426,7 @@ public interface GeocachingApi {
      * @since 2.1
      */
     @NotNull
-    List<User> getUsersWhoFavoritedCache(@NotNull String cacheCode) throws GeocachingApiException;
+    List<User> getUsersWhoFavoritedGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
      * Get a list of Geocache codes favorited by you
@@ -436,7 +436,7 @@ public interface GeocachingApi {
      * @since 2.1
      */
     @NotNull
-    List<String> getCacheIdsFavoritedByUser() throws GeocachingApiException;
+    List<String> getGeocacheCodesFavoritedByUser() throws GeocachingApiException;
 
     /**
      * Get a list of Geocaches favorited by you
@@ -446,5 +446,5 @@ public interface GeocachingApi {
      * @since 2.1
      */
     @NotNull
-    List<FavoritedGeocache> getCachesFavoritedByUser() throws GeocachingApiException;
+    List<FavoritedGeocache> getGeocachesFavoritedByUser() throws GeocachingApiException;
 }

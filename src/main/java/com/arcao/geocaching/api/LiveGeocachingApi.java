@@ -739,7 +739,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public FavoritePointResult addFavoritePointToCache(@NotNull String cacheCode) throws GeocachingApiException {
+    public FavoritePointResult addFavoritePointToGeocache(@NotNull String cacheCode) throws GeocachingApiException {
         if (session == null)
             throw new InvalidSessionException("Session is closed");
 
@@ -776,7 +776,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public FavoritePointResult removeFavoritePointFromCache(@NotNull String cacheCode) throws GeocachingApiException {
+    public FavoritePointResult removeFavoritePointFromGeocache(@NotNull String cacheCode) throws GeocachingApiException {
         if (session == null)
             throw new InvalidSessionException("Session is closed");
 
@@ -846,7 +846,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<User> getUsersWhoFavoritedCache(@NotNull String cacheCode) throws GeocachingApiException {
+    public List<User> getUsersWhoFavoritedGeocache(@NotNull String cacheCode) throws GeocachingApiException {
         List<User> list = new ArrayList<User>();
 
         if (session == null)
@@ -882,7 +882,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<String> getCacheIdsFavoritedByUser() throws GeocachingApiException {
+    public List<String> getGeocacheCodesFavoritedByUser() throws GeocachingApiException {
         List<String> list = new ArrayList<String>();
 
         if (session == null)
@@ -921,7 +921,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<FavoritedGeocache> getCachesFavoritedByUser() throws GeocachingApiException {
+    public List<FavoritedGeocache> getGeocachesFavoritedByUser() throws GeocachingApiException {
         List<FavoritedGeocache> list = new ArrayList<FavoritedGeocache>();
 
         if (session == null)

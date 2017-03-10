@@ -16,8 +16,8 @@ public class FavoritePointsTest extends AbstractGeocachingTest {
 
 
     @Test
-    public void getCacheIdsFavoritedByUserTest() throws GeocachingApiException {
-        List<String> list = api.getCacheIdsFavoritedByUser();
+    public void getGeocacheCodesFavoritedByUserTest() throws GeocachingApiException {
+        List<String> list = api.getGeocacheCodesFavoritedByUser();
 
         assertNotNull(list);
         assertNotSame(0, list.size());
@@ -26,8 +26,8 @@ public class FavoritePointsTest extends AbstractGeocachingTest {
     }
 
     @Test
-    public void getCachesFavoritedByUserTest() throws GeocachingApiException {
-        List<FavoritedGeocache> list = api.getCachesFavoritedByUser();
+    public void getGeocachesFavoritedByUserTest() throws GeocachingApiException {
+        List<FavoritedGeocache> list = api.getGeocachesFavoritedByUser();
 
         assertNotNull(list);
         assertNotSame(0, list.size());
@@ -39,8 +39,8 @@ public class FavoritePointsTest extends AbstractGeocachingTest {
     }
 
     @Test
-    public void getUsersWhoFavoritedCacheTest() throws GeocachingApiException {
-        List<User> list = api.getUsersWhoFavoritedCache("GCY81P");
+    public void getUsersWhoFavoritedGeocacheTest() throws GeocachingApiException {
+        List<User> list = api.getUsersWhoFavoritedGeocache("GCY81P");
 
         assertNotNull(list);
         assertNotSame(0, list.size());
