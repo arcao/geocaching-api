@@ -5,6 +5,7 @@ import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.GeocacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.ImageData;
+import com.arcao.geocaching.api.data.SearchForGeocachesRequest;
 import com.arcao.geocaching.api.data.UserWaypoint;
 import com.arcao.geocaching.api.data.Waypoint;
 import com.arcao.geocaching.api.data.type.AttributeType;
@@ -14,21 +15,14 @@ import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.filter.BookmarksExcludeFilter;
-import com.arcao.geocaching.api.filter.Filter;
 import com.arcao.geocaching.api.filter.PointRadiusFilter;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SearchForGeocachesTest extends AbstractGeocachingTest {
     private final static String CACHE_CODE = "GCY81P";
@@ -186,8 +180,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     @Test
     public void searchForGeocachesPointRadiusFilterSimpleGeocacheTest() throws GeocachingApiException {
         assertEquals(3,
-                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                        Collections.singletonList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+                api.searchForGeocaches(SearchForGeocachesRequest.builder()
+                        .resultQuality(GeocachingApi.ResultQuality.LITE)
+                        .maxPerPage(3)
+                        .geocacheLogCount(0)
+                        .trackableLogCount(0)
+                        .addFilter(new PointRadiusFilter(50, 14, 60000))
+                        .build()
+                ).size()
         );
 
         GeocacheLimits limits = api.getLastGeocacheLimits();
@@ -198,10 +198,15 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     @Test
     public void searchForGeocachesBookmarksExcludeFilterSimpleGeocacheTest() throws GeocachingApiException {
         assertEquals(3,
-                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0, Arrays.asList(
-                        new PointRadiusFilter(50, 14, 60000),
-                        new BookmarksExcludeFilter(true)
-                ), null).size()
+                api.searchForGeocaches(SearchForGeocachesRequest.builder()
+                        .resultQuality(GeocachingApi.ResultQuality.LITE)
+                        .maxPerPage(3)
+                        .geocacheLogCount(0)
+                        .trackableLogCount(0)
+                        .addFilter(new PointRadiusFilter(50, 14, 60000))
+                        .addFilter(new BookmarksExcludeFilter(true))
+                        .build()
+                ).size()
         );
 
         GeocacheLimits limits = api.getLastGeocacheLimits();
@@ -212,8 +217,14 @@ public class SearchForGeocachesTest extends AbstractGeocachingTest {
     @Test
     public void getMoreGeocachesTest() throws GeocachingApiException {
         assertEquals(3,
-                api.searchForGeocaches(GeocachingApi.ResultQuality.LITE, 3, 0, 0,
-                        Collections.singletonList((Filter) new PointRadiusFilter(50, 14, 60000)), null).size()
+                api.searchForGeocaches(SearchForGeocachesRequest.builder()
+                        .resultQuality(GeocachingApi.ResultQuality.LITE)
+                        .maxPerPage(3)
+                        .geocacheLogCount(0)
+                        .trackableLogCount(0)
+                        .addFilter(new PointRadiusFilter(50, 14, 60000))
+                        .build()
+                ).size()
         );
 
         assertEquals(3,

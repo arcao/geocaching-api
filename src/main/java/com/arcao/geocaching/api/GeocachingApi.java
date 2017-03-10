@@ -9,6 +9,7 @@ import com.arcao.geocaching.api.data.GeocacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.GeocacheStatus;
 import com.arcao.geocaching.api.data.ImageData;
+import com.arcao.geocaching.api.data.SearchForGeocachesRequest;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.TrackableTravel;
@@ -153,9 +154,22 @@ public interface GeocachingApi {
      * @return list of found caches
      * @throws GeocachingApiException If error occurs during searching caches
      * @since 1.6
+     * @deprecated Use {@link #searchForGeocaches(SearchForGeocachesRequest)} instead.
      */
     @NotNull
+    @Deprecated
     List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, @Nullable Collection<SortBy> sortByList) throws GeocachingApiException;
+
+    /**
+     * Search for geocaches and return list of found.
+     *
+     * @param request search request object
+     * @return list of found caches
+     * @throws GeocachingApiException If error occurs during searching caches
+     * @since 1.6
+     */
+    @NotNull
+    List<Geocache> searchForGeocaches(@NotNull SearchForGeocachesRequest request) throws GeocachingApiException;
 
     /**
      * Retrieve next geocaches searched by searchForGeocaches method.

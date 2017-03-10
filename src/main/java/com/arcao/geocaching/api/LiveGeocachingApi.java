@@ -12,6 +12,7 @@ import com.arcao.geocaching.api.data.GeocacheLimits;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.GeocacheStatus;
 import com.arcao.geocaching.api.data.ImageData;
+import com.arcao.geocaching.api.data.SearchForGeocachesRequest;
 import com.arcao.geocaching.api.data.Trackable;
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.TrackableTravel;
@@ -22,6 +23,7 @@ import com.arcao.geocaching.api.data.apilimits.ApiLimitsResponse;
 import com.arcao.geocaching.api.data.apilimits.MaxPerPage;
 import com.arcao.geocaching.api.data.bookmarks.Bookmark;
 import com.arcao.geocaching.api.data.bookmarks.BookmarkList;
+import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.sort.SortBy;
 import com.arcao.geocaching.api.data.sort.SortOrder;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
@@ -124,7 +126,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, Collection<SortBy> sortByList) throws GeocachingApiException {
+    public List<Geocache> searchForGeocaches(@NotNull SearchForGeocachesRequest request) throws GeocachingApiException {
         List<Geocache> list = new ArrayList<Geocache>();
 
         if (session == null)
@@ -137,28 +139,37 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             JsonWriter w = new JsonWriter(sw);
             w.beginObject();
             w.name("AccessToken").value(session);
-            w.name("IsLite").value(resultQuality == ResultQuality.LITE);
-            w.name("IsSummaryOnly").value(resultQuality == ResultQuality.SUMMARY);
-            w.name("MaxPerPage").value(maxPerPage);
+            w.name("IsLite").value(request.resultQuality() == ResultQuality.LITE);
+            w.name("IsSummaryOnly").value(request.resultQuality() == ResultQuality.SUMMARY);
+            w.name("MaxPerPage").value(request.maxPerPage());
 
-            if (geocacheLogCount >= 0)
-                w.name("GeocacheLogCount").value(geocacheLogCount);
+            if (request.geocacheLogCount() >= 0)
+                w.name("GeocacheLogCount").value(request.geocacheLogCount());
 
-            if (trackableLogCount >= 0)
-                w.name("TrackableLogCount").value(trackableLogCount);
+            if (request.trackableLogCount() >= 0)
+                w.name("TrackableLogCount").value(request.trackableLogCount());
 
-            for (Filter filter : filters) {
+            for (Filter filter : request.filters()) {
                 if (filter.valid())
                     filter.writeJson(w);
             }
 
-            if (sortByList != null && !sortByList.isEmpty()) {
+            Collection<SortBy> sortKeys = request.sortKeys();
+            if (!sortKeys.isEmpty()) {
                 w.name("SortBys").beginArray();
-                for (SortBy sortBy : sortByList) {
+                for (SortBy sortBy : sortKeys) {
                     w.name("SortFilterId").value(sortBy.key().id);
                     w.name("AscendingOrder").value(sortBy.order() == SortOrder.ASCENDING);
                 }
                 w.endArray();
+            }
+
+            Coordinates sortPoint = request.sortPoint();
+            if (sortPoint != null) {
+                w.name("SortPoint").beginObject()
+                        .name("Latitude").value(sortPoint.latitude())
+                        .name("Longitude").value(sortPoint.longitude())
+                        .endObject();
             }
 
             w.endObject();
