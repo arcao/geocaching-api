@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Date;
 
 @AutoValue
 public abstract class ImageData implements JsonSerializable, Serializable {
@@ -36,6 +37,9 @@ public abstract class ImageData implements JsonSerializable, Serializable {
 
     @Nullable
     public abstract String fileName();
+
+    @Nullable
+    public abstract Date created();
 
     @Nullable
     @SuppressWarnings("mutable")
@@ -104,6 +108,8 @@ public abstract class ImageData implements JsonSerializable, Serializable {
         public abstract Builder fileName(String fileName);
 
         public abstract Builder imageData(byte[] imageData);
+
+        public abstract Builder created(Date created);
 
         public abstract ImageData build();
     }

@@ -447,4 +447,15 @@ public interface GeocachingApi {
      */
     @NotNull
     List<FavoritedGeocache> getGeocachesFavoritedByUser() throws GeocachingApiException;
+
+    /**
+     * Get a list of images for Geocache
+     *
+     * @param cacheCode Geocache code
+     * @return list of images
+     * @throws GeocachingApiException If error occurs during getting information
+     * @since 2.1
+     */
+    @NotNull
+    List<ImageData> getImagesForGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 }

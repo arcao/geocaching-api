@@ -44,6 +44,7 @@ import com.arcao.geocaching.api.parser.FavoritedGeocacheJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheLogJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheStatusJsonParser;
+import com.arcao.geocaching.api.parser.ImageDataJsonParser;
 import com.arcao.geocaching.api.parser.JsonReader;
 import com.arcao.geocaching.api.parser.MaxPerPageJsonParser;
 import com.arcao.geocaching.api.parser.StatusJsonParser;
@@ -940,6 +941,42 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
                 String name = r.nextName();
                 if ("Geocaches".equals(name)) {
                     list = FavoritedGeocacheJsonParser.parseList(r);
+                } else {
+                    r.skipValue();
+                }
+            }
+            r.endObject();
+
+            return list;
+        } catch (IOException e) {
+            throw handleIOException(e);
+        } finally {
+            closeJsonReader(r);
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<ImageData> getImagesForGeocache(@NotNull String cacheCode) throws GeocachingApiException {
+        List<ImageData> list = new ArrayList<ImageData>();
+
+        if (session == null)
+            throw new InvalidSessionException("Session is closed");
+
+        JsonReader r = null;
+        try {
+            r = callGet("GetImagesForGeocache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                    "&cacheCode=" + cacheCode +
+                    "&format=json"
+            );
+
+            r.beginObject();
+            checkError(r);
+
+            while (r.hasNext()) {
+                String name = r.nextName();
+                if ("Images".equals(name)) {
+                    list = ImageDataJsonParser.parseList(r);
                 } else {
                     r.skipValue();
                 }

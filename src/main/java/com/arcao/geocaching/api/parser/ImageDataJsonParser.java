@@ -32,7 +32,9 @@ public final class ImageDataJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Description".equals(name)) {
+            if ("DateCreated".equals(name)) {
+                builder.created(JsonParserUtil.parseJsonDate(r.nextString()));
+            } else if ("Description".equals(name)) {
                 builder.description(r.nextString());
             } else if ("MobileUrl".equals(name)) {
                 builder.mobileUrl(r.nextString());
