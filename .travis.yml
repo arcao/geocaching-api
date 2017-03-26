@@ -5,7 +5,7 @@ jdk:
 - openjdk7
 env:
   global:
-  - secure: OPho7nWDYZ4hpMRyrZ+UBVBfMy18C+8H2qLk5/2zVgm63UurNg1RUXJyn58uEi6lBAdeaHuAKyJ6pCu7VkY32fCXJTx5NIOzK02rNqdNSZGdIvmcXqMaJkCFTN31vJXSsrUNBXEzVWK3d/4l5fjEw84Fc9x0UrWoWo8A+VipZmY=
+  - secure: "Da5O7EwUpNhqTIKef2CqWGqCzV+TjJtOh1doobxMmLV6zp4IrZ8NI4vNPmLWpvMc+HejrEUVvmhkt8//9/FgAk1tqzdXJm2S9hSfXG4fLb+D32Icl7/kIrSfS17nlqSbCqxrAQzTQnGiglsVAiEiuR/c1i+a4WTepRlr36LhhYo="
 sudo: false
 after_success:
 - .buildscript/push-site-to-gh-pages.sh
