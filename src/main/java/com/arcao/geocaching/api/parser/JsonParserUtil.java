@@ -12,8 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,16 +24,20 @@ public final class JsonParserUtil {
     private static final Logger logger = LoggerFactory.getLogger(JsonParserUtil.class);
     private static final long HOUR_IN_MS = 1000 * 60 * 60;
 
+    private static final SimpleDateFormat ISO8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
+
+    private static final Pattern TO_RFC822_TIMEZONE_PATTERN = Pattern.compile("([+-])([0-9]{2}):([0-9]{2})$");
+    private static final Pattern REMOVE_MS_PART_PATTERN = Pattern.compile("\\.\\d+");
+    private static final Pattern JSON_DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
+
     private JsonParserUtil() {
     }
 
     static Date parseJsonDate(String date) {
-        Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
-
         if (date == null)
             return null;
 
-        Matcher m = DATE_PATTERN.matcher(date);
+        Matcher m = JSON_DATE_PATTERN.matcher(date);
         if (m.matches()) {
             long time = Long.parseLong(m.group(1));
             long zone = 0;
@@ -44,12 +51,11 @@ public final class JsonParserUtil {
     }
 
     static Date parseJsonUTCDate(String date) {
-        Pattern DATE_PATTERN = Pattern.compile("/Date\\((-?\\d+)([-+]\\d{4})?\\)/");
 
         if (date == null)
             return null;
 
-        Matcher m = DATE_PATTERN.matcher(date);
+        Matcher m = JSON_DATE_PATTERN.matcher(date);
         if (m.matches()) {
             long time = Long.parseLong(m.group(1));
             // zone is always zero for UTC
@@ -60,6 +66,25 @@ public final class JsonParserUtil {
         logger.error("parseJsonDate failed: " + date);
         return null;
     }
+
+    static Date parseIsoDate(String date) {
+
+        if (date == null)
+            return null;
+
+        date = REMOVE_MS_PART_PATTERN.matcher(date).replaceAll("");
+
+        // convert ISO 8601 timezone to RFC 822 timezone to support Java 6
+        date = TO_RFC822_TIMEZONE_PATTERN.matcher(date).replaceAll("$1$2$3");
+
+        try {
+            return ISO8601_FORMAT.parse(date);
+        } catch (ParseException e) {
+            logger.error("parseIsoDate failed: " + date);
+            return null;
+        }
+    }
+
 
     static GeocacheType parseGeocacheType(JsonReader r) throws IOException {
         GeocacheType geocacheType = null;

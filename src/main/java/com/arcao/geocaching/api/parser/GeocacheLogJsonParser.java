@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.arcao.geocaching.api.parser.JsonParserUtil.isNextNull;
+import static com.arcao.geocaching.api.parser.JsonParserUtil.parseIsoDate;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonDate;
 import static com.arcao.geocaching.api.parser.JsonParserUtil.parseJsonUTCDate;
 
@@ -46,6 +47,8 @@ public final class GeocacheLogJsonParser {
                 builder.created(parseJsonUTCDate(r.nextString()));
             } else if ("VisitDate".equals(name)) {
                 builder.visited(parseJsonDate(r.nextString()));
+            } else if ("VisitDateIso".equals(name)) {
+                builder.visited(parseIsoDate(r.nextString()));
             } else if ("LogType".equals(name)) {
                 builder.logType(parseLogType(r));
             } else if ("Finder".equals(name)) {
