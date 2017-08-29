@@ -26,7 +26,7 @@ public final class UserJsonParser {
         while (r.hasNext()) {
             User user = parse(r);
             if (user != null)
-                list.add(parse(r));
+                list.add(user);
         }
         r.endArray();
         return list;
