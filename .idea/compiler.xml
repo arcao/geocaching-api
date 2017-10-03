@@ -17,7 +17,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="geocaching-api" target="1.6" />
+      <module name="geocaching-api" target="1.7" />
       <module name="geocaching-api-oauth" target="1.6" />
     </bytecodeTargetLevel>
   </component>
