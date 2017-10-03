@@ -62,15 +62,17 @@ public final class UserJsonParser {
                 user.publicGuid(r.nextString());
             } else if ("UserName".equals(name)) {
                 userName = r.nextString();
+                if (userName == null) {
+                    while (r.hasNext()) r.skipValue();
+                    r.endObject();
+                    return null;
+                }
                 user.userName(userName);
             } else {
                 r.skipValue();
             }
         }
         r.endObject();
-
-        if (userName == null)
-            return null;
 
         return user.build();
     }
