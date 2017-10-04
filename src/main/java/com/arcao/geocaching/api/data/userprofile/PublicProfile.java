@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.data.userprofile;
 
 import com.google.auto.value.AutoValue;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,6 +21,7 @@ public abstract class PublicProfile implements Serializable {
 
     public abstract String occupation();
 
+    @Nullable
     public abstract ProfilePhoto profilePhoto();
 
     public abstract String profileText();
@@ -39,7 +42,7 @@ public abstract class PublicProfile implements Serializable {
 
         public abstract Builder occupation(String occupation);
 
-        public abstract Builder profilePhoto(ProfilePhoto profilePhoto);
+        public abstract Builder profilePhoto(@Nullable ProfilePhoto profilePhoto);
 
         public abstract Builder profileText(String profileText);
 
