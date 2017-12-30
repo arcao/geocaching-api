@@ -102,7 +102,10 @@ public abstract class GeocacheLog implements Serializable {
     public abstract boolean undeletable();
 
     public static Builder builder() {
-        return new AutoValue_GeocacheLog.Builder();
+        return new AutoValue_GeocacheLog.Builder()
+                .approved(false)
+                .archived(false)
+                .undeletable(false);
     }
 
     @AutoValue.Builder

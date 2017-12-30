@@ -53,7 +53,9 @@ public abstract class SearchForGeocachesRequest implements Serializable {
     @Nullable public abstract Coordinates sortPoint();
 
     public static Builder builder() {
-        return new AutoValue_SearchForGeocachesRequest.Builder();
+        return new AutoValue_SearchForGeocachesRequest.Builder()
+                .trackableLogCount(0)
+                .geocacheLogCount(0);
     }
 
     @AutoValue.Builder
@@ -72,12 +74,12 @@ public abstract class SearchForGeocachesRequest implements Serializable {
         public abstract Builder maxPerPage(int maxPerPage);
 
         /**
-         * Get a count of logs to be retrieved for particular geocache
+         * Set a count of logs to be retrieved for particular geocache
          */
         public abstract Builder geocacheLogCount(int geocacheLogCount);
 
         /**
-         * Get a count of logs to be retrieved for trackable in particular geocache
+         * Set a count of logs to be retrieved for trackable in particular geocache
          */
         public abstract Builder trackableLogCount(int trackableLogCount);
 
@@ -86,9 +88,9 @@ public abstract class SearchForGeocachesRequest implements Serializable {
         protected abstract Builder sortKeys(Collection<SortBy> sortKeys);
 
         /**
-         * Set a coordinates used for sorting, can be null
+         * Set a coordinates used for sorting
          */
-        @Nullable public abstract Builder sortPoint(Coordinates sortPoint);
+        public abstract Builder sortPoint(Coordinates sortPoint);
 
         protected abstract SearchForGeocachesRequest realBuild();
 

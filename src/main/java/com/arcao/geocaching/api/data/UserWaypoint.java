@@ -15,6 +15,7 @@ public abstract class UserWaypoint implements Serializable {
 
     @Nullable public abstract String cacheCode();
 
+    @Nullable
     public abstract String description();
 
     public abstract long id();

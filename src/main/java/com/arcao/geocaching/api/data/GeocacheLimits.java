@@ -35,7 +35,10 @@ public abstract class GeocacheLimits implements Serializable {
     public abstract int maxGeocacheCount();
 
     public static Builder builder() {
-        return new AutoValue_GeocacheLimits.Builder().geocacheLeft(0).currentGeocacheCount(0);
+        return new AutoValue_GeocacheLimits.Builder()
+                .geocacheLeft(0)
+                .currentGeocacheCount(0)
+                .maxGeocacheCount(0);
     }
 
     @AutoValue.Builder

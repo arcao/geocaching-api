@@ -50,7 +50,10 @@ public abstract class Trackable implements Serializable {
     }
 
     public static Builder builder() {
-        return new AutoValue_Trackable.Builder();
+        return new AutoValue_Trackable.Builder()
+                .allowedToBeCollected(false)
+                .inCollection(false)
+                .archived(false);
     }
 
     @AutoValue.Builder

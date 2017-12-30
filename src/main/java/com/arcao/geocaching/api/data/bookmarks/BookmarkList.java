@@ -2,6 +2,8 @@ package com.arcao.geocaching.api.data.bookmarks;
 
 import com.google.auto.value.AutoValue;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 
 @AutoValue
@@ -14,6 +16,7 @@ public abstract class BookmarkList implements Serializable {
 
     public abstract String name();
 
+    @Nullable
     public abstract String description();
 
     public abstract int itemCount();
@@ -29,7 +32,12 @@ public abstract class BookmarkList implements Serializable {
     public abstract int type();
 
     public static Builder builder() {
-        return new AutoValue_BookmarkList.Builder();
+        return new AutoValue_BookmarkList.Builder()
+                .itemCount(0)
+                .shared(false)
+                .publicList(false)
+                .archived(false)
+                .special(false);
     }
 
     @AutoValue.Builder

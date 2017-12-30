@@ -27,7 +27,11 @@ public abstract class GeocacheStatus implements Serializable {
     public abstract int trackableCount();
 
     public static Builder builder() {
-        return new AutoValue_GeocacheStatus.Builder();
+        return new AutoValue_GeocacheStatus.Builder()
+                .archived(false)
+                .available(false)
+                .premium(false)
+                .trackableCount(0);
     }
 
     @AutoValue.Builder

@@ -5,6 +5,8 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.WaypointType;
 import com.google.auto.value.AutoValue;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,6 +22,7 @@ public abstract class Waypoint implements Serializable {
 
     public abstract String name();
 
+    @Nullable
     public abstract String note();
 
     public abstract WaypointType waypointType();
