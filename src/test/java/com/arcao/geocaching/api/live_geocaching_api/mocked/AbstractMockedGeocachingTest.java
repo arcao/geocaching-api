@@ -41,12 +41,11 @@ public abstract class AbstractMockedGeocachingTest {
     }
 
     byte[] createByteArrayFromResource(String resourceFile) throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream(resourceFile);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         byte[] buffer = new byte[4096];
 
-        try {
+        try (InputStream inputStream = getClass().getResourceAsStream(resourceFile)) {
             while (true) {
                 int len = inputStream.read(buffer);
                 if (len < 0)
@@ -54,8 +53,6 @@ public abstract class AbstractMockedGeocachingTest {
 
                 outputStream.write(buffer, 0, len);
             }
-        } finally {
-            inputStream.close();
         }
 
         return outputStream.toByteArray();
