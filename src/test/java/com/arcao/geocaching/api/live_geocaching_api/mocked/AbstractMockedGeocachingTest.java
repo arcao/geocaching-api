@@ -4,7 +4,9 @@ import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.LiveGeocachingApi;
 import com.arcao.geocaching.api.downloader.JsonDownloader;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.parser.JsonReader;
+import com.arcao.geocaching.api.exception.InvalidResponseException;
+import com.arcao.geocaching.api.exception.NetworkException;
+import com.google.gson.stream.JsonReader;
 
 import org.junit.Before;
 
@@ -12,9 +14,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.Charset;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class AbstractMockedGeocachingTest {
@@ -57,5 +62,14 @@ public abstract class AbstractMockedGeocachingTest {
 
         return outputStream.toByteArray();
 
+    }
+
+    void setDownloaderResponseBody(String resourceFile) throws NetworkException, InvalidResponseException {
+        setDownloaderResponseBody(createJsonReaderFromResource(resourceFile));
+    }
+
+    void setDownloaderResponseBody(JsonReader responseBody) throws NetworkException, InvalidResponseException {
+        when(downloader.post(any(URL.class), any(byte[].class)))
+                .thenReturn(responseBody);
     }
 }

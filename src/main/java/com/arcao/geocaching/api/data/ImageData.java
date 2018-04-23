@@ -18,7 +18,7 @@ import java.util.Date;
 @AutoValue
 public abstract class ImageData implements JsonSerializable, Serializable {
     private static final long serialVersionUID = 1116404414881607691L;
-    private static final int BUFFER_SIZE = 8192;
+    private static final int BUFFER_SIZE = 32768;
 
     @NotNull
     public abstract String name();
@@ -45,7 +45,8 @@ public abstract class ImageData implements JsonSerializable, Serializable {
     @SuppressWarnings("mutable")
     public abstract byte[] imageData();
 
-    public static ImageData createFromInputStream(@NotNull String name, @Nullable String description, String fileName, InputStream is) throws IOException {
+    public static ImageData createFromInputStream(@NotNull String name, @Nullable String description,
+                                                  String fileName, InputStream is) throws IOException {
         byte[] buffer = new byte[BUFFER_SIZE];
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -54,8 +55,9 @@ public abstract class ImageData implements JsonSerializable, Serializable {
         try {
             while (true) {
                 int bytesRead = is.read(buffer);
-                if (bytesRead < 0)
+                if (bytesRead < 0) {
                     break;
+                }
 
                 b64os.write(buffer, 0, bytesRead);
             }
@@ -78,8 +80,9 @@ public abstract class ImageData implements JsonSerializable, Serializable {
     public void writeJson(@NotNull JsonWriter w) throws IOException {
         byte[] imageData = imageData();
 
-        if (imageData == null)
+        if (imageData == null) {
             return;
+        }
 
         w.beginObject()
                 .name("FileCaption").value(name())

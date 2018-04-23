@@ -6,6 +6,7 @@ import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.data.type.TrackableLogType;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import org.slf4j.Logger;
@@ -34,15 +35,17 @@ public final class JsonParserUtil {
     }
 
     static Date parseJsonDate(String date) {
-        if (date == null)
+        if (date == null) {
             return null;
+        }
 
         Matcher m = JSON_DATE_PATTERN.matcher(date);
         if (m.matches()) {
             long time = Long.parseLong(m.group(1));
             long zone = 0;
-            if (m.group(2) != null && !m.group(2).isEmpty())
+            if (m.group(2) != null && !m.group(2).isEmpty()) {
                 zone = Integer.parseInt(m.group(2)) / 100 * HOUR_IN_MS;
+            }
             return new Date(time + zone);
         }
 
@@ -52,8 +55,9 @@ public final class JsonParserUtil {
 
     static Date parseJsonUTCDate(String date) {
 
-        if (date == null)
+        if (date == null) {
             return null;
+        }
 
         Matcher m = JSON_DATE_PATTERN.matcher(date);
         if (m.matches()) {
@@ -69,8 +73,9 @@ public final class JsonParserUtil {
 
     static Date parseIsoDate(String date) {
 
-        if (date == null)
+        if (date == null) {
             return null;
+        }
 
         date = REMOVE_MS_PART_PATTERN.matcher(date).replaceAll("");
 
@@ -89,8 +94,9 @@ public final class JsonParserUtil {
     static GeocacheType parseGeocacheType(JsonReader r) throws IOException {
         GeocacheType geocacheType = null;
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         r.beginObject();
         while (r.hasNext()) {
@@ -108,8 +114,9 @@ public final class JsonParserUtil {
     static ContainerType parseContainerType(JsonReader r) throws IOException {
         ContainerType containerType = ContainerType.NotChosen;
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return containerType;
+        }
 
         r.beginObject();
         while (r.hasNext()) {
@@ -127,8 +134,9 @@ public final class JsonParserUtil {
     static MemberType parseMemberType(JsonReader r) throws IOException {
         MemberType memberType = null;
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         if (r.peek() == JsonToken.NUMBER) {
             memberType = MemberType.fromId(r.nextInt() / 10);
@@ -155,12 +163,16 @@ public final class JsonParserUtil {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("AttributeTypeID".equals(name)) {
-                id = r.nextInt();
-            } else if ("IsOn".equals(name)) {
-                on = r.nextBoolean();
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "AttributeTypeID":
+                    id = r.nextInt();
+                    break;
+                case "IsOn":
+                    on = r.nextBoolean();
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -188,8 +200,9 @@ public final class JsonParserUtil {
     static TrackableLogType parseTrackableLogType(JsonReader r) throws IOException {
         TrackableLogType trackableLogType = null;
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         r.beginObject();
         while (r.hasNext()) {

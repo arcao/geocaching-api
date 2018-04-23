@@ -10,6 +10,7 @@ import com.arcao.geocaching.api.data.userprofile.ProfilePhoto;
 import com.arcao.geocaching.api.data.userprofile.PublicProfile;
 import com.arcao.geocaching.api.data.userprofile.TrackableStats;
 import com.arcao.geocaching.api.data.userprofile.TrackableTypeCount;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -24,28 +25,37 @@ public final class UserProfileJsonParser {
     }
 
     public static UserProfile parse(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         UserProfile.Builder builder = UserProfile.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("FavoritePoints".equals(name)) {
-                builder.favoritePointsStats(parseFavoritePointStats(r));
-            } else if ("Geocaches".equals(name)) {
-                builder.geocacheStats(parseGeocacheStats(r));
-            } else if ("PublicProfile".equals(name)) {
-                builder.publicProfile(parsePublicProfile(r));
-            } else if ("Stats".equals(name)) {
-                builder.globalStats(parseGlobalStats(r));
-            } else if ("Trackables".equals(name)) {
-                builder.trackableStats(parseTrackableStats(r));
-            } else if ("User".equals(name)) {
-                builder.user(UserJsonParser.parse(r));
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "FavoritePoints":
+                    builder.favoritePointsStats(parseFavoritePointStats(r));
+                    break;
+                case "Geocaches":
+                    builder.geocacheStats(parseGeocacheStats(r));
+                    break;
+                case "PublicProfile":
+                    builder.publicProfile(parsePublicProfile(r));
+                    break;
+                case "Stats":
+                    builder.globalStats(parseGlobalStats(r));
+                    break;
+                case "Trackables":
+                    builder.trackableStats(parseTrackableStats(r));
+                    break;
+                case "User":
+                    builder.user(UserJsonParser.parse(r));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -54,8 +64,9 @@ public final class UserProfileJsonParser {
     }
 
     private static FavoritePointStats parseFavoritePointStats(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         FavoritePointStats.Builder builder = FavoritePointStats.builder();
 
@@ -70,24 +81,31 @@ public final class UserProfileJsonParser {
     }
 
     private static GeocacheStats parseGeocacheStats(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         GeocacheStats.Builder builder = GeocacheStats.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("GeocacheFindCount".equals(name)) {
-                builder.findCount(r.nextInt());
-            } else if ("GeocacheFindTypes".equals(name)) {
-                builder.findTypes(parseGeocacheTypeCounts(r));
-            } else if ("GeocacheHideCount".equals(name)) {
-                builder.hideCount(r.nextInt());
-            } else if ("GeocacheHideTypes".equals(name)) {
-                builder.hideTypes(parseGeocacheTypeCounts(r));
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "GeocacheFindCount":
+                    builder.findCount(r.nextInt());
+                    break;
+                case "GeocacheFindTypes":
+                    builder.findTypes(parseGeocacheTypeCounts(r));
+                    break;
+                case "GeocacheHideCount":
+                    builder.hideCount(r.nextInt());
+                    break;
+                case "GeocacheHideTypes":
+                    builder.hideTypes(parseGeocacheTypeCounts(r));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -100,7 +118,7 @@ public final class UserProfileJsonParser {
             r.skipValue();
         }
 
-        List<GeocacheTypeCount> list = new ArrayList<GeocacheTypeCount>();
+        List<GeocacheTypeCount> list = new ArrayList<>();
         r.beginArray();
 
         while (r.hasNext()) {
@@ -111,20 +129,25 @@ public final class UserProfileJsonParser {
     }
 
     private static GeocacheTypeCount parseGeocacheTypeCount(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         GeocacheTypeCount.Builder builder = GeocacheTypeCount.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("GeocacheTypeId".equals(name)) {
-                builder.type(GeocacheType.fromId(r.nextInt()));
-            } else if ("UserCount".equals(name)) {
-                builder.count(r.nextInt());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "GeocacheTypeId":
+                    builder.type(GeocacheType.fromId(r.nextInt()));
+                    break;
+                case "UserCount":
+                    builder.count(r.nextInt());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -133,30 +156,40 @@ public final class UserProfileJsonParser {
     }
 
     private static PublicProfile parsePublicProfile(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         PublicProfile.Builder builder = PublicProfile.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("ForumTitle".equals(name)) {
-                builder.forumTitle(r.nextString());
-            } else if ("LastVisit".equals(name)) {
-                builder.lastVisit(parseJsonDate(r.nextString()));
-            } else if ("Location".equals(name)) {
-                builder.location(r.nextString());
-            } else if ("MemberSince".equals(name)) {
-                builder.memberSince(parseJsonDate(r.nextString()));
-            } else if ("Occupation".equals(name)) {
-                builder.occupation(r.nextString());
-            } else if ("ProfilePhoto".equals(name)) {
-                builder.profilePhoto(parseProfilePhoto(r));
-            } else if ("ProfileText".equals(name)) {
-                builder.profileText(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "ForumTitle":
+                    builder.forumTitle(r.nextString());
+                    break;
+                case "LastVisit":
+                    builder.lastVisit(parseJsonDate(r.nextString()));
+                    break;
+                case "Location":
+                    builder.location(r.nextString());
+                    break;
+                case "MemberSince":
+                    builder.memberSince(parseJsonDate(r.nextString()));
+                    break;
+                case "Occupation":
+                    builder.occupation(r.nextString());
+                    break;
+                case "ProfilePhoto":
+                    builder.profilePhoto(parseProfilePhoto(r));
+                    break;
+                case "ProfileText":
+                    builder.profileText(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -165,24 +198,31 @@ public final class UserProfileJsonParser {
     }
 
     private static ProfilePhoto parseProfilePhoto(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         ProfilePhoto.Builder builder = ProfilePhoto.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("PhotoDescription".equals(name)) {
-                builder.photoDescription(r.nextString());
-            } else if ("PhotoFilename".equals(name)) {
-                builder.photoFilename(r.nextString());
-            } else if ("PhotoName".equals(name)) {
-                builder.photoName(r.nextString());
-            } else if ("PhotoUrl".equals(name)) {
-                builder.photoUrl(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "PhotoDescription":
+                    builder.photoDescription(r.nextString());
+                    break;
+                case "PhotoFilename":
+                    builder.photoFilename(r.nextString());
+                    break;
+                case "PhotoName":
+                    builder.photoName(r.nextString());
+                    break;
+                case "PhotoUrl":
+                    builder.photoUrl(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -191,24 +231,31 @@ public final class UserProfileJsonParser {
     }
 
     private static GlobalStats parseGlobalStats(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         GlobalStats.Builder builder = GlobalStats.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("AccountsLogged".equals(name)) {
-                builder.accountsLogged(r.nextLong());
-            } else if ("ActiveCaches".equals(name)) {
-                builder.activeCaches(r.nextLong());
-            } else if ("ActiveCountries".equals(name)) {
-                builder.activeCountries(r.nextLong());
-            } else if ("NewLogs".equals(name)) {
-                builder.newLogs(r.nextLong());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "AccountsLogged":
+                    builder.accountsLogged(r.nextLong());
+                    break;
+                case "ActiveCaches":
+                    builder.activeCaches(r.nextLong());
+                    break;
+                case "ActiveCountries":
+                    builder.activeCountries(r.nextLong());
+                    break;
+                case "NewLogs":
+                    builder.newLogs(r.nextLong());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -217,24 +264,31 @@ public final class UserProfileJsonParser {
     }
 
     private static TrackableStats parseTrackableStats(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         TrackableStats.Builder builder = TrackableStats.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("TrackableFindCount".equals(name)) {
-                builder.findCount(r.nextInt());
-            } else if ("TrackableFindTypes".equals(name)) {
-                builder.findTypes(parseTrackableTypeCounts(r));
-            } else if ("TrackableOwnedCount".equals(name)) {
-                builder.ownedCount(r.nextInt());
-            } else if ("TrackableOwnedTypes".equals(name)) {
-                builder.ownedTypes(parseTrackableTypeCounts(r));
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "TrackableFindCount":
+                    builder.findCount(r.nextInt());
+                    break;
+                case "TrackableFindTypes":
+                    builder.findTypes(parseTrackableTypeCounts(r));
+                    break;
+                case "TrackableOwnedCount":
+                    builder.ownedCount(r.nextInt());
+                    break;
+                case "TrackableOwnedTypes":
+                    builder.ownedTypes(parseTrackableTypeCounts(r));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -247,7 +301,7 @@ public final class UserProfileJsonParser {
             r.skipValue();
         }
 
-        List<TrackableTypeCount> list = new ArrayList<TrackableTypeCount>();
+        List<TrackableTypeCount> list = new ArrayList<>();
         r.beginArray();
 
         while (r.hasNext()) {
@@ -259,24 +313,31 @@ public final class UserProfileJsonParser {
     }
 
     private static TrackableTypeCount parseTrackableTypeCount(JsonReader r) throws IOException {
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         TrackableTypeCount.Builder builder = TrackableTypeCount.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("BugTypeID".equals(name)) {
-                builder.id(r.nextInt());
-            } else if ("IconUrl".equals(name)) {
-                builder.iconUrl(r.nextString());
-            } else if ("TBTypeName".equals(name)) {
-                builder.name(r.nextString());
-            } else if ("UserCount".equals(name)) {
-                builder.count(r.nextInt());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "BugTypeID":
+                    builder.id(r.nextInt());
+                    break;
+                case "IconUrl":
+                    builder.iconUrl(r.nextString());
+                    break;
+                case "TBTypeName":
+                    builder.name(r.nextString());
+                    break;
+                case "UserCount":
+                    builder.count(r.nextInt());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

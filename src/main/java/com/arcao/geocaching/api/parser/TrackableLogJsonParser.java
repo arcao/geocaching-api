@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.TrackableLog;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public final class TrackableLogJsonParser {
             r.skipValue();
         }
 
-        List<TrackableLog> list = new ArrayList<TrackableLog>();
+        List<TrackableLog> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -38,36 +39,52 @@ public final class TrackableLogJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheID".equals(name)) {
-                builder.cacheId(r.nextInt());
-            } else if ("Code".equals(name)) {
-                builder.code(r.nextString());
-            } else if ("ID".equals(name)) {
-                builder.id(r.nextInt());
-            } else if ("Images".equals(name)) {
-                builder.images(ImageDataJsonParser.parseList(r));
-            } else if ("IsArchived".equals(name)) {
-                builder.archived(r.nextBoolean());
-            } else if ("LogGuid".equals(name)) {
-                builder.guid(r.nextString());
-            } else if ("LogText".equals(name)) {
-                builder.text(r.nextString());
-            } else if ("LogType".equals(name)) {
-                builder.type(parseTrackableLogType(r));
-            } else if ("LoggedBy".equals(name)) {
-                builder.loggedBy(UserJsonParser.parse(r));
-            } else if ("UTCCreateDate".equals(name)) {
-                builder.created(parseJsonUTCDate(r.nextString()));
-            } else if ("UpdatedLatitude".equals(name)) {
-                updatedCoordinatesBuilder.latitude(r.nextDouble());
-            } else if ("UpdatedLongitude".equals(name)) {
-                updatedCoordinatesBuilder.longitude(r.nextDouble());
-            } else if ("Url".equals(name)) {
-                builder.url(r.nextString());
-            } else if ("VisitDate".equals(name)) {
-                builder.visited(parseJsonDate(r.nextString()));
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CacheID":
+                    builder.cacheId(r.nextInt());
+                    break;
+                case "Code":
+                    builder.code(r.nextString());
+                    break;
+                case "ID":
+                    builder.id(r.nextInt());
+                    break;
+                case "Images":
+                    builder.images(ImageDataJsonParser.parseList(r));
+                    break;
+                case "IsArchived":
+                    builder.archived(r.nextBoolean());
+                    break;
+                case "LogGuid":
+                    builder.guid(r.nextString());
+                    break;
+                case "LogText":
+                    builder.text(r.nextString());
+                    break;
+                case "LogType":
+                    builder.type(parseTrackableLogType(r));
+                    break;
+                case "LoggedBy":
+                    builder.loggedBy(UserJsonParser.parse(r));
+                    break;
+                case "UTCCreateDate":
+                    builder.created(parseJsonUTCDate(r.nextString()));
+                    break;
+                case "UpdatedLatitude":
+                    updatedCoordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "UpdatedLongitude":
+                    updatedCoordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                case "Url":
+                    builder.url(r.nextString());
+                    break;
+                case "VisitDate":
+                    builder.visited(parseJsonDate(r.nextString()));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.List;
 
 public class GetTrackablesByCacheCodeTest extends AbstractGeocachingTest {
-    private final static String CACHE_CODE = "GCXZE8";
+    private static final String CACHE_CODE = "GCXZE8";
 
     @Test
     public void simpleGetTrackableByCacheCode() throws GeocachingApiException {

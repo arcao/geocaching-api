@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
+@SuppressWarnings("Duplicates")
 public class GetTrackableTest extends AbstractGeocachingTest {
     private static final String TRACKABLE_CODE = "TB3GW4D";
     private static final String LOOKUP_CODE = "PCFYTA";

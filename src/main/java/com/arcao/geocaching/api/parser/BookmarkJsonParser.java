@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.bookmarks.Bookmark;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public final class BookmarkJsonParser {
             r.skipValue();
         }
 
-        List<Bookmark> list = new ArrayList<Bookmark>();
+        List<Bookmark> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -34,14 +35,19 @@ public final class BookmarkJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String fieldName = r.nextName();
-            if ("CacheCode".equals(fieldName)) {
-                builder.cacheCode(r.nextString());
-            } else if ("CacheTitle".equals(fieldName)) {
-                builder.cacheTitle(r.nextString());
-            } else if ("CacheTypeID".equals(fieldName)) {
-                builder.geocacheType(fromId(r.nextInt()));
-            } else {
-                r.skipValue();
+            switch (fieldName) {
+                case "CacheCode":
+                    builder.cacheCode(r.nextString());
+                    break;
+                case "CacheTitle":
+                    builder.cacheTitle(r.nextString());
+                    break;
+                case "CacheTypeID":
+                    builder.geocacheType(fromId(r.nextInt()));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

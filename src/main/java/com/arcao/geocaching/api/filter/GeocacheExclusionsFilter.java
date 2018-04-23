@@ -17,7 +17,9 @@ public class GeocacheExclusionsFilter implements Filter {
     @Nullable private final Boolean premium;
     @Nullable private final Boolean published;
 
-    public GeocacheExclusionsFilter(@Nullable Boolean archived, @Nullable Boolean available, @Nullable Boolean hasCorrectedCoordinates, @Nullable Boolean hasPersonalCacheNote, @Nullable Boolean premium, @Nullable Boolean published) {
+    public GeocacheExclusionsFilter(@Nullable Boolean archived, @Nullable Boolean available,
+                                    @Nullable Boolean hasCorrectedCoordinates, @Nullable Boolean hasPersonalCacheNote,
+                                    @Nullable Boolean premium, @Nullable Boolean published) {
         this.archived = archived;
         this.available = available;
         this.hasCorrectedCoordinates = hasCorrectedCoordinates;
@@ -34,25 +36,36 @@ public class GeocacheExclusionsFilter implements Filter {
 
     @Override
     public boolean valid() {
-        return archived != null || available != null || hasCorrectedCoordinates != null || hasPersonalCacheNote != null || premium != null || published != null;
+        return archived != null
+                || available != null
+                || hasCorrectedCoordinates != null
+                || hasPersonalCacheNote != null
+                || premium != null
+                || published != null;
     }
 
     @Override
     public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
-        if (archived != null)
+        if (archived != null) {
             w.name("Archived").value(archived);
-        if (available != null)
+        }
+        if (available != null) {
             w.name("Available").value(available);
-        if (hasCorrectedCoordinates != null)
+        }
+        if (hasCorrectedCoordinates != null) {
             w.name("HasCorrectedCoordinates").value(hasCorrectedCoordinates);
-        if (hasPersonalCacheNote != null)
+        }
+        if (hasPersonalCacheNote != null) {
             w.name("HasPersonalCacheNote").value(hasPersonalCacheNote);
-        if (premium != null)
+        }
+        if (premium != null) {
             w.name("Premium").value(premium);
-        if (published != null)
+        }
+        if (published != null) {
             w.name("Published").value(published);
+        }
         w.endObject();
     }
 }

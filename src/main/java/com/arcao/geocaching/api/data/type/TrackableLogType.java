@@ -17,11 +17,11 @@ public enum TrackableLogType {
     Visited("Visited", 75, EnumSet.of(States.WITH_PERSON));
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
     @NotNull private final EnumSet<States> allowedState;
@@ -38,7 +38,7 @@ public enum TrackableLogType {
     }
 
     /**
-     * Is this TrackableLogType allowed in Geocache
+     * Is this TrackableLogType allowed in Geocache.
      * @return true if allowed, otherwise false
      */
     public boolean isAllowedInCache() {
@@ -46,7 +46,7 @@ public enum TrackableLogType {
     }
 
     /**
-     * Is this TrackableLogType allowed with Person
+     * Is this TrackableLogType allowed with Person.
      * @return true if allowed, otherwise false
      */
     public boolean isAllowedWithPerson() {
@@ -62,8 +62,9 @@ public enum TrackableLogType {
     @Nullable
     public static TrackableLogType fromName(@Nullable String name) {
         for (TrackableLogType type : values()) {
-            if (type.name.equals(name))
+            if (type.name.equals(name)) {
                 return type;
+            }
         }
 
         return null;
@@ -78,8 +79,9 @@ public enum TrackableLogType {
     @Nullable
     public static TrackableLogType fromId(int id) {
         for (TrackableLogType type : values()) {
-            if (type.id == id)
+            if (type.id == id) {
                 return type;
+            }
         }
 
         return null;

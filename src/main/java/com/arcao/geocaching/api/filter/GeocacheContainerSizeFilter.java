@@ -13,7 +13,7 @@ public class GeocacheContainerSizeFilter implements Filter {
     @NotNull private final ContainerType[] containerTypes;
 
     public GeocacheContainerSizeFilter(@NotNull ContainerType... containerTypes) {
-        this.containerTypes = containerTypes;
+        this.containerTypes = containerTypes.clone();
     }
 
     @NotNull
@@ -24,12 +24,14 @@ public class GeocacheContainerSizeFilter implements Filter {
 
     @Override
     public boolean valid() {
-        if (containerTypes.length == 0)
+        if (containerTypes.length == 0) {
             return false;
+        }
 
         for (ContainerType containerType : containerTypes) {
-            if (containerType != null)
+            if (containerType != null) {
                 return true;
+            }
         }
 
         return false;
@@ -42,8 +44,9 @@ public class GeocacheContainerSizeFilter implements Filter {
         w.name("GeocacheContainerSizeIds");
         w.beginArray();
         for (ContainerType containerType : containerTypes) {
-            if (containerType != null)
+            if (containerType != null) {
                 w.value(containerType.id);
+            }
         }
         w.endArray();
         w.endObject();

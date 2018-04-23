@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.Geocache;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public final class GeocacheJsonParser {
             r.skipValue();
         }
 
-        List<Geocache> list = new ArrayList<Geocache>();
+        List<Geocache> list = new ArrayList<>();
         r.beginArray();
 
         while (r.hasNext()) {
@@ -38,96 +39,139 @@ public final class GeocacheJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("ID".equals(name)) {
-                builder.id(r.nextLong());
-            } else if ("Code".equals(name)) {
-                builder.code(r.nextString());
-            } else if ("Name".equals(name)) {
-                builder.name(r.nextString());
-            } else if ("Longitude".equals(name)) {
-                coordinatesBuilder.longitude(r.nextDouble());
-            } else if ("Latitude".equals(name)) {
-                coordinatesBuilder.latitude(r.nextDouble());
-            } else if ("CacheType".equals(name)) {
-                builder.geocacheType(parseGeocacheType(r));
-            } else if ("Difficulty".equals(name)) {
-                builder.difficulty((float) r.nextDouble());
-            } else if ("Terrain".equals(name)) {
-                builder.terrain((float) r.nextDouble());
-            } else if ("Owner".equals(name)) {
-                builder.owner(UserJsonParser.parse(r));
-            } else if ("Available".equals(name)) {
-                builder.available(r.nextBoolean());
-            } else if ("Archived".equals(name)) {
-                builder.archived(r.nextBoolean());
-            } else if ("IsPremium".equals(name)) {
-                builder.premium(r.nextBoolean());
-            } else if ("Country".equals(name)) {
-                builder.countryName(r.nextString());
-            } else if ("State".equals(name)) {
-                builder.stateName(r.nextString());
-            } else if ("DateCreated".equals(name)) {
-                builder.createDate(JsonParserUtil.parseJsonDate(r.nextString()));
-            } else if ("PublishDateUtc".equals(name)) {
-                builder.publishDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
-            } else if ("UTCPlaceDate".equals(name)) {
-                builder.placeDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
-            } else if ("DateLastUpdate".equals(name)) {
-                builder.lastUpdateDate(JsonParserUtil.parseJsonDate(r.nextString()));
-            } else if ("DateLastVisited".equals(name)) {
-                builder.lastVisitDate(JsonParserUtil.parseJsonDate(r.nextString()));
-            } else if ("PlacedBy".equals(name)) {
-                builder.placedBy(r.nextString());
-            } else if ("ContainerType".equals(name)) {
-                builder.containerType(parseContainerType(r));
-            } else if ("TrackableCount".equals(name)) {
-                builder.trackableCount(r.nextInt());
-            } else if ("HasbeenFoundbyUser".equals(name)) {
-                builder.foundByUser(r.nextBoolean());
-            } else if ("ShortDescription".equals(name)) {
-                builder.shortDescription(r.nextString());
-            } else if ("ShortDescriptionIsHtml".equals(name)) {
-                builder.shortDescriptionHtml(r.nextBoolean());
-            } else if ("LongDescription".equals(name)) {
-                builder.longDescription(r.nextString());
-            } else if ("LongDescriptionIsHtml".equals(name)) {
-                builder.longDescriptionHtml(r.nextBoolean());
-            } else if ("EncodedHints".equals(name)) {
-                builder.hint(r.nextString());
-            } else if ("GeocacheLogs".equals(name)) {
-                builder.geocacheLogs(GeocacheLogJsonParser.parseList(r));
-            } else if ("Trackables".equals(name)) {
-                builder.trackables(TrackableJsonParser.parseList(r));
-            } else if ("AdditionalWaypoints".equals(name)) {
-                builder.waypoints(WaypointJsonParser.parseList(r));
-            } else if ("Attributes".equals(name)) {
-                builder.attributes(parseAttributeList(r));
-            } else if ("UserWaypoints".equals(name)) {
-                builder.userWaypoints(UserWaypointsJsonParser.parseList(r));
-            } else if ("GeocacheNote".equals(name)) {
-                builder.personalNote(r.nextString());
-            } else if ("Images".equals(name)) {
-                builder.images(ImageDataJsonParser.parseList(r));
-            } else if ("FavoritePoints".equals(name)) {
-                builder.favoritePoints(r.nextInt());
-            } else if ("CanCacheBeFavorited".equals(name)) {
-                builder.favoritable(r.nextBoolean());
-            } else if ("FoundDate".equals(name)) {
-                builder.foundDate(JsonParserUtil.parseJsonDate(r.nextString()));
-            } else if ("HasbeenFavoritedbyUser".equals(name)) {
-                builder.favoritedByUser(r.nextBoolean());
-            } else if ("ImageCount".equals(name)) {
-                builder.imageCount(r.nextInt());
-            } else if ("IsRecommended".equals(name)) {
-                builder.recommended(r.nextBoolean());
-            } else if ("TrackableCount".equals(name)) {
-                builder.trackableCount(r.nextInt());
-            } else if ("Url".equals(name)) {
-                builder.url(r.nextString());
-            } else if ("GUID".equals(name)) {
-                builder.guid(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "ID":
+                    builder.id(r.nextLong());
+                    break;
+                case "Code":
+                    builder.code(r.nextString());
+                    break;
+                case "Name":
+                    builder.name(r.nextString());
+                    break;
+                case "Longitude":
+                    coordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                case "Latitude":
+                    coordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "CacheType":
+                    builder.geocacheType(parseGeocacheType(r));
+                    break;
+                case "Difficulty":
+                    builder.difficulty((float) r.nextDouble());
+                    break;
+                case "Terrain":
+                    builder.terrain((float) r.nextDouble());
+                    break;
+                case "Owner":
+                    builder.owner(UserJsonParser.parse(r));
+                    break;
+                case "Available":
+                    builder.available(r.nextBoolean());
+                    break;
+                case "Archived":
+                    builder.archived(r.nextBoolean());
+                    break;
+                case "IsPremium":
+                    builder.premium(r.nextBoolean());
+                    break;
+                case "Country":
+                    builder.countryName(r.nextString());
+                    break;
+                case "State":
+                    builder.stateName(r.nextString());
+                    break;
+                case "DateCreated":
+                    builder.createDate(JsonParserUtil.parseJsonDate(r.nextString()));
+                    break;
+                case "PublishDateUtc":
+                    builder.publishDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
+                    break;
+                case "UTCPlaceDate":
+                    builder.placeDate(JsonParserUtil.parseJsonUTCDate(r.nextString()));
+                    break;
+                case "DateLastUpdate":
+                    builder.lastUpdateDate(JsonParserUtil.parseJsonDate(r.nextString()));
+                    break;
+                case "DateLastVisited":
+                    builder.lastVisitDate(JsonParserUtil.parseJsonDate(r.nextString()));
+                    break;
+                case "PlacedBy":
+                    builder.placedBy(r.nextString());
+                    break;
+                case "ContainerType":
+                    builder.containerType(parseContainerType(r));
+                    break;
+                case "HasbeenFoundbyUser":
+                    builder.foundByUser(r.nextBoolean());
+                    break;
+                case "ShortDescription":
+                    builder.shortDescription(r.nextString());
+                    break;
+                case "ShortDescriptionIsHtml":
+                    builder.shortDescriptionHtml(r.nextBoolean());
+                    break;
+                case "LongDescription":
+                    builder.longDescription(r.nextString());
+                    break;
+                case "LongDescriptionIsHtml":
+                    builder.longDescriptionHtml(r.nextBoolean());
+                    break;
+                case "EncodedHints":
+                    builder.hint(r.nextString());
+                    break;
+                case "GeocacheLogs":
+                    builder.geocacheLogs(GeocacheLogJsonParser.parseList(r));
+                    break;
+                case "Trackables":
+                    builder.trackables(TrackableJsonParser.parseList(r));
+                    break;
+                case "AdditionalWaypoints":
+                    builder.waypoints(WaypointJsonParser.parseList(r));
+                    break;
+                case "Attributes":
+                    builder.attributes(parseAttributeList(r));
+                    break;
+                case "UserWaypoints":
+                    builder.userWaypoints(UserWaypointsJsonParser.parseList(r));
+                    break;
+                case "GeocacheNote":
+                    builder.personalNote(r.nextString());
+                    break;
+                case "Images":
+                    builder.images(ImageDataJsonParser.parseList(r));
+                    break;
+                case "FavoritePoints":
+                    builder.favoritePoints(r.nextInt());
+                    break;
+                case "CanCacheBeFavorited":
+                    builder.favoritable(r.nextBoolean());
+                    break;
+                case "FoundDate":
+                    builder.foundDate(JsonParserUtil.parseJsonDate(r.nextString()));
+                    break;
+                case "HasbeenFavoritedbyUser":
+                    builder.favoritedByUser(r.nextBoolean());
+                    break;
+                case "ImageCount":
+                    builder.imageCount(r.nextInt());
+                    break;
+                case "IsRecommended":
+                    builder.recommended(r.nextBoolean());
+                    break;
+                case "TrackableCount":
+                    builder.trackableCount(r.nextInt());
+                    break;
+                case "Url":
+                    builder.url(r.nextString());
+                    break;
+                case "GUID":
+                    builder.guid(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

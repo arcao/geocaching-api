@@ -18,84 +18,84 @@ public abstract class GeocacheLog implements Serializable {
     private static final long serialVersionUID = 9088433857246687793L;
 
     /**
-     * Get a unique identificator of the cache log
+     * Get a unique identificator of the cache log.
      *
      * @return unique identifiactor
      */
     public abstract long id();
 
     /**
-     * Get a gccode of the cache
+     * Get a gccode of the cache.
      *
      * @return gccode of the cache
      */
     public abstract String cacheCode();
 
     /**
-     * Get a date when the cache log was created (logged) on Geocaching site
+     * Get a date when the cache log was created (logged) on Geocaching site.
      *
      * @return date
      */
     public abstract Date created();
 
     /**
-     * Get a date when the cache was visited (found)
+     * Get a date when the cache was visited (found).
      *
      * @return date
      */
     public abstract Date visited();
 
     /**
-     * Get a type of log
+     * Get a type of log.
      *
      * @return type of log
      */
     public abstract GeocacheLogType logType();
 
     /**
-     * Get an author of log
+     * Get an author of log.
      *
      * @return author of log
      */
     public abstract User author();
 
     /**
-     * Get a text of log
+     * Get a text of log.
      *
      * @return text of log
      */
     public abstract String text();
 
     /**
-     * Get the images attached to log
+     * Get the images attached to log.
      *
      * @return images
      */
     public abstract List<ImageData> images();
 
     /**
-     * Get an updated coordinates
+     * Get an updated coordinates.
      *
      * @return updated coordinates
      */
     public abstract Coordinates updatedCoordinates();
 
     /**
-     * Return true if log is approved
+     * Return true if log is approved.
      *
      * @return log approved?
      */
     public abstract boolean approved();
 
     /**
-     * Return true if log is archived
+     * Return true if log is archived.
      *
      * @return log archived?
      */
     public abstract boolean archived();
 
     /**
-     * Return true if log can not be deleted
+     * Return true if log can not be deleted.
      *
      * @return can not be deleted?
      */

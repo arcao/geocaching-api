@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.apilimits.MaxPerPage;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 
@@ -14,20 +15,28 @@ public final class MaxPerPageJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Geocaches".equals(name)) {
-                builder.geocaches(r.nextInt());
-            } else if ("GeocacheLogs".equals(name)) {
-                builder.geocacheLogs(r.nextInt());
-            } else if ("Trackables".equals(name)) {
-                builder.trackables(r.nextInt());
-            } else if ("TrackableLogs".equals(name)) {
-                builder.trackableLogs(r.nextInt());
-            } else if ("CacheNotes".equals(name)) {
-                builder.cacheNotes(r.nextInt());
-            } else if ("GalleryImages".equals(name)) {
-                builder.galleryImages(r.nextInt());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "Geocaches":
+                    builder.geocaches(r.nextInt());
+                    break;
+                case "GeocacheLogs":
+                    builder.geocacheLogs(r.nextInt());
+                    break;
+                case "Trackables":
+                    builder.trackables(r.nextInt());
+                    break;
+                case "TrackableLogs":
+                    builder.trackableLogs(r.nextInt());
+                    break;
+                case "CacheNotes":
+                    builder.cacheNotes(r.nextInt());
+                    break;
+                case "GalleryImages":
+                    builder.galleryImages(r.nextInt());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

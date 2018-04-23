@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.Waypoint;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public final class WaypointJsonParser {
             r.skipValue();
         }
 
-        List<Waypoint> list = new ArrayList<Waypoint>();
+        List<Waypoint> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -37,22 +38,31 @@ public final class WaypointJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Longitude".equals(name)) {
-                coordinatesBuilder.longitude(r.nextDouble());
-            } else if ("Latitude".equals(name)) {
-                coordinatesBuilder.latitude(r.nextDouble());
-            } else if ("UTCEnteredDate".equals(name)) {
-                builder.time(parseJsonUTCDate(r.nextString()));
-            } else if ("Code".equals(name)) {
-                builder.waypointCode(r.nextString());
-            } else if ("Name".equals(name)) {
-                builder.waypointType(fromName(r.nextString()));
-            } else if ("Description".equals(name)) {
-                builder.name(r.nextString());
-            } else if ("Comment".equals(name)) {
-                builder.note(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "Longitude":
+                    coordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                case "Latitude":
+                    coordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "UTCEnteredDate":
+                    builder.time(parseJsonUTCDate(r.nextString()));
+                    break;
+                case "Code":
+                    builder.waypointCode(r.nextString());
+                    break;
+                case "Name":
+                    builder.waypointType(fromName(r.nextString()));
+                    break;
+                case "Description":
+                    builder.name(r.nextString());
+                    break;
+                case "Comment":
+                    builder.note(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

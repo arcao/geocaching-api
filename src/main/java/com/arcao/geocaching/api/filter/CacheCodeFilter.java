@@ -12,7 +12,7 @@ public class CacheCodeFilter implements Filter {
     @NotNull private final String[] caches;
 
     public CacheCodeFilter(@NotNull String... caches) {
-        this.caches = caches;
+        this.caches = caches.clone();
     }
 
     @NotNull
@@ -23,12 +23,14 @@ public class CacheCodeFilter implements Filter {
 
     @Override
     public boolean valid() {
-        if (caches.length == 0)
+        if (caches.length == 0) {
             return false;
+        }
 
         for (String cache : caches) {
-            if (cache != null && !cache.isEmpty())
+            if (cache != null && !cache.isEmpty()) {
                 return true;
+            }
         }
 
         return false;
@@ -41,8 +43,9 @@ public class CacheCodeFilter implements Filter {
         w.name("CacheCodes");
         w.beginArray();
         for (String cache : caches) {
-            if (cache != null && !cache.isEmpty())
+            if (cache != null && !cache.isEmpty()) {
                 w.value(cache);
+            }
         }
         w.endArray();
         w.endObject();

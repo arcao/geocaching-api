@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 
 import com.arcao.geocaching.api.data.Trackable;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public final class TrackableJsonParser {
             r.skipValue();
         }
 
-        List<Trackable> list = new ArrayList<Trackable>();
+        List<Trackable> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -34,40 +35,58 @@ public final class TrackableJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Id".equals(name)) {
-                builder.id(r.nextLong());
-            } else if ("Name".equals(name)) {
-                builder.name(r.nextString());
-            } else if ("CurrentGoal".equals(name)) {
-                builder.goal(r.nextString());
-            } else if ("Description".equals(name)) {
-                builder.description(r.nextString());
-            } else if ("TBTypeName".equals(name)) {
-                builder.trackableTypeName(r.nextString());
-            } else if ("IconUrl".equals(name)) {
-                builder.trackableTypeImage(r.nextString());
-            } else if ("OriginalOwner".equals(name)) {
-                builder.owner(UserJsonParser.parse(r));
-            } else if ("CurrentGeocacheCode".equals(name)) {
-                builder.currentCacheCode(r.nextString());
-            } else if ("CurrentOwner".equals(name)) {
-                builder.currentOwner(UserJsonParser.parse(r));
-            } else if ("Code".equals(name)) {
-                builder.trackingNumber(r.nextString());
-            } else if ("DateCreated".equals(name)) {
-                builder.created(parseJsonDate(r.nextString()));
-            } else if ("AllowedToBeCollected".equals(name)) {
-                builder.allowedToBeCollected(r.nextBoolean());
-            } else if ("InCollection".equals(name)) {
-                builder.inCollection(r.nextBoolean());
-            } else if ("Archived".equals(name)) {
-                builder.archived(r.nextBoolean());
-            } else if ("Images".equals(name)) {
-                builder.images(ImageDataJsonParser.parseList(r));
-            } else if ("TrackableLogs".equals(name)) {
-                builder.trackableLogs(TrackableLogJsonParser.parseList(r));
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "Id":
+                    builder.id(r.nextLong());
+                    break;
+                case "Name":
+                    builder.name(r.nextString());
+                    break;
+                case "CurrentGoal":
+                    builder.goal(r.nextString());
+                    break;
+                case "Description":
+                    builder.description(r.nextString());
+                    break;
+                case "TBTypeName":
+                    builder.trackableTypeName(r.nextString());
+                    break;
+                case "IconUrl":
+                    builder.trackableTypeImage(r.nextString());
+                    break;
+                case "OriginalOwner":
+                    builder.owner(UserJsonParser.parse(r));
+                    break;
+                case "CurrentGeocacheCode":
+                    builder.currentCacheCode(r.nextString());
+                    break;
+                case "CurrentOwner":
+                    builder.currentOwner(UserJsonParser.parse(r));
+                    break;
+                case "Code":
+                    builder.trackingNumber(r.nextString());
+                    break;
+                case "DateCreated":
+                    builder.created(parseJsonDate(r.nextString()));
+                    break;
+                case "AllowedToBeCollected":
+                    builder.allowedToBeCollected(r.nextBoolean());
+                    break;
+                case "InCollection":
+                    builder.inCollection(r.nextBoolean());
+                    break;
+                case "Archived":
+                    builder.archived(r.nextBoolean());
+                    break;
+                case "Images":
+                    builder.images(ImageDataJsonParser.parseList(r));
+                    break;
+                case "TrackableLogs":
+                    builder.trackableLogs(TrackableLogJsonParser.parseList(r));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

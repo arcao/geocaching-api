@@ -16,6 +16,7 @@ public abstract class AbstractGeocachingTest {
     // generated via oAuth example, see: https://github.com/arcao/geocaching-api-examples
     private static final String STAGING_AUTH_TOKEN = "JvJcmhBJ88iDoWR107RIKpQgLLU=";
 
+    @SuppressWarnings("CallToSystemGetenv")
     @BeforeClass
     public static void setUp() throws GeocachingApiException {
         LiveGeocachingApi.Builder builder = LiveGeocachingApi.builder();

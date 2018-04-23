@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.UserWaypoint;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public final class UserWaypointsJsonParser {
             r.skipValue();
         }
 
-        List<UserWaypoint> list = new ArrayList<UserWaypoint>();
+        List<UserWaypoint> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -36,24 +37,34 @@ public final class UserWaypointsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheCode".equals(name)) {
-                builder.cacheCode(r.nextString());
-            } else if ("Description".equals(name)) {
-                builder.description(r.nextString());
-            } else if ("ID".equals(name)) {
-                builder.id(r.nextLong());
-            } else if ("Latitude".equals(name)) {
-                coordinatesBuilder.latitude(r.nextDouble());
-            } else if ("Longitude".equals(name)) {
-                coordinatesBuilder.longitude(r.nextDouble());
-            } else if ("UTCDate".equals(name)) {
-                builder.date(parseJsonUTCDate(r.nextString()));
-            } else if ("UserID".equals(name)) {
-                builder.userId(r.nextInt());
-            } else if ("IsCorrectedCoordinate".equals(name)) {
-                builder.correctedCoordinate(r.nextBoolean());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CacheCode":
+                    builder.cacheCode(r.nextString());
+                    break;
+                case "Description":
+                    builder.description(r.nextString());
+                    break;
+                case "ID":
+                    builder.id(r.nextLong());
+                    break;
+                case "Latitude":
+                    coordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "Longitude":
+                    coordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                case "UTCDate":
+                    builder.date(parseJsonUTCDate(r.nextString()));
+                    break;
+                case "UserID":
+                    builder.userId(r.nextInt());
+                    break;
+                case "IsCorrectedCoordinate":
+                    builder.correctedCoordinate(r.nextBoolean());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

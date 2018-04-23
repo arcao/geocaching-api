@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Abstract class of Geocaching API
+ * Abstract class of Geocaching API.
  *
  * @author arcao
  * @since 1.4.3
@@ -37,7 +37,8 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
     }
 
     @Override
-    public Geocache getGeocache(@NotNull ResultQuality resultQuality, @NotNull String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
+    public Geocache getGeocache(@NotNull ResultQuality resultQuality, @NotNull String cacheCode,
+                                int cacheLogCount, int trackableLogCount) throws GeocachingApiException {
         final List<Geocache> list = searchForGeocaches(SearchForGeocachesRequest.builder()
                 .resultQuality(resultQuality)
                 .maxPerPage(1)
@@ -48,8 +49,9 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
         );
 
 
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return null;
+        }
 
         return list.get(0);
     }
@@ -57,7 +59,9 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
     @NotNull
     @Deprecated
     @Override
-    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, @Nullable Collection<SortBy> sortByList) throws GeocachingApiException {
+    public List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount,
+                                             int trackableLogCount, @NotNull Collection<Filter> filters,
+                                             @Nullable Collection<SortBy> sortByList) throws GeocachingApiException {
         return searchForGeocaches(SearchForGeocachesRequest.builder()
                 .resultQuality(resultQuality)
                 .maxPerPage(maxPerPage)
@@ -71,8 +75,16 @@ abstract class AbstractGeocachingApi implements GeocachingApi {
 
 
     @Override
-    public GeocacheLog createFieldNoteAndPublish(@NotNull FieldNote fieldNote, boolean publish, ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException {
-        return createFieldNoteAndPublish(fieldNote.cacheCode(), fieldNote.logType(), fieldNote.dateLogged(), fieldNote.note(), publish, imageData,
-                favoriteThisCache);
+    public GeocacheLog createFieldNoteAndPublish(@NotNull FieldNote fieldNote, boolean publish, ImageData imageData,
+                                                 boolean favoriteThisCache) throws GeocachingApiException {
+        return createFieldNoteAndPublish(
+                fieldNote.cacheCode(),
+                fieldNote.logType(),
+                fieldNote.dateLogged(),
+                fieldNote.note(),
+                publish,
+                imageData,
+                favoriteThisCache
+        );
     }
 }

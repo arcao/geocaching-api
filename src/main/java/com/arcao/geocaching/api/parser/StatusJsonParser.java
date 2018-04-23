@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 
 import com.arcao.geocaching.api.Status;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 
@@ -17,21 +18,27 @@ public final class StatusJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("StatusCode".equals(name)) {
-                status.code(r.nextInt());
-                statusCodeFound = true;
-            } else if ("StatusMessage".equals(name)) {
-                status.message(r.nextString());
-            } else if ("ExceptionDetails".equals(name)) {
-                status.exceptionDetails(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "StatusCode":
+                    status.code(r.nextInt());
+                    statusCodeFound = true;
+                    break;
+                case "StatusMessage":
+                    status.message(r.nextString());
+                    break;
+                case "ExceptionDetails":
+                    status.exceptionDetails(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
 
-        if (!statusCodeFound)
+        if (!statusCodeFound) {
             return null;
+        }
 
         return status.build();
     }

@@ -7,7 +7,6 @@ import com.arcao.geocaching.api.data.type.ContainerType;
 import com.arcao.geocaching.api.data.type.GeocacheType;
 import com.arcao.geocaching.api.data.type.MemberType;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
-import com.arcao.geocaching.api.parser.JsonReader;
 
 import org.junit.Test;
 
@@ -23,17 +22,13 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class SearchForGeocachesMockedTest extends AbstractMockedGeocachingTest {
-    private final static String CACHE_CODE = "GCY81P";
+    private static final String CACHE_CODE = "GCY81P";
 
     @Test
     public void getLiteGeocacheByCacheCodeNotFoundTest() throws GeocachingApiException {
-        JsonReader resultBody = createJsonReaderFromResource("result-lite-geocache-by-cache-code-not-found.json");
-
-        when(downloader.post(any(URL.class), any(byte[].class)))
-                .thenReturn(resultBody);
+        setDownloaderResponseBody("result-lite-geocache-by-cache-code-not-found.json");
 
         Geocache geocache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
         assertNull(geocache);
@@ -41,11 +36,9 @@ public class SearchForGeocachesMockedTest extends AbstractMockedGeocachingTest {
 
     @Test
     public void getLiteGeocacheByCacheCodeRequestTest() throws GeocachingApiException, IOException {
-        byte[] expectedRequestBody = createByteArrayFromResource("request-lite-geocache-by-cache-code.json");
-        JsonReader resultBody = createJsonReaderFromResource("result-lite-geocache-by-cache-code.json");
+        setDownloaderResponseBody("result-lite-geocache-by-cache-code.json");
 
-        when(downloader.post(any(URL.class), any(byte[].class)))
-                .thenReturn(resultBody);
+        byte[] expectedRequestBody = createByteArrayFromResource("request-lite-geocache-by-cache-code.json");
 
         Geocache geocache = api.getGeocache(GeocachingApi.ResultQuality.LITE, CACHE_CODE, 0, 0);
 

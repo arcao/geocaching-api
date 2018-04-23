@@ -20,60 +20,60 @@ import java.util.Locale;
  * @since 1.5
  */
 public class CoordinatesFormatter {
-    static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CoordinatesFormatter.class);
 
     /**
-     * Example: "10,123456 -0,123456"
+     * Example: "10,123456 -0,123456".
      */
     public static final int LAT_LON_DECDEGREE = 0;
 
     /**
-     * Example: "10.123456,-0.123456" (unlocalized)
+     * Example: "10.123456,-0.123456" (unlocalized).
      */
     public static final int LAT_LON_DECDEGREE_COMMA = 1;
 
     /**
-     * Example: "N 10° 12,345 · W 5° 12,345"
+     * Example: "N 10° 12,345 · W 5° 12,345".
      */
     public static final int LAT_LON_DECMINUTE = 2;
 
     /**
-     * Example: "N 10° 12.345 W 5° 12.345" (unlocalized)
+     * Example: "N 10° 12.345 W 5° 12.345" (unlocalized).
      */
     public static final int LAT_LON_DECMINUTE_RAW = 3;
 
     /**
-     * Example: "N 10° 12' 34" W 5° 12' 34""
+     * Example: "N 10° 12' 34" W 5° 12' 34"".
      */
     public static final int LAT_LON_DECSECOND = 4;
 
     /**
-     * Example: "-0.123456" (unlocalized latitude)
+     * Example: "-0.123456" (unlocalized latitude).
      */
     public static final int LAT_DECDEGREE_RAW = 5;
 
     /**
-     * Example: "N 10° 12,345"
+     * Example: "N 10° 12,345".
      */
     public static final int LAT_DECMINUTE = 6;
 
     /**
-     * Example: "N 10 12,345"
+     * Example: "N 10 12,345".
      */
     public static final int LAT_DECMINUTE_RAW = 7;
 
     /**
-     * Example: "-0.123456" (unlocalized longitude)
+     * Example: "-0.123456" (unlocalized longitude).
      */
     public static final int LON_DECDEGREE_RAW = 8;
 
     /**
-     * Example: "W 5° 12,345"
+     * Example: "W 5° 12,345".
      */
     public static final int LON_DECMINUTE = 9;
 
     /**
-     * Example: "W 5 12,345"
+     * Example: "W 5 12,345".
      */
     public static final int LON_DECMINUTE_RAW = 10;
 
@@ -170,11 +170,11 @@ public class CoordinatesFormatter {
      */
     protected static class Direction {
         /**
-         * latitude direction, 'N' or 'S'
+         * latitude direction, 'N' or 'S'.
          */
         public final char latDir;
         /**
-         * longitude direction, 'E' or 'W'
+         * longitude direction, 'E' or 'W'.
          */
         public final char lonDir;
 
@@ -189,16 +189,16 @@ public class CoordinatesFormatter {
     }
 
     /**
-     * Helper class to calculate degrees for coordinates
+     * Helper class to calculate degrees for coordinates.
      */
     protected static final class DDD extends Direction {
 
         /**
-         * latitude degree value
+         * latitude degree value.
          */
         public final int latDeg;
         /**
-         * fractional part of the latitude degree value
+         * fractional part of the latitude degree value.
          */
         public final int latDegFrac;
 
@@ -235,7 +235,7 @@ public class CoordinatesFormatter {
     }
 
     /**
-     * Helper class to calculate degree and minutes for coordinates
+     * Helper class to calculate degree and minutes for coordinates.
      */
     protected static final class DMM extends Direction {
 
@@ -289,7 +289,7 @@ public class CoordinatesFormatter {
     }
 
     /**
-     * Helper class to calculate degree, minutes and seconds for coordinates
+     * Helper class to calculate degree, minutes and seconds for coordinates.
      */
     protected static final class DMS extends Direction {
 

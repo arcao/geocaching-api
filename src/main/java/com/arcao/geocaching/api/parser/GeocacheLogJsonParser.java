@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.parser;
 import com.arcao.geocaching.api.data.GeocacheLog;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public final class GeocacheLogJsonParser {
             r.skipValue();
         }
 
-        List<GeocacheLog> list = new ArrayList<GeocacheLog>();
+        List<GeocacheLog> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -39,36 +40,52 @@ public final class GeocacheLogJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("ID".equals(name)) {
-                builder.id(r.nextLong());
-            } else if ("CacheCode".equals(name)) {
-                builder.cacheCode(r.nextString());
-            } else if ("UTCCreateDate".equals(name)) {
-                builder.created(parseJsonUTCDate(r.nextString()));
-            } else if ("VisitDate".equals(name)) {
-                builder.visited(parseJsonDate(r.nextString()));
-            } else if ("VisitDateIso".equals(name)) {
-                builder.visited(parseIsoDate(r.nextString()));
-            } else if ("LogType".equals(name)) {
-                builder.logType(parseLogType(r));
-            } else if ("Finder".equals(name)) {
-                builder.author(UserJsonParser.parse(r));
-            } else if ("LogText".equals(name)) {
-                builder.text(r.nextString());
-            } else if ("Images".equals(name)) {
-                builder.images(ImageDataJsonParser.parseList(r));
-            } else if ("UpdatedLatitude".equals(name)) {
-                updatedCoordinatesBuilder.latitude(r.nextDouble());
-            } else if ("UpdatedLongitude".equals(name)) {
-                updatedCoordinatesBuilder.longitude(r.nextDouble());
-            } else if ("IsApproved".equals(name)) {
-                builder.approved(r.nextBoolean());
-            } else if ("IsArchived".equals(name)) {
-                builder.archived(r.nextBoolean());
-            } else if ("CannotDelete".equals(name)) {
-                builder.undeletable(r.nextBoolean());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "ID":
+                    builder.id(r.nextLong());
+                    break;
+                case "CacheCode":
+                    builder.cacheCode(r.nextString());
+                    break;
+                case "UTCCreateDate":
+                    builder.created(parseJsonUTCDate(r.nextString()));
+                    break;
+                case "VisitDate":
+                    builder.visited(parseJsonDate(r.nextString()));
+                    break;
+                case "VisitDateIso":
+                    builder.visited(parseIsoDate(r.nextString()));
+                    break;
+                case "LogType":
+                    builder.logType(parseLogType(r));
+                    break;
+                case "Finder":
+                    builder.author(UserJsonParser.parse(r));
+                    break;
+                case "LogText":
+                    builder.text(r.nextString());
+                    break;
+                case "Images":
+                    builder.images(ImageDataJsonParser.parseList(r));
+                    break;
+                case "UpdatedLatitude":
+                    updatedCoordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "UpdatedLongitude":
+                    updatedCoordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                case "IsApproved":
+                    builder.approved(r.nextBoolean());
+                    break;
+                case "IsArchived":
+                    builder.archived(r.nextBoolean());
+                    break;
+                case "CannotDelete":
+                    builder.undeletable(r.nextBoolean());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -81,8 +98,9 @@ public final class GeocacheLogJsonParser {
     private static GeocacheLogType parseLogType(JsonReader r) throws IOException {
         GeocacheLogType geocacheLogType = null;
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return null;
+        }
 
         r.beginObject();
         while (r.hasNext()) {

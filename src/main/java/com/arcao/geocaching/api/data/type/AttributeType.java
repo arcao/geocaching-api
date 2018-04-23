@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.data.type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public enum AttributeType {
     DogsYes(1, "Dogs", true, "http://www.geocaching.com/images/attributes/dogs-yes.gif"),
     DogsNo(1, "Dogs", false, "http://www.geocaching.com/images/attributes/dogs-no.gif"),
@@ -138,20 +139,20 @@ public enum AttributeType {
     TeamworkNo(66, "Teamwork Required", false, "http://www.geocaching.com/images/attributes/teamwork-no.gif");
 
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull
     public final String name;
     /**
-     * Is attribute on?
+     * Is attribute on?.
      */
     public final boolean on;
     /**
-     * Attribute image URL
+     * Attribute image URL.
      */
     @NotNull
     public final String imageUrl;
@@ -178,8 +179,9 @@ public enum AttributeType {
     @Nullable
     public static AttributeType fromId(int id, boolean on) {
         for (AttributeType type : values()) {
-            if (type.id == id && type.on == on)
+            if (type.id == id && type.on == on) {
                 return type;
+            }
         }
 
         return null;

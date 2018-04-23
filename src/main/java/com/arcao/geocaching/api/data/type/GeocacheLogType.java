@@ -25,11 +25,11 @@ public enum GeocacheLogType {
     Unarchive("Unarchive", 1);
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
 
@@ -52,8 +52,9 @@ public enum GeocacheLogType {
     @Nullable
     public static GeocacheLogType fromName(@Nullable String name) {
         for (final GeocacheLogType type : values()) {
-            if (type.name.equals(name))
+            if (type.name.equals(name)) {
                 return type;
+            }
         }
 
         return null;

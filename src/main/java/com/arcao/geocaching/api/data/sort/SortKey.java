@@ -15,7 +15,7 @@ public enum SortKey {
     FoundDateOfFoundByUser("FoundDateOfFoundByUser");
 
     /**
-     * Key id
+     * Key id.
      */
     @NotNull public final String id;
 

@@ -13,11 +13,11 @@ public enum ContainerType {
     Other("Other", 6);
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
 
@@ -40,8 +40,9 @@ public enum ContainerType {
     @NotNull
     public static ContainerType fromName(@Nullable String name) {
         for (ContainerType type : values()) {
-            if (type.name.equals(name))
+            if (type.name.equals(name)) {
                 return type;
+            }
         }
 
         return Other;
@@ -56,8 +57,9 @@ public enum ContainerType {
     @NotNull
     public static ContainerType fromId(int id) {
         for (ContainerType type : values()) {
-            if (type.id == id)
+            if (type.id == id) {
                 return type;
+            }
         }
 
         return Other;

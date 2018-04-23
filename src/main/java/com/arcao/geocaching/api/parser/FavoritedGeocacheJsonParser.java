@@ -1,13 +1,12 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.FavoritedGeocache;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.arcao.geocaching.api.data.type.GeocacheType.fromId;
 
 public final class FavoritedGeocacheJsonParser {
     private FavoritedGeocacheJsonParser() {
@@ -18,7 +17,7 @@ public final class FavoritedGeocacheJsonParser {
             r.skipValue();
         }
 
-        List<FavoritedGeocache> list = new ArrayList<FavoritedGeocache>();
+        List<FavoritedGeocache> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -34,14 +33,19 @@ public final class FavoritedGeocacheJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String fieldName = r.nextName();
-            if ("CacheCode".equals(fieldName)) {
-                builder.cacheCode(r.nextString());
-            } else if ("CacheTitle".equals(fieldName)) {
-                builder.cacheTitle(r.nextString());
-            } else if ("CacheType".equals(fieldName)) {
-                builder.geocacheType(JsonParserUtil.parseGeocacheType(r));
-            } else {
-                r.skipValue();
+            switch (fieldName) {
+                case "CacheCode":
+                    builder.cacheCode(r.nextString());
+                    break;
+                case "CacheTitle":
+                    builder.cacheTitle(r.nextString());
+                    break;
+                case "CacheType":
+                    builder.geocacheType(JsonParserUtil.parseGeocacheType(r));
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

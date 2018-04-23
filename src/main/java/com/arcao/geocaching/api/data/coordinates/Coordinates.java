@@ -36,14 +36,14 @@ public abstract class Coordinates implements Serializable {
     }
 
     /**
-     * Get a latitude
+     * Get a latitude.
      *
      * @return latitude
      */
     public abstract double latitude();
 
     /**
-     * Get a longitude
+     * Get a longitude.
      *
      * @return longitude
      */
@@ -168,8 +168,9 @@ public abstract class Coordinates implements Serializable {
      * @since 1.20
      */
     public static void computeDistanceAndBearing(Coordinates source, Coordinates destination, double[] results) {
-        if (results == null || results.length < 1 || results.length > 3)
+        if (results == null || results.length < 1 || results.length > 3) {
             throw new IllegalArgumentException("Results has to be initialized array of size 1, 2 or 3.");
+        }
 
         double lat1 = Math.toRadians(source.latitude());
         double lon1 = Math.toRadians(source.longitude());
@@ -209,7 +210,9 @@ public abstract class Coordinates implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Coordinates && Math.abs(((Coordinates) obj).latitude() - latitude()) < PRECISION && Math.abs(((Coordinates) obj).longitude() - longitude()) < PRECISION;
+        return obj instanceof Coordinates
+                && Math.abs(((Coordinates) obj).latitude() - latitude()) < PRECISION
+                && Math.abs(((Coordinates) obj).longitude() - longitude()) < PRECISION;
     }
 
     public static Builder builder() {
@@ -235,8 +238,9 @@ public abstract class Coordinates implements Serializable {
 
         @Nullable
         public Coordinates build() {
-            if (Double.isNaN(latitude) || Double.isNaN(longitude))
+            if (Double.isNaN(latitude) || Double.isNaN(longitude)) {
                 return null;
+            }
 
             return Coordinates.create(latitude, longitude);
         }

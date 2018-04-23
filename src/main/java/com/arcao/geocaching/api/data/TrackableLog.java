@@ -43,8 +43,9 @@ public abstract class TrackableLog implements Serializable {
 
     @Nullable
     public String cacheCode() {
-        if (cacheId() == 0)
+        if (cacheId() == 0) {
             return null;
+        }
         return GeocachingUtils.cacheIdToCacheCode(cacheId());
     }
 

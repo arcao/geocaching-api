@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.TrackableTravel;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public final class TrackableTravelJsonParser {
             r.skipValue();
         }
 
-        List<TrackableTravel> list = new ArrayList<TrackableTravel>();
+        List<TrackableTravel> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -36,16 +37,22 @@ public final class TrackableTravelJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheID".equals(name)) {
-                builder.cacheId(r.nextInt());
-            } else if ("DateLogged".equals(name)) {
-                builder.dateLogged(parseJsonDate(r.nextString()));
-            } else if ("Latitude".equals(name)) {
-                coordinatesBuilder.latitude(r.nextDouble());
-            } else if ("Longitude".equals(name)) {
-                coordinatesBuilder.longitude(r.nextDouble());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CacheID":
+                    builder.cacheId(r.nextInt());
+                    break;
+                case "DateLogged":
+                    builder.dateLogged(parseJsonDate(r.nextString()));
+                    break;
+                case "Latitude":
+                    coordinatesBuilder.latitude(r.nextDouble());
+                    break;
+                case "Longitude":
+                    coordinatesBuilder.longitude(r.nextDouble());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

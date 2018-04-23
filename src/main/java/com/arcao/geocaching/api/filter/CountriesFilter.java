@@ -12,7 +12,7 @@ public class CountriesFilter implements Filter {
     @NotNull private final int[] countries;
 
     public CountriesFilter(@NotNull int... countries) {
-        this.countries = countries;
+        this.countries = countries.clone();
     }
 
     @NotNull

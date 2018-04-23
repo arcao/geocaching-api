@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.GeocacheLimits;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 
@@ -14,14 +15,19 @@ public final class CacheLimitsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CachesLeft".equals(name)) {
-                builder.geocacheLeft(r.nextInt());
-            } else if ("CurrentCacheCount".equals(name)) {
-                builder.currentGeocacheCount(r.nextInt());
-            } else if ("MaxCacheCount".equals(name)) {
-                builder.maxGeocacheCount(r.nextInt());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CachesLeft":
+                    builder.geocacheLeft(r.nextInt());
+                    break;
+                case "CurrentCacheCount":
+                    builder.currentGeocacheCount(r.nextInt());
+                    break;
+                case "MaxCacheCount":
+                    builder.maxGeocacheCount(r.nextInt());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

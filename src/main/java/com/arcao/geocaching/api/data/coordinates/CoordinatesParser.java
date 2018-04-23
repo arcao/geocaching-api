@@ -157,7 +157,7 @@ public final class CoordinatesParser {
     }
 
     /**
-     * Normalizes any number to an arbitrary range by assuming the range wraps around when going below min or above max
+     * Normalizes any number to an arbitrary range by assuming the range wraps around when going below min or above max.
      *
      * @param value input
      * @param start range start

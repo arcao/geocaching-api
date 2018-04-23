@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Filter extends JsonSerializable {
     /**
-     * Get a name of filter
+     * Get a name of filter.
      *
      * @return name of filter
      */

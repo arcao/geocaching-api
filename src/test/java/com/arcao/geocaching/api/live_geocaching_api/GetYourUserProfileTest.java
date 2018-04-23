@@ -14,7 +14,7 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
             .applicationSoftwareVersion("1.0")
             .deviceManufacturer("Unknown")
             .deviceName("JUnit test")
-            .deviceOperatingSystem("N/A")
+            .deviceOperatingSystem("Unknown")
             .deviceTotalMemoryInMb(0)
             .deviceUniqueId("12345")
             .build();
@@ -23,13 +23,14 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
     public void getYourUserProfileSimpleTest() throws GeocachingApiException {
         UserProfile userProfile = api.getYourUserProfile(false, false, false, false, false, false, DEVICE_INFO);
 
+        Assert.assertNotNull(userProfile);
+
         Assert.assertNull(userProfile.favoritePointsStats());
         Assert.assertNull(userProfile.geocacheStats());
         Assert.assertNull(userProfile.trackableStats());
         Assert.assertNull(userProfile.publicProfile());
         Assert.assertNull(userProfile.souvenirs());
 
-        Assert.assertNotNull(userProfile);
         Assert.assertNotNull(userProfile.globalStats());
         Assert.assertNotNull(userProfile.user());
     }
@@ -37,6 +38,8 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
     @Test
     public void getYourUserProfileCompleteTest() throws GeocachingApiException {
         UserProfile userProfile = api.getYourUserProfile(true, true, true, true, false, true, DEVICE_INFO);
+
+        Assert.assertNotNull(userProfile);
 
         //Assert.assertNotNull(userProfile.getFavoritePointsStats());
         Assert.assertNotNull(userProfile.geocacheStats());
@@ -46,7 +49,6 @@ public class GetYourUserProfileTest extends AbstractGeocachingTest {
         //Assert.assertEquals(0, userProfile.souvenirs().size());
 
         Assert.assertNotNull(userProfile.publicProfile());
-        Assert.assertNotNull(userProfile);
         Assert.assertNotNull(userProfile.user());
     }
 }

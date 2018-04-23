@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.GeocacheStatus;
 import com.arcao.geocaching.api.data.type.GeocacheType;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public final class GeocacheStatusJsonParser {
             r.skipValue();
         }
 
-        List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
+        List<GeocacheStatus> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             list.add(parse(r));
@@ -35,22 +36,31 @@ public final class GeocacheStatusJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Archived".equals(name)) {
-                builder.archived(r.nextBoolean());
-            } else if ("Available".equals(name)) {
-                builder.available(r.nextBoolean());
-            } else if ("CacheCode".equals(name)) {
-                builder.cacheCode(r.nextString());
-            } else if ("CacheName".equals(name)) {
-                builder.cacheName(r.nextString());
-            } else if ("CacheType".equals(name)) {
-                builder.cacheType(GeocacheType.fromId(r.nextInt()));
-            } else if ("Premium".equals(name)) {
-                builder.premium(r.nextBoolean());
-            } else if ("TrackableCount".equals(name)) {
-                builder.trackableCount(r.nextInt());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "Archived":
+                    builder.archived(r.nextBoolean());
+                    break;
+                case "Available":
+                    builder.available(r.nextBoolean());
+                    break;
+                case "CacheCode":
+                    builder.cacheCode(r.nextString());
+                    break;
+                case "CacheName":
+                    builder.cacheName(r.nextString());
+                    break;
+                case "CacheType":
+                    builder.cacheType(GeocacheType.fromId(r.nextInt()));
+                    break;
+                case "Premium":
+                    builder.premium(r.nextBoolean());
+                    break;
+                case "TrackableCount":
+                    builder.trackableCount(r.nextInt());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

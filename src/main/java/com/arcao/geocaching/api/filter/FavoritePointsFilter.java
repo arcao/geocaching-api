@@ -35,10 +35,12 @@ public class FavoritePointsFilter implements Filter {
     public void writeJson(@NotNull JsonWriter w) throws IOException {
         w.name(NAME);
         w.beginObject();
-        if (min != null)
+        if (min != null) {
             w.name("MinFavoritePoints").value(min.intValue());
-        if (max != null)
+        }
+        if (max != null) {
             w.name("MaxFavoritePoints").value(max.intValue());
+        }
         w.endObject();
     }
 }

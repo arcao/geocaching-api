@@ -2,6 +2,7 @@ package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.User;
 import com.arcao.geocaching.api.data.coordinates.Coordinates;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,12 +22,13 @@ public final class UserJsonParser {
             r.skipValue();
         }
 
-        List<User> list = new ArrayList<User>();
+        List<User> list = new ArrayList<>();
         r.beginArray();
         while (r.hasNext()) {
             User user = parse(r);
-            if (user != null)
+            if (user != null) {
                 list.add(user);
+            }
         }
         r.endArray();
         return list;
@@ -35,41 +37,55 @@ public final class UserJsonParser {
 
     @Nullable
     public static User parse(@NotNull JsonReader r) throws IOException {
-        if (JsonParserUtil.isNextNull(r))
+        if (JsonParserUtil.isNextNull(r)) {
             return null;
+        }
 
         User.Builder user = User.builder();
-        String userName = null;
+        String userName;
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("AvatarUrl".equals(name)) {
-                user.avatarUrl(r.nextString());
-            } else if ("FindCount".equals(name)) {
-                user.findCount(r.nextInt());
-            } else if ("HideCount".equals(name)) {
-                user.hideCount(r.nextInt());
-            } else if ("HomeCoordinates".equals(name)) {
-                user.homeCoordinates(parseHomeCoordinates(r));
-            } else if ("Id".equals(name)) {
-                user.id(r.nextLong());
-            } else if ("IsAdmin".equals(name)) {
-                user.admin(r.nextBoolean());
-            } else if ("MemberType".equals(name)) {
-                user.memberType(JsonParserUtil.parseMemberType(r));
-            } else if ("PublicGuid".equals(name)) {
-                user.publicGuid(r.nextString());
-            } else if ("UserName".equals(name)) {
-                userName = r.nextString();
-                if (userName == null) {
-                    while (r.hasNext()) r.skipValue();
-                    r.endObject();
-                    return null;
-                }
-                user.userName(userName);
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "AvatarUrl":
+                    user.avatarUrl(r.nextString());
+                    break;
+                case "FindCount":
+                    user.findCount(r.nextInt());
+                    break;
+                case "HideCount":
+                    user.hideCount(r.nextInt());
+                    break;
+                case "HomeCoordinates":
+                    user.homeCoordinates(parseHomeCoordinates(r));
+                    break;
+                case "Id":
+                    user.id(r.nextLong());
+                    break;
+                case "IsAdmin":
+                    user.admin(r.nextBoolean());
+                    break;
+                case "MemberType":
+                    user.memberType(JsonParserUtil.parseMemberType(r));
+                    break;
+                case "PublicGuid":
+                    user.publicGuid(r.nextString());
+                    break;
+                case "UserName":
+                    userName = r.nextString();
+                    if (userName == null) {
+                        while (r.hasNext()) {
+                            r.skipValue();
+                        }
+                        r.endObject();
+                        return null;
+                    }
+                    user.userName(userName);
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -78,20 +94,25 @@ public final class UserJsonParser {
     }
 
     private static Coordinates parseHomeCoordinates(JsonReader r) throws IOException {
-        if (JsonParserUtil.isNextNull(r))
+        if (JsonParserUtil.isNextNull(r)) {
             return null;
+        }
 
         Coordinates.Builder coordinates = Coordinates.builder();
 
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("Latitude".equals(name)) {
-                coordinates.latitude((float) r.nextDouble());
-            } else if ("Longitude".equals(name)) {
-                coordinates.longitude((float) r.nextDouble());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "Latitude":
+                    coordinates.latitude((float) r.nextDouble());
+                    break;
+                case "Longitude":
+                    coordinates.longitude((float) r.nextDouble());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

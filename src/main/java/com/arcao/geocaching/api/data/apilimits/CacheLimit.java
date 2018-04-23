@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 import java.io.Serializable;
 
 /**
- * Container class for a cache limit information
+ * Container class for a cache limit information.
  *
  * @author arcao
  */
@@ -14,14 +14,14 @@ public abstract class CacheLimit implements Serializable {
     private static final long serialVersionUID = 5480568653613770776L;
 
     /**
-     * Returns a cache limit
+     * Returns a cache limit.
      *
      * @return limit
      */
     public abstract long limit();
 
     /**
-     * Returns a period for this limit in the minutes
+     * Returns a period for this limit in the minutes.
      *
      * @return period in minutes
      */

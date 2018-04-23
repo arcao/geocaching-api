@@ -3,7 +3,7 @@ package com.arcao.geocaching.api.downloader;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.NetworkException;
-import com.arcao.geocaching.api.parser.JsonReader;
+import com.google.gson.stream.JsonReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,20 +22,20 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 /**
- * Default implementation of {@link JsonDownloader} using {@link HttpURLConnection}
+ * Default implementation of {@link JsonDownloader} using {@link HttpURLConnection}.
  *
  * @author arcao
  */
 public class DefaultJsonDownloader implements JsonDownloader {
     private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
     private static final int HTTP_ERROR_400 = 400;
-    private static final int BUFFER_SIZE = 8192;
+    private static final int BUFFER_SIZE = 32768;
 
     private final GeocachingApiConfiguration configuration;
     private boolean debug = false;
 
     /**
-     * Create a new {@link DefaultJsonDownloader} using specified configuration
+     * Create a new {@link DefaultJsonDownloader} using specified configuration.
      *
      * @param configuration configuration
      */
@@ -80,27 +80,13 @@ public class DefaultJsonDownloader implements JsonDownloader {
                 logger.debug("get: WITHOUT COMPRESSION");
             }
 
-            if (con.getResponseCode() >= HTTP_ERROR_400 || notJsonResponse(con)) {
-                isr = new InputStreamReader(is, "UTF-8");
-
-                StringBuilder sb = new StringBuilder();
-                char[] buffer = new char[BUFFER_SIZE];
-                int len;
-
-                while ((len = isr.read(buffer)) != -1) {
-                    sb.append(buffer, 0, len);
-                }
-
-                isr.close();
-
-                // read error response
-                throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
-            }
+            checkResponseError(is, con);
 
             isr = new InputStreamReader(is, "UTF-8");
 
-            if (debug)
+            if (debug) {
                 return new DebugJsonReader(isr);
+            }
 
             return new JsonReader(isr);
         } catch (InvalidResponseException e) {
@@ -108,6 +94,25 @@ public class DefaultJsonDownloader implements JsonDownloader {
         } catch (Exception e) {
             logger.error(e.toString(), e);
             throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + ")", e);
+        }
+    }
+
+    private static void checkResponseError(InputStream is, HttpURLConnection con)
+            throws IOException, InvalidResponseException {
+        if (con.getResponseCode() >= HTTP_ERROR_400 || notJsonResponse(con)) {
+            StringBuilder sb = new StringBuilder();
+
+            try (InputStreamReader isr = new InputStreamReader(is, "UTF-8")) {
+                char[] buffer = new char[BUFFER_SIZE];
+                int len;
+
+                while ((len = isr.read(buffer)) != -1) {
+                    sb.append(buffer, 0, len);
+                }
+            }
+
+            // read error response
+            throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
         }
     }
 
@@ -133,11 +138,9 @@ public class DefaultJsonDownloader implements JsonDownloader {
             con.setRequestProperty("Accept-Language", "en-US");
             con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
-            OutputStream os = con.getOutputStream();
-
-            os.write(postData);
-            os.flush();
-            os.close();
+            try (OutputStream os = con.getOutputStream()) {
+                os.write(postData);
+            }
 
             is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
 
@@ -153,40 +156,28 @@ public class DefaultJsonDownloader implements JsonDownloader {
                 logger.debug("callPost(): WITHOUT COMPRESSION");
             }
 
-            if (con.getResponseCode() >= HTTP_ERROR_400 || notJsonResponse(con)) {
-                isr = new InputStreamReader(is, "UTF-8");
-
-                StringBuilder sb = new StringBuilder();
-                char[] buffer = new char[BUFFER_SIZE];
-                int len;
-
-                while ((len = isr.read(buffer)) != -1) {
-                    sb.append(buffer, 0, len);
-                }
-
-                isr.close();
-
-                // read error response
-                throw new InvalidResponseException(con.getResponseCode(), con.getResponseMessage(), sb.toString());
-            }
+            checkResponseError(is, con);
 
             isr = new InputStreamReader(is, "UTF-8");
 
-            if (debug)
+            if (debug) {
                 return new DebugJsonReader(isr);
+            }
 
             return new JsonReader(isr);
         } catch (InvalidResponseException e) {
             throw e;
         } catch (Exception e) {
             logger.error(e.toString(), e);
-            throw new NetworkException("Error occurs while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
+            throw new NetworkException("Error occurs while downloading data ("
+                    + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
         }
     }
 
     private static boolean notJsonResponse(HttpURLConnection con) {
         String contentType = con.getHeaderField("Content-Type");
 
+        //noinspection HardcodedFileSeparator
         return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
     }
 
@@ -198,22 +189,19 @@ public class DefaultJsonDownloader implements JsonDownloader {
         }
 
         private static Reader writeOutput(Reader in) throws IOException {
-            try {
-                StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
+            try (Reader reader = in) {
                 char[] buffer = new char[BUFFER_SIZE];
                 int len;
 
-                while ((len = in.read(buffer)) > 0) {
+                while ((len = reader.read(buffer)) > 0) {
                     sb.append(buffer, 0, len);
                 }
-                logger.debug(sb.toString());
-
-                return new StringReader(sb.toString());
-            } finally {
-                if (in != null)
-                    in.close();
             }
+
+            logger.debug(sb.toString());
+            return new StringReader(sb.toString());
         }
     }
 }

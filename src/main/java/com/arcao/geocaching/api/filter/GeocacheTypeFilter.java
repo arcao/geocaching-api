@@ -14,7 +14,7 @@ public class GeocacheTypeFilter implements Filter {
     @NotNull private final GeocacheType[] geocacheTypes;
 
     public GeocacheTypeFilter(@NotNull GeocacheType... geocacheTypes) {
-        this.geocacheTypes = geocacheTypes;
+        this.geocacheTypes = geocacheTypes.clone();
     }
 
     @NotNull
@@ -25,13 +25,15 @@ public class GeocacheTypeFilter implements Filter {
 
     @Override
     public boolean valid() {
-        if (geocacheTypes.length == 0)
+        if (geocacheTypes.length == 0) {
             return false;
+        }
 
         boolean valid = false;
         for (GeocacheType geocacheType : geocacheTypes) {
-            if (geocacheType != null)
+            if (geocacheType != null) {
                 valid = true;
+            }
         }
 
         return valid;
@@ -44,8 +46,9 @@ public class GeocacheTypeFilter implements Filter {
         w.name("GeocacheTypeIds");
         w.beginArray();
         for (GeocacheType geocacheType : geocacheTypes) {
-            if (geocacheType != null)
+            if (geocacheType != null) {
                 w.value(geocacheType.id);
+            }
         }
         w.endArray();
         w.endObject();

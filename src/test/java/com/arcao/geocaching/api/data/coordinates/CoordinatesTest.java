@@ -2,8 +2,6 @@ package com.arcao.geocaching.api.data.coordinates;
 
 import org.junit.Test;
 
-import java.text.ParseException;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -14,7 +12,7 @@ public class CoordinatesTest {
   private static final Coordinates refCoordinates = Coordinates.create(refLatitude, refLongitude);
 
   @Test
-  public void testCoordinates() throws ParseException {
+  public void testCoordinates() {
     assertTrue(refCoordinates.equals(Coordinates.parseCoordinates("N 49° 56.031 | E 8° 38.564")));
   }
 
@@ -27,7 +25,7 @@ public class CoordinatesTest {
   }
 
   @Test
-  public void testVariousFormats() throws ParseException {
+  public void testVariousFormats() {
     final Coordinates point1 = Coordinates.parseCoordinates("N 49° 43' 57\" | E 2 12' 35");
     final Coordinates point2 = Coordinates.parseCoordinates("N 49 43.95 E2°12.5833333333");
 
@@ -36,7 +34,7 @@ public class CoordinatesTest {
   }
 
   @Test
-  public void testLatitudeLongitude() throws ParseException {
+  public void testLatitudeLongitude() {
     final Coordinates point2 = Coordinates.parseCoordinates("N 49° 56.031", "E 8° 38.564");
 
     assertTrue(refCoordinates.equals(point2));

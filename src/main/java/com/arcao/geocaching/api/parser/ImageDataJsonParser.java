@@ -1,6 +1,7 @@
 package com.arcao.geocaching.api.parser;
 
 import com.arcao.geocaching.api.data.ImageData;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public final class ImageDataJsonParser {
             r.skipValue();
         }
 
-        List<ImageData> list = new ArrayList<ImageData>();
+        List<ImageData> list = new ArrayList<>();
         r.beginArray();
 
         while (r.hasNext()) {
@@ -32,20 +33,28 @@ public final class ImageDataJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("DateCreated".equals(name)) {
-                builder.created(JsonParserUtil.parseJsonDate(r.nextString()));
-            } else if ("Description".equals(name)) {
-                builder.description(r.nextString());
-            } else if ("MobileUrl".equals(name)) {
-                builder.mobileUrl(r.nextString());
-            } else if ("Name".equals(name)) {
-                builder.name(r.nextString());
-            } else if ("ThumbUrl".equals(name)) {
-                builder.thumbUrl(r.nextString());
-            } else if ("Url".equals(name)) {
-                builder.url(r.nextString());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "DateCreated":
+                    builder.created(JsonParserUtil.parseJsonDate(r.nextString()));
+                    break;
+                case "Description":
+                    builder.description(r.nextString());
+                    break;
+                case "MobileUrl":
+                    builder.mobileUrl(r.nextString());
+                    break;
+                case "Name":
+                    builder.name(r.nextString());
+                    break;
+                case "ThumbUrl":
+                    builder.thumbUrl(r.nextString());
+                    break;
+                case "Url":
+                    builder.url(r.nextString());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class GeocachingUtilsTest {
   @Test
   public void testBase31Decode() {

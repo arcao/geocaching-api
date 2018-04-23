@@ -9,11 +9,11 @@ public enum MemberType {
     Premium("Premium", 3);
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
 
@@ -31,8 +31,9 @@ public enum MemberType {
     @NotNull
     public static MemberType fromId(int id) {
         for (MemberType memberType : values()) {
-            if (memberType.id == id)
+            if (memberType.id == id) {
                 return memberType;
+            }
         }
 
         return Guest;

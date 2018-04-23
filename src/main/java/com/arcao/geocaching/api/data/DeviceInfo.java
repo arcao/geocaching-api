@@ -49,10 +49,12 @@ public abstract class DeviceInfo implements JsonSerializable, Serializable {
         w.name("DeviceOperatingSystem").value(deviceOperatingSystem());
         w.name("DeviceTotalMemoryInMB").value(deviceTotalMemoryInMb());
         w.name("DeviceUniqueId").value(deviceUniqueId());
-        if (mobileHardwareVersion() != null)
+        if (mobileHardwareVersion() != null) {
             w.name("MobileHardwareVersion").value(mobileHardwareVersion());
-        if (webBrowserVersion() != null)
+        }
+        if (webBrowserVersion() != null) {
             w.name("WebBrowserVersion").value(webBrowserVersion());
+        }
 
         w.endObject();
     }

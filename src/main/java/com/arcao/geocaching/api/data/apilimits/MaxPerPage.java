@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 import java.io.Serializable;
 
 /**
- * Container class for a max per page limit information
+ * Container class for a max per page limit information.
  *
  * @author arcao
  */
@@ -14,42 +14,42 @@ public abstract class MaxPerPage implements Serializable {
     private static final long serialVersionUID = -5594435197387844111L;
 
     /**
-     * Returns a max per page value for retrieving Geocaches
+     * Returns a max per page value for retrieving Geocaches.
      *
      * @return max per page value for Geocaches
      */
     public abstract int geocaches();
 
     /**
-     * Returns a max per page value for retrieving Geocache logs
+     * Returns a max per page value for retrieving Geocache logs.
      *
      * @return max per page value for Geocache logs
      */
     public abstract int geocacheLogs();
 
     /**
-     * Returns a max per page value for retrieving Trackables
+     * Returns a max per page value for retrieving Trackables.
      *
      * @return max per page value for Trackables
      */
     public abstract int trackables();
 
     /**
-     * Returns a max per page value for retrieving Trackable logs
+     * Returns a max per page value for retrieving Trackable logs.
      *
      * @return max per page value for Trackable logs
      */
     public abstract int trackableLogs();
 
     /**
-     * Returns a max per page value for retrieving Cache notes
+     * Returns a max per page value for retrieving Cache notes.
      *
      * @return max per page value for Cache notes
      */
     public abstract int cacheNotes();
 
     /**
-     * Returns a max per page value for retrieving Gallery images
+     * Returns a max per page value for retrieving Gallery images.
      *
      * @return max per page value for Gallery images
      */

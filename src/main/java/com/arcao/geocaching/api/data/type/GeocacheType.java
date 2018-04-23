@@ -70,15 +70,15 @@ public enum GeocacheType {
      */
     LostAndFoundEvent("Lost and Found Event Caches", 3653),
     /**
-     * Groundspeak HQ Cache
+     * Groundspeak HQ Cache.
      */
     GroudspeakHQ("Groundspeak HQ", 3773),
     /**
-     * Groundspeak Lost and Found Celebration
+     * Groundspeak Lost and Found Celebration.
      */
     GroudspeakLostAndFoundCelebration("Groundspeak Lost and Found Celebration", 3774),
     /**
-     * Groundspeak Block Party
+     * Groundspeak Block Party.
      */
     GroundspeakBlockParty("Groundspeak Block Party", 4738),
     /**
@@ -87,11 +87,11 @@ public enum GeocacheType {
     GigaEvent("Giga-Event Cache", 7005);
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Groundspeak Id
+     * Groundspeak Id.
      */
     public final int id;
 
@@ -114,8 +114,9 @@ public enum GeocacheType {
     @Nullable
     public static GeocacheType fromName(@Nullable String name) {
         for (GeocacheType type : values()) {
-            if (type.name.equals(name))
+            if (type.name.equals(name)) {
                 return type;
+            }
         }
 
         return null;
@@ -130,8 +131,9 @@ public enum GeocacheType {
     @Nullable
     public static GeocacheType fromId(int id) {
         for (GeocacheType type : values()) {
-            if (type.id == id)
+            if (type.id == id) {
                 return type;
+            }
         }
 
         return null;

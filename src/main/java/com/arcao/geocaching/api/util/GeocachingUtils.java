@@ -1,7 +1,9 @@
 package com.arcao.geocaching.api.util;
 
+import java.util.Locale;
+
 /**
- * Set of Geocaching helper methods
+ * Set of Geocaching helper methods.
  *
  * @author arcao
  * @since 1.5
@@ -34,8 +36,9 @@ public final class GeocachingUtils {
             ret *= base;
 
             int index = BASE_31_CHARS.indexOf(ch);
-            if (index == -1)
+            if (index == -1) {
                 throw new IllegalArgumentException("Only chars " + BASE_31_CHARS + " are supported.");
+            }
 
             ret += index;
         }
@@ -77,10 +80,11 @@ public final class GeocachingUtils {
      * @see #base31Decode(String)
      */
     public static long cacheCodeToCacheId(final String cacheCode) {
-        String cacheCodeNorm = cacheCode.toUpperCase();
+        String cacheCodeNorm = cacheCode.toUpperCase(Locale.US);
 
-        if (cacheCodeNorm.length() < 3 || !cacheCodeNorm.startsWith(CACHE_PREFIX))
+        if (cacheCodeNorm.length() < 3 || !cacheCodeNorm.startsWith(CACHE_PREFIX)) {
             throw new IllegalArgumentException("Cache code is too short or does not contains GC prefix.");
+        }
 
         // remove GC prefix
         String code = cacheCodeNorm.substring(2);
@@ -113,7 +117,7 @@ public final class GeocachingUtils {
         sb.append(CACHE_PREFIX);
 
         if (cacheId <= CACHE_CODE_BASE16_MAX) { // 0 - FFFF
-            sb.append(Long.toString(cacheId, BASE_16).toUpperCase());
+            sb.append(Long.toString(cacheId, BASE_16).toUpperCase(Locale.US));
         } else { // G000 - ...
             sb.append(base31Encode(cacheId + CACHE_CODE_BASE31_MAGIC_NUMBER));
         }

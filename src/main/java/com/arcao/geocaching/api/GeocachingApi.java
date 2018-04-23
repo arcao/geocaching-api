@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Interface of Geocaching API
+ * Interface of Geocaching API.
  *
  * @author arcao
  * @since 1.0
@@ -45,7 +45,7 @@ public interface GeocachingApi {
 
 
     /**
-     * Gets a session id for current logged user
+     * Gets a session id for current logged user.
      *
      * @return session id
      * @since 1.0
@@ -54,7 +54,7 @@ public interface GeocachingApi {
     String getSession();
 
     /**
-     * Open a session with giving session id of already logged-in user
+     * Open a session with giving session id of already logged-in user.
      *
      * @param session session id
      * @throws GeocachingApiException If Geocaching API error occurs
@@ -63,14 +63,14 @@ public interface GeocachingApi {
     void openSession(@NotNull String session) throws GeocachingApiException;
 
     /**
-     * Close current used session
+     * Close current used session.
      *
      * @since 1.0
      */
     void closeSession();
 
     /**
-     * Check if current used session is still valid
+     * Check if current used session is still valid.
      *
      * @return true if is valid otherwise false
      * @since 1.0
@@ -102,7 +102,8 @@ public interface GeocachingApi {
      * @since 1.1
      */
     @NotNull
-    List<Trackable> getTrackablesByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException;
+    List<Trackable> getTrackablesByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage,
+                                             int trackableLogCount) throws GeocachingApiException;
 
     /**
      * Get a list of complete travel track of specified trackable.
@@ -126,7 +127,8 @@ public interface GeocachingApi {
      * @since 1.1
      */
     @NotNull
-    List<GeocacheLog> getGeocacheLogsByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException;
+    List<GeocacheLog> getGeocacheLogsByCacheCode(@NotNull String cacheCode, int startIndex,
+                                                 int maxPerPage) throws GeocachingApiException;
 
     /**
      * Get an information about geocache.
@@ -140,7 +142,8 @@ public interface GeocachingApi {
      * @since 1.0
      */
     @Nullable
-    Geocache getGeocache(@NotNull ResultQuality resultQuality, @NotNull String cacheCode, int cacheLogCount, int trackableLogCount) throws GeocachingApiException;
+    Geocache getGeocache(@NotNull ResultQuality resultQuality, @NotNull String cacheCode, int cacheLogCount,
+                         int trackableLogCount) throws GeocachingApiException;
 
     /**
      * Search for geocaches and return list of found.
@@ -158,7 +161,9 @@ public interface GeocachingApi {
      */
     @NotNull
     @Deprecated
-    List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount, int trackableLogCount, @NotNull Collection<Filter> filters, @Nullable Collection<SortBy> sortByList) throws GeocachingApiException;
+    List<Geocache> searchForGeocaches(@NotNull ResultQuality resultQuality, int maxPerPage, int geocacheLogCount,
+                                      int trackableLogCount, @NotNull Collection<Filter> filters,
+                                      @Nullable Collection<SortBy> sortByList) throws GeocachingApiException;
 
     /**
      * Search for geocaches and return list of found.
@@ -184,10 +189,11 @@ public interface GeocachingApi {
      * @since 1.6
      */
     @NotNull
-    List<Geocache> getMoreGeocaches(@NotNull ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException;
+    List<Geocache> getMoreGeocaches(@NotNull ResultQuality resultQuality, int startIndex, int maxPerPage,
+                                    int geocacheLogCount, int trackableLogCount) throws GeocachingApiException;
 
     /**
-     * Get an information about user
+     * Get an information about user.
      *
      * @param challengesData    include challanges data
      * @param favoritePointData include favorites points
@@ -201,7 +207,9 @@ public interface GeocachingApi {
      * @since 1.2
      */
     @Nullable
-    UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData, boolean trackableData, @NotNull DeviceInfo deviceInfo) throws GeocachingApiException;
+    UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData,
+                                   boolean publicProfileData, boolean souvenirData, boolean trackableData,
+                                   @NotNull DeviceInfo deviceInfo) throws GeocachingApiException;
 
     /**
      * Create field note and publish them or store them to list of Field notes
@@ -221,7 +229,10 @@ public interface GeocachingApi {
      * @since 1.1
      */
     @Nullable
-    GeocacheLog createFieldNoteAndPublish(@NotNull String cacheCode, @NotNull GeocacheLogType geocacheLogType, @NotNull Date dateLogged, @NotNull String note, boolean publish, @Nullable ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
+    GeocacheLog createFieldNoteAndPublish(@NotNull String cacheCode, @NotNull GeocacheLogType geocacheLogType,
+                                          @NotNull Date dateLogged, @NotNull String note, boolean publish,
+                                          @Nullable ImageData imageData,
+                                          boolean favoriteThisCache) throws GeocachingApiException;
 
     /**
      * Create field note and publish them or store them to list of Field notes
@@ -238,7 +249,9 @@ public interface GeocachingApi {
      * @since 1.1
      */
     @Nullable
-    GeocacheLog createFieldNoteAndPublish(@NotNull FieldNote fieldNote, boolean publish, @Nullable ImageData imageData, boolean favoriteThisCache) throws GeocachingApiException;
+    GeocacheLog createFieldNoteAndPublish(@NotNull FieldNote fieldNote, boolean publish,
+                                          @Nullable ImageData imageData,
+                                          boolean favoriteThisCache) throws GeocachingApiException;
 
     /**
      * Store a personal note for specified geocache. If note parameter is null or
@@ -252,7 +265,7 @@ public interface GeocachingApi {
     void setGeocachePersonalNote(@NotNull String cacheCode, @Nullable String note) throws GeocachingApiException;
 
     /**
-     * Remove existing personal note from a specified geocache
+     * Remove existing personal note from a specified geocache.
      *
      * @param cacheCode geocache where the personal note has to be deleted
      * @throws GeocachingApiException If error occurs during personal note storing
@@ -271,7 +284,8 @@ public interface GeocachingApi {
      * @since 1.5.1
      */
     @NotNull
-    List<TrackableLog> getTrackableLogs(@NotNull String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException;
+    List<TrackableLog> getTrackableLogs(@NotNull String trackableCode, int startIndex,
+                                        int maxPerPage) throws GeocachingApiException;
 
     /**
      * Returns the API limits applied on currently logged user or null if this
@@ -304,7 +318,7 @@ public interface GeocachingApi {
     int getLastSearchResultsFound();
 
     /**
-     * Get a list of users geocache logs
+     * Get a list of users geocache logs.
      *
      * @param userName        user name
      * @param startDate       start date of created geocache log or null
@@ -318,10 +332,13 @@ public interface GeocachingApi {
      * @since 1.5.13
      */
     @NotNull
-    List<GeocacheLog> getUsersGeocacheLogs(@NotNull String userName, @Nullable Date startDate, @Nullable Date endDate, @NotNull GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException;
+    List<GeocacheLog> getUsersGeocacheLogs(@NotNull String userName, @Nullable Date startDate,
+                                           @Nullable Date endDate, @NotNull GeocacheLogType[] logTypes,
+                                           boolean excludeArchived, int startIndex,
+                                           int maxPerPage) throws GeocachingApiException;
 
     /**
-     * Get a user's owned trackables
+     * Get a user's owned trackables.
      *
      * @param startIndex        count of trackables to skip
      * @param maxPerPage        count of trackables to get
@@ -331,7 +348,8 @@ public interface GeocachingApi {
      * @throws GeocachingApiException If error occurs during getting information
      */
     @NotNull
-    List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount, boolean collectionOnly) throws GeocachingApiException;
+    List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount,
+                                       boolean collectionOnly) throws GeocachingApiException;
 
     /**
      * Returns a list of Bookmark lists for current user.
@@ -344,7 +362,7 @@ public interface GeocachingApi {
     List<BookmarkList> getBookmarkListsForUser() throws GeocachingApiException;
 
     /**
-     * Return a list of Bookmark lists for specified user id
+     * Return a list of Bookmark lists for specified user id.
      *
      * @param userId numeric user id from User object
      * @return list of Bookmark lists
@@ -355,7 +373,7 @@ public interface GeocachingApi {
     List<BookmarkList> getBookmarkListsByUserId(int userId) throws GeocachingApiException;
 
     /**
-     * Retrieve a list of Bookmarked caches by a guid
+     * Retrieve a list of Bookmarked caches by a guid.
      *
      * @param guid guid of that list
      * @return list of Bookmarked caches
@@ -366,7 +384,7 @@ public interface GeocachingApi {
     List<Bookmark> getBookmarkListByGuid(@NotNull String guid) throws GeocachingApiException;
 
     /**
-     * Retrieve a list of Geocache Status
+     * Retrieve a list of Geocache Status.
      *
      * @param cacheCodes list of Geocache codes
      * @return list of Geocache status
@@ -377,17 +395,18 @@ public interface GeocachingApi {
     List<GeocacheStatus> getGeocacheStatus(@NotNull Collection<String> cacheCodes) throws GeocachingApiException;
 
     /**
-     * Add the geocaches to list of Bookmarked caches
+     * Add the geocaches to list of Bookmarked caches.
      *
      * @param guid       bookmark list guid
      * @param cacheCodes list of geocaches
      * @throws GeocachingApiException If error occurs during getting information
      * @since 2.1
      */
-    void addGeocachesToBookmarkList(@NotNull String guid, @NotNull Collection<String> cacheCodes) throws GeocachingApiException;
+    void addGeocachesToBookmarkList(@NotNull String guid,
+                                    @NotNull Collection<String> cacheCodes) throws GeocachingApiException;
 
     /**
-     * Add a favorite point to Geocache
+     * Add a favorite point to Geocache.
      *
      * @param cacheCode Geocache code
      * @return geocache favorite points info
@@ -398,7 +417,7 @@ public interface GeocachingApi {
     FavoritePointResult addFavoritePointToGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
-     * Remove a favorite point from Geocache
+     * Remove a favorite point from Geocache.
      *
      * @param cacheCode Geocache code
      * @return geocache favorite points info
@@ -409,7 +428,7 @@ public interface GeocachingApi {
     FavoritePointResult removeFavoritePointFromGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
-     * Get a count of favorite points which user have
+     * Get a count of favorite points which user have.
      *
      * @return count of favorite points
      * @throws GeocachingApiException If error occurs during getting information
@@ -418,7 +437,7 @@ public interface GeocachingApi {
     int getUsersFavoritePoints() throws GeocachingApiException;
 
     /**
-     * Get a list of users who favorited the Geocache
+     * Get a list of users who favorited the Geocache.
      *
      * @param cacheCode Geocache code
      * @return list of users
@@ -429,7 +448,7 @@ public interface GeocachingApi {
     List<User> getUsersWhoFavoritedGeocache(@NotNull String cacheCode) throws GeocachingApiException;
 
     /**
-     * Get a list of Geocache codes favorited by you
+     * Get a list of Geocache codes favorited by you.
      *
      * @return list of Geocache codes
      * @throws GeocachingApiException If error occurs during getting information
@@ -439,7 +458,7 @@ public interface GeocachingApi {
     List<String> getGeocacheCodesFavoritedByUser() throws GeocachingApiException;
 
     /**
-     * Get a list of Geocaches favorited by you
+     * Get a list of Geocaches favorited by you.
      *
      * @return list of Geocaches
      * @throws GeocachingApiException If error occurs during getting information
@@ -449,7 +468,7 @@ public interface GeocachingApi {
     List<FavoritedGeocache> getGeocachesFavoritedByUser() throws GeocachingApiException;
 
     /**
-     * Get a list of images for Geocache
+     * Get a list of images for Geocache.
      *
      * @param cacheCode Geocache code
      * @return list of images

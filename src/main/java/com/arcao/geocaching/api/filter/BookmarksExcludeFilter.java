@@ -15,7 +15,7 @@ public class BookmarksExcludeFilter implements Filter {
 
     public BookmarksExcludeFilter(@Nullable Boolean excludeIgnoreList, @NotNull int... bookmarkListIds) {
         this.excludeIgnoreList = excludeIgnoreList;
-        this.bookmarkListIds = bookmarkListIds;
+        this.bookmarkListIds = bookmarkListIds.clone();
     }
 
     @NotNull
@@ -43,8 +43,9 @@ public class BookmarksExcludeFilter implements Filter {
             w.endArray();
         }
 
-        if (excludeIgnoreList != null)
+        if (excludeIgnoreList != null) {
             w.name("ExcludeIgnoreList").value(excludeIgnoreList);
+        }
 
         w.endObject();
     }

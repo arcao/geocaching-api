@@ -6,22 +6,22 @@ import com.arcao.geocaching.api.configuration.impl.DefaultStagingGeocachingApiCo
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Basic interface for configuration class
+ * Basic interface for configuration class.
  *
  * @author arcao
  */
 public interface GeocachingApiConfiguration {
     /**
-     * Production configuration
+     * Production configuration.
      */
     GeocachingApiConfiguration PRODUCTION = new DefaultProductionGeocachingApiConfiguration();
     /**
-     * Staging configuration
+     * Staging configuration.
      */
     GeocachingApiConfiguration STAGING = new DefaultStagingGeocachingApiConfiguration();
 
     /**
-     * Returns a common part of Gecaching API service URL
+     * Returns a common part of Gecaching API service URL.
      *
      * @return url
      */

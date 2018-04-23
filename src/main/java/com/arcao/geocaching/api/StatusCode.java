@@ -135,8 +135,9 @@ public enum StatusCode {
     @NotNull
     public static StatusCode getByCode(int code) {
         for (StatusCode statusCode : values()) {
-            if (statusCode.getCode() == code)
+            if (statusCode.code == code) {
                 return statusCode;
+            }
         }
 
         return Fail;

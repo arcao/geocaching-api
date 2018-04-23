@@ -18,37 +18,37 @@ public abstract class SearchForGeocachesRequest implements Serializable {
     private static final long serialVersionUID = 8209857729196134528L;
 
     /**
-     * Get a required quality of result (mean what all has to be returned in result)
+     * Get a required quality of result (mean what all has to be returned in result).
      */
     public abstract GeocachingApi.ResultQuality resultQuality();
 
     /**
-     * Get a count of geocaches to be received
+     * Get a count of geocaches to be received.
      */
     public abstract int maxPerPage();
 
     /**
-     * Get a count of logs to be retrieved for particular geocache
+     * Get a count of logs to be retrieved for particular geocache.
      */
     public abstract int geocacheLogCount();
 
     /**
-     * Get a count of logs to be retrieved for trackable in particular geocache
+     * Get a count of logs to be retrieved for trackable in particular geocache.
      */
     public abstract int trackableLogCount();
 
     /**
-     * Get an used filters for request
+     * Get an used filters for request.
      */
     public abstract Collection<Filter> filters();
 
     /**
-     * Get a collection of used sort keys
+     * Get a collection of used sort keys.
      */
     public abstract Collection<SortBy> sortKeys();
 
     /**
-     * Get a coordinates used for sorting, can be null
+     * Get a coordinates used for sorting, can be null.
      */
     @Nullable public abstract Coordinates sortPoint();
 
@@ -60,26 +60,26 @@ public abstract class SearchForGeocachesRequest implements Serializable {
 
     @AutoValue.Builder
     public abstract static class Builder {
-        private final Collection<Filter> filters = new HashSet<Filter>();
-        private final Collection<SortBy> sortKeys = new HashSet<SortBy>();
+        private final Collection<Filter> filters = new HashSet<>();
+        private final Collection<SortBy> sortKeys = new HashSet<>();
 
         /**
-         * Set a required quality of result (mean what all has to be returned in result)
+         * Set a required quality of result (mean what all has to be returned in result).
          */
         public abstract Builder resultQuality(GeocachingApi.ResultQuality resultQuality);
 
         /**
-         * Set a count of geocaches to be received
+         * Set a count of geocaches to be received.
          */
         public abstract Builder maxPerPage(int maxPerPage);
 
         /**
-         * Set a count of logs to be retrieved for particular geocache
+         * Set a count of logs to be retrieved for particular geocache.
          */
         public abstract Builder geocacheLogCount(int geocacheLogCount);
 
         /**
-         * Set a count of logs to be retrieved for trackable in particular geocache
+         * Set a count of logs to be retrieved for trackable in particular geocache.
          */
         public abstract Builder trackableLogCount(int trackableLogCount);
 
@@ -88,14 +88,14 @@ public abstract class SearchForGeocachesRequest implements Serializable {
         protected abstract Builder sortKeys(Collection<SortBy> sortKeys);
 
         /**
-         * Set a coordinates used for sorting
+         * Set a coordinates used for sorting.
          */
         public abstract Builder sortPoint(Coordinates sortPoint);
 
         protected abstract SearchForGeocachesRequest realBuild();
 
         /**
-         * Add a filter for request
+         * Add a filter for request.
          */
         public Builder addFilter(Filter filter) {
             filters.add(filter);
@@ -103,18 +103,19 @@ public abstract class SearchForGeocachesRequest implements Serializable {
         }
 
         /**
-         * Add a filters for request
+         * Add a filters for request.
          */
         public Builder addFilters(@Nullable Collection<Filter> filters) {
-            if (filters == null)
+            if (filters == null) {
                 return this;
+            }
 
             this.filters.addAll(filters);
             return this;
         }
 
         /**
-         * Add a sort key for request
+         * Add a sort key for request.
          */
         public Builder addSortKey(SortBy sortKey) {
             sortKeys.add(sortKey);
@@ -122,11 +123,12 @@ public abstract class SearchForGeocachesRequest implements Serializable {
         }
 
         /**
-         * Add a sort keys for request
+         * Add a sort keys for request.
          */
         public Builder addSortKeys(@Nullable Collection<SortBy> sortKeys) {
-            if (sortKeys == null)
+            if (sortKeys == null) {
                 return this;
+            }
 
             this.sortKeys.addAll(sortKeys);
             return this;

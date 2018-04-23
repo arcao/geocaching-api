@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Helper class during JSON serializing process
+ * Helper class during JSON serializing process.
  *
  * @author arcao
  */
@@ -15,7 +15,7 @@ public final class JsonBuilder {
     }
 
     /**
-     * Convert Date object to JSON date notation
+     * Convert Date object to JSON date notation.
      *
      * @param date date convert
      * @return JSON notation for date
@@ -24,6 +24,7 @@ public final class JsonBuilder {
         if (date == null)
             return null;
 
+        //noinspection HardcodedFileSeparator
         return String.format(Locale.US, "/Date(%d)/", date.getTime());
     }
 }

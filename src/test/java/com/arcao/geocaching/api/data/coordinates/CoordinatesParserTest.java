@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@SuppressWarnings("HardcodedFileSeparator")
 public class CoordinatesParserTest {
   private static final double refLongitude = 8.0 + 38.564 / 60.0;
   private static final double refLatitude = 49.0 + 56.031 / 60.0;
@@ -25,7 +26,7 @@ public class CoordinatesParserTest {
   }
 
   @Test
-  public void testFullCoordinates() throws ParseException {
+  public void testFullCoordinates() {
     assertTrue(refCoordinates.equals(Coordinates.parseCoordinates("N 49° 56.031 | E 8° 38.564")));
   }
 

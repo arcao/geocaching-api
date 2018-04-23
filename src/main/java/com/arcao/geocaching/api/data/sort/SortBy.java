@@ -11,14 +11,14 @@ public abstract class SortBy implements Serializable {
     private static final long serialVersionUID = -8572570659481989738L;
 
     /**
-     * The key to be used for sorting
+     * The key to be used for sorting.
      *
      * @return sorting key
      */
     public abstract SortKey key();
 
     /**
-     * The order to be used for sorting
+     * The order to be used for sorting.
      *
      * @return sorting order
      */

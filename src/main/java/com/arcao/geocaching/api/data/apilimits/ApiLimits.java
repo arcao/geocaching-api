@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Container class for API limits related to currently logged user
+ * Container class for API limits related to currently logged user.
  *
  * @author arcao
  */
@@ -16,77 +16,77 @@ public abstract class ApiLimits implements Serializable {
     private static final long serialVersionUID = -3608995080972521881L;
 
     /**
-     * Returns limits for downloading caches
+     * Returns limits for downloading caches.
      *
      * @return cache limit object
      */
     public abstract List<CacheLimit> cacheLimits();
 
     /**
-     * Returns if the cache limits are enforced
+     * Returns if the cache limits are enforced.
      *
      * @return are enforced
      */
     public abstract boolean enforceCacheLimits();
 
     /**
-     * Returns if the cache limits are enforced for a lite caches
+     * Returns if the cache limits are enforced for a lite caches.
      *
      * @return are enforced
      */
     public abstract boolean enforceLiteCacheLimits();
 
     /**
-     * Returns if the method limits are enforced
+     * Returns if the method limits are enforced.
      *
      * @return are enforced
      */
     public abstract boolean enforceMethodLimits();
 
     /**
-     * Returns a membership type for which are limits applied
+     * Returns a membership type for which are limits applied.
      *
      * @return member type
      */
     public abstract MemberType forMembershipType();
 
     /**
-     * Returns a license key
+     * Returns a license key.
      *
      * @return license key
      */
     public abstract String licenseKey();
 
     /**
-     * Returns a cache limits for lite caches
+     * Returns a cache limits for lite caches.
      *
      * @return cache limits
      */
     public abstract List<CacheLimit> liteCacheLimits();
 
     /**
-     * Returns the number of max calls to be performed with same IP per minute
+     * Returns the number of max calls to be performed with same IP per minute.
      *
      * @return number of max calls
      */
     public abstract long maxCallsbyIPIn1Minute();
 
     /**
-     * Returns the method limits
+     * Returns the method limits.
      *
      * @return method limits
      */
     public abstract List<MethodLimit> methodLimits();
 
     /**
-     * Returns whereas limits are restricted by IP
+     * Returns whereas limits are restricted by IP.
      *
      * @return are restricted by IP
      */
     public abstract boolean restrictByIp();
 
     /**
-     * Returns if counts of IP are validated
+     * Returns if counts of IP are validated.
      *
      * @return count of IP validated
      */

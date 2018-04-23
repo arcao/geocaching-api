@@ -25,7 +25,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class SearchForGeocachesTest extends AbstractGeocachingTest {
-    private final static String CACHE_CODE = "GCY81P";
+    private static final String CACHE_CODE = "GCY81P";
 
     @Test
     public void getLiteGeocacheByCacheCodeTest() throws GeocachingApiException {

@@ -12,7 +12,7 @@ public class StatesFilter implements Filter {
     private final int[] states;
 
     public StatesFilter(@NotNull int... states) {
-        this.states = states;
+        this.states = states.clone();
     }
 
     @NotNull

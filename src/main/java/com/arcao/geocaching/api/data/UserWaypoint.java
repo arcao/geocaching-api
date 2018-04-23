@@ -30,8 +30,9 @@ public abstract class UserWaypoint implements Serializable {
 
     public String userWaypointCode(int index) {
         String cacheCode = cacheCode();
-        if (cacheCode == null)
+        if (cacheCode == null) {
             return null;
+        }
 
         long base = GeocachingUtils.base31Decode("U1");
         String value = GeocachingUtils.base31Encode(base + index);

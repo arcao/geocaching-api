@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 
 public class GeocachePersonalNoteTest extends AbstractGeocachingTest {
-  private final static String CACHE_CODE = "GCY81P";
+  private static final String CACHE_CODE = "GCY81P";
 
   @Before
   @After

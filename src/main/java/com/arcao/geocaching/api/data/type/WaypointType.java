@@ -12,11 +12,11 @@ public enum WaypointType {
     ReferencePoint("Reference Point", "waypoint.jpg");
 
     /**
-     * Friendly name
+     * Friendly name.
      */
     @NotNull public final String name;
     /**
-     * Icon image file name
+     * Icon image file name.
      */
     @NotNull public final String iconName;
 
@@ -39,8 +39,9 @@ public enum WaypointType {
     @NotNull
     public static WaypointType fromName(@Nullable String name) {
         for (WaypointType type : values()) {
-            if (type.name.equals(name))
+            if (type.name.equals(name)) {
                 return type;
+            }
         }
 
         return ReferencePoint;

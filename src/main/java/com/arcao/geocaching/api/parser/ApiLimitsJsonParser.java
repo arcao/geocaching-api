@@ -3,6 +3,7 @@ package com.arcao.geocaching.api.parser;
 import com.arcao.geocaching.api.data.apilimits.ApiLimits;
 import com.arcao.geocaching.api.data.apilimits.CacheLimit;
 import com.arcao.geocaching.api.data.apilimits.MethodLimit;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,30 +22,43 @@ public final class ApiLimitsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheLimits".equals(name)) {
-                builder.cacheLimits(parseCacheLimits(r));
-            } else if ("EnforceCacheLimits".equals(name)) {
-                builder.enforceCacheLimits(r.nextBoolean());
-            } else if ("EnforceLiteCacheLimits".equals(name)) {
-                builder.enforceLiteCacheLimits(r.nextBoolean());
-            } else if ("EnforceMethodLimits".equals(name)) {
-                builder.enforceMethodLimits(r.nextBoolean());
-            } else if ("ForMembershipType".equals(name)) {
-                builder.forMembershipType(parseMemberType(r));
-            } else if ("LicenseKey".equals(name)) {
-                builder.licenseKey(r.nextString());
-            } else if ("LiteCacheLimits".equals(name)) {
-                builder.liteCacheLimits(parseCacheLimits(r));
-            } else if ("MaxCallsbyIPIn1Minute".equals(name)) {
-                builder.maxCallsbyIPIn1Minute(r.nextLong());
-            } else if ("MethodLimits".equals(name)) {
-                builder.methodLimits(parseMethodLimits(r));
-            } else if ("RestrictbyIP".equals(name)) {
-                builder.restrictByIp(r.nextBoolean());
-            } else if ("ValidateIPCounts".equals(name)) {
-                builder.validateIpCounts(r.nextBoolean());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CacheLimits":
+                    builder.cacheLimits(parseCacheLimits(r));
+                    break;
+                case "EnforceCacheLimits":
+                    builder.enforceCacheLimits(r.nextBoolean());
+                    break;
+                case "EnforceLiteCacheLimits":
+                    builder.enforceLiteCacheLimits(r.nextBoolean());
+                    break;
+                case "EnforceMethodLimits":
+                    builder.enforceMethodLimits(r.nextBoolean());
+                    break;
+                case "ForMembershipType":
+                    builder.forMembershipType(parseMemberType(r));
+                    break;
+                case "LicenseKey":
+                    builder.licenseKey(r.nextString());
+                    break;
+                case "LiteCacheLimits":
+                    builder.liteCacheLimits(parseCacheLimits(r));
+                    break;
+                case "MaxCallsbyIPIn1Minute":
+                    builder.maxCallsbyIPIn1Minute(r.nextLong());
+                    break;
+                case "MethodLimits":
+                    builder.methodLimits(parseMethodLimits(r));
+                    break;
+                case "RestrictbyIP":
+                    builder.restrictByIp(r.nextBoolean());
+                    break;
+                case "ValidateIPCounts":
+                    builder.validateIpCounts(r.nextBoolean());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -53,10 +67,11 @@ public final class ApiLimitsJsonParser {
     }
 
     private static List<CacheLimit> parseCacheLimits(JsonReader r) throws IOException {
-        List<CacheLimit> list = new ArrayList<CacheLimit>();
+        List<CacheLimit> list = new ArrayList<>();
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return list;
+        }
 
         r.beginArray();
         while (r.hasNext()) {
@@ -72,12 +87,16 @@ public final class ApiLimitsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("CacheLimit".equals(name)) {
-                builder.limit(r.nextLong());
-            } else if ("InMinutes".equals(name)) {
-                builder.period(r.nextLong());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "CacheLimit":
+                    builder.limit(r.nextLong());
+                    break;
+                case "InMinutes":
+                    builder.period(r.nextLong());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();
@@ -86,10 +105,11 @@ public final class ApiLimitsJsonParser {
     }
 
     private static List<MethodLimit> parseMethodLimits(JsonReader r) throws IOException {
-        List<MethodLimit> list = new ArrayList<MethodLimit>();
+        List<MethodLimit> list = new ArrayList<>();
 
-        if (isNextNull(r))
+        if (isNextNull(r)) {
             return list;
+        }
 
         r.beginArray();
         while (r.hasNext()) {
@@ -106,16 +126,22 @@ public final class ApiLimitsJsonParser {
         r.beginObject();
         while (r.hasNext()) {
             String name = r.nextName();
-            if ("InMinutes".equals(name)) {
-                builder.period(r.nextInt());
-            } else if ("MaxCalls".equals(name)) {
-                builder.limit(r.nextLong());
-            } else if ("MethodName".equals(name)) {
-                builder.methodName(r.nextString());
-            } else if ("PartnerMethod".equals(name)) {
-                builder.partnerMethod(r.nextBoolean());
-            } else {
-                r.skipValue();
+            switch (name) {
+                case "InMinutes":
+                    builder.period(r.nextInt());
+                    break;
+                case "MaxCalls":
+                    builder.limit(r.nextLong());
+                    break;
+                case "MethodName":
+                    builder.methodName(r.nextString());
+                    break;
+                case "PartnerMethod":
+                    builder.partnerMethod(r.nextBoolean());
+                    break;
+                default:
+                    r.skipValue();
+                    break;
             }
         }
         r.endObject();

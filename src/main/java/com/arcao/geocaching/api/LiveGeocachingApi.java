@@ -45,7 +45,6 @@ import com.arcao.geocaching.api.parser.GeocacheJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheLogJsonParser;
 import com.arcao.geocaching.api.parser.GeocacheStatusJsonParser;
 import com.arcao.geocaching.api.parser.ImageDataJsonParser;
-import com.arcao.geocaching.api.parser.JsonReader;
 import com.arcao.geocaching.api.parser.MaxPerPageJsonParser;
 import com.arcao.geocaching.api.parser.StatusJsonParser;
 import com.arcao.geocaching.api.parser.TrackableJsonParser;
@@ -53,6 +52,7 @@ import com.arcao.geocaching.api.parser.TrackableLogJsonParser;
 import com.arcao.geocaching.api.parser.TrackableTravelJsonParser;
 import com.arcao.geocaching.api.parser.UserJsonParser;
 import com.arcao.geocaching.api.parser.UserProfileJsonParser;
+import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.google.gson.stream.MalformedJsonException;
@@ -62,6 +62,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -75,9 +76,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Implementation of Life Geocaching Api provided by Groundspeak. To use this class you need consumer and license key, ask Groundspeak for them.<br>
+ * Implementation of Life Geocaching Api provided by Groundspeak. To use this class you need
+ * consumer and license key, ask Groundspeak for them.<br>
  * <br>
- * <i>Note: Most of methods is limited from Groundspeak side. See Live Geocaching Api agreement.</i><br>
+ * <i>Note: Most of methods is limited from Groundspeak side. See Live Geocaching Api
+ * agreement.</i><br>
  * <br>
  * Some limits for Premium User:<ul>
  * <li>maxPerPage = 50</li>
@@ -99,11 +102,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     private boolean sessionValid = false;
 
     /**
-     * Create a new instance of LiveGeocachingApi with configuration specified by configuration parameter
+     * Create a new instance of LiveGeocachingApi with configuration specified by configuration
+     * parameter.
      *
      * @param builder builder object
      */
-    LiveGeocachingApi(Builder builder) {
+    private LiveGeocachingApi(Builder builder) {
         this.configuration = builder.configuration;
         this.downloader = builder.downloader;
     }
@@ -128,130 +132,148 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     @NotNull
     @Override
     public List<Geocache> searchForGeocaches(@NotNull SearchForGeocachesRequest request) throws GeocachingApiException {
-        List<Geocache> list = new ArrayList<Geocache>();
+        List<Geocache> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
         lastSearchResultsFound = 0;
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("IsLite").value(request.resultQuality() == ResultQuality.LITE);
-            w.name("IsSummaryOnly").value(request.resultQuality() == ResultQuality.SUMMARY);
-            w.name("MaxPerPage").value(request.maxPerPage());
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("IsLite").value(request.resultQuality() == ResultQuality.LITE);
+                w.name("IsSummaryOnly").value(request.resultQuality() == ResultQuality.SUMMARY);
+                w.name("MaxPerPage").value(request.maxPerPage());
 
-            if (request.geocacheLogCount() >= 0)
-                w.name("GeocacheLogCount").value(request.geocacheLogCount());
-
-            if (request.trackableLogCount() >= 0)
-                w.name("TrackableLogCount").value(request.trackableLogCount());
-
-            for (Filter filter : request.filters()) {
-                if (filter.valid())
-                    filter.writeJson(w);
-            }
-
-            Collection<SortBy> sortKeys = request.sortKeys();
-            if (!sortKeys.isEmpty()) {
-                w.name("SortBys").beginArray();
-                for (SortBy sortBy : sortKeys) {
-                    w.name("SortFilterId").value(sortBy.key().id);
-                    w.name("AscendingOrder").value(sortBy.order() == SortOrder.ASCENDING);
+                if (request.geocacheLogCount() >= 0) {
+                    w.name("GeocacheLogCount").value(request.geocacheLogCount());
                 }
-                w.endArray();
-            }
 
-            Coordinates sortPoint = request.sortPoint();
-            if (sortPoint != null) {
-                w.name("SortPoint").beginObject()
-                        .name("Latitude").value(sortPoint.latitude())
-                        .name("Longitude").value(sortPoint.longitude())
-                        .endObject();
-            }
-
-            w.endObject();
-            w.close();
-
-            r = callPost("SearchForGeocaches?format=json", sw.toString());
-            r.beginObject();
-            checkError(r);
-
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Geocaches".equals(name)) {
-                    list = GeocacheJsonParser.parseList(r);
-                } else if ("CacheLimits".equals(name)) {
-                    lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
-                } else if ("TotalMatchingCaches".equals(name)) {
-                    lastSearchResultsFound = r.nextInt();
-                } else {
-                    r.skipValue();
+                if (request.trackableLogCount() >= 0) {
+                    w.name("TrackableLogCount").value(request.trackableLogCount());
                 }
+
+                for (Filter filter : request.filters()) {
+                    if (filter.valid()) {
+                        filter.writeJson(w);
+                    }
+                }
+
+                Collection<SortBy> sortKeys = request.sortKeys();
+                if (!sortKeys.isEmpty()) {
+                    w.name("SortBys").beginArray();
+                    for (SortBy sortBy : sortKeys) {
+                        w.name("SortFilterId").value(sortBy.key().id);
+                        w.name("AscendingOrder").value(sortBy.order() == SortOrder.ASCENDING);
+                    }
+                    w.endArray();
+                }
+
+                Coordinates sortPoint = request.sortPoint();
+                if (sortPoint != null) {
+                    w.name("SortPoint").beginObject()
+                            .name("Latitude").value(sortPoint.latitude())
+                            .name("Longitude").value(sortPoint.longitude())
+                            .endObject();
+                }
+
+                w.endObject();
             }
-            r.endObject();
-            return list;
+
+            //noinspection Duplicates
+            try (JsonReader r = callPost("SearchForGeocaches?format=json", sw.toString())) {
+                r.beginObject();
+                checkError(r);
+
+                //noinspection Duplicates
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    switch (name) {
+                        case "Geocaches":
+                            list = GeocacheJsonParser.parseList(r);
+                            break;
+                        case "CacheLimits":
+                            lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
+                            break;
+                        case "TotalMatchingCaches":
+                            lastSearchResultsFound = r.nextInt();
+                            break;
+                        default:
+                            r.skipValue();
+                            break;
+                    }
+                }
+                r.endObject();
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public List<Geocache> getMoreGeocaches(@NotNull ResultQuality resultQuality, int startIndex, int maxPerPage, int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
-        List<Geocache> list = new ArrayList<Geocache>();
+    public List<Geocache> getMoreGeocaches(@NotNull ResultQuality resultQuality, int startIndex, int maxPerPage,
+                                           int geocacheLogCount, int trackableLogCount) throws GeocachingApiException {
+        List<Geocache> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
         lastSearchResultsFound = 0;
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("IsLite").value(resultQuality == ResultQuality.LITE);
-            w.name("IsSummaryOnly").value(resultQuality == ResultQuality.SUMMARY);
-            w.name("StartIndex").value(startIndex);
-            w.name("MaxPerPage").value(maxPerPage);
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("IsLite").value(resultQuality == ResultQuality.LITE);
+                w.name("IsSummaryOnly").value(resultQuality == ResultQuality.SUMMARY);
+                w.name("StartIndex").value(startIndex);
+                w.name("MaxPerPage").value(maxPerPage);
 
-            if (geocacheLogCount >= 0)
-                w.name("GeocacheLogCount").value(geocacheLogCount);
-
-            if (trackableLogCount >= 0)
-                w.name("TrackableLogCount").value(trackableLogCount);
-
-            w.endObject();
-            w.close();
-
-            r = callPost("GetMoreGeocaches?format=json", sw.toString());
-            r.beginObject();
-            checkError(r);
-
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Geocaches".equals(name)) {
-                    list = GeocacheJsonParser.parseList(r);
-                } else if ("CacheLimits".equals(name)) {
-                    lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
-                } else if ("TotalMatchingCaches".equals(name)) {
-                    lastSearchResultsFound = r.nextInt();
-                } else {
-                    r.skipValue();
+                if (geocacheLogCount >= 0) {
+                    w.name("GeocacheLogCount").value(geocacheLogCount);
                 }
+
+                if (trackableLogCount >= 0) {
+                    w.name("TrackableLogCount").value(trackableLogCount);
+                }
+
+                w.endObject();
             }
-            r.endObject();
-            return list;
+
+            //noinspection Duplicates
+            try (JsonReader r = callPost("GetMoreGeocaches?format=json", sw.toString())) {
+                r.beginObject();
+                checkError(r);
+
+                //noinspection Duplicates
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    switch (name) {
+                        case "Geocaches":
+                            list = GeocacheJsonParser.parseList(r);
+                            break;
+                        case "CacheLimits":
+                            lastGeocacheLimits = CacheLimitsJsonParser.parse(r);
+                            break;
+                        case "TotalMatchingCaches":
+                            lastSearchResultsFound = r.nextInt();
+                            break;
+                        default:
+                            r.skipValue();
+                            break;
+                    }
+                }
+                r.endObject();
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
@@ -259,69 +281,75 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     public Trackable getTrackable(@NotNull String trackableCode, int trackableLogCount) throws GeocachingApiException {
         List<Trackable> list = null;
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
+            JsonReader reader;
             //noinspection IfMayBeConditional
             if (trackableCode.toLowerCase(Locale.US).startsWith("tb")) {
-                r = callGet("GetTrackablesByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                reader = callGet("GetTrackablesByTBCode?accessToken=" + urlEncode(session) +
                         "&tbCode=" + trackableCode +
                         "&trackableLogCount=" + trackableLogCount +
                         "&format=json"
                 );
             } else {
-                r = callGet("GetTrackablesByTrackingNumber?accessToken=" + URLEncoder.encode(session, "UTF-8") +
+                reader = callGet("GetTrackablesByTrackingNumber?accessToken=" + urlEncode(session) +
                         "&trackingNumber=" + trackableCode +
                         "&trackableLogCount=" + trackableLogCount +
                         "&format=json"
                 );
             }
 
-            r.beginObject();
-            checkError(r);
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Trackables".equals(name)) {
-                    list = TrackableJsonParser.parseList(r);
-                } else {
-                    r.skipValue();
+            try (JsonReader r = reader) {
+                r.beginObject();
+                checkError(r);
+
+                //noinspection Duplicates
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("Trackables".equals(name)) {
+                        list = TrackableJsonParser.parseList(r);
+                    } else {
+                        r.skipValue();
+                    }
                 }
+                r.endObject();
+
+                if (list == null || list.isEmpty()) {
+                    return null;
+                }
+
+                return list.get(0);
             }
-            r.endObject();
-
-            if (list == null || list.isEmpty())
-                return null;
-
-            return list.get(0);
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public List<Trackable> getTrackablesByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage, int trackableLogCount) throws GeocachingApiException {
-        List<Trackable> list = new ArrayList<Trackable>();
+    public List<Trackable> getTrackablesByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage,
+                                                    int trackableLogCount) throws GeocachingApiException {
+        List<Trackable> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetTrackablesInCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&startIndex=" + startIndex +
-                    "&maxPerPage=" + maxPerPage +
-                    "&trackableLogCount=" + trackableLogCount +
-                    "&format=json"
-            );
+        //noinspection Duplicates
+        try (JsonReader r = callGet("GetTrackablesInCache?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&startIndex=" + startIndex +
+                "&maxPerPage=" + maxPerPage +
+                "&trackableLogCount=" + trackableLogCount +
+                "&format=json")) {
 
             r.beginObject();
             checkError(r);
+
+            //noinspection Duplicates
             while (r.hasNext()) {
                 String name = r.nextName();
                 if ("Trackables".equals(name)) {
@@ -335,25 +363,21 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<TrackableTravel> getTrackableTravelList(@NotNull String trackableCode) throws GeocachingApiException {
-        List<TrackableTravel> list = new ArrayList<TrackableTravel>();
+        List<TrackableTravel> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetTrackableTravelList?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&tbCode=" + trackableCode +
-                    "&format=json"
-            );
+        try (JsonReader r = callGet("GetTrackableTravelList?accessToken=" + urlEncode(session) +
+                "&tbCode=" + trackableCode +
+                "&format=json")) {
 
             r.beginObject();
             checkError(r);
@@ -370,28 +394,28 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
+    }
 
+    private static String urlEncode(String session) throws UnsupportedEncodingException {
+        return URLEncoder.encode(session, "UTF-8");
     }
 
     @NotNull
     @Override
-    public List<GeocacheLog> getGeocacheLogsByCacheCode(@NotNull String cacheCode, int startIndex, int maxPerPage) throws GeocachingApiException {
-        List<GeocacheLog> list = new ArrayList<GeocacheLog>();
+    public List<GeocacheLog> getGeocacheLogsByCacheCode(@NotNull String cacheCode, int startIndex,
+                                                        int maxPerPage) throws GeocachingApiException {
+        List<GeocacheLog> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetGeocacheLogsByCacheCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&startIndex=" + startIndex +
-                    "&maxPerPage=" + maxPerPage +
-                    "&format=json"
-            );
+        try (JsonReader r = callGet("GetGeocacheLogsByCacheCode?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&startIndex=" + startIndex +
+                "&maxPerPage=" + maxPerPage +
+                "&format=json")) {
 
             r.beginObject();
             checkError(r);
@@ -408,169 +432,169 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
-    public GeocacheLog createFieldNoteAndPublish(@NotNull String cacheCode, @NotNull GeocacheLogType geocacheLogType, @NotNull Date dateLogged, @NotNull String note, boolean publish, ImageData imageData,
+    public GeocacheLog createFieldNoteAndPublish(@NotNull String cacheCode, @NotNull GeocacheLogType geocacheLogType,
+                                                 @NotNull Date dateLogged, @NotNull String note, boolean publish,
+                                                 @Nullable ImageData imageData,
                                                  boolean favoriteThisCache) throws GeocachingApiException {
         GeocacheLog geocacheLog = null;
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("CacheCode").value(cacheCode);
-            w.name("WptLogTypeId").value(geocacheLogType.id);
-            w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
-            w.name("Note").value(note);
-            w.name("PromoteToLog").value(publish);
-            if (imageData != null) {
-                w.name("ImageData");
-                imageData.writeJson(w);
-            }
-            w.name("FavoriteThisCache").value(favoriteThisCache);
-
-            w.endObject();
-            w.close();
-
-            r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString());
-            r.beginObject();
-            checkError(r);
-
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Log".equals(name)) {
-                    geocacheLog = GeocacheLogJsonParser.parse(r);
-                } else {
-                    r.skipValue();
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("CacheCode").value(cacheCode);
+                w.name("WptLogTypeId").value(geocacheLogType.id);
+                w.name("UTCDateLogged").value(JsonBuilder.dateToJsonString(dateLogged));
+                w.name("Note").value(note);
+                w.name("PromoteToLog").value(publish);
+                if (imageData != null) {
+                    w.name("ImageData");
+                    imageData.writeJson(w);
                 }
+                w.name("FavoriteThisCache").value(favoriteThisCache);
+
+                w.endObject();
             }
-            r.endObject();
-            return geocacheLog;
+
+            try (JsonReader r = callPost("CreateFieldNoteAndPublish?format=json", sw.toString())) {
+                r.beginObject();
+                checkError(r);
+
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("Log".equals(name)) {
+                        geocacheLog = GeocacheLogJsonParser.parse(r);
+                    } else {
+                        r.skipValue();
+                    }
+                }
+                r.endObject();
+                return geocacheLog;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
-    public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData, boolean publicProfileData, boolean souvenirData,
-                                          boolean trackableData, @NotNull DeviceInfo deviceInfo) throws GeocachingApiException {
+    public UserProfile getYourUserProfile(boolean challengesData, boolean favoritePointData, boolean geocacheData,
+                                          boolean publicProfileData, boolean souvenirData, boolean trackableData,
+                                          @NotNull DeviceInfo deviceInfo) throws GeocachingApiException {
         UserProfile userProfile = null;
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("ProfileOptions").beginObject()
-                    .name("ChallengesData").value(challengesData)
-                    .name("FavoritePointData").value(favoritePointData)
-                    .name("GeocacheData").value(geocacheData)
-                    .name("PublicProfileData").value(publicProfileData)
-                    .name("SouvenirData").value(souvenirData)
-                    .name("TrackableData").value(trackableData);
-            w.endObject();
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("ProfileOptions").beginObject()
+                        .name("ChallengesData").value(challengesData)
+                        .name("FavoritePointData").value(favoritePointData)
+                        .name("GeocacheData").value(geocacheData)
+                        .name("PublicProfileData").value(publicProfileData)
+                        .name("SouvenirData").value(souvenirData)
+                        .name("TrackableData").value(trackableData);
+                w.endObject();
 
-            w.name("DeviceInfo");
-            deviceInfo.writeJson(w);
+                w.name("DeviceInfo");
+                deviceInfo.writeJson(w);
 
-            w.endObject();
-            w.close();
-
-            r = callPost("GetYourUserProfile?format=json", sw.toString());
-            r.beginObject();
-            checkError(r);
-
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Profile".equals(name)) {
-                    userProfile = UserProfileJsonParser.parse(r);
-                } else {
-                    r.skipValue();
-                }
+                w.endObject();
             }
-            r.endObject();
-            return userProfile;
+
+            try (JsonReader r = callPost("GetYourUserProfile?format=json", sw.toString())) {
+                r.beginObject();
+                checkError(r);
+
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("Profile".equals(name)) {
+                        userProfile = UserProfileJsonParser.parse(r);
+                    } else {
+                        r.skipValue();
+                    }
+                }
+                r.endObject();
+                return userProfile;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount, boolean collectionOnly) throws GeocachingApiException {
-        List<Trackable> list = new ArrayList<Trackable>();
+    public List<Trackable> getUsersTrackables(int startIndex, int maxPerPage, int trackableLogCount,
+                                              boolean collectionOnly) throws GeocachingApiException {
+        List<Trackable> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("StartIndex").value(startIndex);
-            w.name("MaxPerPage").value(maxPerPage);
-            w.name("TrackableLogsCount").value(trackableLogCount);
-            w.name("CollectionOnly").value(collectionOnly);
-            w.endObject();
-            w.close();
-
-            r = callPost("GetUsersTrackables?format=json", sw.toString());
-
-            r.beginObject();
-            checkError(r);
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Trackables".equals(name)) {
-                    list = TrackableJsonParser.parseList(r);
-                } else {
-                    r.skipValue();
-                }
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("StartIndex").value(startIndex);
+                w.name("MaxPerPage").value(maxPerPage);
+                w.name("TrackableLogsCount").value(trackableLogCount);
+                w.name("CollectionOnly").value(collectionOnly);
+                w.endObject();
             }
-            r.endObject();
 
-            return list;
+            //noinspection Duplicates
+            try (JsonReader r = callPost("GetUsersTrackables?format=json", sw.toString())) {
+                r.beginObject();
+                checkError(r);
+
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("Trackables".equals(name)) {
+                        list = TrackableJsonParser.parseList(r);
+                    } else {
+                        r.skipValue();
+                    }
+                }
+                r.endObject();
+
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<BookmarkList> getBookmarkListsForUser() throws GeocachingApiException {
-        List<BookmarkList> list = new ArrayList<BookmarkList>();
+        List<BookmarkList> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetBookmarkListsForUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("GetBookmarkListsForUser?accessToken=" + urlEncode(session) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
+
             while (r.hasNext()) {
                 String name = r.nextName();
                 if ("BookmarkLists".equals(name)) {
@@ -584,28 +608,27 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<BookmarkList> getBookmarkListsByUserId(int userId) throws GeocachingApiException {
-        List<BookmarkList> list = new ArrayList<BookmarkList>();
+        List<BookmarkList> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetBookmarkListsByUserID?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&userID=" + String.valueOf(userId) +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("GetBookmarkListsByUserID?accessToken=" + urlEncode(session) +
+                "&userID=" + String.valueOf(userId) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
+
+            //noinspection Duplicates
             while (r.hasNext()) {
                 String name = r.nextName();
                 if ("BookmarkLists".equals(name)) {
@@ -619,121 +642,120 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<Bookmark> getBookmarkListByGuid(@NotNull String guid) throws GeocachingApiException {
-        List<Bookmark> list = new ArrayList<Bookmark>();
+        List<Bookmark> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("BookmarkListGuid").value(guid);
-            w.endObject();
-            w.close();
-
-            r = callPost("GetBookmarkListByGuid?format=json", sw.toString());
-
-            r.beginObject();
-            checkError(r);
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("BookmarkList".equals(name)) {
-                    list = BookmarkJsonParser.parseList(r);
-                } else {
-                    r.skipValue();
-                }
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("BookmarkListGuid").value(guid);
+                w.endObject();
             }
-            r.endObject();
 
-            return list;
+            try (JsonReader r = callPost("GetBookmarkListByGuid?format=json", sw.toString())) {
+                r.beginObject();
+
+                checkError(r);
+
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("BookmarkList".equals(name)) {
+                        list = BookmarkJsonParser.parseList(r);
+                    } else {
+                        r.skipValue();
+                    }
+                }
+                r.endObject();
+
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public List<GeocacheStatus> getGeocacheStatus(@NotNull Collection<String> cacheCodes) throws GeocachingApiException {
-        List<GeocacheStatus> list = new ArrayList<GeocacheStatus>();
+    public List<GeocacheStatus> getGeocacheStatus(@NotNull Collection<String> cacheCodes)
+            throws GeocachingApiException {
+        List<GeocacheStatus> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
-            for (String cacheCode : cacheCodes) {
-                arrayWriter.value(cacheCode);
-            }
-            arrayWriter.endArray();
-            w.endObject();
-            w.close();
-
-            r = callPost("GetGeocacheStatus?format=json", sw.toString());
-
-            r.beginObject();
-            checkError(r);
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("GeocacheStatuses".equals(name)) {
-                    list = GeocacheStatusJsonParser.parseList(r);
-                } else {
-                    r.skipValue();
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
+                for (String cacheCode : cacheCodes) {
+                    arrayWriter.value(cacheCode);
                 }
+                arrayWriter.endArray();
+                w.endObject();
             }
-            r.endObject();
 
-            return list;
+            try (JsonReader r = callPost("GetGeocacheStatus?format=json", sw.toString())) {
+                r.beginObject();
+
+                checkError(r);
+
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("GeocacheStatuses".equals(name)) {
+                        list = GeocacheStatusJsonParser.parseList(r);
+                    } else {
+                        r.skipValue();
+                    }
+                }
+                r.endObject();
+
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
-    public void addGeocachesToBookmarkList(@NotNull String guid, @NotNull Collection<String> cacheCodes) throws GeocachingApiException {
-        if (session == null)
+    public void addGeocachesToBookmarkList(@NotNull String guid,
+                                           @NotNull Collection<String> cacheCodes) throws GeocachingApiException {
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("BookmarkListGuid").value(guid);
-            JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
-            for (String cacheCode : cacheCodes) {
-                arrayWriter.value(cacheCode);
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("BookmarkListGuid").value(guid);
+                JsonWriter arrayWriter = w.name("CacheCodes").beginArray();
+                for (String cacheCode : cacheCodes) {
+                    arrayWriter.value(cacheCode);
+                }
+                arrayWriter.endArray();
+                w.endObject();
             }
-            arrayWriter.endArray();
-            w.endObject();
-            w.close();
 
-            r = callPost("AddGeocachesToBookmarkList?format=json", sw.toString());
-            checkError(r);
+            try (JsonReader r = callPost("AddGeocachesToBookmarkList?format=json", sw.toString())) {
+                checkError(r);
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
 
     }
@@ -741,28 +763,33 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     @NotNull
     @Override
     public FavoritePointResult addFavoritePointToGeocache(@NotNull String cacheCode) throws GeocachingApiException {
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("AddFavoritePointToCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("AddFavoritePointToCache?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             FavoritePointResult.Builder builder = FavoritePointResult.builder();
+
+            //noinspection Duplicates
             while (r.hasNext()) {
                 String name = r.nextName();
-                if ("CacheFavoritePoints".equals(name)) {
-                    builder.cacheFavoritePoints(r.nextInt());
-                } else if ("UsersFavoritePoints".equals(name)) {
-                    builder.usersFavoritePoints(r.nextInt());
-                } else {
-                    r.skipValue();
+                switch (name) {
+                    case "CacheFavoritePoints":
+                        builder.cacheFavoritePoints(r.nextInt());
+                        break;
+                    case "UsersFavoritePoints":
+                        builder.usersFavoritePoints(r.nextInt());
+                        break;
+                    default:
+                        r.skipValue();
+                        break;
                 }
             }
             r.endObject();
@@ -770,36 +797,39 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return builder.build();
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public FavoritePointResult removeFavoritePointFromGeocache(@NotNull String cacheCode) throws GeocachingApiException {
-        if (session == null)
+    public FavoritePointResult removeFavoritePointFromGeocache(@NotNull String cacheCode)
+            throws GeocachingApiException {
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("RemoveFavoritePointFromCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("RemoveFavoritePointFromCache?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             FavoritePointResult.Builder builder = FavoritePointResult.builder();
+
             while (r.hasNext()) {
                 String name = r.nextName();
-                if ("CacheFavoritePoints".equals(name)) {
-                    builder.cacheFavoritePoints(r.nextInt());
-                } else if ("UsersFavoritePoints".equals(name)) {
-                    builder.usersFavoritePoints(r.nextInt());
-                } else {
-                    r.skipValue();
+                switch (name) {
+                    case "CacheFavoritePoints":
+                        builder.cacheFavoritePoints(r.nextInt());
+                        break;
+                    case "UsersFavoritePoints":
+                        builder.usersFavoritePoints(r.nextInt());
+                        break;
+                    default:
+                        r.skipValue();
+                        break;
                 }
             }
             r.endObject();
@@ -807,23 +837,20 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return builder.build();
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
     public int getUsersFavoritePoints() throws GeocachingApiException {
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetUsersFavoritePoints?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("GetUsersFavoritePoints?accessToken=" + urlEncode(session) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             int favoritePoints = 0;
@@ -840,27 +867,24 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return favoritePoints;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<User> getUsersWhoFavoritedGeocache(@NotNull String cacheCode) throws GeocachingApiException {
-        List<User> list = new ArrayList<User>();
+        List<User> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetUsersWhoFavoritedCache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&format=json"
-            );
-
+        //noinspection Duplicates
+        try (JsonReader r = callGet("GetUsersWhoFavoritedCache?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             while (r.hasNext()) {
@@ -876,26 +900,22 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<String> getGeocacheCodesFavoritedByUser() throws GeocachingApiException {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetCacheIdsFavoritedByUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&format=json"
-            );
-
+        try (JsonReader r = callGet("GetCacheIdsFavoritedByUser?accessToken=" + urlEncode(session) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             while (r.hasNext()) {
@@ -915,26 +935,22 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<FavoritedGeocache> getGeocachesFavoritedByUser() throws GeocachingApiException {
-        List<FavoritedGeocache> list = new ArrayList<FavoritedGeocache>();
+        List<FavoritedGeocache> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetCachesFavoritedByUser?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&format=json"
-            );
-
+        try (JsonReader r = callGet("GetCachesFavoritedByUser?accessToken=" + urlEncode(session) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             while (r.hasNext()) {
@@ -950,27 +966,23 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
     public List<ImageData> getImagesForGeocache(@NotNull String cacheCode) throws GeocachingApiException {
-        List<ImageData> list = new ArrayList<ImageData>();
+        List<ImageData> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetImagesForGeocache?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&format=json"
-            );
-
+        try (JsonReader r = callGet("GetImagesForGeocache?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
 
             while (r.hasNext()) {
@@ -986,79 +998,72 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
     public void setGeocachePersonalNote(@NotNull String cacheCode, String note) throws GeocachingApiException {
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
         if (note == null || note.isEmpty()) {
             deleteCachePersonalNote(cacheCode);
             return;
         }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("CacheCode").value(cacheCode);
-            w.name("Note").value(note);
-            w.endObject();
-            w.close();
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("CacheCode").value(cacheCode);
+                w.name("Note").value(note);
+                w.endObject();
+            }
 
-            r = callPost("UpdateCacheNote?format=json", sw.toString());
-            checkError(r);
+            try (JsonReader r = callPost("UpdateCacheNote?format=json", sw.toString())) {
+                checkError(r);
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @Override
     public void deleteCachePersonalNote(@NotNull String cacheCode) throws GeocachingApiException {
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("DeleteCacheNote?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&cacheCode=" + cacheCode +
-                    "&format=json"
-            );
+        try (JsonReader r = callGet("DeleteCacheNote?accessToken=" + urlEncode(session) +
+                "&cacheCode=" + cacheCode +
+                "&format=json")) {
             checkError(r);
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
     @NotNull
     @Override
-    public List<TrackableLog> getTrackableLogs(@NotNull String trackableCode, int startIndex, int maxPerPage) throws GeocachingApiException {
-        List<TrackableLog> list = new ArrayList<TrackableLog>();
+    public List<TrackableLog> getTrackableLogs(@NotNull String trackableCode, int startIndex,
+                                               int maxPerPage) throws GeocachingApiException {
+        List<TrackableLog> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetTrackableLogsByTBCode?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&tbCode=" + trackableCode +
-                    "&startIndex=" + startIndex +
-                    "&maxPerPage=" + maxPerPage +
-                    "&format=json"
-            );
-
+        try (JsonReader r = callGet("GetTrackableLogsByTBCode?accessToken=" + urlEncode(session) +
+                "&tbCode=" + trackableCode +
+                "&startIndex=" + startIndex +
+                "&maxPerPage=" + maxPerPage +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
+
             while (r.hasNext()) {
                 String name = r.nextName();
                 if ("TrackableLogs".equals(name)) {
@@ -1072,8 +1077,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return list;
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
@@ -1083,25 +1086,27 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         ApiLimits apiLimits = null;
         MaxPerPage maxPerPage = null;
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        JsonReader r = null;
-        try {
-            r = callGet("GetAPILimits?accessToken=" + URLEncoder.encode(session, "UTF-8") +
-                    "&format=json"
-            );
-
+        try (JsonReader r = callGet("GetAPILimits?accessToken=" + urlEncode(session) +
+                "&format=json")) {
             r.beginObject();
+
             checkError(r);
             while (r.hasNext()) {
                 String name = r.nextName();
-                if ("Limits".equals(name)) {
-                    apiLimits = ApiLimitsJsonParser.parse(r);
-                } else if ("MaxPerPage".equals(name)) {
-                    maxPerPage = MaxPerPageJsonParser.parse(r);
-                } else {
-                    r.skipValue();
+                switch (name) {
+                    case "Limits":
+                        apiLimits = ApiLimitsJsonParser.parse(r);
+                        break;
+                    case "MaxPerPage":
+                        maxPerPage = MaxPerPageJsonParser.parse(r);
+                        break;
+                    default:
+                        r.skipValue();
+                        break;
                 }
             }
             r.endObject();
@@ -1109,8 +1114,6 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             return ApiLimitsResponse.create(apiLimits, maxPerPage);
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
@@ -1127,78 +1130,78 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
     @NotNull
     @Override
-    public List<GeocacheLog> getUsersGeocacheLogs(@NotNull String userName, Date startDate, Date endDate, @NotNull GeocacheLogType[] logTypes, boolean excludeArchived, int startIndex, int maxPerPage) throws GeocachingApiException {
-        List<GeocacheLog> list = new ArrayList<GeocacheLog>();
+    public List<GeocacheLog> getUsersGeocacheLogs(@NotNull String userName, Date startDate, Date endDate,
+                                                  @NotNull GeocacheLogType[] logTypes, boolean excludeArchived,
+                                                  int startIndex, int maxPerPage) throws GeocachingApiException {
+        List<GeocacheLog> list = new ArrayList<>();
 
-        if (session == null)
+        if (session == null) {
             throw new InvalidSessionException("Session is closed");
+        }
 
-        if (userName.isEmpty())
+        if (userName.isEmpty()) {
             throw new IllegalArgumentException("You must specify user name.");
+        }
 
-        if (logTypes.length == 0)
+        if (logTypes.length == 0) {
             throw new IllegalArgumentException("You must specify at least one GeocacheLogType.");
+        }
 
-        JsonReader r = null;
         try {
             StringWriter sw = new StringWriter();
-            JsonWriter w = new JsonWriter(sw);
-            w.beginObject();
-            w.name("AccessToken").value(session);
-            w.name("Username").value(userName);
+            try (JsonWriter w = new JsonWriter(sw)) {
+                w.beginObject();
+                w.name("AccessToken").value(session);
+                w.name("Username").value(userName);
 
-            // Date filters
-            if (startDate != null || endDate != null) {
-                JsonWriter range = w.name("Range").beginObject();
+                // Date filters
+                if (startDate != null || endDate != null) {
+                    JsonWriter range = w.name("Range").beginObject();
 
-                if (startDate != null) {
-                    range.name("StartDate").value(JsonBuilder.dateToJsonString(startDate));
+                    if (startDate != null) {
+                        range.name("StartDate").value(JsonBuilder.dateToJsonString(startDate));
+                    }
+
+                    if (endDate != null) {
+                        range.name("EndDate").value(JsonBuilder.dateToJsonString(endDate));
+                    }
+
+                    range.endObject();
                 }
 
-                if (endDate != null) {
-                    range.name("EndDate").value(JsonBuilder.dateToJsonString(endDate));
+                // Cache log type filter
+                JsonWriter logs = w.name("LogTypes").beginArray();
+                for (GeocacheLogType geocacheLogType : logTypes) {
+                    logs.value(geocacheLogType.id);
                 }
+                logs.endArray();
 
-                range.endObject();
+                w.name("ExcludeArchived").value(excludeArchived);
+                w.name("StartIndex").value(startIndex);
+                w.name("MaxPerPage").value(maxPerPage);
+                w.endObject();
             }
 
-            // Cache log type filter
-            JsonWriter logs = w.name("LogTypes").beginArray();
+            try (JsonReader r = callPost("GetUsersGeocacheLogs?format=json", sw.toString())) {
+                r.beginObject();
 
-            for (GeocacheLogType geocacheLogType : logTypes) {
-                logs.value(geocacheLogType.id);
-            }
+                checkError(r);
 
-            logs.endArray();
-
-            w.name("ExcludeArchived").value(excludeArchived);
-            w.name("StartIndex").value(startIndex);
-            w.name("MaxPerPage").value(maxPerPage);
-            w.endObject();
-            w.close();
-
-
-            r = callPost("GetUsersGeocacheLogs?format=json", sw.toString());
-            r.beginObject();
-            checkError(r);
-
-            while (r.hasNext()) {
-                String name = r.nextName();
-                if ("Logs".equals(name)) {
-                    list = GeocacheLogJsonParser.parseList(r);
-                    break;
-                } else {
-                    r.skipValue();
+                while (r.hasNext()) {
+                    String name = r.nextName();
+                    if ("Logs".equals(name)) {
+                        list = GeocacheLogJsonParser.parseList(r);
+                        break;
+                    } else {
+                        r.skipValue();
+                    }
                 }
-            }
-            r.endObject();
-            r.close();
+                r.endObject();
 
-            return list;
+                return list;
+            }
         } catch (IOException e) {
             throw handleIOException(e);
-        } finally {
-            closeJsonReader(r);
         }
     }
 
@@ -1212,11 +1215,13 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         if (r.peek() == JsonToken.BEGIN_OBJECT || "Status".equals(r.nextName())) {
             Status status = StatusJsonParser.parse(r);
 
-            if (status == null)
+            if (status == null) {
                 throw new GeocachingApiException("Missing Status in a response.");
+            }
 
-            if (status.statusCode() == StatusCode.OK)
+            if (status.statusCode() == StatusCode.OK) {
                 return;
+            }
 
             GeocachingApiException cause = new LiveGeocachingApiException(status);
 
@@ -1255,6 +1260,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         logger.debug("Getting " + maskParameterValues(function));
 
         try {
+            @SuppressWarnings("HardcodedFileSeparator")
             URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
             return downloader.get(url);
         } catch (MalformedURLException e) {
@@ -1272,6 +1278,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
 
         try {
             byte[] postData = postBody.getBytes("UTF-8");
+            @SuppressWarnings("HardcodedFileSeparator")
             URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
 
             return downloader.post(url, postData);
@@ -1280,7 +1287,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
         } catch (UnsupportedEncodingException e) {
             logger.error(e.toString(), e);
-            throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + "): " + e.getMessage(), e);
+            throw new NetworkException("Error while downloading data (" +
+                    e.getClass().getSimpleName() + "): " + e.getMessage(), e);
         }
     }
 
@@ -1293,19 +1301,8 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     private static boolean isGsonException(Throwable t) {
-        // This IOException mess will be fixed in a next GSON release
-        return (IOException.class.equals(t.getClass()) && t.getMessage() != null && t.getMessage().startsWith("Expected JSON document")) || t instanceof MalformedJsonException || t instanceof IllegalStateException || t instanceof NumberFormatException;
-    }
-
-    private static void closeJsonReader(JsonReader r) {
-        if (r == null)
-            return;
-
-        try {
-            r.close();
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
+        return t instanceof MalformedJsonException || t instanceof IllegalStateException
+                || t instanceof NumberFormatException || t instanceof EOFException;
     }
 
     public static Builder builder() {
@@ -1313,7 +1310,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     }
 
     /**
-     * Builder for {@link LiveGeocachingApi}
+     * Builder for {@link LiveGeocachingApi}.
      *
      * @author arcao
      */
@@ -1325,7 +1322,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
 
         /**
-         * Set a {@link GeocachingApiConfiguration} where is stored configuration
+         * Set a {@link GeocachingApiConfiguration} where is stored configuration.
          *
          * @param configuration instance of {@link GeocachingApiConfiguration} implementation
          * @return this Builder
@@ -1336,7 +1333,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
 
         /**
-         * Set a instance of {@link JsonDownloader} which will take care for downloading data
+         * Set a instance of {@link JsonDownloader} which will take care for downloading data.
          *
          * @param downloader instance of {@link JsonDownloader} implementation
          * @return this Builder
