@@ -2,11 +2,10 @@ package com.arcao.geocaching.api.live_geocaching_api.mocked;
 
 import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.LiveGeocachingApi;
-import com.arcao.geocaching.api.downloader.JsonDownloader;
+import com.arcao.geocaching.api.downloader.Downloader;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.NetworkException;
-import com.google.gson.stream.JsonReader;
 
 import org.junit.Before;
 
@@ -14,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -26,13 +26,13 @@ public abstract class AbstractMockedGeocachingTest {
     private static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");
 
     GeocachingApi api = null;
-    JsonDownloader downloader = null;
+    Downloader downloader = null;
 
     private static final String ACCESS_TOKEN = "ACCESS_TOKEN";
 
     @Before
     public void setUpMock() throws GeocachingApiException {
-        downloader = mock(JsonDownloader.class);
+        downloader = mock(Downloader.class);
 
         api = LiveGeocachingApi.builder()
                 .downloader(downloader)
@@ -41,8 +41,8 @@ public abstract class AbstractMockedGeocachingTest {
         api.openSession(ACCESS_TOKEN);
     }
 
-    JsonReader createJsonReaderFromResource(String resourceFile) {
-        return new JsonReader(new InputStreamReader(getClass().getResourceAsStream(resourceFile), CHARSET_UTF8));
+    Reader createReaderFromResource(String resourceFile) {
+        return new InputStreamReader(getClass().getResourceAsStream(resourceFile), CHARSET_UTF8);
     }
 
     byte[] createByteArrayFromResource(String resourceFile) throws IOException {
@@ -65,10 +65,10 @@ public abstract class AbstractMockedGeocachingTest {
     }
 
     void setDownloaderResponseBody(String resourceFile) throws NetworkException, InvalidResponseException {
-        setDownloaderResponseBody(createJsonReaderFromResource(resourceFile));
+        setDownloaderResponseBody(createReaderFromResource(resourceFile));
     }
 
-    void setDownloaderResponseBody(JsonReader responseBody) throws NetworkException, InvalidResponseException {
+    void setDownloaderResponseBody(Reader responseBody) throws NetworkException, InvalidResponseException {
         when(downloader.post(any(URL.class), any(byte[].class)))
                 .thenReturn(responseBody);
     }

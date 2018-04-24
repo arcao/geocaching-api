@@ -3,8 +3,8 @@ package com.arcao.geocaching.api.live_geocaching_api;
 import com.arcao.geocaching.api.GeocachingApi;
 import com.arcao.geocaching.api.LiveGeocachingApi;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
-import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
-import com.arcao.geocaching.api.downloader.JsonDownloader;
+import com.arcao.geocaching.api.downloader.DefaultDownloader;
+import com.arcao.geocaching.api.downloader.Downloader;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public abstract class AbstractGeocachingTest {
             configuration = GeocachingApiConfiguration.PRODUCTION;
         }
 
-        JsonDownloader downloader = new DefaultJsonDownloader(configuration).debug(true);
+        Downloader downloader = new DefaultDownloader(configuration).debug(true);
 
         builder.configuration(configuration);
         builder.downloader(downloader);

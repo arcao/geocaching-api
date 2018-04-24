@@ -3,11 +3,11 @@ package com.arcao.geocaching.api.downloader;
 import com.arcao.geocaching.api.configuration.GeocachingApiConfiguration;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
 import com.arcao.geocaching.api.exception.NetworkException;
-import com.google.gson.stream.JsonReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,12 +22,12 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 /**
- * Default implementation of {@link JsonDownloader} using {@link HttpURLConnection}.
+ * Default implementation of {@link Downloader} using {@link HttpURLConnection}.
  *
  * @author arcao
  */
-public class DefaultJsonDownloader implements JsonDownloader {
-    private static final Logger logger = LoggerFactory.getLogger(DefaultJsonDownloader.class);
+public class DefaultDownloader implements Downloader {
+    private static final Logger logger = LoggerFactory.getLogger(DefaultDownloader.class);
     private static final int HTTP_ERROR_400 = 400;
     private static final int BUFFER_SIZE = 32768;
 
@@ -35,24 +35,21 @@ public class DefaultJsonDownloader implements JsonDownloader {
     private boolean debug = false;
 
     /**
-     * Create a new {@link DefaultJsonDownloader} using specified configuration.
+     * Create a new {@link DefaultDownloader} using specified configuration.
      *
      * @param configuration configuration
      */
-    public DefaultJsonDownloader(GeocachingApiConfiguration configuration) {
+    public DefaultDownloader(GeocachingApiConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    public DefaultJsonDownloader debug(boolean debug) {
+    public DefaultDownloader debug(boolean debug) {
         this.debug = debug;
         return this;
     }
 
     @Override
-    public JsonReader get(URL url) throws NetworkException, InvalidResponseException {
-        InputStream is;
-        InputStreamReader isr;
-
+    public Reader get(URL url) throws NetworkException, InvalidResponseException {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -66,7 +63,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
             con.setRequestProperty("Accept-Language", "en-US");
             con.setRequestProperty("Accept-Encoding", "gzip, deflate");
 
-            is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
+            InputStream is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
 
             final String encoding = con.getContentEncoding();
 
@@ -82,13 +79,13 @@ public class DefaultJsonDownloader implements JsonDownloader {
 
             checkResponseError(is, con);
 
-            isr = new InputStreamReader(is, "UTF-8");
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 
             if (debug) {
-                return new DebugJsonReader(isr);
+                return new DebugReader(isr);
             }
 
-            return new JsonReader(isr);
+            return isr;
         } catch (InvalidResponseException e) {
             throw e;
         } catch (Exception e) {
@@ -117,10 +114,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
     }
 
     @Override
-    public JsonReader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
-        InputStream is;
-        InputStreamReader isr;
-
+    public Reader post(URL url, byte[] postData) throws NetworkException, InvalidResponseException {
         try {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -142,7 +136,7 @@ public class DefaultJsonDownloader implements JsonDownloader {
                 os.write(postData);
             }
 
-            is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
+            InputStream is = con.getResponseCode() >= HTTP_ERROR_400 ? con.getErrorStream() : con.getInputStream();
 
             final String encoding = con.getContentEncoding();
 
@@ -158,13 +152,13 @@ public class DefaultJsonDownloader implements JsonDownloader {
 
             checkResponseError(is, con);
 
-            isr = new InputStreamReader(is, "UTF-8");
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 
             if (debug) {
-                return new DebugJsonReader(isr);
+                return new DebugReader(isr);
             }
 
-            return new JsonReader(isr);
+            return isr;
         } catch (InvalidResponseException e) {
             throw e;
         } catch (Exception e) {
@@ -181,10 +175,10 @@ public class DefaultJsonDownloader implements JsonDownloader {
         return contentType == null || !contentType.toLowerCase(Locale.US).contains("/json");
     }
 
-    private static class DebugJsonReader extends JsonReader {
-        private static final Logger logger = LoggerFactory.getLogger(DebugJsonReader.class);
+    private static class DebugReader extends BufferedReader {
+        private static final Logger logger = LoggerFactory.getLogger(DebugReader.class);
 
-        DebugJsonReader(Reader in) throws IOException {
+        DebugReader(Reader in) throws IOException {
             super(writeOutput(in));
         }
 

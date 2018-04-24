@@ -27,8 +27,8 @@ import com.arcao.geocaching.api.data.coordinates.Coordinates;
 import com.arcao.geocaching.api.data.sort.SortBy;
 import com.arcao.geocaching.api.data.sort.SortOrder;
 import com.arcao.geocaching.api.data.type.GeocacheLogType;
-import com.arcao.geocaching.api.downloader.DefaultJsonDownloader;
-import com.arcao.geocaching.api.downloader.JsonDownloader;
+import com.arcao.geocaching.api.downloader.DefaultDownloader;
+import com.arcao.geocaching.api.downloader.Downloader;
 import com.arcao.geocaching.api.exception.GeocachingApiException;
 import com.arcao.geocaching.api.exception.InvalidCredentialsException;
 import com.arcao.geocaching.api.exception.InvalidResponseException;
@@ -52,6 +52,7 @@ import com.arcao.geocaching.api.parser.TrackableLogJsonParser;
 import com.arcao.geocaching.api.parser.TrackableTravelJsonParser;
 import com.arcao.geocaching.api.parser.UserJsonParser;
 import com.arcao.geocaching.api.parser.UserProfileJsonParser;
+import com.arcao.geocaching.api.util.DefaultValueJsonReader;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -94,7 +95,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
     private static final Logger logger = LoggerFactory.getLogger(LiveGeocachingApi.class);
 
     private final GeocachingApiConfiguration configuration;
-    private final JsonDownloader downloader;
+    private final Downloader downloader;
 
     @Nullable private GeocacheLimits lastGeocacheLimits = null;
     private int lastSearchResultsFound = 0;
@@ -1262,7 +1263,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         try {
             @SuppressWarnings("HardcodedFileSeparator")
             URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
-            return downloader.get(url);
+            return new DefaultValueJsonReader(downloader.get(url));
         } catch (MalformedURLException e) {
             logger.error(e.toString(), e);
             throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
@@ -1281,7 +1282,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             @SuppressWarnings("HardcodedFileSeparator")
             URL url = new URL(configuration.getApiServiceEntryPointUrl() + "/" + function);
 
-            return downloader.post(url, postData);
+            return new DefaultValueJsonReader(downloader.post(url, postData));
         } catch (MalformedURLException e) {
             logger.error(e.toString(), e);
             throw new NetworkException("Error while downloading data (" + e.getClass().getSimpleName() + ")", e);
@@ -1316,7 +1317,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
      */
     public static class Builder {
         GeocachingApiConfiguration configuration;
-        JsonDownloader downloader;
+        Downloader downloader;
 
         Builder() {
         }
@@ -1333,12 +1334,12 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         }
 
         /**
-         * Set a instance of {@link JsonDownloader} which will take care for downloading data.
+         * Set a instance of {@link Downloader} which will take care for downloading data.
          *
-         * @param downloader instance of {@link JsonDownloader} implementation
+         * @param downloader instance of {@link Downloader} implementation
          * @return this Builder
          */
-        public Builder downloader(JsonDownloader downloader) {
+        public Builder downloader(Downloader downloader) {
             this.downloader = downloader;
             return this;
         }
@@ -1346,7 +1347,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
         /**
          * Create a new instance of LiveGeocachingApi.<br>
          * If configuration is not set, the instance of {@link DefaultProductionGeocachingApiConfiguration} is used.<br>
-         * If downloader is not set, the instance of {@link DefaultJsonDownloader} is used.
+         * If downloader is not set, the instance of {@link DefaultDownloader} is used.
          *
          * @return new instance of LiveGeocachingApi
          */
@@ -1356,7 +1357,7 @@ public class LiveGeocachingApi extends AbstractGeocachingApi {
             }
 
             if (downloader == null) {
-                downloader = new DefaultJsonDownloader(configuration);
+                downloader = new DefaultDownloader(configuration);
             }
 
             return new LiveGeocachingApi(this);
