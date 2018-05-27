@@ -25,7 +25,7 @@ public class TerrainFilter implements Filter {
 
     @Override
     public boolean valid() {
-        return min >= 1 && max <= 5 && min < max && min != 1 && max != 5;
+        return min >= 1 && max <= 5 && min <= max && (min != 1 || max != 5);
     }
 
     @Override
