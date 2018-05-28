@@ -25,6 +25,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.7" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
+    <orderEntry type="library" name="Maven: com.google.auto.value:auto-value-annotations:1.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.auto.value:auto-value:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations-java5:16.0.2" level="project" />
   </component>
